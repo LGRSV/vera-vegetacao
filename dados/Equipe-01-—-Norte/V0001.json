@@ -1,0 +1,19 @@
+{
+  "id": "V0001",
+  "synced": false,
+  "wkt": "POINT (-48.328427 -10.177638)",
+  "data": "23/06/2026, 14:37:19",
+  "poste": "1",
+  "especie": "Teste",
+  "lat": -10.17763830762443,
+  "lon": -48.32842697182525,
+  "altura": "7",
+  "dtbt": "100",
+  "dtmt": "200",
+  "dtat": "",
+  "dap": "47",
+  "area": "Teste",
+  "acesso": "Sim",
+  "usuario": "Equipe 01 — Norte",
+  "photos": "1 foto(s)"
+}
