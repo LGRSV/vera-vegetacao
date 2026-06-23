@@ -1456,10 +1456,10 @@ function renderPostesNoMapa(circ, postes) {
   const renderer = L.canvas({ padding: 0.5 });
   postes.forEach(p => {
     const m = L.circleMarker([p.lat, p.lon], {
-      radius: 5,
+      radius: 10,
       fillColor: '#1565C0',
       color: '#ffffff',
-      weight: 1,
+      weight: 2,
       fillOpacity: 0.9,
       renderer,
     });
