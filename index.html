@@ -2006,28 +2006,33 @@ async function adminSelecionarPolo(polo) {
 
   const circs = Object.entries(indicePolo[polo]).sort((a,b) => a[0].localeCompare(b[0]));
   lista.innerHTML = circs.map(([id, info]) => `
-    <div class="alim-admin-check" id="acheck-${id}" onclick="adminToggleAlim('${id}', this)">
-      <input type="checkbox" id="achk-${id}" onclick="event.stopPropagation()">
-      <div>
+    <div class="alim-admin-check" id="acheck-${id}">
+      <input type="checkbox" id="achk-${id}"
+        onchange="adminToggleAlim('${id}')"
+        style="width:20px;height:20px;accent-color:var(--amber);cursor:pointer;flex-shrink:0;">
+      <label for="achk-${id}" style="cursor:pointer;flex:1;">
         <div class="alim-admin-label">${id}</div>
         <div class="alim-admin-se">${info.se} · ${info.n.toLocaleString('pt-BR')} postes</div>
-      </div>
+      </label>
     </div>`).join('');
 
   document.getElementById('admin-alim-count').textContent = '';
 }
 
-function adminToggleAlim(id, el) {
+function adminToggleAlim(id) {
   const chk = document.getElementById('achk-' + id);
-  chk.checked = !chk.checked;
-  el.classList.toggle('sel', chk.checked);
+  const el  = document.getElementById('acheck-' + id);
+  // Estado já foi atualizado pelo onchange do checkbox
   if (chk.checked) {
     if (!adminAlims.includes(id)) adminAlims.push(id);
+    el.classList.add('sel');
   } else {
     adminAlims = adminAlims.filter(a => a !== id);
+    el.classList.remove('sel');
   }
   const count = document.getElementById('admin-alim-count');
-  count.textContent = adminAlims.length > 0 ? `(${adminAlims.length} selecionado${adminAlims.length>1?'s':''})` : '';
+  const n = adminAlims.length;
+  count.textContent = n > 0 ? `(${n} selecionado${n > 1 ? 's' : ''})` : '';
 }
 
 async function criarRota() {
