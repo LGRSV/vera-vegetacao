@@ -1582,10 +1582,14 @@ let postesCarregados = {};     // circ -> [postes]
 async function carregarIndice() {
   if (indicePolo) return;
   try {
-    const r = await fetch(`${GITHUB_RAW}/indice.json`);
+    const r = await fetch(`${GITHUB_RAW}/dados/indice.json?t=` + Date.now(), { cache: 'no-store' });
     indicePolo = await r.json();
   } catch(e) {
-    showToast('Sem conexão para carregar alimentadores.', 'error');
+    if (navigator.onLine) {
+      showToast('Erro ao carregar alimentadores. Tente novamente.', 'error');
+    } else {
+      showToast('Offline — sem alimentadores disponíveis.', 'warning');
+    }
   }
 }
 
