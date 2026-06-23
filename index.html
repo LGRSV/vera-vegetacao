@@ -877,15 +877,11 @@ function doLogin() {
   if (!user || USERS[user] !== pass) { err.style.display = 'block'; return; }
   err.style.display = 'none';
   currentUser = user;
+  // Vai para tela de seleção de polo/alimentador
   document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app-header').style.display   = 'flex';
-  document.getElementById('app').style.display          = 'block';
-  document.getElementById('header-user').textContent    = user;
-  initMap();
-  startGPSWatch();
-  renderRecords();
-  loadConfig();
-  updatePendingBadge();
+  document.getElementById('polo-screen').style.display  = 'flex';
+  document.getElementById('polo-user-label').textContent = user;
+  carregarIndice();
 }
 
 document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
