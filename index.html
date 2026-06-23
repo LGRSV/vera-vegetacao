@@ -4,9 +4,9 @@
 <script>
 // VERA v1.0 — limpeza forçada de SW e cache antes de qualquer carga
 (async function() {
-  const APP_VERSION = '1.0.2';
+  const APP_VERSION = '1.0.3';
   const stored = localStorage.getItem('vera_version_check');
-  if (stored !== '1.0.2') {
+  if (stored !== '1.0.3') {
     // Primeira execução desta versão — limpar tudo
     if ('serviceWorker' in navigator) {
       const regs = await navigator.serviceWorker.getRegistrations();
@@ -16,7 +16,7 @@
       const keys = await caches.keys();
       await Promise.all(keys.map(k => caches.delete(k)));
     }
-    localStorage.setItem('vera_version_check', '1.0.2');
+    localStorage.setItem('vera_version_check', '1.0.3');
     // Recarregar para garantir versão limpa
     if (stored) {
       window.location.reload(true);
@@ -39,7 +39,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <style>
 :root {
   --green-deep:  #1a2e1a;
@@ -424,6 +427,27 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   cursor: pointer;
 }
 
+
+/* ── CLUSTER E TOUCH ── */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background-color: rgba(21, 101, 192, 0.5) !important;
+}
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+  background-color: rgba(21, 101, 192, 0.85) !important;
+  color: #fff !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+}
+/* Área de toque maior nos postes */
+.poste-marker-touch {
+  cursor: pointer;
+}
+
 </style>
 </head>
 <body>
@@ -511,7 +535,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
     <div class="logo-mark">🌿</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v1.0.2</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v1.0.3</div>
     </div>
   </div>
   <div class="header-right">
@@ -735,7 +759,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '1.0.2';
+const APP_VERSION = '1.0.3';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
