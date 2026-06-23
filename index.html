@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VERA — Vegetação em Rede Ativa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root {
+    --green-deep:   #1a2e1a;
+    --green-mid:    #2d5a27;
+    --green-live:   #4CAF50;
+    --green-soft:   #a8d5a2;
+    --amber:        #e8a020;
+    --amber-light:  #fef3dc;
+    --soil:         #6b4226;
+    --off-white:    #f5f7f2;
+    --white:        #ffffff;
+    --text-main:    #1a2e1a;
+    --text-muted:   #5a7a55;
+    --border:       #c8dbc4;
+    --danger:       #c0392b;
+    --shadow:       0 2px 12px rgba(26,46,26,0.12);
+    --radius:       12px;
+    --radius-sm:    8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--off-white);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--green-deep);
+    padding: 0 16px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--white);
+  }
+  .logo-mark {
+    width: 32px; height: 32px;
+    background: var(--green-live);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo-text { font-size: 18px; font-weight: 700; letter-spacing: 0.04em; }
+  .logo-sub  { font-size: 10px; color: var(--green-soft); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; }
+
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .user-badge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .btn-logout {
+    background: none;
+    border: none;
+    color: var(--green-soft);
+    cursor: pointer;
+    font-size: 13px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: color 0.2s;
+  }
+  .btn-logout:hover { color: var(--white); }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    min-height: 100vh;
+    background: var(--green-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .login-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 40px 32px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .login-icon {
+    width: 64px; height: 64px;
+    background: var(--green-deep);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 24px;
+  }
+  .login-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--green-deep);
+    margin-bottom: 4px;
+  }
+  .login-subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+  .field-group { margin-bottom: 16px; }
+  .field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .field-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    color: var(--text-main);
+    background: var(--off-white);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .field-input:focus { border-color: var(--green-live); background: var(--white); }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    background: var(--green-mid);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+  }
+  .btn-primary:hover  { background: var(--green-deep); }
+  .btn-primary:active { transform: scale(0.98); }
+  .login-error {
+    color: var(--danger);
+    font-size: 13px;
+    text-align: center;
+    margin-top: 12px;
+    display: none;
+  }
+
+  /* ── MAIN APP ── */
+  #app { display: none; }
+
+  /* ── TABS ── */
+  .tab-bar {
+    display: flex;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 56px;
+    z-index: 900;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 12px 8px;
+    border: none;
+    background: none;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+  .tab-btn .tab-icon { font-size: 18px; }
+  .tab-btn.active {
+    color: var(--green-mid);
+    border-bottom-color: var(--green-live);
+    background: var(--amber-light);
+  }
+
+  .tab-panel { display: none; padding: 16px; }
+  .tab-panel.active { display: block; }
+
+  /* ── MAP ── */
+  #map-panel { padding: 0; }
+  #map {
+    height: calc(100vh - 110px);
+    width: 100%;
+  }
+  .map-fab {
+    position: absolute;
+    bottom: 24px;
+    right: 16px;
+    z-index: 800;
+    background: var(--green-mid);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 56px; height: 56px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(45,90,39,0.4);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .map-fab:active { transform: scale(0.92); }
+
+  .gps-pill {
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 800;
+    background: var(--green-deep);
+    color: var(--white);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+    box-shadow: var(--shadow);
+  }
+
+  /* ── FORM ── */
+  #form-panel { padding-bottom: 80px; }
+
+  .form-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 20px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .form-section-title:first-child { margin-top: 4px; }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+  .coord-box {
+    background: var(--green-deep);
+    color: var(--green-soft);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .coord-box span { color: var(--white); font-weight: 500; }
+
+  .gps-btn {
+    background: var(--green-mid);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+  }
+  .gps-btn:hover { background: var(--green-deep); }
+  .gps-btn.loading { background: var(--text-muted); }
+
+  /* Foto */
+  .photo-area {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--white);
+    position: relative;
+  }
+  .photo-area:hover { border-color: var(--green-live); background: #f0f8f0; }
+  .photo-area input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .photo-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .photo-thumb {
+    position: relative;
+    width: 80px; height: 80px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 2px solid var(--border);
+  }
+  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-thumb .remove-photo {
+    position: absolute;
+    top: 2px; right: 2px;
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px; height: 20px;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .photo-icon { font-size: 32px; margin-bottom: 6px; }
+  .photo-label { font-size: 13px; color: var(--text-muted); }
+
+  .btn-capture {
+    background: var(--amber);
+    color: var(--green-deep);
+    border: none;
+    border-radius: var(--radius);
+    padding: 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 16px rgba(232,160,32,0.35);
+  }
+  .btn-capture:hover  { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,160,32,0.45); }
+  .btn-capture:active { transform: scale(0.98); }
+
+  /* ── REGISTROS ── */
+  #records-panel { padding-bottom: 80px; }
+
+  .records-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .records-count {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .btn-export {
+    background: var(--green-deep);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+  }
+  .btn-export:hover { background: var(--green-mid); }
+
+  .record-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: start;
+  }
+  .record-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .record-species {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green-deep);
+    margin-bottom: 2px;
+  }
+  .record-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .meta-tag {
+    background: var(--off-white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .record-thumb {
+    width: 60px; height: 60px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    border: 2px solid var(--border);
+  }
+  .record-no-photo {
+    width: 60px; height: 60px;
+    border-radius: var(--radius-sm);
+    background: var(--off-white);
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    color: var(--border);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+  .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--green-deep);
+    color: var(--white);
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 9999;
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast.success { background: var(--green-mid); }
+  #toast.error   { background: var(--danger); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,46,26,0.6);
+    z-index: 2000;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet {
+    background: var(--white);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 40px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-handle {
+    width: 40px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green-deep);
+    margin-bottom: 16px;
+  }
+
+  select.field-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7a55' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+
+  @media (min-width: 480px) {
+    #form-panel, #records-panel { max-width: 480px; margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-icon">🌿</div>
+    <div class="login-title">VERA</div>
+    <div class="login-subtitle">Vegetação em Rede Ativa<br>Energisa Tocantins</div>
+    <div class="field-group">
+      <label class="field-label">Equipe / Usuário</label>
+      <select class="field-input" id="login-user">
+        <option value="">Selecione a equipe...</option>
+        <option>Equipe 01 — Norte</option>
+        <option>Equipe 02 — Norte</option>
+        <option>Equipe 03 — Centro</option>
+        <option>Equipe 04 — Centro</option>
+        <option>Equipe 05 — Centro</option>
+        <option>Equipe 06 — Sul</option>
+        <option>Equipe 07 — Sul</option>
+        <option>Equipe 08 — Sul</option>
+        <option>Equipe 09 — Palmas</option>
+        <option>Equipe 10 — Palmas</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Senha</label>
+      <input class="field-input" type="password" id="login-pass" placeholder="••••••">
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Entrar no campo →</button>
+    <div class="login-error" id="login-error">Usuário ou senha incorretos.</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header id="app-header" style="display:none;">
+  <div class="logo">
+    <div class="logo-mark">🌿</div>
+    <div>
+      <div class="logo-text">VERA</div>
+      <div class="logo-sub">Vegetação em Rede Ativa</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="user-badge" id="header-user">—</div>
+    <button class="btn-logout" onclick="doLogout()">Sair</button>
+  </div>
+</header>
+
+<!-- APP -->
+<div id="app">
+  <!-- TABS -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('map')" id="tab-map">
+      <span class="tab-icon">🗺️</span>Mapa
+    </button>
+    <button class="tab-btn" onclick="switchTab('form')" id="tab-form">
+      <span class="tab-icon">📋</span>Novo Ponto
+    </button>
+    <button class="tab-btn" onclick="switchTab('records')" id="tab-records">
+      <span class="tab-icon">📁</span>Registros
+    </button>
+  </div>
+
+  <!-- MAPA -->
+  <div class="tab-panel active" id="map-panel">
+    <div id="map"></div>
+    <div class="gps-pill" id="gps-pill">📍 Aguardando GPS...</div>
+    <button class="map-fab" onclick="switchTab('form')" title="Novo ponto">＋</button>
+  </div>
+
+  <!-- FORMULÁRIO -->
+  <div class="tab-panel" id="form-panel">
+
+    <div class="form-section-title">📍 Localização</div>
+
+    <div class="coord-box">
+      <span style="color:var(--green-soft);font-size:11px;">LAT</span>
+      <span id="disp-lat">—</span>
+      <span style="color:var(--green-soft);font-size:11px;">LON</span>
+      <span id="disp-lon">—</span>
+    </div>
+    <button class="gps-btn" id="gps-btn" onclick="captureGPS()">
+      <span>📡</span> Capturar posição GPS
+    </button>
+
+    <div class="form-section-title">🌳 Dados da Árvore</div>
+
+    <div class="field-group">
+      <label class="field-label">Poste</label>
+      <input class="field-input" type="text" id="f-poste" placeholder="Nº do poste">
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Espécie</label>
+      <input class="field-input" type="text" id="f-especie" placeholder="Nome da espécie">
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Área</label>
+      <input class="field-input" type="text" id="f-area" placeholder="Identificação da área">
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Acesso LV</label>
+      <select class="field-input" id="f-acesso">
+        <option value="">Selecione...</option>
+        <option>Sim</option>
+        <option>Não</option>
+        <option>Parcial</option>
+      </select>
+    </div>
+
+    <div class="form-section-title">📐 Medidas</div>
+
+    <div class="field-group">
+      <label class="field-label">Altura (m)</label>
+      <input class="field-input" type="number" id="f-altura" placeholder="0.0" step="0.1" min="0">
+    </div>
+
+    <div class="field-row triple">
+      <div class="field-group">
+        <label class="field-label">DT BT (cm)</label>
+        <input class="field-input" type="number" id="f-dtbt" placeholder="0" min="0">
+      </div>
+      <div class="field-group">
+        <label class="field-label">DT MT (cm)</label>
+        <input class="field-input" type="number" id="f-dtmt" placeholder="0" min="0">
+      </div>
+      <div class="field-group">
+        <label class="field-label">DT AT (cm)</label>
+        <input class="field-input" type="number" id="f-dtat" placeholder="0" min="0">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">DAP (cm)</label>
+      <input class="field-input" type="number" id="f-dap" placeholder="Diâmetro à altura do peito" step="0.1" min="0">
+    </div>
+
+    <div class="form-section-title">📷 Foto</div>
+
+    <div class="photo-area" id="photo-area">
+      <input type="file" id="photo-input" accept="image/*" capture="environment" multiple onchange="handlePhotos(event)">
+      <div class="photo-icon">📷</div>
+      <div class="photo-label">Toque para fotografar ou escolher da galeria</div>
+    </div>
+    <div class="photo-preview" id="photo-preview"></div>
+
+    <button class="btn-capture" onclick="savePoint()">
+      ✅ Registrar Ponto
+    </button>
+
+  </div>
+
+  <!-- REGISTROS -->
+  <div class="tab-panel" id="records-panel">
+    <div class="records-header">
+      <div class="records-count" id="records-count">0 pontos registrados</div>
+      <button class="btn-export" onclick="exportCSV()">⬇ Exportar CSV</button>
+    </div>
+    <div id="records-list"></div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ── USUÁRIOS ──────────────────────────────────────────────
+const USERS = {
+  'Equipe 01 — Norte':   'vera01',
+  'Equipe 02 — Norte':   'vera02',
+  'Equipe 03 — Centro':  'vera03',
+  'Equipe 04 — Centro':  'vera04',
+  'Equipe 05 — Centro':  'vera05',
+  'Equipe 06 — Sul':     'vera06',
+  'Equipe 07 — Sul':     'vera07',
+  'Equipe 08 — Sul':     'vera08',
+  'Equipe 09 — Palmas':  'vera09',
+  'Equipe 10 — Palmas':  'vera10',
+};
+
+let currentUser = null;
+let currentLat  = null;
+let currentLon  = null;
+let photos      = [];   // base64 strings
+let records     = JSON.parse(localStorage.getItem('vera_records') || '[]');
+let map, userMarker, pointsLayer;
+let watchId = null;
+
+// ── LOGIN ──────────────────────────────────────────────────
+function doLogin() {
+  const user = document.getElementById('login-user').value;
+  const pass = document.getElementById('login-pass').value;
+  const err  = document.getElementById('login-error');
+
+  if (!user || USERS[user] !== pass) {
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+  currentUser = user;
+
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-header').style.display    = 'flex';
+  document.getElementById('app').style.display           = 'block';
+  document.getElementById('header-user').textContent     = user;
+
+  initMap();
+  startGPSWatch();
+  renderRecords();
+}
+
+document.getElementById('login-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+function doLogout() {
+  currentUser = null;
+  currentLat = currentLon = null;
+  photos = [];
+  if (watchId) navigator.geolocation.clearWatch(watchId);
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-header').style.display   = 'none';
+  document.getElementById('app').style.display          = 'none';
+  document.getElementById('login-user').value           = '';
+  document.getElementById('login-pass').value           = '';
+}
+
+// ── TABS ───────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(name + '-panel').classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'map' && map) setTimeout(() => map.invalidateSize(), 100);
+  if (name === 'records') renderRecords();
+}
+
+// ── MAPA ───────────────────────────────────────────────────
+function initMap() {
+  map = L.map('map', { zoomControl: true }).setView([-10.18, -48.33], 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap',
+    maxZoom: 19
+  }).addTo(map);
+
+  pointsLayer = L.layerGroup().addTo(map);
+  renderMapPoints();
+}
+
+function renderMapPoints() {
+  if (!pointsLayer) return;
+  pointsLayer.clearLayers();
+  records.forEach((r, i) => {
+    if (!r.lat || !r.lon) return;
+    const marker = L.circleMarker([r.lat, r.lon], {
+      radius: 8,
+      fillColor: '#4CAF50',
+      color: '#1a2e1a',
+      weight: 2,
+      fillOpacity: 0.85
+    });
+    marker.bindPopup(`
+      <div style="font-family:'Space Grotesk',sans-serif;min-width:160px">
+        <div style="font-weight:700;color:#1a2e1a;margin-bottom:4px">${r.especie || 'Sem espécie'}</div>
+        <div style="font-size:12px;color:#5a7a55">Poste: ${r.poste || '—'}</div>
+        <div style="font-size:12px;color:#5a7a55">Altura: ${r.altura || '—'} m</div>
+        <div style="font-size:11px;color:#999;margin-top:4px">${r.data}</div>
+        ${r.photos && r.photos[0] ? `<img src="${r.photos[0]}" style="width:100%;border-radius:6px;margin-top:8px">` : ''}
+      </div>
+    `);
+    pointsLayer.addLayer(marker);
+  });
+}
+
+function startGPSWatch() {
+  if (!navigator.geolocation) return;
+  watchId = navigator.geolocation.watchPosition(pos => {
+    currentLat = pos.coords.latitude;
+    currentLon = pos.coords.longitude;
+    const pill = document.getElementById('gps-pill');
+    pill.textContent = `📍 ${currentLat.toFixed(6)}, ${currentLon.toFixed(6)}`;
+
+    if (!map) return;
+    if (!userMarker) {
+      userMarker = L.circleMarker([currentLat, currentLon], {
+        radius: 10, fillColor: '#e8a020', color: '#fff',
+        weight: 3, fillOpacity: 1
+      }).addTo(map);
+      map.setView([currentLat, currentLon], 15);
+    } else {
+      userMarker.setLatLng([currentLat, currentLon]);
+    }
+  }, err => {
+    document.getElementById('gps-pill').textContent = '⚠️ GPS indisponível';
+  }, { enableHighAccuracy: true, maximumAge: 5000 });
+}
+
+// ── GPS no formulário ──────────────────────────────────────
+function captureGPS() {
+  const btn = document.getElementById('gps-btn');
+  btn.classList.add('loading');
+  btn.innerHTML = '<span>⏳</span> Capturando...';
+
+  if (!navigator.geolocation) {
+    showToast('GPS não disponível neste dispositivo', 'error');
+    resetGpsBtn();
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    currentLat = pos.coords.latitude;
+    currentLon = pos.coords.longitude;
+    document.getElementById('disp-lat').textContent = currentLat.toFixed(6);
+    document.getElementById('disp-lon').textContent = currentLon.toFixed(6);
+    resetGpsBtn();
+    showToast('Posição capturada! ✓', 'success');
+  }, err => {
+    showToast('Erro ao obter GPS. Tente novamente.', 'error');
+    resetGpsBtn();
+  }, { enableHighAccuracy: true, timeout: 10000 });
+}
+
+function resetGpsBtn() {
+  const btn = document.getElementById('gps-btn');
+  btn.classList.remove('loading');
+  btn.innerHTML = '<span>📡</span> Capturar posição GPS';
+}
+
+// ── FOTOS ──────────────────────────────────────────────────
+function handlePhotos(e) {
+  const files = Array.from(e.target.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      // Comprime para max 800px
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const max = 800;
+        let w = img.width, h = img.height;
+        if (w > max) { h = (h * max) / w; w = max; }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const b64 = canvas.toDataURL('image/jpeg', 0.75);
+        photos.push(b64);
+        renderPhotoPreviews();
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+  e.target.value = '';
+}
+
+function renderPhotoPreviews() {
+  const container = document.getElementById('photo-preview');
+  container.innerHTML = '';
+  photos.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'photo-thumb';
+    div.innerHTML = `
+      <img src="${p}">
+      <button class="remove-photo" onclick="removePhoto(${i})">✕</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function removePhoto(i) {
+  photos.splice(i, 1);
+  renderPhotoPreviews();
+}
+
+// ── SALVAR PONTO ───────────────────────────────────────────
+function savePoint() {
+  if (!currentLat || !currentLon) {
+    showToast('Capture o GPS antes de registrar!', 'error');
+    return;
+  }
+
+  const especie = document.getElementById('f-especie').value.trim();
+  if (!especie) {
+    showToast('Informe a espécie da árvore!', 'error');
+    return;
+  }
+
+  const now = new Date();
+  const id  = 'V' + String(records.length + 1).padStart(4, '0');
+  const wkt = `POINT (${currentLon.toFixed(6)} ${currentLat.toFixed(6)})`;
+
+  const record = {
+    id,
+    wkt,
+    data:    now.toLocaleString('pt-BR'),
+    poste:   document.getElementById('f-poste').value.trim(),
+    especie,
+    lat:     currentLat,
+    lon:     currentLon,
+    altura:  document.getElementById('f-altura').value,
+    dtbt:    document.getElementById('f-dtbt').value,
+    dtmt:    document.getElementById('f-dtmt').value,
+    dtat:    document.getElementById('f-dtat').value,
+    dap:     document.getElementById('f-dap').value,
+    area:    document.getElementById('f-area').value.trim(),
+    acesso:  document.getElementById('f-acesso').value,
+    usuario: currentUser,
+    photos:  [...photos],
+  };
+
+  records.push(record);
+  localStorage.setItem('vera_records', JSON.stringify(records));
+
+  clearForm();
+  renderMapPoints();
+  showToast(`Ponto ${id} registrado! ✓`, 'success');
+  setTimeout(() => switchTab('records'), 900);
+}
+
+function clearForm() {
+  ['f-poste','f-especie','f-area','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('f-acesso').value = '';
+  document.getElementById('disp-lat').textContent = '—';
+  document.getElementById('disp-lon').textContent = '—';
+  currentLat = currentLon = null;
+  photos = [];
+  renderPhotoPreviews();
+}
+
+// ── RENDERIZAR REGISTROS ───────────────────────────────────
+function renderRecords() {
+  const list  = document.getElementById('records-list');
+  const count = document.getElementById('records-count');
+  count.textContent = `${records.length} ponto${records.length !== 1 ? 's' : ''} registrado${records.length !== 1 ? 's' : ''}`;
+
+  if (records.length === 0) {
+    list.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🌿</div>
+        <p>Nenhum ponto registrado ainda.<br>Vá em "Novo Ponto" para começar.</p>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = [...records].reverse().map(r => `
+    <div class="record-card">
+      <div>
+        <div class="record-id">${r.id} · ${r.usuario}</div>
+        <div class="record-species">${r.especie || '—'}</div>
+        <div class="record-meta">
+          ${r.poste ? `<span class="meta-tag">🪝 ${r.poste}</span>` : ''}
+          ${r.altura ? `<span class="meta-tag">↕ ${r.altura}m</span>` : ''}
+          ${r.dap ? `<span class="meta-tag">⊙ DAP ${r.dap}cm</span>` : ''}
+          ${r.area ? `<span class="meta-tag">📍 ${r.area}</span>` : ''}
+          ${r.acesso ? `<span class="meta-tag">🔌 LV: ${r.acesso}</span>` : ''}
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:6px">${r.data}</div>
+      </div>
+      <div>
+        ${r.photos && r.photos[0]
+          ? `<img class="record-thumb" src="${r.photos[0]}">`
+          : `<div class="record-no-photo">🌳</div>`}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── EXPORT CSV ────────────────────────────────────────────
+function exportCSV() {
+  if (records.length === 0) { showToast('Nenhum ponto para exportar.', 'error'); return; }
+
+  const headers = ['WKT','ID','DATA','POSTE','ESPECIE','LATITUDE','LONGITUDE',
+                   'ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DAP(cm)',
+                   'Area','Acesso LV','Usuario','N_Fotos'];
+
+  const rows = records.map(r => [
+    `"${r.wkt}"`, r.id, `"${r.data}"`, `"${r.poste}"`, `"${r.especie}"`,
+    r.lat, r.lon, r.altura, r.dtbt, r.dtmt, r.dtat, r.dap,
+    `"${r.area}"`, `"${r.acesso}"`, `"${r.usuario}"`,
+    r.photos ? r.photos.length : 0
+  ].join(';'));
+
+  const csv = [headers.join(';'), ...rows].join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = `VERA_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV exportado! ✓', 'success');
+}
+
+// ── TOAST ──────────────────────────────────────────────────
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = type ? `show ${type}` : 'show';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.className = '', 3000);
+}
+</script>
+</body>
+</html>
