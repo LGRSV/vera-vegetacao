@@ -3,537 +3,206 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a2e1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VERA">
+<link rel="manifest" href="manifest.json">
 <title>VERA — Vegetação em Rede Ativa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-  :root {
-    --green-deep:   #1a2e1a;
-    --green-mid:    #2d5a27;
-    --green-live:   #4CAF50;
-    --green-soft:   #a8d5a2;
-    --amber:        #e8a020;
-    --amber-light:  #fef3dc;
-    --soil:         #6b4226;
-    --off-white:    #f5f7f2;
-    --white:        #ffffff;
-    --text-main:    #1a2e1a;
-    --text-muted:   #5a7a55;
-    --border:       #c8dbc4;
-    --danger:       #c0392b;
-    --shadow:       0 2px 12px rgba(26,46,26,0.12);
-    --radius:       12px;
-    --radius-sm:    8px;
-  }
+:root {
+  --green-deep:  #1a2e1a;
+  --green-mid:   #2d5a27;
+  --green-live:  #4CAF50;
+  --green-soft:  #a8d5a2;
+  --amber:       #e8a020;
+  --amber-bg:    #fef3dc;
+  --off-white:   #f5f7f2;
+  --white:       #ffffff;
+  --text-main:   #1a2e1a;
+  --text-muted:  #5a7a55;
+  --border:      #c8dbc4;
+  --danger:      #c0392b;
+  --danger-bg:   #fdecea;
+  --shadow:      0 2px 12px rgba(26,46,26,0.12);
+  --radius:      12px;
+  --radius-sm:   8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Space Grotesk',sans-serif;background:var(--off-white);color:var(--text-main);min-height:100vh;overflow-x:hidden;}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── STATUS BAR ── */
+#status-bar{
+  position:fixed;top:0;left:0;right:0;z-index:2000;
+  padding:6px 12px;font-size:11px;font-weight:600;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all 0.3s;
+}
+#status-bar.online{background:var(--green-mid);color:var(--white);}
+#status-bar.offline{background:var(--danger);color:var(--white);}
+#status-bar.syncing{background:var(--amber);color:var(--green-deep);}
+.status-dot{width:8px;height:8px;border-radius:50%;background:currentColor;animation:none;}
+.status-dot.pulse{animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.pending-badge{
+  background:rgba(255,255,255,0.25);border-radius:10px;
+  padding:2px 8px;font-size:10px;
+}
 
-  body {
-    font-family: 'Space Grotesk', sans-serif;
-    background: var(--off-white);
-    color: var(--text-main);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+/* ── HEADER ── */
+header{
+  background:var(--green-deep);padding:0 16px;height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:28px;z-index:1000;
+}
+.logo{display:flex;align-items:center;gap:10px;color:var(--white);}
+.logo-mark{width:30px;height:30px;background:var(--green-live);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.logo-text{font-size:17px;font-weight:700;letter-spacing:0.04em;}
+.logo-sub{font-size:9px;color:var(--green-soft);letter-spacing:0.08em;text-transform:uppercase;line-height:1;}
+.header-right{display:flex;align-items:center;gap:8px;}
+.user-badge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--white);padding:4px 10px;border-radius:16px;font-size:11px;font-weight:500;}
+.btn-icon{background:none;border:none;color:var(--green-soft);cursor:pointer;font-size:18px;padding:4px 6px;border-radius:6px;transition:color 0.2s;}
+.btn-icon:hover{color:var(--white);}
 
-  /* ── HEADER ── */
-  header {
-    background: var(--green-deep);
-    padding: 0 16px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--white);
-  }
-  .logo-mark {
-    width: 32px; height: 32px;
-    background: var(--green-live);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-  }
-  .logo-text { font-size: 18px; font-weight: 700; letter-spacing: 0.04em; }
-  .logo-sub  { font-size: 10px; color: var(--green-soft); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; }
+/* ── LOGIN ── */
+#login-screen{min-height:100vh;background:var(--green-deep);display:flex;align-items:center;justify-content:center;padding:20px;padding-top:40px;}
+.login-card{background:var(--white);border-radius:20px;padding:36px 28px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.login-icon{width:60px;height:60px;background:var(--green-deep);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 20px;}
+.login-title{text-align:center;font-size:22px;font-weight:700;color:var(--green-deep);margin-bottom:4px;}
+.login-subtitle{text-align:center;font-size:12px;color:var(--text-muted);margin-bottom:24px;line-height:1.5;}
+.field-group{margin-bottom:14px;}
+.field-label{display:block;font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+.field-input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--text-main);background:var(--off-white);transition:border-color 0.2s;outline:none;}
+.field-input:focus{border-color:var(--green-live);background:var(--white);}
+select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7a55' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px;}
+.btn-primary{width:100%;padding:13px;background:var(--green-mid);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s,transform 0.1s;margin-top:6px;}
+.btn-primary:hover{background:var(--green-deep);}
+.btn-primary:active{transform:scale(0.98);}
+.login-error{color:var(--danger);font-size:12px;text-align:center;margin-top:10px;display:none;}
 
-  .header-right { display: flex; align-items: center; gap: 10px; }
-  .user-badge {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: var(--white);
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
-  }
-  .btn-logout {
-    background: none;
-    border: none;
-    color: var(--green-soft);
-    cursor: pointer;
-    font-size: 13px;
-    padding: 5px 8px;
-    border-radius: 6px;
-    transition: color 0.2s;
-  }
-  .btn-logout:hover { color: var(--white); }
+/* ── APP ── */
+#app{display:none;padding-top:28px;}
 
-  /* ── LOGIN ── */
-  #login-screen {
-    min-height: 100vh;
-    background: var(--green-deep);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .login-card {
-    background: var(--white);
-    border-radius: 20px;
-    padding: 40px 32px;
-    width: 100%;
-    max-width: 380px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  }
-  .login-icon {
-    width: 64px; height: 64px;
-    background: var(--green-deep);
-    border-radius: 16px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 32px;
-    margin: 0 auto 24px;
-  }
-  .login-title {
-    text-align: center;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--green-deep);
-    margin-bottom: 4px;
-  }
-  .login-subtitle {
-    text-align: center;
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-bottom: 28px;
-  }
-  .field-group { margin-bottom: 16px; }
-  .field-label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 6px;
-  }
-  .field-input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 15px;
-    color: var(--text-main);
-    background: var(--off-white);
-    transition: border-color 0.2s;
-    outline: none;
-  }
-  .field-input:focus { border-color: var(--green-live); background: var(--white); }
+/* ── TABS ── */
+.tab-bar{display:flex;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:80px;z-index:900;}
+.tab-btn{flex:1;padding:10px 6px;border:none;background:none;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab-btn .tab-icon{font-size:17px;}
+.tab-btn.active{color:var(--green-mid);border-bottom-color:var(--green-live);background:var(--amber-bg);}
 
-  .btn-primary {
-    width: 100%;
-    padding: 13px;
-    background: var(--green-mid);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    margin-top: 8px;
-  }
-  .btn-primary:hover  { background: var(--green-deep); }
-  .btn-primary:active { transform: scale(0.98); }
-  .login-error {
-    color: var(--danger);
-    font-size: 13px;
-    text-align: center;
-    margin-top: 12px;
-    display: none;
-  }
+.tab-panel{display:none;padding:14px;}
+.tab-panel.active{display:block;}
 
-  /* ── MAIN APP ── */
-  #app { display: none; }
+/* ── MAPA ── */
+#map-panel{padding:0;}
+#map{height:calc(100vh - 140px);width:100%;}
+.map-fab{position:absolute;bottom:20px;right:14px;z-index:800;background:var(--green-mid);color:var(--white);border:none;border-radius:50%;width:52px;height:52px;font-size:22px;cursor:pointer;box-shadow:0 4px 16px rgba(45,90,39,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
+.map-fab:active{transform:scale(0.92);}
+.gps-pill{position:absolute;top:6px;left:50%;transform:translateX(-50%);z-index:800;background:var(--green-deep);color:var(--white);padding:5px 12px;border-radius:16px;font-size:11px;font-family:'JetBrains Mono',monospace;white-space:nowrap;box-shadow:var(--shadow);}
 
-  /* ── TABS ── */
-  .tab-bar {
-    display: flex;
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 56px;
-    z-index: 900;
-  }
-  .tab-btn {
-    flex: 1;
-    padding: 12px 8px;
-    border: none;
-    background: none;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-muted);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-  }
-  .tab-btn .tab-icon { font-size: 18px; }
-  .tab-btn.active {
-    color: var(--green-mid);
-    border-bottom-color: var(--green-live);
-    background: var(--amber-light);
-  }
+/* ── FORM ── */
+#form-panel{padding-bottom:80px;}
+.form-section-title{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.form-section-title:first-child{margin-top:2px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.field-row.triple{grid-template-columns:1fr 1fr 1fr;}
+.coord-box{background:var(--green-deep);color:var(--green-soft);border-radius:var(--radius-sm);padding:9px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.coord-box span{color:var(--white);font-weight:500;}
+.gps-btn{background:var(--green-mid);color:var(--white);border:none;border-radius:var(--radius-sm);padding:10px 14px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;width:100%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:7px;transition:background 0.2s;}
+.gps-btn:hover{background:var(--green-deep);}
+.gps-btn.loading{background:var(--text-muted);}
+.photo-area{border:2px dashed var(--border);border-radius:var(--radius);padding:18px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--white);position:relative;}
+.photo-area:hover{border-color:var(--green-live);background:#f0f8f0;}
+.photo-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-preview{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+.photo-thumb{position:relative;width:76px;height:76px;border-radius:var(--radius-sm);overflow:hidden;border:2px solid var(--border);}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;}
+.photo-thumb .remove-photo{position:absolute;top:2px;right:2px;background:var(--danger);color:white;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.photo-icon{font-size:28px;margin-bottom:5px;}
+.photo-label{font-size:12px;color:var(--text-muted);}
+.btn-capture{background:var(--amber);color:var(--green-deep);border:none;border-radius:var(--radius);padding:15px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;cursor:pointer;width:100%;margin-top:18px;display:flex;align-items:center;justify-content:center;gap:9px;transition:transform 0.15s,box-shadow 0.15s;box-shadow:0 4px 16px rgba(232,160,32,0.35);}
+.btn-capture:hover{transform:translateY(-1px);}
+.btn-capture:active{transform:scale(0.98);}
 
-  .tab-panel { display: none; padding: 16px; }
-  .tab-panel.active { display: block; }
+/* ── REGISTROS ── */
+#records-panel{padding-bottom:80px;}
+.records-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.records-count{font-size:12px;color:var(--text-muted);}
+.btn-export{background:var(--green-deep);color:var(--white);border:none;border-radius:var(--radius-sm);padding:7px 14px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background 0.2s;}
+.btn-export:hover{background:var(--green-mid);}
+.record-card{background:var(--white);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;border:1px solid var(--border);box-shadow:var(--shadow);display:grid;grid-template-columns:1fr auto;gap:7px;align-items:start;}
+.record-card.pending{border-left:3px solid var(--amber);}
+.record-card.synced{border-left:3px solid var(--green-live);}
+.record-id{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:3px;}
+.record-species{font-size:15px;font-weight:700;color:var(--green-deep);margin-bottom:2px;}
+.record-meta{font-size:11px;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:5px;margin-top:3px;}
+.meta-tag{background:var(--off-white);border:1px solid var(--border);border-radius:4px;padding:2px 5px;font-size:10px;font-family:'JetBrains Mono',monospace;}
+.sync-tag{background:var(--amber-bg);border:1px solid var(--amber);color:var(--amber);border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600;}
+.synced-tag{background:var(--off-white);border:1px solid var(--green-live);color:var(--green-mid);border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600;}
+.record-thumb{width:58px;height:58px;border-radius:var(--radius-sm);object-fit:cover;border:2px solid var(--border);}
+.record-no-photo{width:58px;height:58px;border-radius:var(--radius-sm);background:var(--off-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--border);}
+.empty-state{text-align:center;padding:50px 20px;color:var(--text-muted);}
+.empty-state .empty-icon{font-size:44px;margin-bottom:10px;}
+.empty-state p{font-size:13px;}
 
-  /* ── MAP ── */
-  #map-panel { padding: 0; }
-  #map {
-    height: calc(100vh - 110px);
-    width: 100%;
-  }
-  .map-fab {
-    position: absolute;
-    bottom: 24px;
-    right: 16px;
-    z-index: 800;
-    background: var(--green-mid);
-    color: var(--white);
-    border: none;
-    border-radius: 50%;
-    width: 56px; height: 56px;
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(45,90,39,0.4);
-    display: flex; align-items: center; justify-content: center;
-    transition: transform 0.2s, background 0.2s;
-  }
-  .map-fab:active { transform: scale(0.92); }
+/* ── CONFIG ── */
+#config-panel{padding-bottom:80px;}
+.config-section{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:16px;margin-bottom:14px;}
+.config-title{font-size:13px;font-weight:700;color:var(--green-deep);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.token-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-main);background:var(--off-white);outline:none;}
+.token-input:focus{border-color:var(--green-live);}
+.btn-save-config{background:var(--green-mid);color:var(--white);border:none;border-radius:var(--radius-sm);padding:10px 18px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:10px;transition:background 0.2s;}
+.btn-save-config:hover{background:var(--green-deep);}
+.config-status{margin-top:8px;font-size:12px;color:var(--text-muted);}
+.config-status.ok{color:var(--green-mid);}
+.config-status.err{color:var(--danger);}
+.sync-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.stat-box{background:var(--off-white);border-radius:var(--radius-sm);padding:12px;text-align:center;border:1px solid var(--border);}
+.stat-num{font-size:24px;font-weight:700;color:var(--green-deep);}
+.stat-num.amber{color:var(--amber);}
+.stat-label{font-size:10px;color:var(--text-muted);margin-top:2px;}
+.btn-sync-now{background:var(--amber);color:var(--green-deep);border:none;border-radius:var(--radius-sm);padding:10px 18px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;transition:background 0.2s;}
+.btn-sync-now:hover{background:#d4911c;}
+.btn-danger{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger);border-radius:var(--radius-sm);padding:9px 18px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;width:100%;margin-top:8px;}
 
-  .gps-pill {
-    position: absolute;
-    top: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 800;
-    background: var(--green-deep);
-    color: var(--white);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-family: 'JetBrains Mono', monospace;
-    white-space: nowrap;
-    box-shadow: var(--shadow);
-  }
+/* ── TOAST ── */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green-deep);color:var(--white);padding:11px 22px;border-radius:22px;font-size:13px;font-weight:500;z-index:9999;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,0.25);}
+#toast.show{transform:translateX(-50%) translateY(0);}
+#toast.success{background:var(--green-mid);}
+#toast.error{background:var(--danger);}
+#toast.warning{background:var(--amber);color:var(--green-deep);}
 
-  /* ── FORM ── */
-  #form-panel { padding-bottom: 80px; }
+/* ── INSTALL BANNER ── */
+#install-banner{display:none;background:var(--green-deep);color:var(--white);padding:10px 14px;text-align:center;font-size:12px;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;}
+#install-banner.show{display:flex;}
+.btn-install{background:var(--green-live);color:var(--white);border:none;border-radius:6px;padding:6px 14px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-dismiss{background:none;border:none;color:var(--green-soft);cursor:pointer;font-size:18px;padding:0 4px;}
 
-  .form-section-title {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin: 20px 0 10px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--border);
-  }
-  .form-section-title:first-child { margin-top: 4px; }
-
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
-
-  .coord-box {
-    background: var(--green-deep);
-    color: var(--green-soft);
-    border-radius: var(--radius-sm);
-    padding: 10px 12px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .coord-box span { color: var(--white); font-weight: 500; }
-
-  .gps-btn {
-    background: var(--green-mid);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius-sm);
-    padding: 10px 16px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: background 0.2s;
-  }
-  .gps-btn:hover { background: var(--green-deep); }
-  .gps-btn.loading { background: var(--text-muted); }
-
-  /* Foto */
-  .photo-area {
-    border: 2px dashed var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: var(--white);
-    position: relative;
-  }
-  .photo-area:hover { border-color: var(--green-live); background: #f0f8f0; }
-  .photo-area input[type=file] {
-    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
-  }
-  .photo-preview {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 12px;
-  }
-  .photo-thumb {
-    position: relative;
-    width: 80px; height: 80px;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    border: 2px solid var(--border);
-  }
-  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
-  .photo-thumb .remove-photo {
-    position: absolute;
-    top: 2px; right: 2px;
-    background: var(--danger);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 20px; height: 20px;
-    font-size: 11px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .photo-icon { font-size: 32px; margin-bottom: 6px; }
-  .photo-label { font-size: 13px; color: var(--text-muted); }
-
-  .btn-capture {
-    background: var(--amber);
-    color: var(--green-deep);
-    border: none;
-    border-radius: var(--radius);
-    padding: 16px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 16px rgba(232,160,32,0.35);
-  }
-  .btn-capture:hover  { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,160,32,0.45); }
-  .btn-capture:active { transform: scale(0.98); }
-
-  /* ── REGISTROS ── */
-  #records-panel { padding-bottom: 80px; }
-
-  .records-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-  .records-count {
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-  .btn-export {
-    background: var(--green-deep);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius-sm);
-    padding: 8px 16px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: background 0.2s;
-  }
-  .btn-export:hover { background: var(--green-mid); }
-
-  .record-card {
-    background: var(--white);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 8px;
-    align-items: start;
-  }
-  .record-id {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-bottom: 4px;
-  }
-  .record-species {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--green-deep);
-    margin-bottom: 2px;
-  }
-  .record-meta {
-    font-size: 12px;
-    color: var(--text-muted);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 4px;
-  }
-  .meta-tag {
-    background: var(--off-white);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 2px 6px;
-    font-size: 11px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .record-thumb {
-    width: 60px; height: 60px;
-    border-radius: var(--radius-sm);
-    object-fit: cover;
-    border: 2px solid var(--border);
-  }
-  .record-no-photo {
-    width: 60px; height: 60px;
-    border-radius: var(--radius-sm);
-    background: var(--off-white);
-    border: 2px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    color: var(--border);
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-muted);
-  }
-  .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
-  .empty-state p { font-size: 14px; }
-
-  /* ── TOAST ── */
-  #toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--green-deep);
-    color: var(--white);
-    padding: 12px 24px;
-    border-radius: 24px;
-    font-size: 14px;
-    font-weight: 500;
-    z-index: 9999;
-    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    white-space: nowrap;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-  }
-  #toast.show { transform: translateX(-50%) translateY(0); }
-  #toast.success { background: var(--green-mid); }
-  #toast.error   { background: var(--danger); }
-
-  /* ── MODAL ── */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(26,46,26,0.6);
-    z-index: 2000;
-    align-items: flex-end;
-    justify-content: center;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal-sheet {
-    background: var(--white);
-    border-radius: 20px 20px 0 0;
-    padding: 24px 20px 40px;
-    width: 100%;
-    max-width: 480px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  .modal-handle {
-    width: 40px; height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    margin: 0 auto 20px;
-  }
-  .modal-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--green-deep);
-    margin-bottom: 16px;
-  }
-
-  select.field-input {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7a55' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 32px;
-  }
-
-  @media (min-width: 480px) {
-    #form-panel, #records-panel { max-width: 480px; margin: 0 auto; }
-  }
+@media(min-width:480px){
+  #form-panel,#records-panel,#config-panel{max-width:480px;margin:0 auto;}
+}
 </style>
 </head>
 <body>
+
+<!-- STATUS BAR -->
+<div id="status-bar" class="online">
+  <div style="display:flex;align-items:center;gap:6px;">
+    <div class="status-dot" id="status-dot"></div>
+    <span id="status-text">Online</span>
+  </div>
+  <div id="pending-info" class="pending-badge" style="display:none;"></div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div id="install-banner">
+  <span>📲 Instale o VERA na tela inicial para usar offline</span>
+  <button class="btn-install" id="btn-install">Instalar</button>
+  <button class="btn-dismiss" onclick="document.getElementById('install-banner').classList.remove('show')">✕</button>
+</div>
 
 <!-- LOGIN -->
 <div id="login-screen">
@@ -577,114 +246,64 @@
   </div>
   <div class="header-right">
     <div class="user-badge" id="header-user">—</div>
-    <button class="btn-logout" onclick="doLogout()">Sair</button>
+    <button class="btn-icon" onclick="switchTab('config')" title="Configurações">⚙️</button>
+    <button class="btn-icon" onclick="doLogout()" title="Sair">🚪</button>
   </div>
 </header>
 
 <!-- APP -->
 <div id="app">
-  <!-- TABS -->
   <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('map')" id="tab-map">
-      <span class="tab-icon">🗺️</span>Mapa
-    </button>
-    <button class="tab-btn" onclick="switchTab('form')" id="tab-form">
-      <span class="tab-icon">📋</span>Novo Ponto
-    </button>
-    <button class="tab-btn" onclick="switchTab('records')" id="tab-records">
-      <span class="tab-icon">📁</span>Registros
-    </button>
+    <button class="tab-btn active" onclick="switchTab('map')" id="tab-map"><span class="tab-icon">🗺️</span>Mapa</button>
+    <button class="tab-btn" onclick="switchTab('form')" id="tab-form"><span class="tab-icon">📋</span>Novo Ponto</button>
+    <button class="tab-btn" onclick="switchTab('records')" id="tab-records"><span class="tab-icon">📁</span>Registros</button>
+    <button class="tab-btn" onclick="switchTab('config')" id="tab-config"><span class="tab-icon">⚙️</span>Config</button>
   </div>
 
   <!-- MAPA -->
   <div class="tab-panel active" id="map-panel">
     <div id="map"></div>
     <div class="gps-pill" id="gps-pill">📍 Aguardando GPS...</div>
-    <button class="map-fab" onclick="switchTab('form')" title="Novo ponto">＋</button>
+    <button class="map-fab" onclick="switchTab('form')">＋</button>
   </div>
 
   <!-- FORMULÁRIO -->
   <div class="tab-panel" id="form-panel">
-
     <div class="form-section-title">📍 Localização</div>
-
     <div class="coord-box">
-      <span style="color:var(--green-soft);font-size:11px;">LAT</span>
+      <span style="color:var(--green-soft);font-size:10px;">LAT</span>
       <span id="disp-lat">—</span>
-      <span style="color:var(--green-soft);font-size:11px;">LON</span>
+      <span style="color:var(--green-soft);font-size:10px;">LON</span>
       <span id="disp-lon">—</span>
     </div>
-    <button class="gps-btn" id="gps-btn" onclick="captureGPS()">
-      <span>📡</span> Capturar posição GPS
-    </button>
+    <button class="gps-btn" id="gps-btn" onclick="captureGPS()"><span>📡</span> Capturar posição GPS</button>
 
     <div class="form-section-title">🌳 Dados da Árvore</div>
-
-    <div class="field-group">
-      <label class="field-label">Poste</label>
-      <input class="field-input" type="text" id="f-poste" placeholder="Nº do poste">
-    </div>
-
-    <div class="field-group">
-      <label class="field-label">Espécie</label>
-      <input class="field-input" type="text" id="f-especie" placeholder="Nome da espécie">
-    </div>
-
-    <div class="field-group">
-      <label class="field-label">Área</label>
-      <input class="field-input" type="text" id="f-area" placeholder="Identificação da área">
-    </div>
-
+    <div class="field-group"><label class="field-label">Poste</label><input class="field-input" type="text" id="f-poste" placeholder="Nº do poste"></div>
+    <div class="field-group"><label class="field-label">Espécie *</label><input class="field-input" type="text" id="f-especie" placeholder="Nome da espécie"></div>
+    <div class="field-group"><label class="field-label">Área</label><input class="field-input" type="text" id="f-area" placeholder="Identificação da área"></div>
     <div class="field-group">
       <label class="field-label">Acesso LV</label>
-      <select class="field-input" id="f-acesso">
-        <option value="">Selecione...</option>
-        <option>Sim</option>
-        <option>Não</option>
-        <option>Parcial</option>
-      </select>
+      <select class="field-input" id="f-acesso"><option value="">Selecione...</option><option>Sim</option><option>Não</option><option>Parcial</option></select>
     </div>
 
     <div class="form-section-title">📐 Medidas</div>
-
-    <div class="field-group">
-      <label class="field-label">Altura (m)</label>
-      <input class="field-input" type="number" id="f-altura" placeholder="0.0" step="0.1" min="0">
-    </div>
-
+    <div class="field-group"><label class="field-label">Altura (m)</label><input class="field-input" type="number" id="f-altura" placeholder="0.0" step="0.1" min="0"></div>
     <div class="field-row triple">
-      <div class="field-group">
-        <label class="field-label">DT BT (cm)</label>
-        <input class="field-input" type="number" id="f-dtbt" placeholder="0" min="0">
-      </div>
-      <div class="field-group">
-        <label class="field-label">DT MT (cm)</label>
-        <input class="field-input" type="number" id="f-dtmt" placeholder="0" min="0">
-      </div>
-      <div class="field-group">
-        <label class="field-label">DT AT (cm)</label>
-        <input class="field-input" type="number" id="f-dtat" placeholder="0" min="0">
-      </div>
+      <div class="field-group"><label class="field-label">DT BT (cm)</label><input class="field-input" type="number" id="f-dtbt" placeholder="0" min="0"></div>
+      <div class="field-group"><label class="field-label">DT MT (cm)</label><input class="field-input" type="number" id="f-dtmt" placeholder="0" min="0"></div>
+      <div class="field-group"><label class="field-label">DT AT (cm)</label><input class="field-input" type="number" id="f-dtat" placeholder="0" min="0"></div>
     </div>
-
-    <div class="field-group">
-      <label class="field-label">DAP (cm)</label>
-      <input class="field-input" type="number" id="f-dap" placeholder="Diâmetro à altura do peito" step="0.1" min="0">
-    </div>
+    <div class="field-group"><label class="field-label">DAP (cm)</label><input class="field-input" type="number" id="f-dap" placeholder="Diâmetro à altura do peito" step="0.1" min="0"></div>
 
     <div class="form-section-title">📷 Foto</div>
-
     <div class="photo-area" id="photo-area">
       <input type="file" id="photo-input" accept="image/*" capture="environment" multiple onchange="handlePhotos(event)">
       <div class="photo-icon">📷</div>
       <div class="photo-label">Toque para fotografar ou escolher da galeria</div>
     </div>
     <div class="photo-preview" id="photo-preview"></div>
-
-    <button class="btn-capture" onclick="savePoint()">
-      ✅ Registrar Ponto
-    </button>
-
+    <button class="btn-capture" onclick="savePoint()">✅ Registrar Ponto</button>
   </div>
 
   <!-- REGISTROS -->
@@ -696,64 +315,348 @@
     <div id="records-list"></div>
   </div>
 
+  <!-- CONFIG -->
+  <div class="tab-panel" id="config-panel">
+
+    <div class="config-section">
+      <div class="config-title">📊 Status de Sincronização</div>
+      <div class="sync-stats">
+        <div class="stat-box"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total registrado</div></div>
+        <div class="stat-box"><div class="stat-num amber" id="stat-pending">0</div><div class="stat-label">Aguardando envio</div></div>
+      </div>
+      <button class="btn-sync-now" onclick="syncNow()">🔄 Sincronizar agora</button>
+    </div>
+
+    <div class="config-section">
+      <div class="config-title">🔑 Token GitHub (supervisor)</div>
+      <label class="field-label">Personal Access Token (classic)</label>
+      <input class="token-input" type="password" id="github-token" placeholder="ghp_...">
+      <br>
+      <label class="field-label" style="margin-top:10px;">Repositório</label>
+      <input class="field-input" type="text" id="github-repo" placeholder="LGRSV/vera-vegetacao" style="margin-top:5px;">
+      <br>
+      <button class="btn-save-config" onclick="saveConfig()">💾 Salvar configuração</button>
+      <div class="config-status" id="config-status"></div>
+    </div>
+
+    <div class="config-section">
+      <div class="config-title">📤 Exportação Manual</div>
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
+        Use quando não houver wifi. Exporte o CSV e envie manualmente ao supervisor.
+      </p>
+      <button class="btn-export" style="width:100%;justify-content:center;" onclick="exportCSV()">⬇ Exportar CSV completo</button>
+      <button class="btn-export" style="width:100%;justify-content:center;margin-top:8px;background:var(--amber);color:var(--green-deep);" onclick="exportPendingCSV()">⬇ Exportar apenas pendentes</button>
+    </div>
+
+    <div class="config-section">
+      <div class="config-title">⚠️ Zona de Perigo</div>
+      <button class="btn-danger" onclick="clearSyncedRecords()">🗑 Limpar apenas registros já enviados</button>
+      <button class="btn-danger" onclick="clearAllRecords()" style="margin-top:8px;">🗑 Limpar TODOS os registros</button>
+    </div>
+
+  </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
 <script>
-// ── USUÁRIOS ──────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+// USUÁRIOS
+// ══════════════════════════════════════════════════
 const USERS = {
-  'Equipe 01 — Norte':   'vera01',
-  'Equipe 02 — Norte':   'vera02',
-  'Equipe 03 — Centro':  'vera03',
-  'Equipe 04 — Centro':  'vera04',
-  'Equipe 05 — Centro':  'vera05',
-  'Equipe 06 — Sul':     'vera06',
-  'Equipe 07 — Sul':     'vera07',
-  'Equipe 08 — Sul':     'vera08',
-  'Equipe 09 — Palmas':  'vera09',
-  'Equipe 10 — Palmas':  'vera10',
+  'Equipe 01 — Norte':'vera01','Equipe 02 — Norte':'vera02',
+  'Equipe 03 — Centro':'vera03','Equipe 04 — Centro':'vera04',
+  'Equipe 05 — Centro':'vera05','Equipe 06 — Sul':'vera06',
+  'Equipe 07 — Sul':'vera07','Equipe 08 — Sul':'vera08',
+  'Equipe 09 — Palmas':'vera09','Equipe 10 — Palmas':'vera10',
 };
 
-let currentUser = null;
-let currentLat  = null;
-let currentLon  = null;
-let photos      = [];   // base64 strings
-let records     = JSON.parse(localStorage.getItem('vera_records') || '[]');
-let map, userMarker, pointsLayer;
-let watchId = null;
+// ══════════════════════════════════════════════════
+// INDEXEDDB
+// ══════════════════════════════════════════════════
+let db;
+const DB_NAME = 'veraDB', DB_VERSION = 1;
 
-// ── LOGIN ──────────────────────────────────────────────────
+function initDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains('points')) {
+        const store = d.createObjectStore('points', { keyPath: 'id' });
+        store.createIndex('synced', 'synced', { unique: false });
+        store.createIndex('usuario', 'usuario', { unique: false });
+      }
+      if (!d.objectStoreNames.contains('config')) {
+        d.createObjectStore('config', { keyPath: 'key' });
+      }
+    };
+    req.onsuccess = e => { db = e.target.result; resolve(); };
+    req.onerror   = () => reject(req.error);
+  });
+}
+
+function dbPut(store, data) {
+  return new Promise((res, rej) => {
+    const tx = db.transaction(store, 'readwrite');
+    tx.objectStore(store).put(data).onsuccess = e => res(e.target.result);
+    tx.onerror = () => rej(tx.error);
+  });
+}
+
+function dbGetAll(store) {
+  return new Promise((res, rej) => {
+    const tx = db.transaction(store, 'readonly');
+    tx.objectStore(store).getAll().onsuccess = e => res(e.target.result);
+    tx.onerror = () => rej(tx.error);
+  });
+}
+
+function dbGet(store, key) {
+  return new Promise((res, rej) => {
+    const tx = db.transaction(store, 'readonly');
+    tx.objectStore(store).get(key).onsuccess = e => res(e.target.result);
+    tx.onerror = () => rej(tx.error);
+  });
+}
+
+function dbDelete(store, key) {
+  return new Promise((res, rej) => {
+    const tx = db.transaction(store, 'readwrite');
+    tx.objectStore(store).delete(key).onsuccess = () => res();
+    tx.onerror = () => rej(tx.error);
+  });
+}
+
+async function getConfig(key) {
+  const r = await dbGet('config', key);
+  return r ? r.value : null;
+}
+
+async function setConfig(key, value) {
+  await dbPut('config', { key, value });
+}
+
+// ══════════════════════════════════════════════════
+// SERVICE WORKER
+// ══════════════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(reg => {
+    console.log('SW registrado');
+  });
+  navigator.serviceWorker.addEventListener('message', e => {
+    if (e.data?.type === 'DO_SYNC') syncPendingPoints();
+  });
+}
+
+// ══════════════════════════════════════════════════
+// INSTALL PROMPT
+// ══════════════════════════════════════════════════
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-banner').classList.add('show');
+});
+document.getElementById('btn-install').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('install-banner').classList.remove('show');
+  if (outcome === 'accepted') showToast('VERA instalado! ✓', 'success');
+});
+
+// ══════════════════════════════════════════════════
+// STATUS DE CONEXÃO
+// ══════════════════════════════════════════════════
+function updateConnectionStatus() {
+  const bar  = document.getElementById('status-bar');
+  const dot  = document.getElementById('status-dot');
+  const txt  = document.getElementById('status-text');
+  const info = document.getElementById('pending-info');
+
+  if (navigator.onLine) {
+    bar.className = 'online';
+    dot.classList.remove('pulse');
+    txt.textContent = 'Online';
+    syncPendingPoints();
+  } else {
+    bar.className = 'offline';
+    dot.classList.add('pulse');
+    txt.textContent = 'Offline — dados salvos no celular';
+  }
+  updatePendingBadge();
+}
+
+async function updatePendingBadge() {
+  const all     = await dbGetAll('points');
+  const pending = all.filter(r => !r.synced);
+  const info    = document.getElementById('pending-info');
+  if (pending.length > 0) {
+    info.style.display = 'block';
+    info.textContent   = `${pending.length} pendente${pending.length > 1 ? 's' : ''}`;
+  } else {
+    info.style.display = 'none';
+  }
+  document.getElementById('stat-total').textContent   = all.length;
+  document.getElementById('stat-pending').textContent = pending.length;
+}
+
+window.addEventListener('online',  updateConnectionStatus);
+window.addEventListener('offline', updateConnectionStatus);
+
+// ══════════════════════════════════════════════════
+// SINCRONIZAÇÃO COM GITHUB
+// ══════════════════════════════════════════════════
+let isSyncing = false;
+
+async function syncPendingPoints() {
+  if (isSyncing || !navigator.onLine) return;
+
+  const token = await getConfig('github_token');
+  const repo  = await getConfig('github_repo');
+  if (!token || !repo) return;
+
+  const all     = await dbGetAll('points');
+  const pending = all.filter(r => !r.synced);
+  if (pending.length === 0) return;
+
+  isSyncing = true;
+  const bar = document.getElementById('status-bar');
+  const dot = document.getElementById('status-dot');
+  bar.className = 'syncing';
+  dot.classList.add('pulse');
+  document.getElementById('status-text').textContent = `Enviando ${pending.length} ponto(s)...`;
+
+  let enviados = 0;
+  for (const point of pending) {
+    try {
+      // Salva JSON do ponto no GitHub
+      const conteudo = JSON.stringify({...point, photos: point.photos ? `${point.photos.length} foto(s)` : 0}, null, 2);
+      const b64 = btoa(unescape(encodeURIComponent(conteudo)));
+      const path = `dados/${point.usuario.replace(/\s+/g,'-')}/${point.id}.json`;
+
+      // Verifica se arquivo já existe (para pegar o SHA)
+      let sha = null;
+      const check = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+        headers: { 'Authorization': `token ${token}` }
+      });
+      if (check.ok) {
+        const existing = await check.json();
+        sha = existing.sha;
+      }
+
+      const body = {
+        message: `VERA: ponto ${point.id} — ${point.especie || 'sem espécie'}`,
+        content: b64,
+      };
+      if (sha) body.sha = sha;
+
+      const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (res.ok) {
+        point.synced    = true;
+        point.syncedAt  = new Date().toISOString();
+        await dbPut('points', point);
+        enviados++;
+      }
+    } catch (err) {
+      console.warn('Erro ao enviar ponto:', point.id, err);
+    }
+  }
+
+  isSyncing = false;
+  updateConnectionStatus();
+  if (enviados > 0) {
+    showToast(`✅ ${enviados} ponto(s) enviado(s) ao GitHub!`, 'success');
+    renderRecords();
+  }
+}
+
+async function syncNow() {
+  if (!navigator.onLine) {
+    showToast('Sem conexão. Conecte ao wifi primeiro.', 'error');
+    return;
+  }
+  const token = await getConfig('github_token');
+  if (!token) {
+    showToast('Configure o token GitHub primeiro.', 'warning');
+    switchTab('config');
+    return;
+  }
+  await syncPendingPoints();
+}
+
+// ══════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════
+async function loadConfig() {
+  const token = await getConfig('github_token');
+  const repo  = await getConfig('github_repo');
+  if (token) document.getElementById('github-token').value = '••••••••••••••••••••';
+  if (repo)  document.getElementById('github-repo').value  = repo;
+  if (token && repo) {
+    document.getElementById('config-status').textContent = '✅ Token configurado';
+    document.getElementById('config-status').className   = 'config-status ok';
+  }
+}
+
+async function saveConfig() {
+  const tokenInput = document.getElementById('github-token').value.trim();
+  const repo       = document.getElementById('github-repo').value.trim();
+  const status     = document.getElementById('config-status');
+
+  if (!repo) { status.textContent = 'Informe o repositório.'; status.className = 'config-status err'; return; }
+
+  // Só salva token se não for máscara
+  if (tokenInput && !tokenInput.startsWith('•')) {
+    await setConfig('github_token', tokenInput);
+  }
+  await setConfig('github_repo', repo);
+
+  status.textContent = '✅ Configuração salva!';
+  status.className   = 'config-status ok';
+  showToast('Configuração salva! ✓', 'success');
+
+  setTimeout(() => syncPendingPoints(), 500);
+}
+
+// ══════════════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════════════
+let currentUser = null, currentLat = null, currentLon = null;
+let photos = [], map, userMarker, pointsLayer, watchId;
+
 function doLogin() {
   const user = document.getElementById('login-user').value;
   const pass = document.getElementById('login-pass').value;
   const err  = document.getElementById('login-error');
-
-  if (!user || USERS[user] !== pass) {
-    err.style.display = 'block';
-    return;
-  }
+  if (!user || USERS[user] !== pass) { err.style.display = 'block'; return; }
   err.style.display = 'none';
   currentUser = user;
-
   document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app-header').style.display    = 'flex';
-  document.getElementById('app').style.display           = 'block';
-  document.getElementById('header-user').textContent     = user;
-
+  document.getElementById('app-header').style.display   = 'flex';
+  document.getElementById('app').style.display          = 'block';
+  document.getElementById('header-user').textContent    = user;
   initMap();
   startGPSWatch();
   renderRecords();
+  loadConfig();
+  updatePendingBadge();
 }
 
-document.getElementById('login-pass').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
+document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
 
 function doLogout() {
-  currentUser = null;
-  currentLat = currentLon = null;
+  currentUser = currentLat = currentLon = null;
   photos = [];
   if (watchId) navigator.geolocation.clearWatch(watchId);
   document.getElementById('login-screen').style.display = 'flex';
@@ -763,50 +666,47 @@ function doLogout() {
   document.getElementById('login-pass').value           = '';
 }
 
-// ── TABS ───────────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════
 function switchTab(name) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(name + '-panel').classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById(name+'-panel').classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
   if (name === 'map' && map) setTimeout(() => map.invalidateSize(), 100);
   if (name === 'records') renderRecords();
+  if (name === 'config') { updatePendingBadge(); loadConfig(); }
 }
 
-// ── MAPA ───────────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+// MAPA
+// ══════════════════════════════════════════════════
 function initMap() {
   map = L.map('map', { zoomControl: true }).setView([-10.18, -48.33], 12);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap',
-    maxZoom: 19
-  }).addTo(map);
-
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OpenStreetMap', maxZoom:19 }).addTo(map);
   pointsLayer = L.layerGroup().addTo(map);
   renderMapPoints();
 }
 
-function renderMapPoints() {
+async function renderMapPoints() {
   if (!pointsLayer) return;
   pointsLayer.clearLayers();
-  records.forEach((r, i) => {
+  const records = await dbGetAll('points');
+  records.forEach(r => {
     if (!r.lat || !r.lon) return;
-    const marker = L.circleMarker([r.lat, r.lon], {
-      radius: 8,
-      fillColor: '#4CAF50',
-      color: '#1a2e1a',
-      weight: 2,
-      fillOpacity: 0.85
-    });
+    const cor = r.synced ? '#4CAF50' : '#e8a020';
+    const marker = L.circleMarker([r.lat, r.lon], { radius:8, fillColor:cor, color:'#1a2e1a', weight:2, fillOpacity:0.85 });
     marker.bindPopup(`
-      <div style="font-family:'Space Grotesk',sans-serif;min-width:160px">
-        <div style="font-weight:700;color:#1a2e1a;margin-bottom:4px">${r.especie || 'Sem espécie'}</div>
-        <div style="font-size:12px;color:#5a7a55">Poste: ${r.poste || '—'}</div>
-        <div style="font-size:12px;color:#5a7a55">Altura: ${r.altura || '—'} m</div>
-        <div style="font-size:11px;color:#999;margin-top:4px">${r.data}</div>
-        ${r.photos && r.photos[0] ? `<img src="${r.photos[0]}" style="width:100%;border-radius:6px;margin-top:8px">` : ''}
-      </div>
-    `);
+      <div style="font-family:'Space Grotesk',sans-serif;min-width:150px">
+        <div style="font-weight:700;color:#1a2e1a;margin-bottom:4px">${r.especie||'Sem espécie'}</div>
+        <div style="font-size:12px;color:#5a7a55">Poste: ${r.poste||'—'}</div>
+        <div style="font-size:12px;color:#5a7a55">Altura: ${r.altura||'—'}m</div>
+        <div style="font-size:11px;margin-top:4px;color:${r.synced?'#2d5a27':'#e8a020'};font-weight:600">
+          ${r.synced?'✅ Enviado':'⏳ Pendente'}
+        </div>
+        ${r.photos&&r.photos[0]?`<img src="${r.photos[0]}" style="width:100%;border-radius:6px;margin-top:8px">`:''}
+      </div>`);
     pointsLayer.addLayer(marker);
   });
 }
@@ -816,47 +716,33 @@ function startGPSWatch() {
   watchId = navigator.geolocation.watchPosition(pos => {
     currentLat = pos.coords.latitude;
     currentLon = pos.coords.longitude;
-    const pill = document.getElementById('gps-pill');
-    pill.textContent = `📍 ${currentLat.toFixed(6)}, ${currentLon.toFixed(6)}`;
-
+    document.getElementById('gps-pill').textContent = `📍 ${currentLat.toFixed(6)}, ${currentLon.toFixed(6)}`;
     if (!map) return;
     if (!userMarker) {
-      userMarker = L.circleMarker([currentLat, currentLon], {
-        radius: 10, fillColor: '#e8a020', color: '#fff',
-        weight: 3, fillOpacity: 1
-      }).addTo(map);
-      map.setView([currentLat, currentLon], 15);
+      userMarker = L.circleMarker([currentLat,currentLon], { radius:10, fillColor:'#e8a020', color:'#fff', weight:3, fillOpacity:1 }).addTo(map);
+      map.setView([currentLat,currentLon], 15);
     } else {
-      userMarker.setLatLng([currentLat, currentLon]);
+      userMarker.setLatLng([currentLat,currentLon]);
     }
-  }, err => {
-    document.getElementById('gps-pill').textContent = '⚠️ GPS indisponível';
-  }, { enableHighAccuracy: true, maximumAge: 5000 });
+  }, ()=>{ document.getElementById('gps-pill').textContent='⚠️ GPS indisponível'; }, { enableHighAccuracy:true, maximumAge:5000 });
 }
 
-// ── GPS no formulário ──────────────────────────────────────
+// ══════════════════════════════════════════════════
+// GPS FORM
+// ══════════════════════════════════════════════════
 function captureGPS() {
   const btn = document.getElementById('gps-btn');
   btn.classList.add('loading');
   btn.innerHTML = '<span>⏳</span> Capturando...';
-
-  if (!navigator.geolocation) {
-    showToast('GPS não disponível neste dispositivo', 'error');
-    resetGpsBtn();
-    return;
-  }
-
+  if (!navigator.geolocation) { showToast('GPS não disponível','error'); resetGpsBtn(); return; }
   navigator.geolocation.getCurrentPosition(pos => {
     currentLat = pos.coords.latitude;
     currentLon = pos.coords.longitude;
     document.getElementById('disp-lat').textContent = currentLat.toFixed(6);
     document.getElementById('disp-lon').textContent = currentLon.toFixed(6);
     resetGpsBtn();
-    showToast('Posição capturada! ✓', 'success');
-  }, err => {
-    showToast('Erro ao obter GPS. Tente novamente.', 'error');
-    resetGpsBtn();
-  }, { enableHighAccuracy: true, timeout: 10000 });
+    showToast('Posição capturada! ✓','success');
+  }, ()=>{ showToast('Erro ao obter GPS.','error'); resetGpsBtn(); }, { enableHighAccuracy:true, timeout:10000 });
 }
 
 function resetGpsBtn() {
@@ -865,23 +751,21 @@ function resetGpsBtn() {
   btn.innerHTML = '<span>📡</span> Capturar posição GPS';
 }
 
-// ── FOTOS ──────────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+// FOTOS
+// ══════════════════════════════════════════════════
 function handlePhotos(e) {
-  const files = Array.from(e.target.files);
-  files.forEach(file => {
+  Array.from(e.target.files).forEach(file => {
     const reader = new FileReader();
     reader.onload = ev => {
-      // Comprime para max 800px
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        const max = 800;
-        let w = img.width, h = img.height;
-        if (w > max) { h = (h * max) / w; w = max; }
+        const max = 800; let w = img.width, h = img.height;
+        if (w > max) { h = h*max/w; w = max; }
         canvas.width = w; canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        const b64 = canvas.toDataURL('image/jpeg', 0.75);
-        photos.push(b64);
+        photos.push(canvas.toDataURL('image/jpeg', 0.75));
         renderPhotoPreviews();
       };
       img.src = ev.target.result;
@@ -892,73 +776,60 @@ function handlePhotos(e) {
 }
 
 function renderPhotoPreviews() {
-  const container = document.getElementById('photo-preview');
-  container.innerHTML = '';
+  const c = document.getElementById('photo-preview');
+  c.innerHTML = '';
   photos.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = 'photo-thumb';
-    div.innerHTML = `
-      <img src="${p}">
-      <button class="remove-photo" onclick="removePhoto(${i})">✕</button>
-    `;
-    container.appendChild(div);
+    div.innerHTML = `<img src="${p}"><button class="remove-photo" onclick="removePhoto(${i})">✕</button>`;
+    c.appendChild(div);
   });
 }
 
-function removePhoto(i) {
-  photos.splice(i, 1);
-  renderPhotoPreviews();
-}
+function removePhoto(i) { photos.splice(i,1); renderPhotoPreviews(); }
 
-// ── SALVAR PONTO ───────────────────────────────────────────
-function savePoint() {
-  if (!currentLat || !currentLon) {
-    showToast('Capture o GPS antes de registrar!', 'error');
-    return;
-  }
-
+// ══════════════════════════════════════════════════
+// SALVAR PONTO
+// ══════════════════════════════════════════════════
+async function savePoint() {
+  if (!currentLat || !currentLon) { showToast('Capture o GPS antes de registrar!','error'); return; }
   const especie = document.getElementById('f-especie').value.trim();
-  if (!especie) {
-    showToast('Informe a espécie da árvore!', 'error');
-    return;
-  }
+  if (!especie) { showToast('Informe a espécie da árvore!','error'); return; }
 
+  const all = await dbGetAll('points');
+  const id  = 'V' + String(all.length + 1).padStart(4, '0');
   const now = new Date();
-  const id  = 'V' + String(records.length + 1).padStart(4, '0');
-  const wkt = `POINT (${currentLon.toFixed(6)} ${currentLat.toFixed(6)})`;
 
   const record = {
-    id,
-    wkt,
-    data:    now.toLocaleString('pt-BR'),
-    poste:   document.getElementById('f-poste').value.trim(),
+    id, synced: false,
+    wkt:    `POINT (${currentLon.toFixed(6)} ${currentLat.toFixed(6)})`,
+    data:   now.toLocaleString('pt-BR'),
+    poste:  document.getElementById('f-poste').value.trim(),
     especie,
-    lat:     currentLat,
-    lon:     currentLon,
-    altura:  document.getElementById('f-altura').value,
-    dtbt:    document.getElementById('f-dtbt').value,
-    dtmt:    document.getElementById('f-dtmt').value,
-    dtat:    document.getElementById('f-dtat').value,
-    dap:     document.getElementById('f-dap').value,
-    area:    document.getElementById('f-area').value.trim(),
-    acesso:  document.getElementById('f-acesso').value,
+    lat:    currentLat, lon: currentLon,
+    altura: document.getElementById('f-altura').value,
+    dtbt:   document.getElementById('f-dtbt').value,
+    dtmt:   document.getElementById('f-dtmt').value,
+    dtat:   document.getElementById('f-dtat').value,
+    dap:    document.getElementById('f-dap').value,
+    area:   document.getElementById('f-area').value.trim(),
+    acesso: document.getElementById('f-acesso').value,
     usuario: currentUser,
-    photos:  [...photos],
+    photos: [...photos],
   };
 
-  records.push(record);
-  localStorage.setItem('vera_records', JSON.stringify(records));
-
+  await dbPut('points', record);
   clearForm();
   renderMapPoints();
-  showToast(`Ponto ${id} registrado! ✓`, 'success');
-  setTimeout(() => switchTab('records'), 900);
+  updatePendingBadge();
+  showToast(`Ponto ${id} salvo! ${navigator.onLine ? 'Enviando...' : '⏳ Será enviado quando conectar'}`, 'success');
+
+  if (navigator.onLine) setTimeout(syncPendingPoints, 800);
+  setTimeout(() => switchTab('records'), 1000);
 }
 
 function clearForm() {
-  ['f-poste','f-especie','f-area','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
+  ['f-poste','f-especie','f-area','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('f-acesso').value = '';
   document.getElementById('disp-lat').textContent = '—';
   document.getElementById('disp-lon').textContent = '—';
@@ -967,78 +838,112 @@ function clearForm() {
   renderPhotoPreviews();
 }
 
-// ── RENDERIZAR REGISTROS ───────────────────────────────────
-function renderRecords() {
-  const list  = document.getElementById('records-list');
-  const count = document.getElementById('records-count');
-  count.textContent = `${records.length} ponto${records.length !== 1 ? 's' : ''} registrado${records.length !== 1 ? 's' : ''}`;
+// ══════════════════════════════════════════════════
+// RENDERIZAR REGISTROS
+// ══════════════════════════════════════════════════
+async function renderRecords() {
+  const records = await dbGetAll('points');
+  const list    = document.getElementById('records-list');
+  const count   = document.getElementById('records-count');
+  const pending = records.filter(r => !r.synced).length;
+  count.textContent = `${records.length} ponto(s) — ${pending} pendente(s)`;
 
   if (records.length === 0) {
-    list.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">🌿</div>
-        <p>Nenhum ponto registrado ainda.<br>Vá em "Novo Ponto" para começar.</p>
-      </div>`;
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">🌿</div><p>Nenhum ponto registrado ainda.<br>Vá em "Novo Ponto" para começar.</p></div>`;
     return;
   }
 
   list.innerHTML = [...records].reverse().map(r => `
-    <div class="record-card">
+    <div class="record-card ${r.synced ? 'synced' : 'pending'}">
       <div>
         <div class="record-id">${r.id} · ${r.usuario}</div>
-        <div class="record-species">${r.especie || '—'}</div>
+        <div class="record-species">${r.especie||'—'}</div>
         <div class="record-meta">
           ${r.poste ? `<span class="meta-tag">🪝 ${r.poste}</span>` : ''}
           ${r.altura ? `<span class="meta-tag">↕ ${r.altura}m</span>` : ''}
-          ${r.dap ? `<span class="meta-tag">⊙ DAP ${r.dap}cm</span>` : ''}
-          ${r.area ? `<span class="meta-tag">📍 ${r.area}</span>` : ''}
-          ${r.acesso ? `<span class="meta-tag">🔌 LV: ${r.acesso}</span>` : ''}
+          ${r.dap ? `<span class="meta-tag">⊙ ${r.dap}cm</span>` : ''}
+          <span class="${r.synced?'synced-tag':'sync-tag'}">${r.synced?'✅ Enviado':'⏳ Pendente'}</span>
         </div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:6px">${r.data}</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">${r.data}</div>
       </div>
       <div>
-        ${r.photos && r.photos[0]
+        ${r.photos&&r.photos[0]
           ? `<img class="record-thumb" src="${r.photos[0]}">`
           : `<div class="record-no-photo">🌳</div>`}
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-// ── EXPORT CSV ────────────────────────────────────────────
-function exportCSV() {
-  if (records.length === 0) { showToast('Nenhum ponto para exportar.', 'error'); return; }
+// ══════════════════════════════════════════════════
+// EXPORT CSV
+// ══════════════════════════════════════════════════
+async function exportCSV(soPendentes = false) {
+  const all     = await dbGetAll('points');
+  const records = soPendentes ? all.filter(r => !r.synced) : all;
+  if (records.length === 0) { showToast('Nenhum ponto para exportar.','error'); return; }
 
-  const headers = ['WKT','ID','DATA','POSTE','ESPECIE','LATITUDE','LONGITUDE',
-                   'ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DAP(cm)',
-                   'Area','Acesso LV','Usuario','N_Fotos'];
-
+  const headers = ['WKT','ID','DATA','POSTE','ESPECIE','LATITUDE','LONGITUDE','ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DAP(cm)','Area','Acesso LV','Usuario','N_Fotos','Sincronizado'];
   const rows = records.map(r => [
     `"${r.wkt}"`, r.id, `"${r.data}"`, `"${r.poste}"`, `"${r.especie}"`,
     r.lat, r.lon, r.altura, r.dtbt, r.dtmt, r.dtat, r.dap,
     `"${r.area}"`, `"${r.acesso}"`, `"${r.usuario}"`,
-    r.photos ? r.photos.length : 0
+    r.photos ? r.photos.length : 0,
+    r.synced ? 'Sim' : 'Não'
   ].join(';'));
 
-  const csv = [headers.join(';'), ...rows].join('\n');
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const csv  = [headers.join(';'), ...rows].join('\n');
+  const blob = new Blob(['\uFEFF'+csv], { type:'text/csv;charset=utf-8;' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href = url;
-  a.download = `VERA_${new Date().toISOString().slice(0,10)}.csv`;
+  a.download = `VERA_${soPendentes?'pendentes_':''}${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
   URL.revokeObjectURL(url);
-  showToast('CSV exportado! ✓', 'success');
+  showToast('CSV exportado! ✓','success');
 }
 
-// ── TOAST ──────────────────────────────────────────────────
-function showToast(msg, type = '') {
+async function exportPendingCSV() { await exportCSV(true); }
+
+// ══════════════════════════════════════════════════
+// LIMPAR DADOS
+// ══════════════════════════════════════════════════
+async function clearSyncedRecords() {
+  if (!confirm('Remover todos os pontos JÁ ENVIADOS ao GitHub? (Os pendentes serão mantidos)')) return;
+  const all    = await dbGetAll('points');
+  const synced = all.filter(r => r.synced);
+  for (const r of synced) await dbDelete('points', r.id);
+  renderRecords(); renderMapPoints(); updatePendingBadge();
+  showToast(`${synced.length} registro(s) removido(s).`,'success');
+}
+
+async function clearAllRecords() {
+  if (!confirm('⚠️ ATENÇÃO: Isso vai apagar TODOS os registros, incluindo os não enviados. Deseja continuar?')) return;
+  const all = await dbGetAll('points');
+  for (const r of all) await dbDelete('points', r.id);
+  renderRecords(); renderMapPoints(); updatePendingBadge();
+  showToast('Todos os registros removidos.','warning');
+}
+
+// ══════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════
+function showToast(msg, type='') {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = type ? `show ${type}` : 'show';
   clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.className = '', 3000);
+  t._timer = setTimeout(()=> t.className='', 3500);
 }
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+initDB().then(() => {
+  updateConnectionStatus();
+}).catch(err => {
+  console.error('Erro ao iniciar DB:', err);
+  showToast('Erro ao iniciar banco de dados.','error');
+});
 </script>
 </body>
 </html>
