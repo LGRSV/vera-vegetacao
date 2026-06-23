@@ -2,27 +2,26 @@
 <html lang="pt-BR">
 <head>
 <script>
-// VERA v1.0 — limpeza forçada de SW e cache antes de qualquer carga
-(async function() {
-  const APP_VERSION = '1.1.1';
-  const stored = localStorage.getItem('vera_version_check');
-  if (stored !== '1.1.1') {
-    // Primeira execução desta versão — limpar tudo
-    if ('serviceWorker' in navigator) {
-      const regs = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map(r => r.unregister()));
+// VERA v1.1.1 — limpeza única de SW antigos (sem reload automático)
+(function() {
+  try {
+    const V = '1.1.1';
+    if (localStorage.getItem('vera_v') !== V) {
+      localStorage.setItem('vera_v', V);
+      // Limpar SWs em background, sem recarregar
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(regs) {
+          regs.forEach(function(r) { r.unregister(); });
+        });
+      }
+      if ('caches' in window) {
+        caches.keys().then(function(keys) {
+          keys.forEach(function(k) { caches.delete(k); });
+        });
+      }
+      // Sem reload — a página já está carregando a versão nova
     }
-    if ('caches' in window) {
-      const keys = await caches.keys();
-      await Promise.all(keys.map(k => caches.delete(k)));
-    }
-    localStorage.setItem('vera_version_check', '1.1.1');
-    // Recarregar para garantir versão limpa
-    if (stored) {
-      window.location.reload(true);
-      return;
-    }
-  }
+  } catch(e) {}
 })();
 </script>
 <meta charset="UTF-8">
