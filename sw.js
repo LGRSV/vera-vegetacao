@@ -1,4 +1,5 @@
 const CACHE_NAME = 'vera-v7';
+const APP_VERSION = '1.0.0';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -12,9 +13,15 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Nunca cacheia — sempre busca na rede
+// Nunca cacheia HTML/JS — sempre busca na rede
 self.addEventListener('fetch', e => {
-  e.respondWith(fetch(e.request, { cache: 'no-store' }).catch(() => caches.match(e.request)));
+  const url = new URL(e.request.url);
+  // Não intercepta APIs externas
+  if (url.hostname !== 'lgrsv.github.io') return;
+  e.respondWith(
+    fetch(e.request, { cache: 'no-store' })
+      .catch(() => caches.match(e.request))
+  );
 });
 
 self.addEventListener('sync', e => {
