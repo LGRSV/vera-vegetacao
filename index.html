@@ -258,6 +258,110 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   cursor:pointer; font-family:'Space Grotesk',sans-serif;
 }
 
+
+/* ── SELETOR DE POSTE PRÓXIMO ── */
+.poste-selector {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.poste-selecionado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--off-white);
+}
+.poste-selecionado.ativo {
+  background: #E3F2FD;
+  border-bottom: 1px solid #BBDEFB;
+}
+.poste-id-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1565C0;
+}
+.poste-circ-display {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.poste-dist-display {
+  font-size: 10px;
+  color: #1565C0;
+  font-weight: 600;
+}
+.btn-buscar-poste {
+  width: 100%;
+  padding: 11px;
+  background: #1565C0;
+  color: var(--white);
+  border: none;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: background 0.2s;
+}
+.btn-buscar-poste:hover { background: #0D47A1; }
+.btn-buscar-poste:disabled { background: var(--text-muted); cursor: not-allowed; }
+.btn-buscar-poste.loading { background: var(--text-muted); }
+
+.postes-proximos-lista {
+  max-height: 200px;
+  overflow-y: auto;
+  border-top: 1px solid var(--border);
+  display: none;
+}
+.postes-proximos-lista.aberta { display: block; }
+.poste-opcao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.poste-opcao:hover { background: #E3F2FD; }
+.poste-opcao.sel { background: #1565C0; }
+.poste-opcao.sel .poste-op-id { color: white; }
+.poste-opcao.sel .poste-op-info { color: #BBDEFB; }
+.poste-op-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1565C0;
+}
+.poste-op-info {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+.poste-op-dist {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1565C0;
+  white-space: nowrap;
+}
+.poste-op-dist.perto { color: var(--green-mid); }
+.sem-alimentador-aviso {
+  background: var(--amber-bg);
+  border: 1px solid var(--amber);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--green-deep);
+  margin-bottom: 14px;
+}
+
 </style>
 </head>
 <body>
@@ -390,7 +494,24 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
     <button class="gps-btn" id="gps-btn" onclick="captureGPS()"><span>📡</span> Capturar posição GPS</button>
 
     <div class="form-section-title">🌳 Dados da Árvore</div>
-    <div class="field-group"><label class="field-label">Poste</label><input class="field-input" type="text" id="f-poste" placeholder="Nº do poste"></div>
+
+    <label class="field-label">Poste de Referência</label>
+    <div class="poste-selector" id="poste-selector">
+      <div class="poste-selecionado" id="poste-selecionado-box">
+        <div>
+          <div class="poste-id-display" id="poste-id-display">Nenhum poste selecionado</div>
+          <div class="poste-circ-display" id="poste-circ-display">Selecione um alimentador e busque o poste mais próximo</div>
+        </div>
+        <div class="poste-dist-display" id="poste-dist-display"></div>
+      </div>
+      <div class="postes-proximos-lista" id="postes-proximos-lista"></div>
+      <button class="btn-buscar-poste" id="btn-buscar-poste" onclick="buscarPostesProximos()">
+        🔵 Buscar poste mais próximo
+      </button>
+    </div>
+    <div class="sem-alimentador-aviso" id="aviso-sem-alimentador" style="display:none;">
+      ⚠️ Selecione um alimentador na tela inicial para buscar postes próximos.
+    </div>
     <div class="field-group"><label class="field-label">Espécie *</label><input class="field-input" type="text" id="f-especie" placeholder="Nome da espécie"></div>
     <div class="field-group"><label class="field-label">Área</label><input class="field-input" type="text" id="f-area" placeholder="Identificação da área"></div>
     <div class="field-group">
@@ -904,6 +1025,8 @@ function removePhoto(i) { photos.splice(i,1); renderPhotoPreviews(); }
 // ══════════════════════════════════════════════════
 async function savePoint() {
   if (!currentLat || !currentLon) { showToast('Capture o GPS antes de registrar!','error'); return; }
+  // Poste vem do seletor, não de campo texto
+  const posteVal = posteSelecionado ? String(posteSelecionado.id) : '';
   const especie = document.getElementById('f-especie').value.trim();
   if (!especie) { showToast('Informe a espécie da árvore!','error'); return; }
 
@@ -915,7 +1038,7 @@ async function savePoint() {
     id, synced: false,
     wkt:    `POINT (${currentLon.toFixed(6)} ${currentLat.toFixed(6)})`,
     data:   now.toLocaleString('pt-BR'),
-    poste:  document.getElementById('f-poste').value.trim(),
+    poste:  posteVal,
     especie,
     lat:    currentLat, lon: currentLon,
     altura: document.getElementById('f-altura').value,
@@ -940,7 +1063,13 @@ async function savePoint() {
 }
 
 function clearForm() {
-  ['f-poste','f-especie','f-area','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => document.getElementById(id).value = '');
+  ['f-especie','f-area','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => document.getElementById(id).value = '');
+  posteSelecionado = null;
+  document.getElementById('poste-id-display').textContent = 'Nenhum poste selecionado';
+  document.getElementById('poste-circ-display').textContent = 'Selecione um alimentador e busque o poste mais próximo';
+  document.getElementById('poste-dist-display').textContent = '';
+  document.getElementById('poste-selecionado-box').classList.remove('ativo');
+  document.getElementById('postes-proximos-lista').classList.remove('aberta');
   document.getElementById('f-acesso').value = '';
   document.getElementById('disp-lat').textContent = '—';
   document.getElementById('disp-lon').textContent = '—';
@@ -1243,6 +1372,124 @@ function usarPoste(id, circ) {
 
 // ── Override do doLogin para ir para polo-screen ──
 const _doLoginOriginal = doLogin;
+
+
+// ══════════════════════════════════════════════════
+// BUSCA DE POSTE MAIS PRÓXIMO
+// ══════════════════════════════════════════════════
+let posteSelecionado = null;
+
+async function buscarPostesProximos() {
+  // Verificar se tem alimentadores carregados
+  const temPostes = Object.keys(postesCarregados).length > 0;
+  if (!temPostes) {
+    document.getElementById('aviso-sem-alimentador').style.display = 'block';
+    document.getElementById('poste-selector').style.display = 'none';
+    showToast('Selecione um alimentador primeiro.', 'warning');
+    return;
+  }
+
+  const btn = document.getElementById('btn-buscar-poste');
+  btn.classList.add('loading');
+  btn.innerHTML = '⏳ Obtendo GPS...';
+  btn.disabled = true;
+
+  // Obter GPS atual
+  let lat, lon;
+  try {
+    const pos = await new Promise((res, rej) =>
+      navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, timeout: 8000 })
+    );
+    lat = pos.coords.latitude;
+    lon = pos.coords.longitude;
+  } catch(e) {
+    showToast('GPS indisponível. Tente novamente.', 'error');
+    resetBtnPoste();
+    return;
+  }
+
+  // Juntar todos os postes de todos os alimentadores carregados
+  let todosPostes = [];
+  for (const [circ, postes] of Object.entries(postesCarregados)) {
+    postes.forEach(p => todosPostes.push({ ...p, circ }));
+  }
+
+  if (todosPostes.length === 0) {
+    showToast('Nenhum poste carregado ainda.', 'error');
+    resetBtnPoste();
+    return;
+  }
+
+  // Calcular distância de cada poste
+  todosPostes.forEach(p => {
+    p.dist = distKm(lat, lon, p.lat, p.lon) * 1000; // em metros
+  });
+
+  // Pegar os 5 mais próximos
+  todosPostes.sort((a, b) => a.dist - b.dist);
+  const proximos = todosPostes.slice(0, 5);
+
+  // Renderizar lista
+  const lista = document.getElementById('postes-proximos-lista');
+  lista.innerHTML = proximos.map((p, i) => `
+    <div class="poste-opcao ${i===0?'sel':''}" onclick="selecionarPoste('${p.id}','${p.circ}',${p.dist.toFixed(0)})" id="poste-op-${p.id}">
+      <div>
+        <div class="poste-op-id">Poste ${p.id}</div>
+        <div class="poste-op-info">Alimentador: ${p.circ}</div>
+      </div>
+      <div class="poste-op-dist ${p.dist < 50 ? 'perto' : ''}">
+        ${p.dist < 1000 ? p.dist.toFixed(0)+'m' : (p.dist/1000).toFixed(2)+'km'}
+      </div>
+    </div>
+  `).join('');
+  lista.classList.add('aberta');
+
+  // Auto-selecionar o mais próximo
+  selecionarPoste(proximos[0].id, proximos[0].circ, proximos[0].dist);
+
+  resetBtnPoste();
+}
+
+function selecionarPoste(id, circ, dist) {
+  posteSelecionado = { id, circ, dist };
+
+  // Atualizar display
+  const box = document.getElementById('poste-selecionado-box');
+  box.classList.add('ativo');
+  document.getElementById('poste-id-display').textContent = `Poste ${id}`;
+  document.getElementById('poste-circ-display').textContent = `Alimentador: ${circ}`;
+  const distLabel = dist < 1000 ? `${Math.round(dist)}m` : `${(dist/1000).toFixed(2)}km`;
+  document.getElementById('poste-dist-display').textContent = `📍 ${distLabel}`;
+
+  // Highlight na lista
+  document.querySelectorAll('.poste-opcao').forEach(el => el.classList.remove('sel'));
+  document.getElementById(`poste-op-${id}`)?.classList.add('sel');
+
+  // Destacar no mapa
+  if (postesLayer && map) {
+    postesLayer.eachLayer(m => {
+      if (m.options._posteId === String(id)) {
+        m.setStyle({ fillColor: '#FF6F00', radius: 8 });
+        map.panTo(m.getLatLng());
+      }
+    });
+  }
+}
+
+function resetBtnPoste() {
+  const btn = document.getElementById('btn-buscar-poste');
+  btn.classList.remove('loading');
+  btn.innerHTML = '🔵 Buscar poste mais próximo';
+  btn.disabled = false;
+}
+
+// Override usarPoste para usar selecionarPoste
+function usarPoste(id, circ) {
+  selecionarPoste(id, circ, 0);
+  map.closePopup();
+  switchTab('form');
+  showToast(`Poste ${id} selecionado! ✓`, 'success');
+}
 
 // ══════════════════════════════════════════════════
 // INIT
