@@ -1013,27 +1013,13 @@ const APP_VERSION = '1.1.1';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
-  try {
-    // Busca versão do servidor (sem cache)
-    const r = await fetch('version.json?t=' + Date.now(), { cache: 'no-store' });
-    const data = await r.json();
-    const versaoServidor = data.version;
-    const versaoLocal    = localStorage.getItem(VERSION_KEY);
-
-    if (versaoLocal && versaoLocal !== versaoServidor) {
-      // Nova versão disponível — mostrar banner
-      document.getElementById('update-banner').classList.add('show');
-    } else {
-      localStorage.setItem(VERSION_KEY, versaoServidor);
-    }
-  } catch(e) {
-    // Sem internet — ignora
-  }
+  // Desabilitado — sem auto-reload para evitar loop no iOS
+  // Banner de atualização controlado apenas pelo SW
 }
 
 async function forcarAtualizacao() {
-  // Limpar cache e recarregar
-  localStorage.clear();
+  // Setar versão ANTES de limpar para não entrar em loop
+  localStorage.setItem('vera_v', '1.1.1');
   if ('caches' in window) {
     const keys = await caches.keys();
     await Promise.all(keys.map(k => caches.delete(k)));
@@ -1071,8 +1057,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Verificar versão ao carregar (após 2s)
-setTimeout(verificarVersao, 2000);
+// Verificação de versão desabilitada (evita reload loop)
 
 // ══════════════════════════════════════════════════
 // INSTALL PROMPT
