@@ -4,9 +4,9 @@
 <script>
 // VERA v1.0 — limpeza forçada de SW e cache antes de qualquer carga
 (async function() {
-  const APP_VERSION = '1.0.3';
+  const APP_VERSION = '1.1.0';
   const stored = localStorage.getItem('vera_version_check');
-  if (stored !== '1.0.3') {
+  if (stored !== '1.1.0') {
     // Primeira execução desta versão — limpar tudo
     if ('serviceWorker' in navigator) {
       const regs = await navigator.serviceWorker.getRegistrations();
@@ -16,7 +16,7 @@
       const keys = await caches.keys();
       await Promise.all(keys.map(k => caches.delete(k)));
     }
-    localStorage.setItem('vera_version_check', '1.0.3');
+    localStorage.setItem('vera_version_check', '1.1.0');
     // Recarregar para garantir versão limpa
     if (stored) {
       window.location.reload(true);
@@ -448,6 +448,176 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   cursor: pointer;
 }
 
+
+/* ── PAINEL ADMIN ── */
+#admin-panel { padding-bottom: 80px; }
+
+.admin-header {
+  background: var(--green-deep);
+  color: var(--white);
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.admin-badge {
+  background: var(--amber);
+  color: var(--green-deep);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rota-form {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.rota-form-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green-deep);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-criar-rota {
+  width: 100%;
+  padding: 13px;
+  background: var(--amber);
+  color: var(--green-deep);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+.btn-criar-rota:hover { background: #d4911c; }
+
+.rotas-lista { margin-top: 6px; }
+.rota-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+}
+.rota-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+.rota-equipe {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green-deep);
+}
+.rota-polo-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--green-deep);
+  color: var(--white);
+}
+.rota-alims {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+.rota-alim-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 7px;
+  color: var(--text-main);
+}
+.rota-meta {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.btn-excluir-rota {
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 4px;
+  line-height: 1;
+}
+.rota-pontos {
+  font-size: 11px;
+  color: var(--green-mid);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* ── ROTA ATRIBUÍDA (equipe campo) ── */
+.rota-atribuida-banner {
+  background: var(--green-deep);
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rota-atribuida-banner .rota-icon { font-size: 22px; }
+.rota-atribuida-info { flex: 1; }
+.rota-atribuida-title { font-size: 12px; font-weight: 700; color: var(--green-soft); }
+.rota-atribuida-alims { font-size: 13px; font-weight: 600; color: var(--white); margin-top: 2px; }
+
+.sem-rota-banner {
+  background: var(--amber-bg);
+  border: 1px solid var(--amber);
+  border-radius: var(--radius);
+  padding: 14px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.sem-rota-banner .sem-rota-icon { font-size: 28px; margin-bottom: 6px; }
+.sem-rota-banner p { font-size: 12px; color: var(--text-muted); }
+.sem-rota-banner strong { color: var(--green-deep); }
+
+/* Alim selecionável admin */
+.alim-admin-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--white);
+}
+.alim-admin-check:hover { border-color: var(--amber); background: var(--amber-bg); }
+.alim-admin-check.sel { border-color: var(--amber); background: var(--amber-bg); }
+.alim-admin-check input[type=checkbox] { accent-color: var(--amber); width: 16px; height: 16px; }
+.alim-admin-label { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text-main); }
+.alim-admin-se { font-size: 10px; color: var(--text-muted); }
+.alim-admin-lista { max-height: 220px; overflow-y: auto; margin-top: 8px; }
+
 </style>
 </head>
 <body>
@@ -472,6 +642,22 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 <!-- SELEÇÃO DE POLO/ALIMENTADOR -->
 <div id="polo-screen" style="display:none;">
   <div class="polo-card">
+
+    <!-- BANNER ROTA ATRIBUÍDA -->
+    <div id="rota-atribuida-banner" class="rota-atribuida-banner" style="display:none;">
+      <div class="rota-icon">🗺️</div>
+      <div class="rota-atribuida-info">
+        <div class="rota-atribuida-title">Rota atribuída pelo supervisor</div>
+        <div class="rota-atribuida-alims" id="rota-atribuida-alims">—</div>
+      </div>
+      <button style="background:var(--green-live);border:none;color:white;border-radius:8px;padding:6px 12px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;" onclick="usarRotaAtribuida()">Usar →</button>
+    </div>
+    <div id="sem-rota-banner" class="sem-rota-banner" style="display:none;">
+      <div class="sem-rota-icon">⏳</div>
+      <strong>Sem rota atribuída</strong>
+      <p>O supervisor ainda não definiu sua rota.<br>Você pode selecionar os alimentadores manualmente abaixo.</p>
+    </div>
+
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
       <div style="width:40px;height:40px;background:var(--green-deep);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🌿</div>
       <div>
@@ -514,6 +700,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
       <label class="field-label">Equipe / Usuário</label>
       <select class="field-input" id="login-user">
         <option value="">Selecione a equipe...</option>
+        <option>Admin</option>
         <option>Equipe Energisa</option>
         <option>Enecol Norte</option>
         <option>Enecol Centro</option>
@@ -535,7 +722,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
     <div class="logo-mark">🌿</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v1.0.3</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v1.1.0</div>
     </div>
   </div>
   <div class="header-right">
@@ -552,6 +739,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
     <button class="tab-btn" onclick="switchTab('form')" id="tab-form"><span class="tab-icon">📋</span>Novo Ponto</button>
     <button class="tab-btn" onclick="switchTab('records')" id="tab-records"><span class="tab-icon">📁</span>Registros</button>
     <button class="tab-btn" onclick="switchTab('config')" id="tab-config"><span class="tab-icon">⚙️</span>Config</button>
+    <button class="tab-btn" onclick="switchTab('admin')" id="tab-admin" style="display:none;"><span class="tab-icon">👑</span>Admin</button>
   </div>
 
   <!-- MAPA -->
@@ -676,6 +864,55 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   <button class="btn-update-now" onclick="forcarAtualizacao()">Atualizar agora</button>
 </div>
 
+
+  <!-- PAINEL ADMIN -->
+  <div class="tab-panel" id="admin-panel">
+    <div class="admin-header">
+      <span style="font-size:22px;">👑</span>
+      <div>
+        <div style="font-weight:700;font-size:14px;">Painel Administrativo</div>
+        <div style="font-size:11px;color:var(--green-soft);">Gerenciamento de Rotas — DCMD</div>
+      </div>
+      <span class="admin-badge">Admin</span>
+    </div>
+
+    <!-- CRIAR ROTA -->
+    <div class="rota-form">
+      <div class="rota-form-title">📍 Criar Nova Rota</div>
+
+      <label class="field-label">Equipe</label>
+      <select class="field-input" id="admin-equipe" style="margin-bottom:10px;">
+        <option value="">Selecione a equipe...</option>
+        <option>Equipe Energisa</option>
+        <option>Enecol Norte</option>
+        <option>Enecol Centro</option>
+        <option>Enecol Sul</option>
+      </select>
+
+      <label class="field-label">Polo</label>
+      <div class="polo-btns" style="margin-bottom:10px;">
+        <button class="polo-btn" onclick="adminSelecionarPolo('NORTE')" id="apbtn-NORTE"><span class="polo-icon">🔼</span>Norte</button>
+        <button class="polo-btn" onclick="adminSelecionarPolo('CENTRO')" id="apbtn-CENTRO"><span class="polo-icon">🎯</span>Centro</button>
+        <button class="polo-btn" onclick="adminSelecionarPolo('SUL')" id="apbtn-SUL"><span class="polo-icon">🔽</span>Sul</button>
+      </div>
+
+      <label class="field-label">Alimentadores <span id="admin-alim-count" style="color:var(--amber)"></span></label>
+      <div class="alim-admin-lista" id="admin-alim-lista">
+        <div style="font-size:12px;color:var(--text-muted);padding:8px;">Selecione um polo primeiro...</div>
+      </div>
+
+      <button class="btn-criar-rota" onclick="criarRota()">✅ Criar Rota</button>
+    </div>
+
+    <!-- ROTAS EXISTENTES -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">
+      Rotas Ativas
+    </div>
+    <div class="rotas-lista" id="rotas-lista">
+      <div style="text-align:center;padding:30px;color:var(--text-muted);font-size:13px;">Carregando rotas...</div>
+    </div>
+  </div>
+
 <div id="toast"></div>
 
 <script>
@@ -683,11 +920,15 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 // USUÁRIOS
 // ══════════════════════════════════════════════════
 const USERS = {
+  'Admin':'admin10',
   'Equipe Energisa':'energisa',
   'Enecol Norte':'enecol01',
   'Enecol Centro':'enecol02',
   'Enecol Sul':'enecol03',
 };
+const ADMIN_USER = 'Admin';
+const EQUIPES_CAMPO = ['Equipe Energisa','Enecol Norte','Enecol Centro','Enecol Sul'];
+const GITHUB_RAW = 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main';
 
 // ══════════════════════════════════════════════════
 // INDEXEDDB
@@ -759,7 +1000,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '1.0.3';
+const APP_VERSION = '1.1.0';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1017,11 +1258,29 @@ function doLogin() {
   if (!user || USERS[user] !== pass) { err.style.display = 'block'; return; }
   err.style.display = 'none';
   currentUser = user;
-  // Vai para tela de seleção de polo/alimentador
   document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('polo-screen').style.display  = 'flex';
-  document.getElementById('polo-user-label').textContent = user;
-  carregarIndice();
+
+  if (user === ADMIN_USER) {
+    // Admin vai direto para o app com painel admin
+    document.getElementById('app-header').style.display = 'flex';
+    document.getElementById('app').style.display        = 'block';
+    document.getElementById('header-user').textContent  = user;
+    document.getElementById('tab-admin').style.display  = 'flex';
+    // Esconder tabs desnecessárias para admin
+    document.getElementById('tab-map').style.display    = 'none';
+    document.getElementById('tab-form').style.display   = 'none';
+    document.getElementById('tab-records').style.display= 'none';
+    initMap();
+    loadConfig();
+    switchTab('admin');
+    renderRotasAdmin();
+  } else {
+    // Equipe de campo vai para seleção de polo
+    document.getElementById('polo-screen').style.display  = 'flex';
+    document.getElementById('polo-user-label').textContent = user;
+    carregarIndice();
+    mostrarRotaAtribuida(user);
+  }
 }
 
 document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
@@ -1048,6 +1307,7 @@ function switchTab(name) {
   if (name === 'map' && map) setTimeout(() => map.invalidateSize(), 100);
   if (name === 'records') renderRecords();
   if (name === 'config') { updatePendingBadge(); loadConfig(); }
+  if (name === 'admin') renderRotasAdmin();
 }
 
 // ══════════════════════════════════════════════════
@@ -1324,7 +1584,6 @@ let alimentadoresAtivos = [];  // até 3 selecionados
 let postesLayer  = null;
 let postesCarregados = {};     // circ -> [postes]
 
-const GITHUB_RAW = 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/dados';
 
 async function carregarIndice() {
   if (indicePolo) return;
@@ -1667,6 +1926,217 @@ function usarPoste(id, circ) {
   map.closePopup();
   switchTab('form');
   showToast(`Poste ${id} selecionado! ✓`, 'success');
+}
+
+
+// ══════════════════════════════════════════════════
+// SISTEMA DE ROTAS
+// ══════════════════════════════════════════════════
+let rotasData     = { rotas: [] };
+let adminPolo     = null;
+let adminAlims    = [];
+let rotaAtribuida = null;
+
+const GH_TOKEN_KEY = 'vera_gh_token';
+const GH_REPO      = 'LGRSV/vera-vegetacao';
+
+async function getGhToken() {
+  return await getConfig('github_token');
+}
+
+async function carregarRotas() {
+  try {
+    const r = await fetch(GITHUB_RAW + '/rotas.json?t=' + Date.now(), { cache: 'no-store' });
+    rotasData = await r.json();
+  } catch(e) {
+    rotasData = { rotas: [] };
+  }
+}
+
+async function salvarRotas() {
+  const token = await getGhToken();
+  if (!token) { showToast('Configure o token GitHub na aba Config.', 'error'); return false; }
+
+  // Buscar SHA atual
+  let sha = null;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/rotas.json`,
+      { headers: { 'Authorization': 'token ' + token } });
+    if (r.ok) { const d = await r.json(); sha = d.sha; }
+  } catch(e) {}
+
+  const conteudo = JSON.stringify(rotasData, null, 2);
+  const b64 = btoa(unescape(encodeURIComponent(conteudo)));
+  const body = { message: 'VERA: atualizar rotas', content: b64 };
+  if (sha) body.sha = sha;
+
+  try {
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/rotas.json`, {
+      method: 'PUT',
+      headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    return r.ok;
+  } catch(e) { return false; }
+}
+
+// ── ADMIN: selecionar polo ──
+async function adminSelecionarPolo(polo) {
+  adminPolo  = polo;
+  adminAlims = [];
+  document.querySelectorAll('[id^="apbtn-"]').forEach(b => b.classList.remove('active'));
+  document.getElementById('apbtn-' + polo).classList.add('active');
+
+  const lista = document.getElementById('admin-alim-lista');
+  lista.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px;">Carregando alimentadores...</div>';
+
+  await carregarIndice();
+  if (!indicePolo || !indicePolo[polo]) {
+    lista.innerHTML = '<div style="font-size:12px;color:var(--danger);padding:8px;">Polo sem dados.</div>';
+    return;
+  }
+
+  const circs = Object.entries(indicePolo[polo]).sort((a,b) => a[0].localeCompare(b[0]));
+  lista.innerHTML = circs.map(([id, info]) => `
+    <div class="alim-admin-check" id="acheck-${id}" onclick="adminToggleAlim('${id}', this)">
+      <input type="checkbox" id="achk-${id}" onclick="event.stopPropagation()">
+      <div>
+        <div class="alim-admin-label">${id}</div>
+        <div class="alim-admin-se">${info.se} · ${info.n.toLocaleString('pt-BR')} postes</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('admin-alim-count').textContent = '';
+}
+
+function adminToggleAlim(id, el) {
+  const chk = document.getElementById('achk-' + id);
+  chk.checked = !chk.checked;
+  el.classList.toggle('sel', chk.checked);
+  if (chk.checked) {
+    if (!adminAlims.includes(id)) adminAlims.push(id);
+  } else {
+    adminAlims = adminAlims.filter(a => a !== id);
+  }
+  const count = document.getElementById('admin-alim-count');
+  count.textContent = adminAlims.length > 0 ? `(${adminAlims.length} selecionado${adminAlims.length>1?'s':''})` : '';
+}
+
+async function criarRota() {
+  const equipe = document.getElementById('admin-equipe').value;
+  if (!equipe)          { showToast('Selecione a equipe.', 'error'); return; }
+  if (!adminPolo)       { showToast('Selecione o polo.', 'error'); return; }
+  if (adminAlims.length === 0) { showToast('Selecione ao menos um alimentador.', 'error'); return; }
+
+  const novaRota = {
+    id:          Date.now(),
+    equipe,
+    polo:        adminPolo,
+    alimentadores: [...adminAlims],
+    criada:      new Date().toLocaleString('pt-BR'),
+    criadaPor:   currentUser,
+  };
+
+  await carregarRotas();
+  rotasData.rotas.push(novaRota);
+
+  const ok = await salvarRotas();
+  if (ok) {
+    showToast('Rota criada para ' + equipe + '! ✓', 'success');
+    // Limpar form
+    document.getElementById('admin-equipe').value = '';
+    adminPolo  = null;
+    adminAlims = [];
+    document.querySelectorAll('[id^="apbtn-"]').forEach(b => b.classList.remove('active'));
+    document.getElementById('admin-alim-lista').innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px;">Selecione um polo primeiro...</div>';
+    document.getElementById('admin-alim-count').textContent = '';
+    renderRotasAdmin();
+  } else {
+    showToast('Erro ao salvar. Verifique o token.', 'error');
+  }
+}
+
+async function excluirRota(id) {
+  if (!confirm('Excluir esta rota?')) return;
+  await carregarRotas();
+  rotasData.rotas = rotasData.rotas.filter(r => r.id !== id);
+  const ok = await salvarRotas();
+  if (ok) { showToast('Rota excluída.', 'success'); renderRotasAdmin(); }
+  else showToast('Erro ao excluir.', 'error');
+}
+
+async function renderRotasAdmin() {
+  await carregarRotas();
+  const lista = document.getElementById('rotas-lista');
+  if (!lista) return;
+
+  if (rotasData.rotas.length === 0) {
+    lista.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);font-size:13px;">Nenhuma rota criada ainda.</div>';
+    return;
+  }
+
+  // Contar pontos por equipe
+  const pontosEquipe = {};
+  try {
+    const records = await dbGetAll('points');
+    records.forEach(r => {
+      pontosEquipe[r.usuario] = (pontosEquipe[r.usuario] || 0) + 1;
+    });
+  } catch(e) {}
+
+  lista.innerHTML = [...rotasData.rotas].reverse().map(r => `
+    <div class="rota-card">
+      <div class="rota-card-header">
+        <div>
+          <div class="rota-equipe">${r.equipe}</div>
+          <div class="rota-meta">Criada em ${r.criada} por ${r.criadaPor}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="rota-polo-badge">${r.polo}</span>
+          <button class="btn-excluir-rota" onclick="excluirRota(${r.id})">🗑</button>
+        </div>
+      </div>
+      <div class="rota-alims">
+        ${r.alimentadores.map(a => `<span class="rota-alim-tag">${a}</span>`).join('')}
+      </div>
+      <div class="rota-pontos">
+        📍 ${pontosEquipe[r.equipe] || 0} pontos registrados por esta equipe
+      </div>
+    </div>`).join('');
+}
+
+// ── EQUIPE CAMPO: verificar rota atribuída ──
+async function verificarRotaAtribuida(user) {
+  await carregarRotas();
+  // Pegar a rota mais recente desta equipe
+  const minhasRotas = rotasData.rotas.filter(r => r.equipe === user);
+  if (minhasRotas.length === 0) return null;
+  return minhasRotas[minhasRotas.length - 1]; // mais recente
+}
+
+async function mostrarRotaAtribuida(user) {
+  const rota = await verificarRotaAtribuida(user);
+  const banner   = document.getElementById('rota-atribuida-banner');
+  const semRota  = document.getElementById('sem-rota-banner');
+
+  if (rota) {
+    rotaAtribuida = rota;
+    banner.style.display  = 'flex';
+    semRota.style.display = 'none';
+    document.getElementById('rota-atribuida-alims').textContent =
+      rota.polo + ' — ' + rota.alimentadores.join(', ');
+  } else {
+    rotaAtribuida = null;
+    banner.style.display  = 'none';
+    semRota.style.display = 'block';
+  }
+}
+
+async function usarRotaAtribuida() {
+  if (!rotaAtribuida) return;
+  poloAtivo            = rotaAtribuida.polo;
+  alimentadoresAtivos  = [...rotaAtribuida.alimentadores];
+  await confirmarAlimentadores();
 }
 
 // ══════════════════════════════════════════════════
