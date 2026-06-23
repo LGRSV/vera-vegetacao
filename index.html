@@ -184,6 +184,80 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 @media(min-width:480px){
   #form-panel,#records-panel,#config-panel{max-width:480px;margin:0 auto;}
 }
+
+/* ── SELEÇÃO DE POLO/ALIMENTADOR ── */
+#polo-screen {
+  min-height:100vh; background:var(--green-deep);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px; padding-top:40px;
+}
+.polo-card {
+  background:var(--white); border-radius:20px;
+  padding:32px 24px; width:100%; max-width:400px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+.polo-title { font-size:18px; font-weight:700; color:var(--green-deep); margin-bottom:4px; }
+.polo-sub   { font-size:12px; color:var(--text-muted); margin-bottom:20px; }
+
+.polo-btns  { display:flex; gap:10px; margin-bottom:20px; }
+.polo-btn   {
+  flex:1; padding:14px 8px; border:2px solid var(--border);
+  border-radius:10px; background:var(--off-white);
+  font-family:'Space Grotesk',sans-serif; font-size:13px;
+  font-weight:600; color:var(--text-muted); cursor:pointer;
+  transition:all 0.2s; text-align:center;
+}
+.polo-btn:hover  { border-color:var(--green-live); color:var(--green-mid); }
+.polo-btn.active { border-color:var(--green-live); background:var(--green-deep); color:var(--white); }
+.polo-btn .polo-icon { font-size:22px; display:block; margin-bottom:4px; }
+
+.alim-list  { max-height:340px; overflow-y:auto; }
+.alim-item  {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 12px; border:1px solid var(--border);
+  border-radius:var(--radius-sm); margin-bottom:6px;
+  cursor:pointer; transition:all 0.15s; background:var(--white);
+}
+.alim-item:hover   { border-color:var(--green-live); background:#f0f8f0; }
+.alim-item.sel     { border-color:var(--green-live); background:var(--green-deep); color:var(--white); }
+.alim-item.sel .alim-se, .alim-item.sel .alim-dist { color:var(--green-soft); }
+.alim-name  { font-size:13px; font-weight:600; }
+.alim-se    { font-size:10px; color:var(--text-muted); margin-top:1px; }
+.alim-dist  { font-size:10px; color:var(--text-muted); text-align:right; white-space:nowrap; }
+.alim-badge { font-size:9px; background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber); border-radius:4px; padding:1px 5px; margin-left:5px; }
+
+.btn-confirmar {
+  width:100%; padding:13px; background:var(--green-mid); color:var(--white);
+  border:none; border-radius:var(--radius-sm); font-family:'Space Grotesk',sans-serif;
+  font-size:14px; font-weight:700; cursor:pointer; margin-top:14px;
+  transition:background 0.2s;
+}
+.btn-confirmar:hover { background:var(--green-deep); }
+.btn-confirmar:disabled { background:var(--border); cursor:not-allowed; }
+
+.gps-locating { font-size:11px; color:var(--text-muted); text-align:center; padding:10px; }
+.no-alim { font-size:12px; color:var(--text-muted); text-align:center; padding:20px; }
+
+/* Chip do alimentador ativo no mapa */
+.alim-chip {
+  position:absolute; top:6px; right:10px; z-index:800;
+  background:var(--green-deep); color:var(--white);
+  padding:4px 10px; border-radius:12px; font-size:10px;
+  font-weight:600; cursor:pointer; box-shadow:var(--shadow);
+  display:flex; align-items:center; gap:5px;
+}
+.alim-chip:hover { background:var(--green-mid); }
+
+/* Poste popup */
+.poste-popup { font-family:'Space Grotesk',sans-serif; min-width:160px; }
+.poste-popup .poste-id { font-size:14px; font-weight:700; color:var(--green-deep); margin-bottom:3px; }
+.poste-popup .poste-circ { font-size:11px; color:var(--text-muted); margin-bottom:8px; }
+.poste-popup .btn-usar {
+  width:100%; padding:7px; background:var(--green-mid); color:white;
+  border:none; border-radius:6px; font-size:12px; font-weight:600;
+  cursor:pointer; font-family:'Space Grotesk',sans-serif;
+}
+
 </style>
 </head>
 <body>
@@ -202,6 +276,42 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   <span>📲 Instale o VERA na tela inicial para usar offline</span>
   <button class="btn-install" id="btn-install">Instalar</button>
   <button class="btn-dismiss" onclick="document.getElementById('install-banner').classList.remove('show')">✕</button>
+</div>
+
+
+<!-- SELEÇÃO DE POLO/ALIMENTADOR -->
+<div id="polo-screen" style="display:none;">
+  <div class="polo-card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <div style="width:40px;height:40px;background:var(--green-deep);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🌿</div>
+      <div>
+        <div class="polo-title">Selecionar Área de Trabalho</div>
+        <div class="polo-sub" id="polo-user-label">—</div>
+      </div>
+    </div>
+
+    <label class="field-label">1. Selecione o Polo</label>
+    <div class="polo-btns">
+      <button class="polo-btn" onclick="selecionarPolo('NORTE')" id="pbtn-NORTE">
+        <span class="polo-icon">🔼</span>Norte
+      </button>
+      <button class="polo-btn" onclick="selecionarPolo('CENTRO')" id="pbtn-CENTRO">
+        <span class="polo-icon">🎯</span>Centro
+      </button>
+      <button class="polo-btn" onclick="selecionarPolo('SUL')" id="pbtn-SUL">
+        <span class="polo-icon">🔽</span>Sul
+      </button>
+    </div>
+
+    <label class="field-label">2. Alimentadores mais próximos</label>
+    <div class="alim-list" id="alim-list">
+      <div class="gps-locating">📡 Selecione um polo para ver os alimentadores...</div>
+    </div>
+
+    <button class="btn-confirmar" id="btn-confirmar" disabled onclick="confirmarAlimentadores()">
+      Entrar no campo →
+    </button>
+  </div>
 </div>
 
 <!-- LOGIN -->
@@ -264,6 +374,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   <div class="tab-panel active" id="map-panel">
     <div id="map"></div>
     <div class="gps-pill" id="gps-pill">📍 Aguardando GPS...</div>
+    <div class="alim-chip" id="alim-chip" onclick="switchTab('config')" style="display:none;">📋 <span id="alim-chip-label">—</span></div>
     <button class="map-fab" onclick="switchTab('form')">＋</button>
   </div>
 
@@ -934,6 +1045,204 @@ function showToast(msg, type='') {
   clearTimeout(t._timer);
   t._timer = setTimeout(()=> t.className='', 3500);
 }
+
+
+// ══════════════════════════════════════════════════
+// POLO / ALIMENTADOR
+// ══════════════════════════════════════════════════
+let indicePolo   = null;   // dados do indice.json
+let poloAtivo    = null;
+let alimentadoresAtivos = [];  // até 3 selecionados
+let postesLayer  = null;
+let postesCarregados = {};     // circ -> [postes]
+
+const GITHUB_RAW = 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/dados';
+
+async function carregarIndice() {
+  if (indicePolo) return;
+  try {
+    const r = await fetch(`${GITHUB_RAW}/indice.json`);
+    indicePolo = await r.json();
+  } catch(e) {
+    showToast('Sem conexão para carregar alimentadores.', 'error');
+  }
+}
+
+function selecionarPolo(polo) {
+  poloAtivo = polo;
+  document.querySelectorAll('.polo-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pbtn-' + polo).classList.add('active');
+  alimentadoresAtivos = [];
+  document.getElementById('btn-confirmar').disabled = true;
+  renderAlimentadores();
+}
+
+function distKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+async function renderAlimentadores() {
+  const lista = document.getElementById('alim-list');
+  lista.innerHTML = '<div class="gps-locating">📡 Obtendo sua localização...</div>';
+
+  await carregarIndice();
+  if (!indicePolo || !poloAtivo) return;
+
+  const circs = indicePolo[poloAtivo];
+  if (!circs) { lista.innerHTML = '<div class="no-alim">Polo sem dados.</div>'; return; }
+
+  // Pegar GPS atual
+  let userLat = null, userLon = null;
+  try {
+    const pos = await new Promise((res, rej) =>
+      navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, timeout: 8000 })
+    );
+    userLat = pos.coords.latitude;
+    userLon = pos.coords.longitude;
+  } catch(e) {
+    // sem GPS, ordena por nome
+  }
+
+  // Ordenar por distância do centro do alimentador ao usuário
+  let lista_circs = Object.entries(circs).map(([id, info]) => {
+    const dist = userLat ? distKm(userLat, userLon, info.clat, info.clon) : null;
+    return { id, ...info, dist };
+  });
+
+  if (userLat) {
+    lista_circs.sort((a, b) => a.dist - b.dist);
+  } else {
+    lista_circs.sort((a, b) => a.id.localeCompare(b.id));
+  }
+
+  lista.innerHTML = lista_circs.map(c => {
+    const distLabel = c.dist !== null ? `${c.dist.toFixed(1)} km` : '';
+    const isSel = alimentadoresAtivos.includes(c.id);
+    return `
+      <div class="alim-item ${isSel ? 'sel' : ''}" id="alim-${c.id}" onclick="toggleAlimentador('${c.id}')">
+        <div>
+          <div class="alim-name">${c.id} ${c.n > 5000 ? '<span class="alim-badge">Grande</span>' : ''}</div>
+          <div class="alim-se">${c.se} · ${c.n.toLocaleString('pt-BR')} postes</div>
+        </div>
+        <div class="alim-dist">${distLabel}</div>
+      </div>`;
+  }).join('');
+}
+
+function toggleAlimentador(id) {
+  const idx = alimentadoresAtivos.indexOf(id);
+  if (idx >= 0) {
+    alimentadoresAtivos.splice(idx, 1);
+  } else {
+    if (alimentadoresAtivos.length >= 3) {
+      showToast('Máximo 3 alimentadores por vez.', 'warning');
+      return;
+    }
+    alimentadoresAtivos.push(id);
+  }
+  // Atualizar visual
+  document.querySelectorAll('.alim-item').forEach(el => el.classList.remove('sel'));
+  alimentadoresAtivos.forEach(id => document.getElementById('alim-' + id)?.classList.add('sel'));
+  document.getElementById('btn-confirmar').disabled = alimentadoresAtivos.length === 0;
+}
+
+async function confirmarAlimentadores() {
+  if (alimentadoresAtivos.length === 0) return;
+  // Ir para o app
+  document.getElementById('polo-screen').style.display = 'none';
+  document.getElementById('app-header').style.display  = 'flex';
+  document.getElementById('app').style.display         = 'block';
+  document.getElementById('header-user').textContent   = currentUser;
+
+  // Chip no mapa
+  const chip = document.getElementById('alim-chip');
+  document.getElementById('alim-chip-label').textContent = alimentadoresAtivos.join(', ');
+  chip.style.display = 'flex';
+
+  initMap();
+  startGPSWatch();
+  renderRecords();
+  loadConfig();
+  updatePendingBadge();
+
+  // Carregar postes dos alimentadores selecionados
+  await carregarPostes();
+}
+
+async function carregarPostes() {
+  if (!map) return;
+  if (!postesLayer) {
+    postesLayer = L.layerGroup().addTo(map);
+  }
+  postesLayer.clearLayers();
+
+  showToast('Carregando postes...', '');
+
+  for (const circ of alimentadoresAtivos) {
+    if (postesCarregados[circ]) {
+      renderPostesNoMapa(circ, postesCarregados[circ]);
+      continue;
+    }
+    try {
+      const r = await fetch(`${GITHUB_RAW}/${poloAtivo}/${circ}.json`);
+      if (!r.ok) throw new Error('Não encontrado');
+      const postes = await r.json();
+      postesCarregados[circ] = postes;
+      renderPostesNoMapa(circ, postes);
+      showToast(`✓ ${circ}: ${postes.length.toLocaleString('pt-BR')} postes carregados`, 'success');
+    } catch(e) {
+      showToast(`Erro ao carregar ${circ}`, 'error');
+    }
+  }
+}
+
+function renderPostesNoMapa(circ, postes) {
+  // Usar canvas renderer para performance com muitos pontos
+  const renderer = L.canvas({ padding: 0.5 });
+  postes.forEach(p => {
+    const m = L.circleMarker([p.lat, p.lon], {
+      radius: 4,
+      fillColor: '#e8a020',
+      color: '#1a2e1a',
+      weight: 1,
+      fillOpacity: 0.85,
+      renderer,
+    });
+    m.bindPopup(() => {
+      const div = document.createElement('div');
+      div.className = 'poste-popup';
+      div.innerHTML = `
+        <div class="poste-id">Poste ${p.id}</div>
+        <div class="poste-circ">Alimentador: ${circ}</div>
+        <button class="btn-usar" onclick="usarPoste(${p.id}, '${circ}')">
+          ✅ Usar este poste
+        </button>`;
+      return div;
+    }, { maxWidth: 200 });
+    postesLayer.addLayer(m);
+  });
+
+  // Centralizar no primeiro alimentador
+  if (postes.length > 0 && alimentadoresAtivos[0] === circ) {
+    map.setView([postes[0].lat, postes[0].lon], 14);
+  }
+}
+
+function usarPoste(id, circ) {
+  // Preenche o campo poste e vai para o formulário
+  document.getElementById('f-poste').value = id;
+  document.getElementById('f-area').value  = circ;
+  map.closePopup();
+  switchTab('form');
+  showToast(`Poste ${id} selecionado! ✓`, 'success');
+}
+
+// ── Override do doLogin para ir para polo-screen ──
+const _doLoginOriginal = doLogin;
 
 // ══════════════════════════════════════════════════
 // INIT
