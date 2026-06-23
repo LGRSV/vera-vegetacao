@@ -365,6 +365,41 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   margin-bottom: 14px;
 }
 
+
+/* ── BANNER DE ATUALIZAÇÃO ── */
+#update-banner {
+  display: none;
+  position: fixed;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: var(--green-deep);
+  color: var(--white);
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  display: none;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+  border: 2px solid var(--green-live);
+}
+#update-banner.show { display: flex; }
+.btn-update-now {
+  background: var(--green-live);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 </style>
 </head>
 <body>
@@ -458,7 +493,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
     <div class="logo-mark">🌿</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v1.0</div>
     </div>
   </div>
   <div class="header-right">
@@ -592,6 +627,13 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   </div>
 </div>
 
+
+<!-- BANNER DE ATUALIZAÇÃO -->
+<div id="update-banner">
+  🔄 Nova versão disponível!
+  <button class="btn-update-now" onclick="forcarAtualizacao()">Atualizar agora</button>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -675,24 +717,71 @@ async function setConfig(key, value) {
 // ══════════════════════════════════════════════════
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
+// ── VERSÃO DO APP ──
+const APP_VERSION = '1.0.0';
+const VERSION_KEY = 'vera_app_version';
+
+async function verificarVersao() {
+  try {
+    // Busca versão do servidor (sem cache)
+    const r = await fetch('version.json?t=' + Date.now(), { cache: 'no-store' });
+    const data = await r.json();
+    const versaoServidor = data.version;
+    const versaoLocal    = localStorage.getItem(VERSION_KEY);
+
+    if (versaoLocal && versaoLocal !== versaoServidor) {
+      // Nova versão disponível — mostrar banner
+      document.getElementById('update-banner').classList.add('show');
+    } else {
+      localStorage.setItem(VERSION_KEY, versaoServidor);
+    }
+  } catch(e) {
+    // Sem internet — ignora
+  }
+}
+
+async function forcarAtualizacao() {
+  // Limpar cache e recarregar
+  localStorage.clear();
+  if ('caches' in window) {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(k => caches.delete(k)));
+  }
+  if ('serviceWorker' in navigator) {
+    const regs = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(regs.map(r => r.unregister()));
+  }
+  window.location.reload(true);
+}
+
 if ('serviceWorker' in navigator) {
-  // Desregistrar todos os SWs antigos antes de registrar o novo
+  // Desregistrar SWs antigos + limpar caches na primeira carga
   navigator.serviceWorker.getRegistrations().then(regs => {
     regs.forEach(r => r.unregister());
   });
-  // Limpar todos os caches antigos
   if ('caches' in window) {
     caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
   }
   // Registrar SW novo
   navigator.serviceWorker.register('sw.js?v=7').then(reg => {
     reg.update();
-    console.log('SW v7 registrado');
+    // Detectar quando SW novo estiver pronto
+    reg.addEventListener('updatefound', () => {
+      const novo = reg.installing;
+      novo.addEventListener('statechange', () => {
+        if (novo.state === 'installed' && navigator.serviceWorker.controller) {
+          document.getElementById('update-banner').classList.add('show');
+        }
+      });
+    });
   });
   navigator.serviceWorker.addEventListener('message', e => {
     if (e.data?.type === 'DO_SYNC') syncPendingPoints();
   });
 }
+
+// Verificar versão ao carregar (após 2s)
+setTimeout(verificarVersao, 2000);
 
 // ══════════════════════════════════════════════════
 // INSTALL PROMPT
