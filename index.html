@@ -1,6 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>
+// VERA v1.0 — limpeza forçada de SW e cache antes de qualquer carga
+(async function() {
+  const APP_VERSION = '1.0.0';
+  const stored = localStorage.getItem('vera_version_check');
+  if (stored !== APP_VERSION) {
+    // Primeira execução desta versão — limpar tudo
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+    }
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+    localStorage.setItem('vera_version_check', APP_VERSION);
+    // Recarregar para garantir versão limpa
+    if (stored) {
+      window.location.reload(true);
+      return;
+    }
+  }
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#1a2e1a">
