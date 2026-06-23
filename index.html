@@ -4,9 +4,9 @@
 <script>
 // VERA v1.0 — limpeza forçada de SW e cache antes de qualquer carga
 (async function() {
-  const APP_VERSION = '1.1.0';
+  const APP_VERSION = '1.1.1';
   const stored = localStorage.getItem('vera_version_check');
-  if (stored !== '1.1.0') {
+  if (stored !== '1.1.1') {
     // Primeira execução desta versão — limpar tudo
     if ('serviceWorker' in navigator) {
       const regs = await navigator.serviceWorker.getRegistrations();
@@ -16,7 +16,7 @@
       const keys = await caches.keys();
       await Promise.all(keys.map(k => caches.delete(k)));
     }
-    localStorage.setItem('vera_version_check', '1.1.0');
+    localStorage.setItem('vera_version_check', '1.1.1');
     // Recarregar para garantir versão limpa
     if (stored) {
       window.location.reload(true);
@@ -26,7 +26,7 @@
 })();
 </script>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#1a2e1a">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -36,13 +36,11 @@
 <meta name="apple-mobile-web-app-title" content="VERA">
 <link rel="manifest" href="manifest.json">
 <title>VERA — Vegetação em Rede Ativa</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Fonts removidas para melhor performance iOS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
 <style>
 :root {
   --green-deep:  #1a2e1a;
@@ -63,7 +61,7 @@
   --radius-sm:   8px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Space Grotesk',sans-serif;background:var(--off-white);color:var(--text-main);min-height:100vh;overflow-x:hidden;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--off-white);color:var(--text-main);min-height:100vh;overflow-x:hidden;}
 
 /* ── STATUS BAR ── */
 #status-bar{
@@ -76,8 +74,8 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--off-white);color:va
 #status-bar.offline{background:var(--danger);color:var(--white);}
 #status-bar.syncing{background:var(--amber);color:var(--green-deep);}
 .status-dot{width:8px;height:8px;border-radius:50%;background:currentColor;animation:none;}
-.status-dot.pulse{animation:pulse 1.2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.status-dot.pulse{opacity:0.5;}
+
 .pending-badge{
   background:rgba(255,255,255,0.25);border-radius:10px;
   padding:2px 8px;font-size:10px;
@@ -106,10 +104,10 @@ header{
 .login-subtitle{text-align:center;font-size:12px;color:var(--text-muted);margin-bottom:24px;line-height:1.5;}
 .field-group{margin-bottom:14px;}
 .field-label{display:block;font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
-.field-input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--text-main);background:var(--off-white);transition:border-color 0.2s;outline:none;}
+.field-input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;color:var(--text-main);background:var(--off-white);transition:border-color 0.2s;outline:none;}
 .field-input:focus{border-color:var(--green-live);background:var(--white);}
 select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7a55' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px;}
-.btn-primary{width:100%;padding:13px;background:var(--green-mid);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s,transform 0.1s;margin-top:6px;}
+.btn-primary{width:100%;padding:13px;background:var(--green-mid);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s,transform 0.1s;margin-top:6px;}
 .btn-primary:hover{background:var(--green-deep);}
 .btn-primary:active{transform:scale(0.98);}
 .login-error{color:var(--danger);font-size:12px;text-align:center;margin-top:10px;display:none;}
@@ -119,7 +117,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 
 /* ── TABS ── */
 .tab-bar{display:flex;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:80px;z-index:900;}
-.tab-btn{flex:1;padding:10px 6px;border:none;background:none;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab-btn{flex:1;padding:10px 6px;border:none;background:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:12px;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
 .tab-btn .tab-icon{font-size:17px;}
 .tab-btn.active{color:var(--green-mid);border-bottom-color:var(--green-live);background:var(--amber-bg);}
 
@@ -131,7 +129,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 #map{height:calc(100vh - 140px);width:100%;}
 .map-fab{position:absolute;bottom:20px;right:14px;z-index:800;background:var(--green-mid);color:var(--white);border:none;border-radius:50%;width:52px;height:52px;font-size:22px;cursor:pointer;box-shadow:0 4px 16px rgba(45,90,39,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
 .map-fab:active{transform:scale(0.92);}
-.gps-pill{position:absolute;top:6px;left:50%;transform:translateX(-50%);z-index:800;background:var(--green-deep);color:var(--white);padding:5px 12px;border-radius:16px;font-size:11px;font-family:'JetBrains Mono',monospace;white-space:nowrap;box-shadow:var(--shadow);}
+.gps-pill{position:absolute;top:6px;left:50%;transform:translateX(-50%);z-index:800;background:var(--green-deep);color:var(--white);padding:5px 12px;border-radius:16px;font-size:11px;font-family:'SF Mono','Courier New',monospace;white-space:nowrap;box-shadow:var(--shadow);}
 
 /* ── FORM ── */
 #form-panel{padding-bottom:80px;}
@@ -139,9 +137,9 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 .form-section-title:first-child{margin-top:2px;}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .field-row.triple{grid-template-columns:1fr 1fr 1fr;}
-.coord-box{background:var(--green-deep);color:var(--green-soft);border-radius:var(--radius-sm);padding:9px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.coord-box{background:var(--green-deep);color:var(--green-soft);border-radius:var(--radius-sm);padding:9px 12px;font-family:'SF Mono','Courier New',monospace;font-size:11px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
 .coord-box span{color:var(--white);font-weight:500;}
-.gps-btn{background:var(--green-mid);color:var(--white);border:none;border-radius:var(--radius-sm);padding:10px 14px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;width:100%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:7px;transition:background 0.2s;}
+.gps-btn{background:var(--green-mid);color:var(--white);border:none;border-radius:var(--radius-sm);padding:10px 14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;font-weight:600;cursor:pointer;width:100%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:7px;transition:background 0.2s;}
 .gps-btn:hover{background:var(--green-deep);}
 .gps-btn.loading{background:var(--text-muted);}
 .photo-area{border:2px dashed var(--border);border-radius:var(--radius);padding:18px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--white);position:relative;}
@@ -153,7 +151,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 .photo-thumb .remove-photo{position:absolute;top:2px;right:2px;background:var(--danger);color:white;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .photo-icon{font-size:28px;margin-bottom:5px;}
 .photo-label{font-size:12px;color:var(--text-muted);}
-.btn-capture{background:var(--amber);color:var(--green-deep);border:none;border-radius:var(--radius);padding:15px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;cursor:pointer;width:100%;margin-top:18px;display:flex;align-items:center;justify-content:center;gap:9px;transition:transform 0.15s,box-shadow 0.15s;box-shadow:0 4px 16px rgba(232,160,32,0.35);}
+.btn-capture{background:var(--amber);color:var(--green-deep);border:none;border-radius:var(--radius);padding:15px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;font-weight:700;cursor:pointer;width:100%;margin-top:18px;display:flex;align-items:center;justify-content:center;gap:9px;transition:transform 0.15s,box-shadow 0.15s;box-shadow:0 4px 16px rgba(232,160,32,0.35);}
 .btn-capture:hover{transform:translateY(-1px);}
 .btn-capture:active{transform:scale(0.98);}
 
@@ -161,15 +159,15 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 #records-panel{padding-bottom:80px;}
 .records-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
 .records-count{font-size:12px;color:var(--text-muted);}
-.btn-export{background:var(--green-deep);color:var(--white);border:none;border-radius:var(--radius-sm);padding:7px 14px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background 0.2s;}
+.btn-export{background:var(--green-deep);color:var(--white);border:none;border-radius:var(--radius-sm);padding:7px 14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background 0.2s;}
 .btn-export:hover{background:var(--green-mid);}
 .record-card{background:var(--white);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;border:1px solid var(--border);box-shadow:var(--shadow);display:grid;grid-template-columns:1fr auto;gap:7px;align-items:start;}
 .record-card.pending{border-left:3px solid var(--amber);}
 .record-card.synced{border-left:3px solid var(--green-live);}
-.record-id{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:3px;}
+.record-id{font-family:'SF Mono','Courier New',monospace;font-size:10px;color:var(--text-muted);margin-bottom:3px;}
 .record-species{font-size:15px;font-weight:700;color:var(--green-deep);margin-bottom:2px;}
 .record-meta{font-size:11px;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:5px;margin-top:3px;}
-.meta-tag{background:var(--off-white);border:1px solid var(--border);border-radius:4px;padding:2px 5px;font-size:10px;font-family:'JetBrains Mono',monospace;}
+.meta-tag{background:var(--off-white);border:1px solid var(--border);border-radius:4px;padding:2px 5px;font-size:10px;font-family:'SF Mono','Courier New',monospace;}
 .sync-tag{background:var(--amber-bg);border:1px solid var(--amber);color:var(--amber);border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600;}
 .synced-tag{background:var(--off-white);border:1px solid var(--green-live);color:var(--green-mid);border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600;}
 .record-thumb{width:58px;height:58px;border-radius:var(--radius-sm);object-fit:cover;border:2px solid var(--border);}
@@ -182,9 +180,9 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 #config-panel{padding-bottom:80px;}
 .config-section{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:16px;margin-bottom:14px;}
 .config-title{font-size:13px;font-weight:700;color:var(--green-deep);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
-.token-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-main);background:var(--off-white);outline:none;}
+.token-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'SF Mono','Courier New',monospace;font-size:12px;color:var(--text-main);background:var(--off-white);outline:none;}
 .token-input:focus{border-color:var(--green-live);}
-.btn-save-config{background:var(--green-mid);color:var(--white);border:none;border-radius:var(--radius-sm);padding:10px 18px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:10px;transition:background 0.2s;}
+.btn-save-config{background:var(--green-mid);color:var(--white);border:none;border-radius:var(--radius-sm);padding:10px 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:10px;transition:background 0.2s;}
 .btn-save-config:hover{background:var(--green-deep);}
 .config-status{margin-top:8px;font-size:12px;color:var(--text-muted);}
 .config-status.ok{color:var(--green-mid);}
@@ -194,9 +192,9 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 .stat-num{font-size:24px;font-weight:700;color:var(--green-deep);}
 .stat-num.amber{color:var(--amber);}
 .stat-label{font-size:10px;color:var(--text-muted);margin-top:2px;}
-.btn-sync-now{background:var(--amber);color:var(--green-deep);border:none;border-radius:var(--radius-sm);padding:10px 18px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;transition:background 0.2s;}
+.btn-sync-now{background:var(--amber);color:var(--green-deep);border:none;border-radius:var(--radius-sm);padding:10px 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;transition:background 0.2s;}
 .btn-sync-now:hover{background:#d4911c;}
-.btn-danger{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger);border-radius:var(--radius-sm);padding:9px 18px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;width:100%;margin-top:8px;}
+.btn-danger{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger);border-radius:var(--radius-sm);padding:9px 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:12px;font-weight:600;cursor:pointer;width:100%;margin-top:8px;}
 
 /* ── TOAST ── */
 #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green-deep);color:var(--white);padding:11px 22px;border-radius:22px;font-size:13px;font-weight:500;z-index:9999;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,0.25);}
@@ -208,7 +206,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 /* ── INSTALL BANNER ── */
 #install-banner{display:none;background:var(--green-deep);color:var(--white);padding:10px 14px;text-align:center;font-size:12px;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;}
 #install-banner.show{display:flex;}
-.btn-install{background:var(--green-live);color:var(--white);border:none;border-radius:6px;padding:6px 14px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-install{background:var(--green-live);color:var(--white);border:none;border-radius:6px;padding:6px 14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:12px;font-weight:600;cursor:pointer;}
 .btn-dismiss{background:none;border:none;color:var(--green-soft);cursor:pointer;font-size:18px;padding:0 4px;}
 
 @media(min-width:480px){
@@ -233,7 +231,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 .polo-btn   {
   flex:1; padding:14px 8px; border:2px solid var(--border);
   border-radius:10px; background:var(--off-white);
-  font-family:'Space Grotesk',sans-serif; font-size:13px;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; font-size:13px;
   font-weight:600; color:var(--text-muted); cursor:pointer;
   transition:all 0.2s; text-align:center;
 }
@@ -258,7 +256,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 
 .btn-confirmar {
   width:100%; padding:13px; background:var(--green-mid); color:var(--white);
-  border:none; border-radius:var(--radius-sm); font-family:'Space Grotesk',sans-serif;
+  border:none; border-radius:var(--radius-sm); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   font-size:14px; font-weight:700; cursor:pointer; margin-top:14px;
   transition:background 0.2s;
 }
@@ -279,13 +277,13 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 .alim-chip:hover { background:var(--green-mid); }
 
 /* Poste popup */
-.poste-popup { font-family:'Space Grotesk',sans-serif; min-width:160px; }
+.poste-popup { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; min-width:160px; }
 .poste-popup .poste-id { font-size:14px; font-weight:700; color:var(--green-deep); margin-bottom:3px; }
 .poste-popup .poste-circ { font-size:11px; color:var(--text-muted); margin-bottom:8px; }
 .poste-popup .btn-usar {
   width:100%; padding:7px; background:var(--green-mid); color:white;
   border:none; border-radius:6px; font-size:12px; font-weight:600;
-  cursor:pointer; font-family:'Space Grotesk',sans-serif;
+  cursor:pointer; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
 }
 
 
@@ -309,7 +307,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   border-bottom: 1px solid #BBDEFB;
 }
 .poste-id-display {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'SF Mono', 'Courier New', monospace;
   font-size: 13px;
   font-weight: 700;
   color: #1565C0;
@@ -330,7 +328,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   background: #1565C0;
   color: var(--white);
   border: none;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -365,7 +363,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 .poste-opcao.sel .poste-op-id { color: white; }
 .poste-opcao.sel .poste-op-info { color: #BBDEFB; }
 .poste-op-id {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'SF Mono', 'Courier New', monospace;
   font-size: 12px;
   font-weight: 700;
   color: #1565C0;
@@ -421,7 +419,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   border: none;
   border-radius: 8px;
   padding: 6px 14px;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
@@ -497,7 +495,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   color: var(--green-deep);
   border: none;
   border-radius: var(--radius-sm);
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -541,7 +539,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   margin-top: 5px;
 }
 .rota-alim-tag {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'SF Mono', 'Courier New', monospace;
   font-size: 10px;
   background: var(--off-white);
   border: 1px solid var(--border);
@@ -614,9 +612,21 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 .alim-admin-check:hover { border-color: var(--amber); background: var(--amber-bg); }
 .alim-admin-check.sel { border-color: var(--amber); background: var(--amber-bg); }
 .alim-admin-check input[type=checkbox] { accent-color: var(--amber); width: 16px; height: 16px; }
-.alim-admin-label { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text-main); }
+.alim-admin-label { font-family: 'SF Mono', 'Courier New', monospace; font-size: 12px; font-weight: 600; color: var(--text-main); }
 .alim-admin-se { font-size: 10px; color: var(--text-muted); }
 .alim-admin-lista { max-height: 220px; overflow-y: auto; margin-top: 8px; }
+
+
+/* ── iOS FIXES ── */
+#map { touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch; }
+.leaflet-container { -webkit-tap-highlight-color: transparent; }
+* { -webkit-tap-highlight-color: transparent; }
+button, .polo-btn, .alim-item, .tab-btn {
+  touch-action: manipulation; /* remove delay de 300ms no iOS */
+  -webkit-user-select: none;
+  user-select: none;
+}
+.tab-panel { -webkit-overflow-scrolling: touch; }
 
 </style>
 </head>
@@ -650,7 +660,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
         <div class="rota-atribuida-title">Rota atribuída pelo supervisor</div>
         <div class="rota-atribuida-alims" id="rota-atribuida-alims">—</div>
       </div>
-      <button style="background:var(--green-live);border:none;color:white;border-radius:8px;padding:6px 12px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;" onclick="usarRotaAtribuida()">Usar →</button>
+      <button style="background:var(--green-live);border:none;color:white;border-radius:8px;padding:6px 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:12px;font-weight:700;cursor:pointer;" onclick="usarRotaAtribuida()">Usar →</button>
     </div>
     <div id="sem-rota-banner" class="sem-rota-banner" style="display:none;">
       <div class="sem-rota-icon">⏳</div>
@@ -722,7 +732,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
     <div class="logo-mark">🌿</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v1.1.0</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v1.1.1</div>
     </div>
   </div>
   <div class="header-right">
@@ -1000,7 +1010,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.1.1';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1329,7 +1339,7 @@ async function renderMapPoints() {
     const cor = '#4CAF50';
     const marker = L.circleMarker([r.lat, r.lon], { radius:8, fillColor:cor, color:'#1a2e1a', weight:2, fillOpacity:0.85 });
     marker.bindPopup(`
-      <div style="font-family:'Space Grotesk',sans-serif;min-width:150px">
+      <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-width:150px">
         <div style="font-weight:700;color:#1a2e1a;margin-bottom:4px">${r.especie||'Sem espécie'}</div>
         <div style="font-size:12px;color:#5a7a55">Poste: ${r.poste||'—'}</div>
         <div style="font-size:12px;color:#5a7a55">Altura: ${r.altura||'—'}m</div>
@@ -1729,73 +1739,83 @@ async function carregarPostes() {
 
 function renderPostesNoMapa(circ, postes) {
   // Filtrar por raio de 5km do GPS atual
-  let postesVisiveis = postes;
+  let visiveis = postes;
   if (currentLat && currentLon) {
-    postesVisiveis = postes.filter(p => distKm(currentLat, currentLon, p.lat, p.lon) <= 5);
-    if (postesVisiveis.length < 50) {
-      postesVisiveis = postes
-        .map(p => ({ ...p, d: distKm(currentLat, currentLon, p.lat, p.lon) }))
-        .sort((a, b) => a.d - b.d)
-        .slice(0, 500);
+    visiveis = postes.filter(p => distKm(currentLat, currentLon, p.lat, p.lon) <= 5);
+    if (visiveis.length < 30) {
+      visiveis = postes
+        .map(p => ({ ...p, _d: distKm(currentLat, currentLon, p.lat, p.lon) }))
+        .sort((a, b) => a._d - b._d)
+        .slice(0, 300);
     }
   } else {
-    postesVisiveis = postes.slice(0, 500);
+    visiveis = postes.slice(0, 300);
   }
 
-  const renderer = L.canvas({ padding: 0.5 });
+  const renderer = L.canvas({ padding: 0.5, tolerance: 10 });
+  const LOTE = 100; // postes por frame — evita travar o iOS
+  let idx = 0;
 
-  postesVisiveis.forEach(p => {
-    // Hit area invisível grande para facilitar toque
-    const hit = L.circleMarker([p.lat, p.lon], {
-      radius: 20,
-      fillColor: 'transparent',
-      color: 'transparent',
-      weight: 0,
-      fillOpacity: 0,
-      interactive: true,
-      bubblingMouseEvents: false,
-    });
-    // Visual menor
-    const vis = L.circleMarker([p.lat, p.lon], {
-      radius: 7,
-      fillColor: '#1565C0',
-      color: '#ffffff',
-      weight: 2,
-      fillOpacity: 0.9,
-      renderer,
-      interactive: false,
-    });
+  function plotarLote() {
+    const fim = Math.min(idx + LOTE, visiveis.length);
+    for (let i = idx; i < fim; i++) {
+      const p = visiveis[i];
 
-    const popupContent = '<div class="poste-popup">'
-      + '<div class="poste-id">Poste ' + p.id + '</div>'
-      + '<div class="poste-circ">Alimentador: ' + circ + '</div>'
-      + '<button class="btn-usar" onclick="usarPoste(\'' + p.id + '\',\'' + circ + '\')">✅ Usar este poste</button>'
-      + '</div>';
+      // Hit area invisível grande (facilita toque iOS)
+      const hit = L.circleMarker([p.lat, p.lon], {
+        radius: 22,
+        fillColor: 'transparent',
+        color: 'transparent',
+        weight: 0,
+        fillOpacity: 0,
+        interactive: true,
+        bubblingMouseEvents: false,
+      });
 
-    hit.bindPopup(popupContent, { maxWidth: 220, autoPan: true });
+      // Visual azul
+      const vis = L.circleMarker([p.lat, p.lon], {
+        radius: 7,
+        fillColor: '#1565C0',
+        color: '#ffffff',
+        weight: 2,
+        fillOpacity: 0.9,
+        renderer,
+        interactive: false,
+      });
 
-    // Touch otimizado — responde imediatamente
-    hit.on('touchstart', function(e) {
-      L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault(e);
-      this.openPopup();
-    });
-    hit.on('click', function() { this.openPopup(); });
+      const popupHtml = '<div class="poste-popup">'
+        + '<div class="poste-id">Poste ' + p.id + '</div>'
+        + '<div class="poste-circ">Alimentador: ' + circ + '</div>'
+        + '<button class="btn-usar" onclick="usarPoste(\'' + p.id + '\',\'' + circ + '\')">✅ Usar este poste</button>'
+        + '</div>';
 
-    postesLayer.addLayer(vis);
-    postesLayer.addLayer(hit);
-  });
+      hit.bindPopup(popupHtml, { maxWidth: 220, autoPan: false });
+      hit.on('touchstart', function(e) {
+        L.DomEvent.stopPropagation(e);
+        L.DomEvent.preventDefault(e);
+        this.openPopup();
+      });
+      hit.on('click', function() { this.openPopup(); });
 
-  const total = postes.length;
-  const vis2  = postesVisiveis.length;
-  const msg   = vis2 < total
-    ? (circ + ': ' + vis2.toLocaleString('pt-BR') + ' postes próximos (total ' + total.toLocaleString('pt-BR') + ')')
-    : (circ + ': ' + vis2.toLocaleString('pt-BR') + ' postes');
-  showToast(msg, 'success');
-
-  if (postesVisiveis.length > 0 && alimentadoresAtivos[0] === circ) {
-    map.setView([postesVisiveis[0].lat, postesVisiveis[0].lon], 15);
+      postesLayer.addLayer(vis);
+      postesLayer.addLayer(hit);
+    }
+    idx = fim;
+    if (idx < visiveis.length) {
+      requestAnimationFrame(plotarLote);
+    } else {
+      const total = postes.length;
+      const msg = visiveis.length < total
+        ? (circ + ': ' + visiveis.length + ' postes próximos')
+        : (circ + ': ' + visiveis.length + ' postes');
+      showToast(msg, 'success');
+      if (alimentadoresAtivos[0] === circ && visiveis.length > 0) {
+        map.setView([visiveis[0].lat, visiveis[0].lon], 15);
+      }
+    }
   }
+
+  requestAnimationFrame(plotarLote);
 }
 
 function usarPoste(id, circ) {
