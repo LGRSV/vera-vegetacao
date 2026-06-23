@@ -4,9 +4,9 @@
 <script>
 // VERA v1.0 — limpeza forçada de SW e cache antes de qualquer carga
 (async function() {
-  const APP_VERSION = '1.0.1';
+  const APP_VERSION = '1.0.2';
   const stored = localStorage.getItem('vera_version_check');
-  if (stored !== '1.0.1') {
+  if (stored !== '1.0.2') {
     // Primeira execução desta versão — limpar tudo
     if ('serviceWorker' in navigator) {
       const regs = await navigator.serviceWorker.getRegistrations();
@@ -16,7 +16,7 @@
       const keys = await caches.keys();
       await Promise.all(keys.map(k => caches.delete(k)));
     }
-    localStorage.setItem('vera_version_check', '1.0.1');
+    localStorage.setItem('vera_version_check', '1.0.2');
     // Recarregar para garantir versão limpa
     if (stored) {
       window.location.reload(true);
@@ -490,16 +490,10 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
       <label class="field-label">Equipe / Usuário</label>
       <select class="field-input" id="login-user">
         <option value="">Selecione a equipe...</option>
-        <option>Equipe 01 — Norte</option>
-        <option>Equipe 02 — Norte</option>
-        <option>Equipe 03 — Centro</option>
-        <option>Equipe 04 — Centro</option>
-        <option>Equipe 05 — Centro</option>
-        <option>Equipe 06 — Sul</option>
-        <option>Equipe 07 — Sul</option>
-        <option>Equipe 08 — Sul</option>
-        <option>Equipe 09 — Palmas</option>
-        <option>Equipe 10 — Palmas</option>
+        <option>Equipe Energisa</option>
+        <option>Enecol Norte</option>
+        <option>Enecol Centro</option>
+        <option>Enecol Sul</option>
       </select>
     </div>
     <div class="field-group">
@@ -517,7 +511,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
     <div class="logo-mark">🌿</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v1.0.1</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v1.0.2</div>
     </div>
   </div>
   <div class="header-right">
@@ -665,11 +659,10 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 // USUÁRIOS
 // ══════════════════════════════════════════════════
 const USERS = {
-  'Equipe 01 — Norte':'vera01','Equipe 02 — Norte':'vera02',
-  'Equipe 03 — Centro':'vera03','Equipe 04 — Centro':'vera04',
-  'Equipe 05 — Centro':'vera05','Equipe 06 — Sul':'vera06',
-  'Equipe 07 — Sul':'vera07','Equipe 08 — Sul':'vera08',
-  'Equipe 09 — Palmas':'vera09','Equipe 10 — Palmas':'vera10',
+  'Equipe Energisa':'energisa',
+  'Enecol Norte':'enecol01',
+  'Enecol Centro':'enecol02',
+  'Enecol Sul':'enecol03',
 };
 
 // ══════════════════════════════════════════════════
@@ -742,7 +735,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '1.0.1';
+const APP_VERSION = '1.0.2';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1049,7 +1042,7 @@ async function renderMapPoints() {
   const records = await dbGetAll('points');
   records.forEach(r => {
     if (!r.lat || !r.lon) return;
-    const cor = r.synced ? '#4CAF50' : '#e8a020';
+    const cor = '#4CAF50';
     const marker = L.circleMarker([r.lat, r.lon], { radius:8, fillColor:cor, color:'#1a2e1a', weight:2, fillOpacity:0.85 });
     marker.bindPopup(`
       <div style="font-family:'Space Grotesk',sans-serif;min-width:150px">
