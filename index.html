@@ -1469,34 +1469,73 @@ async function carregarPostes() {
 }
 
 function renderPostesNoMapa(circ, postes) {
-  // Usar canvas renderer para performance com muitos pontos
+  // Filtrar por raio de 5km do GPS atual
+  let postesVisiveis = postes;
+  if (currentLat && currentLon) {
+    postesVisiveis = postes.filter(p => distKm(currentLat, currentLon, p.lat, p.lon) <= 5);
+    if (postesVisiveis.length < 50) {
+      postesVisiveis = postes
+        .map(p => ({ ...p, d: distKm(currentLat, currentLon, p.lat, p.lon) }))
+        .sort((a, b) => a.d - b.d)
+        .slice(0, 500);
+    }
+  } else {
+    postesVisiveis = postes.slice(0, 500);
+  }
+
   const renderer = L.canvas({ padding: 0.5 });
-  postes.forEach(p => {
-    const m = L.circleMarker([p.lat, p.lon], {
-      radius: 10,
+
+  postesVisiveis.forEach(p => {
+    // Hit area invisível grande para facilitar toque
+    const hit = L.circleMarker([p.lat, p.lon], {
+      radius: 20,
+      fillColor: 'transparent',
+      color: 'transparent',
+      weight: 0,
+      fillOpacity: 0,
+      interactive: true,
+      bubblingMouseEvents: false,
+    });
+    // Visual menor
+    const vis = L.circleMarker([p.lat, p.lon], {
+      radius: 7,
       fillColor: '#1565C0',
       color: '#ffffff',
       weight: 2,
       fillOpacity: 0.9,
       renderer,
+      interactive: false,
     });
-    m.bindPopup(() => {
-      const div = document.createElement('div');
-      div.className = 'poste-popup';
-      div.innerHTML = `
-        <div class="poste-id">Poste ${p.id}</div>
-        <div class="poste-circ">Alimentador: ${circ}</div>
-        <button class="btn-usar" onclick="usarPoste(${p.id}, '${circ}')">
-          ✅ Usar este poste
-        </button>`;
-      return div;
-    }, { maxWidth: 200 });
-    postesLayer.addLayer(m);
+
+    const popupContent = '<div class="poste-popup">'
+      + '<div class="poste-id">Poste ' + p.id + '</div>'
+      + '<div class="poste-circ">Alimentador: ' + circ + '</div>'
+      + '<button class="btn-usar" onclick="usarPoste(\'' + p.id + '\',\'' + circ + '\')">✅ Usar este poste</button>'
+      + '</div>';
+
+    hit.bindPopup(popupContent, { maxWidth: 220, autoPan: true });
+
+    // Touch otimizado — responde imediatamente
+    hit.on('touchstart', function(e) {
+      L.DomEvent.stopPropagation(e);
+      L.DomEvent.preventDefault(e);
+      this.openPopup();
+    });
+    hit.on('click', function() { this.openPopup(); });
+
+    postesLayer.addLayer(vis);
+    postesLayer.addLayer(hit);
   });
 
-  // Centralizar no primeiro alimentador
-  if (postes.length > 0 && alimentadoresAtivos[0] === circ) {
-    map.setView([postes[0].lat, postes[0].lon], 14);
+  const total = postes.length;
+  const vis2  = postesVisiveis.length;
+  const msg   = vis2 < total
+    ? (circ + ': ' + vis2.toLocaleString('pt-BR') + ' postes próximos (total ' + total.toLocaleString('pt-BR') + ')')
+    : (circ + ': ' + vis2.toLocaleString('pt-BR') + ' postes');
+  showToast(msg, 'success');
+
+  if (postesVisiveis.length > 0 && alimentadoresAtivos[0] === circ) {
+    map.setView([postesVisiveis[0].lat, postesVisiveis[0].lon], 15);
   }
 }
 
