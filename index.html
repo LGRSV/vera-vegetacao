@@ -1095,7 +1095,7 @@ function startGPSWatch() {
     } else {
       userMarker.setLatLng([currentLat,currentLon]);
     }
-  }, ()=>{ document.getElementById('gps-pill').textContent='⚠️ GPS indisponível'; }, { enableHighAccuracy:true, maximumAge:5000 });
+  }, ()=>{ document.getElementById('gps-pill').textContent='⚠️ GPS indisponível'; }, { enableHighAccuracy:false, maximumAge:10000, timeout:15000 });
 }
 
 // ══════════════════════════════════════════════════
