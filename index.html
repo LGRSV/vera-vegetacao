@@ -676,8 +676,18 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js?v=6').then(reg => {
-    console.log('SW registrado');
+  // Desregistrar todos os SWs antigos antes de registrar o novo
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    regs.forEach(r => r.unregister());
+  });
+  // Limpar todos os caches antigos
+  if ('caches' in window) {
+    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+  }
+  // Registrar SW novo
+  navigator.serviceWorker.register('sw.js?v=7').then(reg => {
+    reg.update();
+    console.log('SW v7 registrado');
   });
   navigator.serviceWorker.addEventListener('message', e => {
     if (e.data?.type === 'DO_SYNC') syncPendingPoints();
