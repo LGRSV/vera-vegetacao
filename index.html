@@ -5,7 +5,7 @@
 // VERA v1.1.1 — limpeza única de SW antigos (sem reload automático)
 (function() {
   try {
-    const V = '1.1.1';
+    const V = '2.0.0';
     if (localStorage.getItem('vera_v') !== V) {
       localStorage.setItem('vera_v', V);
       // Limpar SWs em background, sem recarregar
@@ -87,7 +87,7 @@ header{
   position:sticky;top:28px;z-index:1000;
 }
 .logo{display:flex;align-items:center;gap:10px;color:var(--white);}
-.logo-mark{width:30px;height:30px;background:var(--green-live);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.logo-mark{width:32px;height:32px;background:var(--green-live);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;letter-spacing:-0.02em;}
 .logo-text{font-size:17px;font-weight:700;letter-spacing:0.04em;}
 .logo-sub{font-size:9px;color:var(--green-soft);letter-spacing:0.08em;text-transform:uppercase;line-height:1;}
 .header-right{display:flex;align-items:center;gap:8px;}
@@ -98,7 +98,7 @@ header{
 /* ── LOGIN ── */
 #login-screen{min-height:100vh;background:var(--green-deep);display:flex;align-items:center;justify-content:center;padding:20px;padding-top:40px;}
 .login-card{background:var(--white);border-radius:20px;padding:36px 28px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
-.login-icon{width:60px;height:60px;background:var(--green-deep);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 20px;}
+.login-icon{width:auto;height:auto;background:var(--green-deep);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:var(--green-live);letter-spacing:0.1em;margin:0 auto 20px;padding:14px 28px;}
 .login-title{text-align:center;font-size:22px;font-weight:700;color:var(--green-deep);margin-bottom:4px;}
 .login-subtitle{text-align:center;font-size:12px;color:var(--text-muted);margin-bottom:24px;line-height:1.5;}
 .field-group{margin-bottom:14px;}
@@ -117,7 +117,7 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 /* ── TABS ── */
 .tab-bar{display:flex;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:80px;z-index:900;}
 .tab-btn{flex:1;padding:10px 6px;border:none;background:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:12px;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
-.tab-btn .tab-icon{font-size:17px;}
+.tab-btn .tab-icon{font-size:13px;font-weight:600;}
 .tab-btn.active{color:var(--green-mid);border-bottom-color:var(--green-live);background:var(--amber-bg);}
 
 .tab-panel{display:none;padding:14px;}
@@ -727,9 +727,9 @@ button, .polo-btn, .alim-item, .tab-btn {
 
 <!-- INSTALL BANNER -->
 <div id="install-banner">
-  <span>📲 Instale o VERA na tela inicial para usar offline</span>
+  <span>Instale o VERA na tela inicial para usar offline</span>
   <button class="btn-install" id="btn-install">Instalar</button>
-  <button class="btn-dismiss" onclick="document.getElementById('install-banner').classList.remove('show')">✕</button>
+  <button class="btn-dismiss" onclick="document.getElementById('install-banner').classList.remove('show')"></button>
 </div>
 
 
@@ -739,7 +739,7 @@ button, .polo-btn, .alim-item, .tab-btn {
 
     <!-- BANNER ROTA ATRIBUÍDA -->
     <div id="rota-atribuida-banner" class="rota-atribuida-banner" style="display:none;">
-      <div class="rota-icon">🗺️</div>
+      <div class="rota-icon"></div>
       <div class="rota-atribuida-info">
         <div class="rota-atribuida-title">Rota atribuída pelo supervisor</div>
         <div class="rota-atribuida-alims" id="rota-atribuida-alims">—</div>
@@ -753,7 +753,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     </div>
 
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-      <div style="width:40px;height:40px;background:var(--green-deep);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🌿</div>
+      <div style="width:40px;height:40px;background:var(--green-deep);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;"></div>
       <div>
         <div class="polo-title">Selecionar Área de Trabalho</div>
         <div class="polo-sub" id="polo-user-label">—</div>
@@ -763,9 +763,9 @@ button, .polo-btn, .alim-item, .tab-btn {
     <!-- ETAPA 1: POLO -->
     <div class="etapa-label"><span class="etapa-num" id="enum-1">1</span> Regional</div>
     <div class="polo-btns">
-      <button class="polo-btn" onclick="selecionarPolo('NORTE')" id="pbtn-NORTE"><span class="polo-icon">🔼</span>Norte</button>
-      <button class="polo-btn" onclick="selecionarPolo('CENTRO')" id="pbtn-CENTRO"><span class="polo-icon">🎯</span>Centro</button>
-      <button class="polo-btn" onclick="selecionarPolo('SUL')" id="pbtn-SUL"><span class="polo-icon">🔽</span>Sul</button>
+      <button class="polo-btn" onclick="selecionarPolo('NORTE')" id="pbtn-NORTE">Norte</button>
+      <button class="polo-btn" onclick="selecionarPolo('CENTRO')" id="pbtn-CENTRO">Centro</button>
+      <button class="polo-btn" onclick="selecionarPolo('SUL')" id="pbtn-SUL">Sul</button>
     </div>
 
     <!-- ETAPA 2: MUNICÍPIO -->
@@ -787,7 +787,7 @@ button, .polo-btn, .alim-item, .tab-btn {
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
-    <div class="login-icon">🌿</div>
+    <div class="login-icon">VERA</div>
     <div class="login-title">VERA</div>
     <div class="login-subtitle">Vegetação em Rede Ativa<br>Energisa Tocantins</div>
     <div class="field-group">
@@ -813,49 +813,49 @@ button, .polo-btn, .alim-item, .tab-btn {
 <!-- HEADER -->
 <header id="app-header" style="display:none;">
   <div class="logo">
-    <div class="logo-mark">🌿</div>
+    <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v1.1.1</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.0.0</div>
     </div>
   </div>
   <div class="header-right">
     <div class="user-badge" id="header-user">—</div>
-    <button class="btn-icon" onclick="switchTab('config')" title="Configurações">⚙️</button>
-    <button class="btn-icon" onclick="doLogout()" title="Sair">🚪</button>
+    <button class="btn-icon" onclick="switchTab('config')" title="Configurações">️</button>
+    <button class="btn-icon" onclick="doLogout()" title="Sair"></button>
   </div>
 </header>
 
 <!-- APP -->
 <div id="app">
   <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('map')" id="tab-map"><span class="tab-icon">🗺️</span>Mapa</button>
-    <button class="tab-btn" onclick="switchTab('form')" id="tab-form"><span class="tab-icon">📋</span>Novo Ponto</button>
-    <button class="tab-btn" onclick="switchTab('records')" id="tab-records"><span class="tab-icon">📁</span>Registros</button>
-    <button class="tab-btn" onclick="switchTab('config')" id="tab-config"><span class="tab-icon">⚙️</span>Config</button>
-    <button class="tab-btn" onclick="switchTab('admin')" id="tab-admin" style="display:none;"><span class="tab-icon">👑</span>Admin</button>
+    <button class="tab-btn active" onclick="switchTab('map')" id="tab-map"><span class="tab-icon">Mapa</span></button>
+    <button class="tab-btn" onclick="switchTab('form')" id="tab-form"><span class="tab-icon">Novo Ponto</span></button>
+    <button class="tab-btn" onclick="switchTab('records')" id="tab-records"><span class="tab-icon">Registros</span></button>
+    <button class="tab-btn" onclick="switchTab('config')" id="tab-config"><span class="tab-icon">Config</span></button>
+    <button class="tab-btn" onclick="switchTab('admin')" id="tab-admin" style="display:none;"><span class="tab-icon">Admin</span></button>
   </div>
 
   <!-- MAPA -->
   <div class="tab-panel active" id="map-panel">
     <div id="map"></div>
-    <div class="gps-pill" id="gps-pill">📍 Aguardando GPS...</div>
-    <div class="alim-chip" id="alim-chip" onclick="switchTab('config')" style="display:none;">📋 <span id="alim-chip-label">—</span></div>
+    <div class="gps-pill" id="gps-pill"> Aguardando GPS...</div>
+    <div class="alim-chip" id="alim-chip" onclick="switchTab('config')" style="display:none;"> <span id="alim-chip-label">—</span></div>
     <button class="map-fab" onclick="switchTab('form')">＋</button>
   </div>
 
   <!-- FORMULÁRIO -->
   <div class="tab-panel" id="form-panel">
-    <div class="form-section-title">📍 Localização</div>
+    <div class="form-section-title">Localização</div>
     <div class="coord-box">
       <span style="color:var(--green-soft);font-size:10px;">LAT</span>
       <span id="disp-lat">—</span>
       <span style="color:var(--green-soft);font-size:10px;">LON</span>
       <span id="disp-lon">—</span>
     </div>
-    <button class="gps-btn" id="gps-btn" onclick="captureGPS()"><span>📡</span> Capturar posição GPS</button>
+    <button class="gps-btn" id="gps-btn" onclick="captureGPS()">Capturar posição GPS</button>
 
-    <div class="form-section-title">🌳 Dados da Árvore</div>
+    <div class="form-section-title">Dados da Árvore</div>
 
     <label class="field-label">Poste de Referência</label>
     <div class="poste-selector" id="poste-selector">
@@ -868,11 +868,11 @@ button, .polo-btn, .alim-item, .tab-btn {
       </div>
       <div class="postes-proximos-lista" id="postes-proximos-lista"></div>
       <button class="btn-buscar-poste" id="btn-buscar-poste" onclick="buscarPostesProximos()">
-        🔵 Buscar poste mais próximo
+         Buscar poste mais próximo
       </button>
     </div>
     <div class="sem-alimentador-aviso" id="aviso-sem-alimentador" style="display:none;">
-      ⚠️ Selecione um alimentador na tela inicial para buscar postes próximos.
+      ️ Selecione um alimentador na tela inicial para buscar postes próximos.
     </div>
     <div class="field-group"><label class="field-label">Espécie *</label><input class="field-input" type="text" id="f-especie" placeholder="Nome da espécie"></div>
     <div class="field-group"><label class="field-label">Área</label><input class="field-input" type="text" id="f-area" placeholder="Identificação da área"></div>
@@ -881,7 +881,7 @@ button, .polo-btn, .alim-item, .tab-btn {
       <select class="field-input" id="f-acesso"><option value="">Selecione...</option><option>Sim</option><option>Não</option><option>Parcial</option></select>
     </div>
 
-    <div class="form-section-title">📐 Medidas</div>
+    <div class="form-section-title">Medidas</div>
     <div class="field-group"><label class="field-label">Altura (m)</label><input class="field-input" type="number" id="f-altura" placeholder="0.0" step="0.1" min="0"></div>
     <div class="field-row triple">
       <div class="field-group"><label class="field-label">DT BT (cm)</label><input class="field-input" type="number" id="f-dtbt" placeholder="0" min="0"></div>
@@ -890,21 +890,24 @@ button, .polo-btn, .alim-item, .tab-btn {
     </div>
     <div class="field-group"><label class="field-label">DAP (cm)</label><input class="field-input" type="number" id="f-dap" placeholder="Diâmetro à altura do peito" step="0.1" min="0"></div>
 
-    <div class="form-section-title">📷 Foto</div>
+    <div class="form-section-title">Foto</div>
     <div class="photo-area" id="photo-area">
       <input type="file" id="photo-input" accept="image/*" capture="environment" multiple onchange="handlePhotos(event)">
-      <div class="photo-icon">📷</div>
+      <div class="photo-icon"></div>
       <div class="photo-label">Toque para fotografar ou escolher da galeria</div>
     </div>
     <div class="photo-preview" id="photo-preview"></div>
-    <button class="btn-capture" onclick="savePoint()">✅ Registrar Ponto</button>
+    <div style="display:flex;gap:8px;margin-top:18px;">
+      <button class="btn-capture" onclick="savePoint()" style="margin-top:0;flex:2;">Registrar Ponto</button>
+      <button onclick="limparFormManual()" style="flex:1;margin-top:0;background:var(--off-white);color:var(--text-muted);border:1.5px solid var(--border);border-radius:var(--radius);padding:15px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">Limpar</button>
+    </div>
   </div>
 
   <!-- REGISTROS -->
   <div class="tab-panel" id="records-panel">
     <div class="records-header">
       <div class="records-count" id="records-count">0 pontos registrados</div>
-      <button class="btn-export" onclick="exportCSV()">⬇ Exportar CSV</button>
+      <button class="btn-export" onclick="exportCSV()">Exportar CSV</button>
     </div>
     <div id="records-list"></div>
   </div>
@@ -913,39 +916,39 @@ button, .polo-btn, .alim-item, .tab-btn {
   <div class="tab-panel" id="config-panel">
 
     <div class="config-section">
-      <div class="config-title">📊 Status de Sincronização</div>
+      <div class="config-title">Status de Sincronização</div>
       <div class="sync-stats">
         <div class="stat-box"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total registrado</div></div>
         <div class="stat-box"><div class="stat-num amber" id="stat-pending">0</div><div class="stat-label">Aguardando envio</div></div>
       </div>
-      <button class="btn-sync-now" onclick="syncNow()">🔄 Sincronizar agora</button>
+      <button class="btn-sync-now" onclick="syncNow()">Sincronizar agora</button>
     </div>
 
     <div class="config-section">
-      <div class="config-title">🔑 Token GitHub (supervisor)</div>
+      <div class="config-title">Token GitHub (supervisor)</div>
       <label class="field-label">Personal Access Token (classic)</label>
       <input class="token-input" type="password" id="github-token" placeholder="ghp_...">
       <br>
       <label class="field-label" style="margin-top:10px;">Repositório</label>
       <input class="field-input" type="text" id="github-repo" placeholder="LGRSV/vera-vegetacao" style="margin-top:5px;">
       <br>
-      <button class="btn-save-config" onclick="saveConfig()">💾 Salvar configuração</button>
+      <button class="btn-save-config" onclick="saveConfig()">Salvar configuração</button>
       <div class="config-status" id="config-status"></div>
     </div>
 
     <div class="config-section">
-      <div class="config-title">📤 Exportação Manual</div>
+      <div class="config-title">Exportação Manual</div>
       <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
         Use quando não houver wifi. Exporte o CSV e envie manualmente ao supervisor.
       </p>
-      <button class="btn-export" style="width:100%;justify-content:center;" onclick="exportCSV()">⬇ Exportar CSV completo</button>
-      <button class="btn-export" style="width:100%;justify-content:center;margin-top:8px;background:var(--amber);color:var(--green-deep);" onclick="exportPendingCSV()">⬇ Exportar apenas pendentes</button>
+      <button class="btn-export" style="width:100%;justify-content:center;" onclick="exportCSV()">Exportar CSV completo</button>
+      <button class="btn-export" style="width:100%;justify-content:center;margin-top:8px;background:var(--amber);color:var(--green-deep);" onclick="exportPendingCSV()">Exportar apenas pendentes</button>
     </div>
 
     <div class="config-section">
-      <div class="config-title">⚠️ Zona de Perigo</div>
-      <button class="btn-danger" onclick="clearSyncedRecords()">🗑 Limpar apenas registros já enviados</button>
-      <button class="btn-danger" onclick="clearAllRecords()" style="margin-top:8px;">🗑 Limpar TODOS os registros</button>
+      <div class="config-title">Zona de Perigo</div>
+      <button class="btn-danger" onclick="clearSyncedRecords()">Limpar registros já enviados</button>
+      <button class="btn-danger" onclick="clearAllRecords()" style="margin-top:8px;">Limpar TODOS os registros</button>
     </div>
 
   </div>
@@ -954,7 +957,7 @@ button, .polo-btn, .alim-item, .tab-btn {
 
 <!-- BANNER DE ATUALIZAÇÃO -->
 <div id="update-banner">
-  🔄 Nova versão disponível!
+   Nova versão disponível!
   <button class="btn-update-now" onclick="forcarAtualizacao()">Atualizar agora</button>
 </div>
 
@@ -962,7 +965,7 @@ button, .polo-btn, .alim-item, .tab-btn {
   <!-- PAINEL ADMIN -->
   <div class="tab-panel" id="admin-panel">
     <div class="admin-header">
-      <span style="font-size:22px;">👑</span>
+      <span style="font-size:22px;"></span>
       <div>
         <div style="font-weight:700;font-size:14px;">Painel Administrativo</div>
         <div style="font-size:11px;color:var(--green-soft);">Gerenciamento de Rotas — DCMD</div>
@@ -972,7 +975,7 @@ button, .polo-btn, .alim-item, .tab-btn {
 
     <!-- CRIAR ROTA -->
     <div class="rota-form">
-      <div class="rota-form-title">📍 Criar Nova Rota</div>
+      <div class="rota-form-title">Criar Nova Rota</div>
 
       <label class="field-label">Equipe</label>
       <select class="field-input" id="admin-equipe" style="margin-bottom:10px;">
@@ -985,9 +988,9 @@ button, .polo-btn, .alim-item, .tab-btn {
 
       <label class="field-label">Polo</label>
       <div class="polo-btns" style="margin-bottom:10px;">
-        <button class="polo-btn" onclick="adminSelecionarPolo('NORTE')" id="apbtn-NORTE"><span class="polo-icon">🔼</span>Norte</button>
-        <button class="polo-btn" onclick="adminSelecionarPolo('CENTRO')" id="apbtn-CENTRO"><span class="polo-icon">🎯</span>Centro</button>
-        <button class="polo-btn" onclick="adminSelecionarPolo('SUL')" id="apbtn-SUL"><span class="polo-icon">🔽</span>Sul</button>
+        <button class="polo-btn" onclick="adminSelecionarPolo('NORTE')" id="apbtn-NORTE">Norte</button>
+        <button class="polo-btn" onclick="adminSelecionarPolo('CENTRO')" id="apbtn-CENTRO">Centro</button>
+        <button class="polo-btn" onclick="adminSelecionarPolo('SUL')" id="apbtn-SUL">Sul</button>
       </div>
 
       <label class="field-label">Município / Alimentadores <span id="admin-alim-count" style="color:var(--amber)"></span></label>
@@ -995,7 +998,7 @@ button, .polo-btn, .alim-item, .tab-btn {
         <div style="font-size:12px;color:var(--text-muted);padding:8px;">Selecione um polo primeiro...</div>
       </div>
 
-      <button class="btn-criar-rota" onclick="criarRota()">✅ Criar Rota</button>
+      <button class="btn-criar-rota" onclick="criarRota()"> Criar Rota</button>
     </div>
 
     <!-- ROTAS EXISTENTES -->
@@ -1004,6 +1007,28 @@ button, .polo-btn, .alim-item, .tab-btn {
     </div>
     <div class="rotas-lista" id="rotas-lista">
       <div style="text-align:center;padding:30px;color:var(--text-muted);font-size:13px;">Carregando rotas...</div>
+    </div>
+
+    <!-- EXPORTAÇÃO DE DADOS DAS EQUIPES -->
+    <div class="rota-form" style="margin-top:18px;">
+      <div class="rota-form-title">Exportar Dados Coletados</div>
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+        Baixe os pontos registrados pelas equipes em campo.
+      </p>
+      <label class="field-label">Equipe</label>
+      <select class="field-input" id="export-equipe" style="margin-bottom:12px;" onchange="carregarDadosEquipe()">
+        <option value="">Selecione a equipe...</option>
+        <option>Equipe Energisa</option>
+        <option>Enecol Norte</option>
+        <option>Enecol Centro</option>
+        <option>Enecol Sul</option>
+        <option value="__todas__">Todas as equipes</option>
+      </select>
+      <div id="export-info" style="font-size:12px;color:var(--text-muted);margin-bottom:12px;"></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-export" style="flex:1;justify-content:center;" onclick="exportarDadosAdmin('csv')">Exportar CSV</button>
+        <button class="btn-export" style="flex:1;justify-content:center;background:var(--green-mid);" onclick="exportarDadosAdmin('kml')">Exportar KML</button>
+      </div>
     </div>
   </div>
 
@@ -1094,7 +1119,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '1.1.1';
+const APP_VERSION = '2.0.0';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1104,7 +1129,7 @@ async function verificarVersao() {
 
 async function forcarAtualizacao() {
   // Setar versão ANTES de limpar para não entrar em loop
-  localStorage.setItem('vera_v', '1.1.1');
+  localStorage.setItem('vera_v', '2.0.0');
   if ('caches' in window) {
     const keys = await caches.keys();
     await Promise.all(keys.map(k => caches.delete(k)));
@@ -1159,7 +1184,7 @@ document.getElementById('btn-install').addEventListener('click', async () => {
   const { outcome } = await deferredPrompt.userChoice;
   deferredPrompt = null;
   document.getElementById('install-banner').classList.remove('show');
-  if (outcome === 'accepted') showToast('VERA instalado! ✓', 'success');
+  if (outcome === 'accepted') showToast('VERA instalado! ', 'success');
 });
 
 // ══════════════════════════════════════════════════
@@ -1209,8 +1234,9 @@ let isSyncing = false;
 async function syncPendingPoints() {
   if (isSyncing || !navigator.onLine) return;
 
-  const token = await getConfig('github_token');
-  const repo  = await getConfig('github_repo');
+  const cfg = await carregarConfigGlobal();
+  const token = (cfg && cfg.token) || await getConfig('github_token');
+  const repo  = (cfg && cfg.repo)  || await getConfig('github_repo');
   if (!token || !repo) return;
 
   const all     = await dbGetAll('points');
@@ -1271,7 +1297,7 @@ async function syncPendingPoints() {
   isSyncing = false;
   updateConnectionStatus();
   if (enviados > 0) {
-    showToast(`✅ ${enviados} ponto(s) enviado(s) ao GitHub!`, 'success');
+    showToast(` ${enviados} ponto(s) enviado(s) ao GitHub!`, 'success');
     renderRecords();
   }
 }
@@ -1299,7 +1325,7 @@ async function loadConfig() {
   if (token) document.getElementById('github-token').value = '••••••••••••••••••••';
   if (repo)  document.getElementById('github-repo').value  = repo;
   if (token && repo) {
-    document.getElementById('config-status').textContent = '✅ Token configurado';
+    document.getElementById('config-status').textContent = ' Token configurado';
     document.getElementById('config-status').className   = 'config-status ok';
   }
 }
@@ -1317,9 +1343,9 @@ async function saveConfig() {
   }
   await setConfig('github_repo', repo);
 
-  status.textContent = '✅ Configuração salva!';
+  status.textContent = ' Configuração salva!';
   status.className   = 'config-status ok';
-  showToast('Configuração salva! ✓', 'success');
+  showToast('Configuração salva! ', 'success');
 
   setTimeout(() => syncPendingPoints(), 500);
 }
@@ -1337,6 +1363,7 @@ function doLogin() {
   if (!user || USERS[user] !== pass) { err.style.display = 'block'; return; }
   err.style.display = 'none';
   currentUser = user;
+  carregarConfigGlobal();
   document.getElementById('login-screen').style.display = 'none';
 
   if (user === ADMIN_USER) {
@@ -1413,7 +1440,7 @@ async function renderMapPoints() {
         <div style="font-size:12px;color:#5a7a55">Poste: ${r.poste||'—'}</div>
         <div style="font-size:12px;color:#5a7a55">Altura: ${r.altura||'—'}m</div>
         <div style="font-size:11px;margin-top:4px;color:${r.synced?'#2d5a27':'#e8a020'};font-weight:600">
-          ${r.synced?'✅ Enviado':'⏳ Pendente'}
+          ${r.synced?' Enviado':'⏳ Pendente'}
         </div>
         ${r.photos&&r.photos[0]?`<img src="${r.photos[0]}" style="width:100%;border-radius:6px;margin-top:8px">`:''}
       </div>`);
@@ -1426,7 +1453,7 @@ function startGPSWatch() {
   watchId = navigator.geolocation.watchPosition(pos => {
     currentLat = pos.coords.latitude;
     currentLon = pos.coords.longitude;
-    document.getElementById('gps-pill').textContent = `📍 ${currentLat.toFixed(6)}, ${currentLon.toFixed(6)}`;
+    document.getElementById('gps-pill').textContent = ` ${currentLat.toFixed(6)}, ${currentLon.toFixed(6)}`;
     if (!map) return;
     if (!userMarker) {
       userMarker = L.circleMarker([currentLat,currentLon], { radius:10, fillColor:'#e8a020', color:'#fff', weight:3, fillOpacity:1 }).addTo(map);
@@ -1434,7 +1461,7 @@ function startGPSWatch() {
     } else {
       userMarker.setLatLng([currentLat,currentLon]);
     }
-  }, ()=>{ document.getElementById('gps-pill').textContent='⚠️ GPS indisponível'; }, { enableHighAccuracy:false, maximumAge:10000, timeout:15000 });
+  }, ()=>{ document.getElementById('gps-pill').textContent='️ GPS indisponível'; }, { enableHighAccuracy:false, maximumAge:10000, timeout:15000 });
 }
 
 // ══════════════════════════════════════════════════
@@ -1451,14 +1478,14 @@ function captureGPS() {
     document.getElementById('disp-lat').textContent = currentLat.toFixed(6);
     document.getElementById('disp-lon').textContent = currentLon.toFixed(6);
     resetGpsBtn();
-    showToast('Posição capturada! ✓','success');
+    showToast('Posição capturada! ','success');
   }, ()=>{ showToast('Erro ao obter GPS.','error'); resetGpsBtn(); }, { enableHighAccuracy:true, timeout:10000 });
 }
 
 function resetGpsBtn() {
   const btn = document.getElementById('gps-btn');
   btn.classList.remove('loading');
-  btn.innerHTML = '<span>📡</span> Capturar posição GPS';
+  btn.innerHTML = 'Capturar posição GPS';
 }
 
 // ══════════════════════════════════════════════════
@@ -1491,7 +1518,7 @@ function renderPhotoPreviews() {
   photos.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = 'photo-thumb';
-    div.innerHTML = `<img src="${p}"><button class="remove-photo" onclick="removePhoto(${i})">✕</button>`;
+    div.innerHTML = `<img src="${p}"><button class="remove-photo" onclick="removePhoto(${i})"></button>`;
     c.appendChild(div);
   });
 }
@@ -1540,6 +1567,14 @@ async function savePoint() {
   setTimeout(() => switchTab('records'), 1000);
 }
 
+
+function limparFormManual() {
+  if (confirm('Limpar todas as informações preenchidas neste formulário?')) {
+    clearForm();
+    showToast('Formulário limpo.', '');
+  }
+}
+
 function clearForm() {
   ['f-especie','f-area','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => document.getElementById(id).value = '');
   posteSelecionado = null;
@@ -1567,7 +1602,7 @@ async function renderRecords() {
   count.textContent = `${records.length} ponto(s) — ${pending} pendente(s)`;
 
   if (records.length === 0) {
-    list.innerHTML = `<div class="empty-state"><div class="empty-icon">🌿</div><p>Nenhum ponto registrado ainda.<br>Vá em "Novo Ponto" para começar.</p></div>`;
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon"></div><p>Nenhum ponto registrado ainda.<br>Vá em "Novo Ponto" para começar.</p></div>`;
     return;
   }
 
@@ -1577,17 +1612,17 @@ async function renderRecords() {
         <div class="record-id">${r.id} · ${r.usuario}</div>
         <div class="record-species">${r.especie||'—'}</div>
         <div class="record-meta">
-          ${r.poste ? `<span class="meta-tag">🪝 ${r.poste}</span>` : ''}
+          ${r.poste ? `<span class="meta-tag"> ${r.poste}</span>` : ''}
           ${r.altura ? `<span class="meta-tag">↕ ${r.altura}m</span>` : ''}
           ${r.dap ? `<span class="meta-tag">⊙ ${r.dap}cm</span>` : ''}
-          <span class="${r.synced?'synced-tag':'sync-tag'}">${r.synced?'✅ Enviado':'⏳ Pendente'}</span>
+          <span class="${r.synced?'synced-tag':'sync-tag'}">${r.synced?' Enviado':'⏳ Pendente'}</span>
         </div>
         <div style="font-size:10px;color:var(--text-muted);margin-top:5px">${r.data}</div>
       </div>
       <div>
         ${r.photos&&r.photos[0]
           ? `<img class="record-thumb" src="${r.photos[0]}">`
-          : `<div class="record-no-photo">🌳</div>`}
+          : `<div class="record-no-photo"></div>`}
       </div>
     </div>`).join('');
 }
@@ -1617,7 +1652,7 @@ async function exportCSV(soPendentes = false) {
   a.download = `VERA_${soPendentes?'pendentes_':''}${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
   URL.revokeObjectURL(url);
-  showToast('CSV exportado! ✓','success');
+  showToast('CSV exportado! ','success');
 }
 
 async function exportPendingCSV() { await exportCSV(true); }
@@ -1635,7 +1670,7 @@ async function clearSyncedRecords() {
 }
 
 async function clearAllRecords() {
-  if (!confirm('⚠️ ATENÇÃO: Isso vai apagar TODOS os registros, incluindo os não enviados. Deseja continuar?')) return;
+  if (!confirm('️ ATENÇÃO: Isso vai apagar TODOS os registros, incluindo os não enviados. Deseja continuar?')) return;
   const all = await dbGetAll('points');
   for (const r of all) await dbDelete('points', r.id);
   renderRecords(); renderMapPoints(); updatePendingBadge();
@@ -1789,7 +1824,7 @@ function distKm(lat1, lon1, lat2, lon2) {
 
 async function renderAlimentadores() {
   const lista = document.getElementById('alim-list');
-  lista.innerHTML = '<div class="gps-locating">📡 Obtendo sua localização...</div>';
+  lista.innerHTML = '<div class="gps-locating"> Obtendo sua localização...</div>';
 
   await carregarIndice();
   if (!indicePolo || !poloAtivo) return;
@@ -1909,13 +1944,13 @@ async function carregarPostes() {
       postesCarregados[circ] = postes;
       renderPostesNoMapa(circ, postes);
       ok++;
-      showToast(`✓ ${ok}/${total} — ${circ} carregado`, 'success');
+      showToast(` ${ok}/${total} — ${circ} carregado`, 'success');
     } catch(e) {
       showToast(`Erro ao carregar ${circ}`, 'error');
     }
   }
   if (ok === total) {
-    showToast(`✅ ${total} alimentador${total > 1 ? 'es' : ''} prontos!`, 'success');
+    showToast(` ${total} alimentador${total > 1 ? 'es' : ''} prontos!`, 'success');
     // Centralizar mapa nos postes carregados
     if (map && postesLayer) {
       try { map.fitBounds(postesLayer.getBounds(), { padding: [20, 20] }); } catch(e) {}
@@ -1972,7 +2007,7 @@ function renderPostesNoMapa(circ, postes) {
       const popupHtml = '<div class="poste-popup">'
         + '<div class="poste-id">Poste ' + p.id + '</div>'
         + '<div class="poste-circ">Alimentador: ' + circ + '</div>'
-        + '<button class="btn-usar" onclick="usarPoste(\'' + p.id + '\',\'' + circ + '\')">✅ Usar este poste</button>'
+        + '<button class="btn-usar" onclick="usarPoste(\'' + p.id + '\',\'' + circ + '\')"> Usar este poste</button>'
         + '</div>';
 
       hit.bindPopup(popupHtml, { maxWidth: 220, autoPan: false });
@@ -2010,7 +2045,7 @@ function usarPoste(id, circ) {
   document.getElementById('f-area').value  = circ;
   map.closePopup();
   switchTab('form');
-  showToast(`Poste ${id} selecionado! ✓`, 'success');
+  showToast(`Poste ${id} selecionado! `, 'success');
 }
 
 // ── Override do doLogin para ir para polo-screen ──
@@ -2102,7 +2137,7 @@ function selecionarPoste(id, circ, dist) {
   document.getElementById('poste-id-display').textContent = `Poste ${id}`;
   document.getElementById('poste-circ-display').textContent = `Alimentador: ${circ}`;
   const distLabel = dist < 1000 ? `${Math.round(dist)}m` : `${(dist/1000).toFixed(2)}km`;
-  document.getElementById('poste-dist-display').textContent = `📍 ${distLabel}`;
+  document.getElementById('poste-dist-display').textContent = ` ${distLabel}`;
 
   // Highlight na lista
   document.querySelectorAll('.poste-opcao').forEach(el => el.classList.remove('sel'));
@@ -2122,7 +2157,7 @@ function selecionarPoste(id, circ, dist) {
 function resetBtnPoste() {
   const btn = document.getElementById('btn-buscar-poste');
   btn.classList.remove('loading');
-  btn.innerHTML = '🔵 Buscar poste mais próximo';
+  btn.innerHTML = ' Buscar poste mais próximo';
   btn.disabled = false;
 }
 
@@ -2131,9 +2166,140 @@ function usarPoste(id, circ) {
   selecionarPoste(id, circ, 0);
   map.closePopup();
   switchTab('form');
-  showToast(`Poste ${id} selecionado! ✓`, 'success');
+  showToast(`Poste ${id} selecionado! `, 'success');
 }
 
+
+
+// ══════════════════════════════════════════════════
+// CONFIG AUTOMÁTICA (token via config.json)
+// ══════════════════════════════════════════════════
+let appConfig = null;
+
+function desofuscarToken(codigos) {
+  const chars = codigos.map(c => String.fromCharCode(c - 7));
+  return chars.join('').split('').reverse().join('');
+}
+
+async function carregarConfigGlobal() {
+  if (appConfig) return appConfig;
+  try {
+    const r = await fetch(GITHUB_RAW + '/config.json?t=' + Date.now(), { cache: 'no-store' });
+    const data = await r.json();
+    appConfig = {
+      repo: data.repo,
+      token: data.k ? desofuscarToken(data.k) : null
+    };
+    // Salvar no IndexedDB para uso offline
+    if (appConfig.token) await setConfig('github_token', appConfig.token);
+    if (appConfig.repo)  await setConfig('github_repo', appConfig.repo);
+  } catch(e) {
+    appConfig = null;
+  }
+  return appConfig;
+}
+
+
+// ══════════════════════════════════════════════════
+// EXPORTAÇÃO ADMIN (dados das equipes do GitHub)
+// ══════════════════════════════════════════════════
+let dadosEquipeCarregados = [];
+
+async function carregarDadosEquipe() {
+  const equipe = document.getElementById('export-equipe').value;
+  const info   = document.getElementById('export-info');
+  if (!equipe) { info.textContent = ''; dadosEquipeCarregados = []; return; }
+
+  info.textContent = 'Carregando dados...';
+  const cfg = await carregarConfigGlobal();
+  const token = cfg ? cfg.token : null;
+  if (!token) { info.textContent = 'Token não disponível.'; return; }
+
+  const equipes = equipe === '__todas__'
+    ? ['Equipe Energisa','Enecol Norte','Enecol Centro','Enecol Sul']
+    : [equipe];
+
+  dadosEquipeCarregados = [];
+  for (const eq of equipes) {
+    const pasta = 'dados/' + eq.replace(/\s+/g,'-');
+    try {
+      const r = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + pasta, {
+        headers: { 'Authorization': 'token ' + token }
+      });
+      if (!r.ok) continue;
+      const arquivos = await r.json();
+      for (const arq of arquivos) {
+        if (!arq.name.endsWith('.json')) continue;
+        try {
+          const rp = await fetch(arq.download_url + '?t=' + Date.now(), { cache: 'no-store' });
+          const ponto = await rp.json();
+          ponto._equipe = eq;
+          dadosEquipeCarregados.push(ponto);
+        } catch(e) {}
+      }
+    } catch(e) {}
+  }
+
+  info.textContent = dadosEquipeCarregados.length + ' ponto(s) encontrado(s).';
+}
+
+function exportarDadosAdmin(formato) {
+  if (dadosEquipeCarregados.length === 0) {
+    showToast('Selecione uma equipe com dados primeiro.', 'error');
+    return;
+  }
+
+  const equipe = document.getElementById('export-equipe').value;
+  const nomeBase = 'VERA_' + (equipe === '__todas__' ? 'todas' : equipe.replace(/\s+/g,'-')) + '_' + new Date().toISOString().slice(0,10);
+
+  if (formato === 'csv') {
+    const headers = ['WKT','ID','DATA','POSTE','ESPECIE','LATITUDE','LONGITUDE','ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DAP(cm)','Area','Acesso LV','Equipe'];
+    const rows = dadosEquipeCarregados.map(r => [
+      '"' + (r.wkt||'') + '"', r.id, '"' + (r.data||'') + '"', '"' + (r.poste||'') + '"',
+      '"' + (r.especie||'') + '"', r.lat, r.lon, r.altura||'', r.dtbt||'', r.dtmt||'',
+      r.dtat||'', r.dap||'', '"' + (r.area||'') + '"', '"' + (r.acesso||'') + '"', '"' + (r._equipe||'') + '"'
+    ].join(';'));
+    baixarArquivo(nomeBase + '.csv', '\uFEFF' + [headers.join(';'), ...rows].join('\n'), 'text/csv');
+  } else {
+    // KML
+    let kml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    kml += '<kml xmlns="http://www.opengis.net/kml/2.2">\n<Document>\n';
+    kml += '<name>VERA - ' + (equipe === '__todas__' ? 'Todas as equipes' : equipe) + '</name>\n';
+    kml += '<Style id="vera"><IconStyle><color>ff4CAF50</color><scale>1.1</scale></IconStyle></Style>\n';
+    dadosEquipeCarregados.forEach(r => {
+      if (!r.lat || !r.lon) return;
+      kml += '<Placemark>\n';
+      kml += '<name>' + escapeXml(r.especie || r.id) + '</name>\n';
+      kml += '<styleUrl>#vera</styleUrl>\n';
+      kml += '<description><![CDATA[';
+      kml += 'Poste: ' + (r.poste||'-') + '<br>';
+      kml += 'Especie: ' + (r.especie||'-') + '<br>';
+      kml += 'Altura: ' + (r.altura||'-') + ' m<br>';
+      kml += 'DAP: ' + (r.dap||'-') + ' cm<br>';
+      kml += 'Acesso LV: ' + (r.acesso||'-') + '<br>';
+      kml += 'Equipe: ' + (r._equipe||'-') + '<br>';
+      kml += 'Data: ' + (r.data||'-');
+      kml += ']]></description>\n';
+      kml += '<Point><coordinates>' + r.lon + ',' + r.lat + ',0</coordinates></Point>\n';
+      kml += '</Placemark>\n';
+    });
+    kml += '</Document>\n</kml>';
+    baixarArquivo(nomeBase + '.kml', kml, 'application/vnd.google-earth.kml+xml');
+  }
+  showToast('Arquivo ' + formato.toUpperCase() + ' exportado!', 'success');
+}
+
+function escapeXml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function baixarArquivo(nome, conteudo, tipo) {
+  const blob = new Blob([conteudo], { type: tipo + ';charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = nome; a.click();
+  URL.revokeObjectURL(url);
+}
 
 // ══════════════════════════════════════════════════
 // SISTEMA DE ROTAS
@@ -2147,6 +2313,8 @@ const GH_TOKEN_KEY = 'vera_gh_token';
 const GH_REPO      = 'LGRSV/vera-vegetacao';
 
 async function getGhToken() {
+  const cfg = await carregarConfigGlobal();
+  if (cfg && cfg.token) return cfg.token;
   return await getConfig('github_token');
 }
 
@@ -2291,7 +2459,7 @@ async function criarRota() {
 
   const ok = await salvarRotas();
   if (ok) {
-    showToast('Rota criada para ' + equipe + '! ✓', 'success');
+    showToast('Rota criada para ' + equipe + '! ', 'success');
     // Limpar form
     document.getElementById('admin-equipe').value = '';
     adminPolo  = null;
@@ -2342,7 +2510,7 @@ async function renderRotasAdmin() {
         </div>
         <div style="display:flex;align-items:center;gap:6px;">
           <span class="rota-polo-badge">${r.polo}</span>
-          <button class="btn-excluir-rota" onclick="excluirRota(${r.id})">🗑</button>
+          <button class="btn-excluir-rota" onclick="excluirRota(${r.id})"></button>
         </div>
       </div>
       <div class="rota-alims">
@@ -2353,7 +2521,7 @@ async function renderRotasAdmin() {
         }).join('')}
       </div>
       <div class="rota-pontos">
-        📍 ${pontosEquipe[r.equipe] || 0} pontos registrados por esta equipe
+         ${pontosEquipe[r.equipe] || 0} pontos registrados por esta equipe
       </div>
     </div>`).join('');
 }
