@@ -5,7 +5,7 @@
 // VERA v1.1.1 — limpeza única de SW antigos (sem reload automático)
 (function() {
   try {
-    const V = '2.0.1';
+    const V = '2.1.1';
     if (localStorage.getItem('vera_v') !== V) {
       localStorage.setItem('vera_v', V);
       // Limpar SWs em background, sem recarregar
@@ -832,7 +832,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.0.1</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.1.1</div>
     </div>
   </div>
   <div class="header-right">
@@ -890,19 +890,50 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="sem-alimentador-aviso" id="aviso-sem-alimentador" style="display:none;">
       ️ Selecione um alimentador na tela inicial para buscar postes próximos.
     </div>
-    <div class="field-group"><label class="field-label">Espécie *</label><input class="field-input" type="text" id="f-especie" placeholder="Nome da espécie"></div>
+    <div class="field-group">
+      <label class="field-label">Espécie *</label>
+      <select class="field-input" id="f-especie-select" onchange="onEspecieChange()">
+        <option value="">Selecione a espécie...</option>
+        <option>Mangueira</option>
+        <option>Ipê</option>
+        <option>Mogno</option>
+        <option>Babaçu</option>
+        <option>Pequi</option>
+        <option>Cajueiro</option>
+        <option>Jatobá</option>
+        <option>Buriti</option>
+        <option>Flamboyant</option>
+        <option>Oiti</option>
+        <option value="__outra__">Outra (digitar)</option>
+      </select>
+      <input class="field-input" type="text" id="f-especie" placeholder="Digite o nome da espécie" style="display:none;margin-top:8px;">
+    </div>
     <div class="field-group"><label class="field-label">Área</label><input class="field-input" type="text" id="f-area" placeholder="Identificação da área"></div>
     <div class="field-group">
       <label class="field-label">Acesso LV</label>
-      <select class="field-input" id="f-acesso"><option value="">Selecione...</option><option>Sim</option><option>Não</option><option>Parcial</option></select>
+      <select class="field-input" id="f-acesso"><option value="">Selecione...</option><option>Sim</option><option>Não</option></select>
     </div>
 
     <div class="form-section-title">Medidas</div>
-    <div class="field-group"><label class="field-label">Altura (m)</label><input class="field-input" type="number" id="f-altura" placeholder="0.0" step="0.1" min="0"></div>
-    <div class="field-row triple">
-      <div class="field-group"><label class="field-label">DT BT (cm)</label><input class="field-input" type="number" id="f-dtbt" placeholder="0" min="0"></div>
-      <div class="field-group"><label class="field-label">DT MT (cm)</label><input class="field-input" type="number" id="f-dtmt" placeholder="0" min="0"></div>
-      <div class="field-group"><label class="field-label">DT AT (cm)</label><input class="field-input" type="number" id="f-dtat" placeholder="0" min="0"></div>
+    <div class="field-group">
+      <label class="field-label">Altura (m)</label>
+      <select class="field-input" id="f-altura"></select>
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--border);margin:18px 0;">
+
+    <div class="form-section-title">Distância da Árvore</div>
+    <div class="field-group">
+      <label class="field-label">DT BT (cm)</label>
+      <select class="field-input" id="f-dtbt"></select>
+    </div>
+    <div class="field-group">
+      <label class="field-label">DT MT (cm)</label>
+      <select class="field-input" id="f-dtmt"></select>
+    </div>
+    <div class="field-group">
+      <label class="field-label">DT AT (cm)</label>
+      <select class="field-input" id="f-dtat"></select>
     </div>
     <div class="field-group">
       <label class="field-label">Diâmetro do tronco (cm)</label>
@@ -1138,7 +1169,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.0.1';
+const APP_VERSION = '2.1.1';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1148,7 +1179,7 @@ async function verificarVersao() {
 
 async function forcarAtualizacao() {
   // Setar versão ANTES de limpar para não entrar em loop
-  localStorage.setItem('vera_v', '2.0.1');
+  localStorage.setItem('vera_v', '2.1.1');
   if ('caches' in window) {
     const keys = await caches.keys();
     await Promise.all(keys.map(k => caches.delete(k)));
@@ -1567,6 +1598,37 @@ function removePhoto(i) { photos.splice(i,1); renderPhotoPreviews(); }
 // ══════════════════════════════════════════════════
 // SALVAR PONTO
 // ══════════════════════════════════════════════════
+
+function popularSeletores() {
+  const alt = document.getElementById('f-altura');
+  if (alt && alt.options.length === 0) {
+    alt.innerHTML = '<option value="">Selecione...</option>';
+    for (let h = 0.5; h <= 40; h += 0.5) alt.innerHTML += '<option value="' + h + '">' + h.toFixed(1) + ' m</option>';
+  }
+  ['f-dtbt','f-dtmt','f-dtat'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (sel && sel.options.length === 0) {
+      sel.innerHTML = '<option value="">Selecione...</option>';
+      for (let d = 0; d <= 300; d += 5) sel.innerHTML += '<option value="' + d + '">' + d + ' cm</option>';
+    }
+  });
+  const dap = document.getElementById('f-dap');
+  if (dap && dap.options.length === 0) {
+    dap.innerHTML = '<option value="">Selecione...</option>';
+    for (let d = 5; d <= 200; d += 5) dap.innerHTML += '<option value="' + d + '">' + d + ' cm</option>';
+  }
+}
+
+function onEspecieChange() {
+  const sel = document.getElementById('f-especie-select');
+  const input = document.getElementById('f-especie');
+  if (sel.value === '__outra__') {
+    input.style.display = 'block'; input.value = ''; input.focus();
+  } else {
+    input.style.display = 'none'; input.value = sel.value;
+  }
+}
+
 async function savePoint() {
   if (!currentLat || !currentLon) { showToast('Capture o GPS antes de registrar!','error'); return; }
   // Poste vem do seletor, não de campo texto
@@ -1616,6 +1678,10 @@ function limparFormManual() {
 
 function clearForm() {
   ['f-especie','f-area','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => document.getElementById(id).value = '');
+  const espSel = document.getElementById('f-especie-select');
+  if (espSel) espSel.value = '';
+  const espInput = document.getElementById('f-especie');
+  if (espInput) espInput.style.display = 'none';
   posteSelecionado = null;
   document.getElementById('poste-id-display').textContent = 'Nenhum poste selecionado';
   document.getElementById('poste-circ-display').textContent = 'Selecione um alimentador e busque o poste mais próximo';
@@ -1947,6 +2013,7 @@ async function confirmarAlimentadores() {
   initMap();
   startGPSWatch();
   renderRecords();
+  popularSeletores();
   loadConfig();
   updatePendingBadge();
 
