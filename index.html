@@ -627,6 +627,32 @@ button, .polo-btn, .alim-item, .tab-btn {
 }
 .tab-panel { -webkit-overflow-scrolling: touch; }
 
+
+/* ── SELEÇÃO 3 ETAPAS ── */
+.etapa-label {
+  font-size: 10px; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin: 14px 0 6px; display: flex; align-items: center; gap: 6px;
+}
+.etapa-num {
+  width: 18px; height: 18px; background: var(--green-mid); color: white;
+  border-radius: 50%; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.etapa-num.inactive { background: var(--border); color: var(--text-muted); }
+.mun-lista { max-height: 260px; overflow-y: auto; margin-bottom: 4px; }
+.mun-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); margin-bottom: 5px;
+  cursor: pointer; transition: all 0.15s; background: var(--white);
+}
+.mun-item:hover { border-color: var(--green-live); background: #f0f8f0; }
+.mun-item.sel { border-color: var(--green-live); background: var(--green-deep); color: white; }
+.mun-item.sel .mun-count { color: var(--green-soft); }
+.mun-nome { font-size: 13px; font-weight: 600; }
+.mun-count { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
 </style>
 </head>
 <body>
@@ -675,22 +701,24 @@ button, .polo-btn, .alim-item, .tab-btn {
       </div>
     </div>
 
-    <label class="field-label">1. Selecione o Polo</label>
+    <!-- ETAPA 1: POLO -->
+    <div class="etapa-label"><span class="etapa-num" id="enum-1">1</span> Regional</div>
     <div class="polo-btns">
-      <button class="polo-btn" onclick="selecionarPolo('NORTE')" id="pbtn-NORTE">
-        <span class="polo-icon">🔼</span>Norte
-      </button>
-      <button class="polo-btn" onclick="selecionarPolo('CENTRO')" id="pbtn-CENTRO">
-        <span class="polo-icon">🎯</span>Centro
-      </button>
-      <button class="polo-btn" onclick="selecionarPolo('SUL')" id="pbtn-SUL">
-        <span class="polo-icon">🔽</span>Sul
-      </button>
+      <button class="polo-btn" onclick="selecionarPolo('NORTE')" id="pbtn-NORTE"><span class="polo-icon">🔼</span>Norte</button>
+      <button class="polo-btn" onclick="selecionarPolo('CENTRO')" id="pbtn-CENTRO"><span class="polo-icon">🎯</span>Centro</button>
+      <button class="polo-btn" onclick="selecionarPolo('SUL')" id="pbtn-SUL"><span class="polo-icon">🔽</span>Sul</button>
     </div>
 
-    <label class="field-label">2. Alimentadores mais próximos</label>
+    <!-- ETAPA 2: MUNICÍPIO -->
+    <div class="etapa-label"><span class="etapa-num inactive" id="enum-2">2</span> Município</div>
+    <div class="mun-lista" id="mun-lista">
+      <div class="gps-locating">Selecione uma regional primeiro...</div>
+    </div>
+
+    <!-- ETAPA 3: ALIMENTADORES -->
+    <div class="etapa-label"><span class="etapa-num inactive" id="enum-3">3</span> Alimentadores <span id="alim-count-label" style="color:var(--amber);font-weight:700;"></span></div>
     <div class="alim-list" id="alim-list">
-      <div class="gps-locating">📡 Selecione um polo para ver os alimentadores...</div>
+      <div class="gps-locating">Selecione um município primeiro...</div>
     </div>
 
     <button class="btn-confirmar" id="btn-confirmar" disabled onclick="confirmarAlimentadores()">
@@ -905,8 +933,8 @@ button, .polo-btn, .alim-item, .tab-btn {
         <button class="polo-btn" onclick="adminSelecionarPolo('SUL')" id="apbtn-SUL"><span class="polo-icon">🔽</span>Sul</button>
       </div>
 
-      <label class="field-label">Alimentadores <span id="admin-alim-count" style="color:var(--amber)"></span></label>
-      <div class="alim-admin-lista" id="admin-alim-lista">
+      <label class="field-label">Município / Alimentadores <span id="admin-alim-count" style="color:var(--amber)"></span></label>
+      <div class="alim-admin-lista" id="admin-alim-lista" style="max-height:320px;overflow-y:auto;">
         <div style="font-size:12px;color:var(--text-muted);padding:8px;">Selecione um polo primeiro...</div>
       </div>
 
@@ -1574,6 +1602,7 @@ function showToast(msg, type='') {
 // ══════════════════════════════════════════════════
 let indicePolo   = null;   // dados do indice.json
 let poloAtivo    = null;
+let municipioAtivo = null;
 let alimentadoresAtivos = [];  // até 3 selecionados
 let postesLayer  = null;
 let postesCarregados = {};     // circ -> [postes]
@@ -1595,11 +1624,68 @@ async function carregarIndice() {
 
 function selecionarPolo(polo) {
   poloAtivo = polo;
+  municipioAtivo = null;
+  alimentadoresAtivos = [];
   document.querySelectorAll('.polo-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('pbtn-' + polo).classList.add('active');
+  document.getElementById('btn-confirmar').disabled = true;
+  document.getElementById('alim-list').innerHTML = '<div class="gps-locating">Selecione um município primeiro...</div>';
+  document.getElementById('alim-count-label').textContent = '';
+  document.getElementById('enum-2').classList.remove('inactive');
+  document.getElementById('enum-3').classList.add('inactive');
+  renderMunicipios();
+}
+
+function renderMunicipios() {
+  const lista = document.getElementById('mun-lista');
+  if (!indicePolo || !indicePolo[poloAtivo]) {
+    lista.innerHTML = '<div class="gps-locating">Sem dados para esta regional.</div>';
+    return;
+  }
+  // Agrupar alimentadores por município
+  const muns = {};
+  Object.entries(indicePolo[poloAtivo]).forEach(([id, info]) => {
+    const mun = info.municipio || '?';
+    if (!muns[mun]) muns[mun] = { n_alim: 0, n_postes: 0 };
+    muns[mun].n_alim++;
+    muns[mun].n_postes += info.n;
+  });
+
+  lista.innerHTML = Object.entries(muns).sort((a,b) => a[0].localeCompare(b[0])).map(([mun, data]) => `
+    <div class="mun-item ${municipioAtivo === mun ? 'sel' : ''}" onclick="selecionarMunicipio('${mun.replace(/'/g,"\'")}')">
+      <div>
+        <div class="mun-nome">${mun}</div>
+        <div class="mun-count">${data.n_alim} alimentador${data.n_alim > 1 ? 'es' : ''} · ${data.n_postes.toLocaleString('pt-BR')} postes</div>
+      </div>
+      <span style="font-size:16px;">${municipioAtivo === mun ? '✓' : '›'}</span>
+    </div>`).join('');
+}
+
+function selecionarMunicipio(mun) {
+  municipioAtivo = mun;
   alimentadoresAtivos = [];
   document.getElementById('btn-confirmar').disabled = true;
-  renderAlimentadores();
+  document.getElementById('enum-3').classList.remove('inactive');
+  document.getElementById('alim-count-label').textContent = '';
+  renderMunicipios(); // atualizar visual selecionado
+  renderAlimentadoresMunicipio();
+}
+
+function renderAlimentadoresMunicipio() {
+  const lista = document.getElementById('alim-list');
+  if (!indicePolo || !municipioAtivo) return;
+
+  const circs = Object.entries(indicePolo[poloAtivo])
+    .filter(([id, info]) => info.municipio === municipioAtivo)
+    .sort((a,b) => a[0].localeCompare(b[0]));
+
+  lista.innerHTML = circs.map(([id, info]) => `
+    <div class="alim-item ${alimentadoresAtivos.includes(id) ? 'sel' : ''}" id="alim-${id}" onclick="toggleAlimentador('${id}')">
+      <div>
+        <div class="alim-name">${id} ${info.n > 5000 ? '<span class="alim-badge">Grande</span>' : ''}</div>
+        <div class="alim-se">${info.se} · ${info.n.toLocaleString('pt-BR')} postes</div>
+      </div>
+    </div>`).join('');
 }
 
 function distKm(lat1, lon1, lat2, lon2) {
@@ -1673,6 +1759,10 @@ function toggleAlimentador(id) {
   document.querySelectorAll('.alim-item').forEach(el => el.classList.remove('sel'));
   alimentadoresAtivos.forEach(id => document.getElementById('alim-' + id)?.classList.add('sel'));
   document.getElementById('btn-confirmar').disabled = alimentadoresAtivos.length === 0;
+  const n = alimentadoresAtivos.length;
+  document.getElementById('alim-count-label').textContent = n > 0 ? `(${n} selecionado${n>1?'s':''})` : '';
+  // Atualizar visual da lista
+  renderAlimentadoresMunicipio();
 }
 
 async function confirmarAlimentadores() {
@@ -2005,34 +2095,79 @@ async function salvarRotas() {
 }
 
 // ── ADMIN: selecionar polo ──
+let adminMunicipio = null;
+
 async function adminSelecionarPolo(polo) {
-  adminPolo  = polo;
-  adminAlims = [];
+  adminPolo      = polo;
+  adminMunicipio = null;
+  adminAlims     = [];
   document.querySelectorAll('[id^="apbtn-"]').forEach(b => b.classList.remove('active'));
   document.getElementById('apbtn-' + polo).classList.add('active');
-
-  const lista = document.getElementById('admin-alim-lista');
-  lista.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px;">Carregando alimentadores...</div>';
+  document.getElementById('admin-alim-lista').innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px;">Selecione um município...</div>';
+  document.getElementById('admin-alim-count').textContent = '';
 
   await carregarIndice();
   if (!indicePolo || !indicePolo[polo]) {
-    lista.innerHTML = '<div style="font-size:12px;color:var(--danger);padding:8px;">Polo sem dados.</div>';
+    document.getElementById('admin-alim-lista').innerHTML = '<div style="font-size:12px;color:var(--danger);padding:8px;">Polo sem dados.</div>';
     return;
   }
+  renderAdminMunicipios();
+}
 
-  const circs = Object.entries(indicePolo[polo]).sort((a,b) => a[0].localeCompare(b[0]));
-  lista.innerHTML = circs.map(([id, info]) => `
+function renderAdminMunicipios() {
+  const lista = document.getElementById('admin-alim-lista');
+  const muns = {};
+  Object.entries(indicePolo[adminPolo]).forEach(([id, info]) => {
+    const mun = info.municipio || '?';
+    if (!muns[mun]) muns[mun] = { n_alim: 0 };
+    muns[mun].n_alim++;
+  });
+
+  lista.innerHTML = '<div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Município</div>'
+    + Object.entries(muns).sort((a,b) => a[0].localeCompare(b[0])).map(([mun, data]) => `
+    <div class="mun-item ${adminMunicipio === mun ? 'sel' : ''}"
+         onclick="adminSelecionarMunicipio('${mun.replace(/'/g,"\'")}')">
+      <div>
+        <div class="mun-nome">${mun}</div>
+        <div class="mun-count">${data.n_alim} alimentador${data.n_alim > 1 ? 'es' : ''}</div>
+      </div>
+      <span>${adminMunicipio === mun ? '✓' : '›'}</span>
+    </div>`).join('');
+}
+
+function adminSelecionarMunicipio(mun) {
+  adminMunicipio = mun;
+  adminAlims     = [];
+  document.getElementById('admin-alim-count').textContent = '';
+  renderAdminMunicipios();
+  renderAdminAlimentadores();
+}
+
+function renderAdminAlimentadores() {
+  const circs = Object.entries(indicePolo[adminPolo])
+    .filter(([id, info]) => info.municipio === adminMunicipio)
+    .sort((a,b) => a[0].localeCompare(b[0]));
+
+  const container = document.createElement('div');
+  container.innerHTML = '<div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin:10px 0 6px;">Alimentadores — ' + adminMunicipio + '</div>'
+    + circs.map(([id, info]) => `
     <div class="alim-admin-check" id="acheck-${id}">
       <input type="checkbox" id="achk-${id}"
         onchange="adminToggleAlim('${id}')"
         style="width:20px;height:20px;accent-color:var(--amber);cursor:pointer;flex-shrink:0;">
       <label for="achk-${id}" style="cursor:pointer;flex:1;">
-        <div class="alim-admin-label">${id} <span style="font-weight:400;color:var(--text-muted);font-family:inherit;">— ${info.municipio || ''}</span></div>
+        <div class="alim-admin-label">${id}</div>
         <div class="alim-admin-se">${info.se} · ${info.n.toLocaleString('pt-BR')} postes</div>
       </label>
     </div>`).join('');
 
-  document.getElementById('admin-alim-count').textContent = '';
+  // Manter lista de municípios + adicionar alimentadores abaixo
+  const lista = document.getElementById('admin-alim-lista');
+  // Remover alimentadores anteriores se existir
+  const prev = lista.querySelector('.admin-alim-section');
+  if (prev) prev.remove();
+  container.className = 'admin-alim-section';
+  lista.appendChild(container);
 }
 
 function adminToggleAlim(id) {
