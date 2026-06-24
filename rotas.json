@@ -49,6 +49,17 @@
       ],
       "criada": "23/06/2026, 22:06:36",
       "criadaPor": "Admin"
+    },
+    {
+      "id": 1782275273477,
+      "equipe": "Equipe Energisa",
+      "polo": "NORTE",
+      "alimentadores": [
+        "AL01055123",
+        "AL02055123"
+      ],
+      "criada": "24/06/2026, 01:27:53",
+      "criadaPor": "Admin"
     }
   ]
 }
