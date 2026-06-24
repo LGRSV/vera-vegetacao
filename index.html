@@ -1269,7 +1269,10 @@ function doLogin() {
     switchTab('admin');
     renderRotasAdmin();
   } else {
-    // Equipe de campo vai para seleção de polo
+    // Equipe de campo — esconder tabs desnecessárias
+    document.getElementById('tab-config').style.display = 'none';
+    document.getElementById('tab-admin').style.display  = 'none';
+    // Ir para seleção de polo/rota
     document.getElementById('polo-screen').style.display  = 'flex';
     document.getElementById('polo-user-label').textContent = user;
     carregarIndice();
@@ -1691,8 +1694,13 @@ async function confirmarAlimentadores() {
   initMap();
   startGPSWatch();
   renderRecords();
-  loadConfig();
+  if (currentUser === ADMIN_USER) loadConfig();
   updatePendingBadge();
+  // Esconder tabs de admin para equipes de campo
+  if (currentUser !== ADMIN_USER) {
+    document.getElementById('tab-config').style.display = 'none';
+    document.getElementById('tab-admin').style.display  = 'none';
+  }
 
   // Ir para o mapa imediatamente
   switchTab('map');
@@ -2144,20 +2152,36 @@ async function verificarRotaAtribuida(user) {
 }
 
 async function mostrarRotaAtribuida(user) {
-  const rota = await verificarRotaAtribuida(user);
-  const banner   = document.getElementById('rota-atribuida-banner');
-  const semRota  = document.getElementById('sem-rota-banner');
+  const rota    = await verificarRotaAtribuida(user);
+  const banner  = document.getElementById('rota-atribuida-banner');
+  const semRota = document.getElementById('sem-rota-banner');
+  // Elementos de seleção manual
+  const poloBtns   = document.querySelector('.polo-btns');
+  const alimLista  = document.getElementById('alim-list');
+  const btnConfirm = document.getElementById('btn-confirmar');
+  const labelPolo  = document.querySelector('.polo-card label.field-label');
+  const labelAlim  = document.querySelectorAll('.polo-card label.field-label');
 
   if (rota) {
     rotaAtribuida = rota;
     banner.style.display  = 'flex';
     semRota.style.display = 'none';
     document.getElementById('rota-atribuida-alims').textContent =
-      rota.polo + ' — ' + rota.alimentadores.join(', ');
+      rota.polo + ' — ' + rota.alimentadores.length + ' alimentador' + (rota.alimentadores.length > 1 ? 'es' : '');
+    // Esconder seleção manual — rota já definida pelo admin
+    if (poloBtns)  poloBtns.style.display  = 'none';
+    if (alimLista) alimLista.style.display = 'none';
+    if (btnConfirm) btnConfirm.style.display = 'none';
+    labelAlim.forEach(l => l.style.display = 'none');
   } else {
     rotaAtribuida = null;
     banner.style.display  = 'none';
     semRota.style.display = 'block';
+    // Mostrar seleção manual — sem rota atribuída
+    if (poloBtns)  poloBtns.style.display  = 'flex';
+    if (alimLista) alimLista.style.display = 'block';
+    if (btnConfirm) btnConfirm.style.display = 'block';
+    labelAlim.forEach(l => l.style.display = 'block');
   }
 }
 
