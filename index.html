@@ -641,17 +641,76 @@ button, .polo-btn, .alim-item, .tab-btn {
 }
 .etapa-num.inactive { background: var(--border); color: var(--text-muted); }
 .mun-lista { max-height: 260px; overflow-y: auto; margin-bottom: 4px; }
+
+/* ── ACCORDION MUNICÍPIO ── */
 .mun-item {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 12px; border: 1px solid var(--border);
-  border-radius: var(--radius-sm); margin-bottom: 5px;
-  cursor: pointer; transition: all 0.15s; background: var(--white);
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  cursor: default;
 }
-.mun-item:hover { border-color: var(--green-live); background: #f0f8f0; }
-.mun-item.sel { border-color: var(--green-live); background: var(--green-deep); color: white; }
+.mun-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+}
+.mun-header:hover { background: #f0f8f0; }
+.mun-item.sel .mun-header {
+  background: var(--green-deep);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  color: white;
+}
 .mun-item.sel .mun-count { color: var(--green-soft); }
-.mun-nome { font-size: 13px; font-weight: 600; }
-.mun-count { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.mun-alims-expand {
+  display: none;
+  padding: 6px 8px 8px;
+  background: var(--off-white);
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+.mun-item.sel .mun-alims-expand { display: block; }
+.alim-check-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 4px;
+  background: var(--white);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.alim-check-inline:hover { border-color: var(--green-live); }
+.alim-check-inline.sel { border-color: var(--green-live); background: var(--green-deep); }
+.alim-check-inline.sel .alim-il { color: white; }
+.alim-check-inline.sel .alim-il-sub { color: var(--green-soft); }
+.alim-check-inline input[type=checkbox] {
+  width: 18px; height: 18px;
+  accent-color: var(--green-live);
+  flex-shrink: 0; cursor: pointer;
+}
+.alim-il { font-family: 'SF Mono','Courier New',monospace; font-size: 12px; font-weight: 700; color: var(--text-main); }
+.alim-il-sub { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+
+/* Admin accordion */
+.admin-mun-item { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 5px; overflow: hidden; }
+.admin-mun-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; cursor: pointer; background: var(--white); transition: background 0.15s;
+}
+.admin-mun-header:hover { background: #f0f8f0; }
+.admin-mun-item.sel .admin-mun-header { background: var(--green-deep); color: white; }
+.admin-mun-item.sel .admin-mun-sub { color: var(--green-soft); }
+.admin-mun-expand { display: none; padding: 6px 8px 8px; background: var(--off-white); border-top: 1px solid var(--border); }
+.admin-mun-item.sel .admin-mun-expand { display: block; }
+.admin-mun-nome { font-size: 13px; font-weight: 600; }
+.admin-mun-sub { font-size: 10px; color: var(--text-muted); }
+
 
 </style>
 </head>
@@ -715,11 +774,9 @@ button, .polo-btn, .alim-item, .tab-btn {
       <div class="gps-locating">Selecione uma regional primeiro...</div>
     </div>
 
-    <!-- ETAPA 3: ALIMENTADORES -->
-    <div class="etapa-label"><span class="etapa-num inactive" id="enum-3">3</span> Alimentadores <span id="alim-count-label" style="color:var(--amber);font-weight:700;"></span></div>
-    <div class="alim-list" id="alim-list">
-      <div class="gps-locating">Selecione um município primeiro...</div>
-    </div>
+    <!-- ETAPA 3: contador inline -->
+    <div class="etapa-label" id="etapa3-label" style="display:none;"><span class="etapa-num" id="enum-3">3</span> Alimentadores selecionados: <span id="alim-count-label" style="color:var(--amber);font-weight:700;"></span></div>
+    <div id="alim-list" style="display:none;"></div>
 
     <button class="btn-confirmar" id="btn-confirmar" disabled onclick="confirmarAlimentadores()">
       Entrar no campo →
@@ -1642,51 +1699,85 @@ function renderMunicipios() {
     lista.innerHTML = '<div class="gps-locating">Sem dados para esta regional.</div>';
     return;
   }
-  // Agrupar alimentadores por município
+  // Agrupar por município
   const muns = {};
   Object.entries(indicePolo[poloAtivo]).forEach(([id, info]) => {
     const mun = info.municipio || '?';
-    if (!muns[mun]) muns[mun] = { n_alim: 0, n_postes: 0 };
-    muns[mun].n_alim++;
+    if (!muns[mun]) muns[mun] = { circs: [], n_postes: 0 };
+    muns[mun].circs.push([id, info]);
     muns[mun].n_postes += info.n;
   });
 
-  lista.innerHTML = Object.entries(muns).sort((a,b) => a[0].localeCompare(b[0])).map(([mun, data]) => `
-    <div class="mun-item ${municipioAtivo === mun ? 'sel' : ''}" onclick="selecionarMunicipio('${mun.replace(/'/g,"\'")}')">
-      <div>
-        <div class="mun-nome">${mun}</div>
-        <div class="mun-count">${data.n_alim} alimentador${data.n_alim > 1 ? 'es' : ''} · ${data.n_postes.toLocaleString('pt-BR')} postes</div>
+  lista.innerHTML = Object.entries(muns).sort((a,b) => a[0].localeCompare(b[0])).map(([mun, data]) => {
+    const sel = municipioAtivo === mun;
+    const munId = mun.replace(/[^a-zA-Z0-9]/g,'_');
+    const alimHtml = data.circs.map(([id, info]) => {
+      const checked = alimentadoresAtivos.includes(id);
+      return `<label class="alim-check-inline ${checked?'sel':''}" id="alim-il-${id}">
+        <input type="checkbox" ${checked?'checked':''} onchange="toggleAlimentadorInline('${id}','${munId}')">
+        <div>
+          <div class="alim-il">${id}</div>
+          <div class="alim-il-sub">${info.se} · ${info.n.toLocaleString('pt-BR')} postes</div>
+        </div>
+      </label>`;
+    }).join('');
+
+    return `<div class="mun-item ${sel?'sel':''}" id="mun-item-${munId}">
+      <div class="mun-header" onclick="selecionarMunicipio('${mun.replace(/'/g,"\'")}','${munId}')">
+        <div>
+          <div class="mun-nome">${mun}</div>
+          <div class="mun-count">${data.circs.length} alimentador${data.circs.length>1?'es':''} · ${data.n_postes.toLocaleString('pt-BR')} postes</div>
+        </div>
+        <span style="font-size:18px;transition:transform 0.2s;">${sel?'▾':'›'}</span>
       </div>
-      <span style="font-size:16px;">${municipioAtivo === mun ? '✓' : '›'}</span>
-    </div>`).join('');
+      <div class="mun-alims-expand">${alimHtml}</div>
+    </div>`;
+  }).join('');
 }
 
-function selecionarMunicipio(mun) {
-  municipioAtivo = mun;
-  alimentadoresAtivos = [];
-  document.getElementById('btn-confirmar').disabled = true;
-  document.getElementById('enum-3').classList.remove('inactive');
-  document.getElementById('alim-count-label').textContent = '';
-  renderMunicipios(); // atualizar visual selecionado
-  renderAlimentadoresMunicipio();
+function selecionarMunicipio(mun, munId) {
+  // Toggle: se já selecionado, fecha
+  if (municipioAtivo === mun) {
+    municipioAtivo = null;
+  } else {
+    municipioAtivo = mun;
+    document.getElementById('enum-3').classList.remove('inactive');
+  }
+  renderMunicipios();
+  // Scroll para o item aberto
+  if (municipioAtivo) {
+    setTimeout(() => {
+      const el = document.getElementById('mun-item-' + munId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+  }
 }
 
-function renderAlimentadoresMunicipio() {
-  const lista = document.getElementById('alim-list');
-  if (!indicePolo || !municipioAtivo) return;
-
-  const circs = Object.entries(indicePolo[poloAtivo])
-    .filter(([id, info]) => info.municipio === municipioAtivo)
-    .sort((a,b) => a[0].localeCompare(b[0]));
-
-  lista.innerHTML = circs.map(([id, info]) => `
-    <div class="alim-item ${alimentadoresAtivos.includes(id) ? 'sel' : ''}" id="alim-${id}" onclick="toggleAlimentador('${id}')">
-      <div>
-        <div class="alim-name">${id} ${info.n > 5000 ? '<span class="alim-badge">Grande</span>' : ''}</div>
-        <div class="alim-se">${info.se} · ${info.n.toLocaleString('pt-BR')} postes</div>
-      </div>
-    </div>`).join('');
+function toggleAlimentadorInline(id, munId) {
+  const idx = alimentadoresAtivos.indexOf(id);
+  if (idx >= 0) {
+    alimentadoresAtivos.splice(idx, 1);
+  } else {
+    if (alimentadoresAtivos.length >= 10) {
+      showToast('Máximo 10 alimentadores.', 'warning');
+      // reverter checkbox
+      const chk = document.querySelector(`#alim-il-${id} input`);
+      if (chk) chk.checked = false;
+      return;
+    }
+    alimentadoresAtivos.push(id);
+  }
+  // Atualizar visual do label
+  const lbl = document.getElementById('alim-il-' + id);
+  if (lbl) lbl.classList.toggle('sel', alimentadoresAtivos.includes(id));
+  // Atualizar botão e contador
+  document.getElementById('btn-confirmar').disabled = alimentadoresAtivos.length === 0;
+  const n = alimentadoresAtivos.length;
+  document.getElementById('alim-count-label').textContent = n > 0 ? String(n) : '';
+  document.getElementById('etapa3-label').style.display = n > 0 ? 'flex' : 'none';
 }
+
+function renderAlimentadoresMunicipio() { /* não usado mais */ }
 
 function distKm(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -1760,7 +1851,8 @@ function toggleAlimentador(id) {
   alimentadoresAtivos.forEach(id => document.getElementById('alim-' + id)?.classList.add('sel'));
   document.getElementById('btn-confirmar').disabled = alimentadoresAtivos.length === 0;
   const n = alimentadoresAtivos.length;
-  document.getElementById('alim-count-label').textContent = n > 0 ? `(${n} selecionado${n>1?'s':''})` : '';
+  document.getElementById('alim-count-label').textContent = n > 0 ? String(n) : '';
+  document.getElementById('etapa3-label').style.display = n > 0 ? 'flex' : 'none';
   // Atualizar visual da lista
   renderAlimentadoresMunicipio();
 }
@@ -2119,56 +2211,49 @@ function renderAdminMunicipios() {
   const muns = {};
   Object.entries(indicePolo[adminPolo]).forEach(([id, info]) => {
     const mun = info.municipio || '?';
-    if (!muns[mun]) muns[mun] = { n_alim: 0 };
-    muns[mun].n_alim++;
+    if (!muns[mun]) muns[mun] = { circs: [] };
+    muns[mun].circs.push([id, info]);
   });
 
-  lista.innerHTML = '<div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Município</div>'
-    + Object.entries(muns).sort((a,b) => a[0].localeCompare(b[0])).map(([mun, data]) => `
-    <div class="mun-item ${adminMunicipio === mun ? 'sel' : ''}"
-         onclick="adminSelecionarMunicipio('${mun.replace(/'/g,"\'")}')">
-      <div>
-        <div class="mun-nome">${mun}</div>
-        <div class="mun-count">${data.n_alim} alimentador${data.n_alim > 1 ? 'es' : ''}</div>
+  lista.innerHTML = Object.entries(muns).sort((a,b) => a[0].localeCompare(b[0])).map(([mun, data]) => {
+    const sel = adminMunicipio === mun;
+    const munId = 'adm_' + mun.replace(/[^a-zA-Z0-9]/g,'_');
+    const alimHtml = data.circs.map(([id, info]) => `
+      <div class="alim-admin-check" id="acheck-${id}">
+        <input type="checkbox" id="achk-${id}" ${adminAlims.includes(id)?'checked':''}
+          onchange="adminToggleAlim('${id}')"
+          style="width:20px;height:20px;accent-color:var(--amber);cursor:pointer;flex-shrink:0;">
+        <label for="achk-${id}" style="cursor:pointer;flex:1;">
+          <div class="alim-admin-label">${id}</div>
+          <div class="alim-admin-se">${info.se} · ${info.n.toLocaleString('pt-BR')} postes</div>
+        </label>
+      </div>`).join('');
+
+    return `<div class="admin-mun-item ${sel?'sel':''}" id="${munId}">
+      <div class="admin-mun-header" onclick="adminSelecionarMunicipio('${mun.replace(/'/g,"\'")}','${munId}')">
+        <div>
+          <div class="admin-mun-nome">${mun}</div>
+          <div class="admin-mun-sub">${data.circs.length} alimentador${data.circs.length>1?'es':''}</div>
+        </div>
+        <span style="font-size:18px;">${sel?'▾':'›'}</span>
       </div>
-      <span>${adminMunicipio === mun ? '✓' : '›'}</span>
-    </div>`).join('');
+      <div class="admin-mun-expand">${alimHtml}</div>
+    </div>`;
+  }).join('');
 }
 
-function adminSelecionarMunicipio(mun) {
-  adminMunicipio = mun;
-  adminAlims     = [];
-  document.getElementById('admin-alim-count').textContent = '';
+function adminSelecionarMunicipio(mun, munId) {
+  adminMunicipio = adminMunicipio === mun ? null : mun;
   renderAdminMunicipios();
-  renderAdminAlimentadores();
+  if (adminMunicipio) {
+    setTimeout(() => {
+      const el = document.getElementById(munId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+  }
 }
 
-function renderAdminAlimentadores() {
-  const circs = Object.entries(indicePolo[adminPolo])
-    .filter(([id, info]) => info.municipio === adminMunicipio)
-    .sort((a,b) => a[0].localeCompare(b[0]));
-
-  const container = document.createElement('div');
-  container.innerHTML = '<div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin:10px 0 6px;">Alimentadores — ' + adminMunicipio + '</div>'
-    + circs.map(([id, info]) => `
-    <div class="alim-admin-check" id="acheck-${id}">
-      <input type="checkbox" id="achk-${id}"
-        onchange="adminToggleAlim('${id}')"
-        style="width:20px;height:20px;accent-color:var(--amber);cursor:pointer;flex-shrink:0;">
-      <label for="achk-${id}" style="cursor:pointer;flex:1;">
-        <div class="alim-admin-label">${id}</div>
-        <div class="alim-admin-se">${info.se} · ${info.n.toLocaleString('pt-BR')} postes</div>
-      </label>
-    </div>`).join('');
-
-  // Manter lista de municípios + adicionar alimentadores abaixo
-  const lista = document.getElementById('admin-alim-lista');
-  // Remover alimentadores anteriores se existir
-  const prev = lista.querySelector('.admin-alim-section');
-  if (prev) prev.remove();
-  container.className = 'admin-alim-section';
-  lista.appendChild(container);
-}
+function renderAdminAlimentadores() { /* incorporado no accordion */ }
 
 function adminToggleAlim(id) {
   const chk = document.getElementById('achk-' + id);
