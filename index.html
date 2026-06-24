@@ -5,7 +5,7 @@
 // VERA v1.1.1 — limpeza única de SW antigos (sem reload automático)
 (function() {
   try {
-    const V = '2.0.0';
+    const V = '2.0.1';
     if (localStorage.getItem('vera_v') !== V) {
       localStorage.setItem('vera_v', V);
       // Limpar SWs em background, sem recarregar
@@ -712,6 +712,22 @@ button, .polo-btn, .alim-item, .tab-btn {
 .admin-mun-sub { font-size: 10px; color: var(--text-muted); }
 
 
+
+.btn-trocar {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: var(--white);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-family: inherit;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.btn-trocar:hover { background: rgba(255,255,255,0.22); }
+
 </style>
 </head>
 <body>
@@ -816,13 +832,13 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.0.0</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.0.1</div>
     </div>
   </div>
   <div class="header-right">
     <div class="user-badge" id="header-user">—</div>
-    <button class="btn-icon" onclick="switchTab('config')" title="Configurações">️</button>
-    <button class="btn-icon" onclick="doLogout()" title="Sair"></button>
+    <button class="btn-icon" id="btn-config-header" onclick="switchTab('config')" title="Configurações" style="display:none;">Config</button>
+    <button class="btn-trocar" onclick="trocarEquipe()" title="Trocar equipe">Trocar equipe</button>
   </div>
 </header>
 
@@ -1119,7 +1135,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.0.0';
+const APP_VERSION = '2.0.1';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1129,7 +1145,7 @@ async function verificarVersao() {
 
 async function forcarAtualizacao() {
   // Setar versão ANTES de limpar para não entrar em loop
-  localStorage.setItem('vera_v', '2.0.0');
+  localStorage.setItem('vera_v', '2.0.1');
   if ('caches' in window) {
     const keys = await caches.keys();
     await Promise.all(keys.map(k => caches.delete(k)));
@@ -1372,6 +1388,7 @@ function doLogin() {
     document.getElementById('app').style.display        = 'block';
     document.getElementById('header-user').textContent  = user;
     document.getElementById('tab-admin').style.display  = 'flex';
+    document.getElementById('btn-config-header').style.display = 'block';
     // Esconder tabs desnecessárias para admin
     document.getElementById('tab-map').style.display    = 'none';
     document.getElementById('tab-form').style.display   = 'none';
@@ -1390,6 +1407,25 @@ function doLogin() {
 }
 
 document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
+
+
+async function trocarEquipe() {
+  // Verificar se há pontos não sincronizados
+  let pendentes = 0;
+  try {
+    const all = await dbGetAll('points');
+    pendentes = all.filter(r => !r.synced).length;
+  } catch(e) {}
+
+  let msg = 'Deseja trocar de equipe? Você voltará para a tela de login.';
+  if (pendentes > 0) {
+    msg = 'ATENÇÃO: Você tem ' + pendentes + ' ponto(s) ainda não enviado(s). '
+        + 'Se trocar de equipe agora sem sincronizar, esses dados podem se misturar com a próxima equipe. '
+        + 'Deseja trocar mesmo assim?';
+  }
+  if (!confirm(msg)) return;
+  doLogout();
+}
 
 function doLogout() {
   currentUser = currentLat = currentLon = null;
