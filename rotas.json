@@ -60,6 +60,18 @@
       ],
       "criada": "24/06/2026, 01:27:53",
       "criadaPor": "Admin"
+    },
+    {
+      "id": 1782328822193,
+      "equipe": "Equipe Energisa",
+      "polo": "CENTRO",
+      "alimentadores": [
+        "AL02059122",
+        "AL01059122",
+        "AL03059122"
+      ],
+      "criada": "24/06/2026, 16:20:22",
+      "criadaPor": "Admin"
     }
   ]
 }
