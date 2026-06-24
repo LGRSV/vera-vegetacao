@@ -1694,8 +1694,13 @@ async function confirmarAlimentadores() {
   loadConfig();
   updatePendingBadge();
 
-  // Carregar postes dos alimentadores selecionados
-  await carregarPostes();
+  // Ir para o mapa imediatamente
+  switchTab('map');
+
+  // Carregar postes em background (não bloqueia a UI)
+  setTimeout(async () => {
+    await carregarPostes();
+  }, 300);
 }
 
 async function carregarPostes() {
@@ -1705,22 +1710,33 @@ async function carregarPostes() {
   }
   postesLayer.clearLayers();
 
-  showToast('Carregando postes...', '');
+  const total = alimentadoresAtivos.length;
+  showToast(`Carregando ${total} alimentador${total > 1 ? 'es' : ''}...`, '');
 
+  let ok = 0;
   for (const circ of alimentadoresAtivos) {
     if (postesCarregados[circ]) {
       renderPostesNoMapa(circ, postesCarregados[circ]);
+      ok++;
       continue;
     }
     try {
-      const r = await fetch(`${GITHUB_RAW}/${poloAtivo}/${circ}.json`);
+      const r = await fetch(`${GITHUB_RAW}/dados/${poloAtivo}/${circ}.json?t=` + Date.now(), { cache: 'no-store' });
       if (!r.ok) throw new Error('Não encontrado');
       const postes = await r.json();
       postesCarregados[circ] = postes;
       renderPostesNoMapa(circ, postes);
-      showToast(`✓ ${circ}: ${postes.length.toLocaleString('pt-BR')} postes carregados`, 'success');
+      ok++;
+      showToast(`✓ ${ok}/${total} — ${circ} carregado`, 'success');
     } catch(e) {
       showToast(`Erro ao carregar ${circ}`, 'error');
+    }
+  }
+  if (ok === total) {
+    showToast(`✅ ${total} alimentador${total > 1 ? 'es' : ''} prontos!`, 'success');
+    // Centralizar mapa nos postes carregados
+    if (map && postesLayer) {
+      try { map.fitBounds(postesLayer.getBounds(), { padding: [20, 20] }); } catch(e) {}
     }
   }
 }
@@ -2147,8 +2163,13 @@ async function mostrarRotaAtribuida(user) {
 
 async function usarRotaAtribuida() {
   if (!rotaAtribuida) return;
-  poloAtivo            = rotaAtribuida.polo;
-  alimentadoresAtivos  = [...rotaAtribuida.alimentadores];
+  poloAtivo           = rotaAtribuida.polo;
+  alimentadoresAtivos = [...rotaAtribuida.alimentadores];
+
+  // Feedback visual antes de entrar
+  const btn = document.querySelector('[onclick="usarRotaAtribuida()"]');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Carregando...'; }
+
   await confirmarAlimentadores();
 }
 
