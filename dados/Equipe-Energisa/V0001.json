@@ -1,0 +1,19 @@
+{
+  "id": "V0001",
+  "synced": false,
+  "wkt": "POINT (-48.348494 -10.210092)",
+  "data": "24/06/2026, 01:48:01",
+  "poste": "651375",
+  "especie": "Mangueira",
+  "lat": -10.210091690678944,
+  "lon": -48.34849406315539,
+  "altura": "2",
+  "dtbt": "30",
+  "dtmt": "0",
+  "dtat": "0",
+  "dap": "40",
+  "area": "Teste",
+  "acesso": "Sim",
+  "usuario": "Equipe Energisa",
+  "photos": "1 foto(s)"
+}
