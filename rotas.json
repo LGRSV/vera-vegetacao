@@ -72,6 +72,18 @@
       ],
       "criada": "24/06/2026, 16:20:22",
       "criadaPor": "Admin"
+    },
+    {
+      "id": 1782356633279,
+      "equipe": "Enecol Sul",
+      "polo": "CENTRO",
+      "alimentadores": [
+        "AL03101271",
+        "AL02101271",
+        "AL01101271"
+      ],
+      "criada": "25/06/2026, 00:03:53",
+      "criadaPor": "Admin"
     }
   ]
 }
