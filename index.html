@@ -5,7 +5,7 @@
 // VERA v1.1.1 — limpeza única de SW antigos (sem reload automático)
 (function() {
   try {
-    const V = '2.1.1';
+    const V = '2.2.0';
     if (localStorage.getItem('vera_v') !== V) {
       localStorage.setItem('vera_v', V);
       // Limpar SWs em background, sem recarregar
@@ -728,6 +728,43 @@ button, .polo-btn, .alim-item, .tab-btn {
 }
 .btn-trocar:hover { background: rgba(255,255,255,0.22); }
 
+
+/* ── CONTROLE DE CAMADAS ── */
+.camadas-control {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 800;
+  background: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cam-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border: none;
+  background: var(--off-white);
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.cam-btn.ativo { background: var(--green-deep); color: white; }
+.cam-dot { width: 12px; height: 3px; border-radius: 2px; flex-shrink: 0; }
+.cam-dot.postes { width: 8px; height: 8px; border-radius: 50%; background: #1565C0; }
+.cam-dot.t1 { background: #D32F2F; }
+.cam-dot.t2 { background: #F57C00; }
+
 </style>
 </head>
 <body>
@@ -832,7 +869,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.1.1</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.2.0</div>
     </div>
   </div>
   <div class="header-right">
@@ -854,6 +891,18 @@ button, .polo-btn, .alim-item, .tab-btn {
 
   <!-- MAPA -->
   <div class="tab-panel active" id="map-panel">
+    <div class="camadas-control" id="camadas-control" style="display:none;">
+      <button class="cam-btn ativo" id="cam-postes" onclick="toggleCamada('postes')">
+        <span class="cam-dot postes"></span>Postes
+      </button>
+      <button class="cam-btn ativo" id="cam-t1" onclick="toggleCamada('t1')">
+        <span class="cam-dot t1"></span>T1 (Tronco)
+      </button>
+      <button class="cam-btn ativo" id="cam-t2" onclick="toggleCamada('t2')">
+        <span class="cam-dot t2"></span>T2 (Ramal)
+      </button>
+    </div>
+
     <div id="map"></div>
     <div class="gps-pill" id="gps-pill"> Aguardando GPS...</div>
     <div class="alim-chip" id="alim-chip" onclick="switchTab('config')" style="display:none;"> <span id="alim-chip-label">—</span></div>
@@ -1169,7 +1218,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.1.1';
+const APP_VERSION = '2.2.0';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1179,7 +1228,7 @@ async function verificarVersao() {
 
 async function forcarAtualizacao() {
   // Setar versão ANTES de limpar para não entrar em loop
-  localStorage.setItem('vera_v', '2.1.1');
+  localStorage.setItem('vera_v', '2.2.0');
   if ('caches' in window) {
     const keys = await caches.keys();
     await Promise.all(keys.map(k => caches.delete(k)));
@@ -1802,6 +1851,9 @@ let poloAtivo    = null;
 let municipioAtivo = null;
 let alimentadoresAtivos = [];  // até 3 selecionados
 let postesLayer  = null;
+let cabosT1Layer = null;
+let cabosT2Layer = null;
+let cabosCarregados = {};
 let postesCarregados = {};     // circ -> [postes]
 
 
@@ -2028,10 +2080,12 @@ async function confirmarAlimentadores() {
 
 async function carregarPostes() {
   if (!map) return;
-  if (!postesLayer) {
-    postesLayer = L.layerGroup().addTo(map);
-  }
+  if (!postesLayer) postesLayer = L.layerGroup().addTo(map);
+  if (!cabosT1Layer) cabosT1Layer = L.layerGroup().addTo(map);
+  if (!cabosT2Layer) cabosT2Layer = L.layerGroup().addTo(map);
   postesLayer.clearLayers();
+  cabosT1Layer.clearLayers();
+  cabosT2Layer.clearLayers();
 
   const total = alimentadoresAtivos.length;
   showToast(`Carregando ${total} alimentador${total > 1 ? 'es' : ''}...`, '');
@@ -2049,12 +2103,15 @@ async function carregarPostes() {
       const postes = await r.json();
       postesCarregados[circ] = postes;
       renderPostesNoMapa(circ, postes);
+      // Carregar cabos T1/T2 do circuito
+      await carregarCabos(circ);
       ok++;
       showToast(` ${ok}/${total} — ${circ} carregado`, 'success');
     } catch(e) {
       showToast(`Erro ao carregar ${circ}`, 'error');
     }
   }
+  document.getElementById('camadas-control').style.display = 'flex';
   if (ok === total) {
     showToast(` ${total} alimentador${total > 1 ? 'es' : ''} prontos!`, 'success');
     // Centralizar mapa nos postes carregados
@@ -2157,6 +2214,56 @@ function usarPoste(id, circ) {
 // ── Override do doLogin para ir para polo-screen ──
 const _doLoginOriginal = doLogin;
 
+
+
+// ══════════════════════════════════════════════════
+// CABOS T1/T2
+// ══════════════════════════════════════════════════
+async function carregarCabos(circ) {
+  if (cabosCarregados[circ]) {
+    renderCabos(circ, cabosCarregados[circ]);
+    return;
+  }
+  try {
+    const r = await fetch(`${GITHUB_RAW}/cabos/${poloAtivo}/${circ}.json?t=` + Date.now(), { cache: 'no-store' });
+    if (!r.ok) return; // circuito sem cabos processados
+    const cabos = await r.json();
+    cabosCarregados[circ] = cabos;
+    renderCabos(circ, cabos);
+  } catch(e) {}
+}
+
+function renderCabos(circ, cabos) {
+  // T1 — tronco principal (vermelho mais grosso)
+  (cabos.t1 || []).forEach(linha => {
+    const pts = linha.map(c => [c[1], c[0]]); // [lat,lon]
+    L.polyline(pts, { color: '#D32F2F', weight: 3, opacity: 0.85 }).addTo(cabosT1Layer);
+  });
+  // T2 — após 1º religador (laranja mais fino)
+  (cabos.t2 || []).forEach(linha => {
+    const pts = linha.map(c => [c[1], c[0]]);
+    L.polyline(pts, { color: '#F57C00', weight: 2, opacity: 0.8 }).addTo(cabosT2Layer);
+  });
+}
+
+// ── CONTROLE DE CAMADAS ──
+let camadas = { postes: true, t1: true, t2: true };
+
+function toggleCamada(nome) {
+  camadas[nome] = !camadas[nome];
+  const btn = document.getElementById('cam-' + nome);
+  if (btn) btn.classList.toggle('ativo', camadas[nome]);
+
+  if (nome === 'postes' && postesLayer) {
+    camadas.postes ? map.addLayer(postesLayer) : map.removeLayer(postesLayer);
+  }
+  if (nome === 't1' && cabosT1Layer) {
+    camadas.t1 ? map.addLayer(cabosT1Layer) : map.removeLayer(cabosT1Layer);
+  }
+  if (nome === 't2' && cabosT2Layer) {
+    camadas.t2 ? map.addLayer(cabosT2Layer) : map.removeLayer(cabosT2Layer);
+  }
+}
 
 // ══════════════════════════════════════════════════
 // BUSCA DE POSTE MAIS PRÓXIMO
