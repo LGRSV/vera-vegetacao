@@ -58,7 +58,7 @@
       html = substituirUmaVez(
         html,
         "    c.appendChild(div);\n  });\n}\n\nfunction removePhoto(i)",
-        "    c.appendChild(div);n  });\n  const requirement = document.getElementById('photo-requirement');\n  if (requirement) {\n    const completas = photos.length >= 3;\n    requirement.textContent = completas\n      ? photos.length + ' foto(s) adicionada(s) — evidências completas.'\n      : photos.length + ' de 3 fotos adicionadas — registre frente, lateral e a proximidade com a rede.';\n    requirement.style.color = completas ? 'var(--green-mid)' : 'var(--danger)';\n  }\n}\n\nfunction removePhoto(i)",
+        "    c.appendChild(div);\n  });\n  const requirement = document.getElementById('photo-requirement');\n  if (requirement) {\n    const completas = photos.length >= 3;\n    requirement.textContent = completas\n      ? photos.length + ' foto(s) adicionada(s) — evidências completas.'\n      : photos.length + ' de 3 fotos adicionadas — registre frente, lateral e a proximidade com a rede.';\n    requirement.style.color = completas ? 'var(--green-mid)' : 'var(--danger)';\n  }\n}\n\nfunction removePhoto(i)",
         'contador de fotos'
       );
 
