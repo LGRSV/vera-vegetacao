@@ -16,7 +16,7 @@
 <body>
   <main>
     <div class="mark">V</div>
-    <strong>Carregando VERA 2.6.5</strong>
+    <strong>Carregando VERA 2.6.6</strong>
     <p class="status" id="status">Preparando regras de coleta em campo…</p>
     <div class="error" id="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
   </main>
@@ -37,7 +37,7 @@
 
     try {
       status.textContent = 'Carregando a versão protegida e aplicando as validações…';
-      const response = await fetch(SOURCE_URL + '?v=2.6.5', { cache: 'no-store' });
+      const response = await fetch(SOURCE_URL + '?v=2.6.6', { cache: 'no-store' });
       if (!response.ok) throw new Error('Backup indisponível (' + response.status + ').');
       let html = await response.text();
 
@@ -58,7 +58,7 @@
       html = substituirUmaVez(
         html,
         "    c.appendChild(div);\n  });\n}\n\nfunction removePhoto(i)",
-        "    c.appendChild(div);\n  });\n  const requirement = document.getElementById('photo-requirement');\n  if (requirement) {\n    const completas = photos.length >= 3;\n    requirement.textContent = completas\n      ? photos.length + ' foto(s) adicionada(s) — evidências completas.'\n      : photos.length + ' de 3 fotos adicionadas — registre frente, lateral e a proximidade com a rede.';\n    requirement.style.color = completas ? 'var(--green-mid)' : 'var(--danger)';\n  }\n}\n\nfunction removePhoto(i)",
+        "    c.appendChild(div);n  });\n  const requirement = document.getElementById('photo-requirement');\n  if (requirement) {\n    const completas = photos.length >= 3;\n    requirement.textContent = completas\n      ? photos.length + ' foto(s) adicionada(s) — evidências completas.'\n      : photos.length + ' de 3 fotos adicionadas — registre frente, lateral e a proximidade com a rede.';\n    requirement.style.color = completas ? 'var(--green-mid)' : 'var(--danger)';\n  }\n}\n\nfunction removePhoto(i)",
         'contador de fotos'
       );
 
@@ -72,15 +72,44 @@
       html = substituirUmaVez(
         html,
         "const APP_VERSION = '2.6.4';",
-        "const APP_VERSION = '2.6.5';",
+        "const APP_VERSION = '2.6.6';",
         'versão interna'
       );
-      html = html.replace(/v2\.6\.4/g, 'v2.6.5');
+      html = html.replace(/v2\.6\.4/g, 'v2.6.6');
+
       html = substituirUmaVez(
         html,
-        '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.5</div>',
-        '<div style="display:inline-flex;align-items:center;margin-top:10px;padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--off-white);font-size:10px;font-weight:800;color:var(--green-mid);letter-spacing:0.08em;">VERSÃO 2.6.5</div>',
+        '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.6</div>',
+        '<div style="display:inline-flex;align-items:center;margin-top:10px;padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--off-white);font-size:10px;font-weight:800;color:var(--green-mid);letter-spacing:0.08em;">VERSÃO 2.6.6</div>',
         'selo de versão na tela de login'
+      );
+
+      html = substituirUmaVez(
+        html,
+        "function salvarSessao() {\n  try {\n    const sessao = {\n      user: currentUser,\n      polo: poloAtivo,\n      alimentadores: alimentadoresAtivos,\n      ts: Date.now(),\n    };\n    localStorage.setItem(SESSAO_KEY, JSON.stringify(sessao));\n  } catch(e) {}\n}",
+        "function salvarSessao() {\n  try {\n    const sessao = {\n      user: currentUser,\n      rotaId: rotaAtribuida ? String(rotaAtribuida.id) : null,\n      ts: Date.now(),\n    };\n    localStorage.setItem(SESSAO_KEY, JSON.stringify(sessao));\n  } catch(e) {}\n}",
+        'sessão vinculada ao projeto atribuído'
+      );
+
+      html = substituirUmaVez(
+        html,
+        "  // EQUIPE DE CAMPO com alimentadores ativos\n  if (sessao.polo && Array.isArray(sessao.alimentadores) && sessao.alimentadores.length) {\n    poloAtivo = sessao.polo;\n    alimentadoresAtivos = sessao.alimentadores;\n    await carregarIndice();\n    await confirmarAlimentadores();\n    return true;\n  }\n\n  // Equipe sem rota escolhida — volta pra seleção de polo\n  document.getElementById('polo-screen').style.display  = 'flex';\n  document.getElementById('polo-user-label').textContent = sessao.user;\n  carregarIndice();\n  mostrarRotaAtribuida(sessao.user);\n  return true;",
+        "  // EQUIPE DE CAMPO: somente projetos atribuídos pelo supervisor\n  if (sessao.rotaId) {\n    await carregarRotas();\n    const rotaRestaurada = (rotasData.rotas || []).find(r =>\n      r && String(r.id) === String(sessao.rotaId) && r.equipe === currentUser\n    );\n    if (rotaRestaurada) {\n      rotaAtribuida = rotaRestaurada;\n      poloAtivo = rotaRestaurada.polo;\n      alimentadoresAtivos = [...rotaRestaurada.alimentadores];\n      await carregarIndice();\n      await confirmarAlimentadores();\n      return true;\n    }\n  }\n\n  // Sessões antigas ou projetos removidos não podem manter rota manual.\n  limparSessao();\n  document.getElementById('polo-screen').style.display = 'flex';\n  document.getElementById('polo-user-label').textContent = sessao.user;\n  carregarIndice();\n  mostrarRotaAtribuida(sessao.user);\n  return true;",
+        'restauração restrita a projeto atribuído'
+      );
+
+      html = substituirUmaVez(
+        html,
+        '<p>O supervisor ainda não definiu sua rota.<br>Você pode selecionar os alimentadores manualmente abaixo.</p>',
+        '<p>O supervisor ainda não definiu um projeto para esta equipe.<br>Aguarde a atribuição para iniciar a coleta.</p>',
+        'aviso sem projeto atribuído'
+      );
+
+      html = substituirUmaVez(
+        html,
+        'async function mostrarRotaAtribuida(user) {',
+        "function bloquearSelecaoManualRota() {\n  const card = document.querySelector('#polo-screen .polo-card');\n  if (!card) return;\n  Array.from(card.children).forEach(el => {\n    if (el.id === 'rota-atribuida-banner' || el.id === 'sem-rota-banner') return;\n    el.style.display = 'none';\n  });\n}\n\nasync function mostrarRotaAtribuida(user) {\n  bloquearSelecaoManualRota();",
+        'bloqueio da seleção manual de rota'
       );
 
       document.open();
