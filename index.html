@@ -14,7 +14,7 @@
 <body>
   <main>
     <div class="mark">V</div>
-    <strong>Carregando VERA 2.6.11</strong>
+    <strong>Carregando VERA 2.6.12</strong>
     <p id="status" class="status">Preparando projeto compartilhado por equipe…</p>
     <div id="error" class="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
   </main>
@@ -25,11 +25,16 @@
     const errorDetail = document.getElementById('error-detail');
     const source = 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/backup/v2.6.8-antes-admin-fotos-renomeacao-20260626/index.html';
     try {
-      const response = await fetch(source + '?team-state=2.6.11', { cache: 'no-store' });
+      const response = await fetch(source + '?team-state=2.6.12', { cache: 'no-store' });
       if (!response.ok) throw new Error('Versão estável indisponível (' + response.status + ').');
       let html = await response.text();
-      html = html.replaceAll('2.6.8', '2.6.11');
-      html = html.replace('</body>', '<script src="estado-equipes.js?v=2.6.11"><\/script></body>');
+      html = html.replaceAll('2.6.8', '2.6.12');
+
+      const fimDoApp = '      document.open();\n      document.write(html);\n      document.close();';
+      const fimComEstado = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?v=2.6.12"><\\/script></body>\');\n' + fimDoApp;
+      if (html.indexOf(fimDoApp) < 0) throw new Error('Não foi possível conectar o estado compartilhado ao app.');
+      html = html.replace(fimDoApp, fimComEstado);
+
       document.open();
       document.write(html);
       document.close();
