@@ -998,6 +998,34 @@ button, .polo-btn, .alim-item, .tab-btn {
 }
 .btn-salvar-rota:hover { background: var(--green-deep); }
 
+
+/* ── MAPA ADMIN ── */
+#admin-map-container {
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+#admin-map {
+  width: 100%;
+  height: 320px;
+}
+.admin-map-legend {
+  display: flex;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--off-white);
+  font-size: 11px;
+  flex-wrap: wrap;
+}
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
 </style>
 </head>
 <body>
@@ -1081,7 +1109,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="login-icon">VERA</div>
     <div class="login-title">VERA</div>
     <div class="login-subtitle">Vegetação em Rede Ativa<br>Energisa Tocantins</div>
-    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.2</div>
+    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.3</div>
     <div class="field-group">
       <label class="field-label">Equipe / Usuário</label>
       <select class="field-input" id="login-user">
@@ -1108,7 +1136,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.6.2</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.6.3</div>
     </div>
   </div>
   <div class="header-right">
@@ -1272,6 +1300,7 @@ button, .polo-btn, .alim-item, .tab-btn {
         <div class="stat-box"><div class="stat-num amber" id="stat-pending">0</div><div class="stat-label">Aguardando envio</div></div>
       </div>
       <button class="btn-sync-now" onclick="syncNow()">Sincronizar agora</button>
+      <button class="btn-sync-now" onclick="reenviarTodos()" style="margin-top:8px;background:var(--amber);color:var(--green-deep);">Reenviar todos os pontos</button>
     </div>
 
     <div class="config-section">
@@ -1298,11 +1327,7 @@ button, .polo-btn, .alim-item, .tab-btn {
       <button class="btn-export" style="width:100%;justify-content:center;margin-top:8px;background:var(--amber);color:var(--green-deep);" onclick="exportPendingCSV()">Exportar apenas pendentes</button>
     </div>
 
-    <div class="config-section">
-      <div class="config-title">Zona de Perigo</div>
-      <button class="btn-danger" onclick="clearSyncedRecords()">Limpar registros já enviados</button>
-      <button class="btn-danger" onclick="clearAllRecords()" style="margin-top:8px;">Limpar TODOS os registros</button>
-    </div>
+
 
   </div>
 </div>
@@ -1324,6 +1349,30 @@ button, .polo-btn, .alim-item, .tab-btn {
         <div style="font-size:11px;color:var(--green-soft);">Gerenciamento de Rotas — DCMD</div>
       </div>
       <span class="admin-badge">Admin</span>
+    </div>
+
+    <!-- MAPA DOS PONTOS REGISTRADOS -->
+    <div class="rota-form" style="padding:0;overflow:hidden;">
+      <div style="padding:12px 14px 8px;display:flex;align-items:center;justify-content:space-between;">
+        <div class="rota-form-title" style="margin-bottom:0;">Pontos Registrados em Campo</div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <select id="admin-map-equipe" style="font-size:11px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--white);" onchange="carregarPontosAdmin()">
+            <option value="__todas__">Todas as equipes</option>
+            <option>Equipe Energisa</option>
+            <option>Enecol Norte</option>
+            <option>Enecol Centro</option>
+            <option>Enecol Sul</option>
+          </select>
+          <button onclick="carregarPontosAdmin()" style="padding:4px 10px;font-size:11px;border:1px solid var(--border);border-radius:6px;background:var(--white);cursor:pointer;font-family:inherit;">Atualizar</button>
+        </div>
+      </div>
+      <div id="admin-map-container">
+        <div id="admin-map"></div>
+        <div class="admin-map-legend" id="admin-map-legend">
+          <span>Carregue os pontos para visualizar</span>
+        </div>
+      </div>
+      <div id="admin-map-info" style="padding:0 14px 12px;font-size:12px;color:var(--text-muted);"></div>
     </div>
 
     <!-- CRIAR ROTA -->
@@ -1513,7 +1562,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.6.2';
+const APP_VERSION = '2.6.3';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -2044,7 +2093,7 @@ function switchTab(name) {
   if (name === 'map' && map) setTimeout(() => map.invalidateSize(), 100);
   if (name === 'records') renderRecords();
   if (name === 'config') { updatePendingBadge(); loadConfig(); }
-  if (name === 'admin') renderRotasAdmin();
+  if (name === 'admin') { renderRotasAdmin(); setTimeout(iniciarMapaAdmin, 300); }
 }
 
 // ══════════════════════════════════════════════════
@@ -3520,6 +3569,131 @@ function baixarArquivo(nome, conteudo, tipo) {
   }
 }
 
+
+
+async function reenviarTodos() {
+  const all = await dbGetAll('points');
+  if (all.length === 0) { showToast('Nenhum ponto registrado.', ''); return; }
+  if (!confirm('Reenviar todos os ' + all.length + ' ponto(s) para o servidor? Isso irá reprocessar todos os registros incluindo fotos.')) return;
+  // Marcar todos como não sincronizados
+  for (const p of all) {
+    p.synced = false;
+    p.syncedAt = null;
+    p.fotos_ids = [];
+    p.fotos_github = [];
+    await dbPut('points', p);
+  }
+  updatePendingBadge();
+  showToast('Iniciando reenvio de ' + all.length + ' ponto(s)...', '');
+  await syncPendingPoints();
+}
+
+// ══════════════════════════════════════════════════
+// MAPA ADMIN — pontos registrados pelas equipes
+// ══════════════════════════════════════════════════
+let adminMap = null;
+let adminMapLayer = null;
+
+const CORES_EQUIPES = {
+  'Equipe Energisa': '#1565C0',
+  'Enecol Norte':    '#2E7D32',
+  'Enecol Centro':   '#F57C00',
+  'Enecol Sul':      '#6A1B9A',
+};
+
+function iniciarMapaAdmin() {
+  if (adminMap) return;
+  const el = document.getElementById('admin-map');
+  if (!el) return;
+  adminMap = L.map('admin-map', { zoomControl: true });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    { attribution: '© OpenStreetMap', maxZoom: 19 }).addTo(adminMap);
+  adminMapLayer = L.layerGroup().addTo(adminMap);
+  // Centro do Tocantins como default
+  adminMap.setView([-10.2, -48.3], 7);
+}
+
+async function carregarPontosAdmin() {
+  iniciarMapaAdmin();
+  const info    = document.getElementById('admin-map-info');
+  const equipe  = document.getElementById('admin-map-equipe').value;
+  info.textContent = 'Carregando pontos...';
+
+  const cfg   = await carregarConfigGlobal().catch(() => null);
+  const token = (cfg && cfg.token) || await getConfig('github_token').catch(() => null);
+  const repo  = (cfg && cfg.repo)  || GH_REPO;
+
+  const equipes = equipe === '__todas__'
+    ? ['Equipe Energisa','Enecol Norte','Enecol Centro','Enecol Sul']
+    : [equipe];
+
+  adminMapLayer.clearLayers();
+  const bounds = [];
+  let total = 0;
+  const contPorEquipe = {};
+
+  for (const eq of equipes) {
+    const pasta = 'dados/' + eq.replace(/\s+/g, '-');
+    const cor   = CORES_EQUIPES[eq] || '#888';
+    contPorEquipe[eq] = 0;
+    try {
+      const r = await fetch('https://api.github.com/repos/' + repo + '/contents/' + pasta,
+        { headers: { 'Authorization': 'token ' + token } });
+      if (!r.ok) continue;
+      const arquivos = await r.json();
+      for (const arq of arquivos.filter(a => a.name.endsWith('.json'))) {
+        try {
+          const rp = await fetch(arq.download_url + '?t=' + Date.now(), { cache: 'no-store' });
+          if (!rp.ok) continue;
+          const pt = await rp.json();
+          if (!pt.lat || !pt.lon) continue;
+          const fotos = pt.fotos_ids && pt.fotos_ids.length > 0
+            ? pt.fotos_ids.join(', ')
+            : (pt.fotos_count > 0 ? pt.fotos_count + ' foto(s)' : 'Sem fotos');
+          const popup = '<div style="font-family:inherit;min-width:160px;">'
+            + '<div style="font-weight:700;font-size:13px;color:' + cor + ';">' + (pt.especie || 'Sem espécie') + '</div>'
+            + '<div style="font-size:10px;color:#666;margin:2px 0;">' + eq + '</div>'
+            + '<hr style="margin:5px 0;border-color:#eee;">'
+            + '<div style="font-size:11px;"><b>Ponto:</b> ' + pt.id + '</div>'
+            + '<div style="font-size:11px;"><b>Poste:</b> ' + (pt.poste || '-') + '</div>'
+            + '<div style="font-size:11px;"><b>Data:</b> ' + (pt.data || '-') + '</div>'
+            + '<div style="font-size:11px;"><b>Altura:</b> ' + (pt.altura || '-') + ' m</div>'
+            + '<div style="font-size:11px;"><b>Fotos:</b> ' + fotos + '</div>'
+            + '</div>';
+          const m = L.circleMarker([pt.lat, pt.lon], {
+            radius: 8, fillColor: cor, color: '#fff', weight: 2, fillOpacity: 0.9
+          }).bindPopup(popup);
+          adminMapLayer.addLayer(m);
+          bounds.push([pt.lat, pt.lon]);
+          total++;
+          contPorEquipe[eq]++;
+        } catch(e) {}
+      }
+    } catch(e) {}
+  }
+
+  if (bounds.length > 0) {
+    adminMap.fitBounds(bounds, { padding: [30, 30] });
+  }
+
+  // Legenda
+  const legEl = document.getElementById('admin-map-legend');
+  if (legEl) {
+    legEl.innerHTML = Object.entries(contPorEquipe)
+      .filter(([,n]) => n > 0)
+      .map(([eq, n]) => '<span style="display:flex;align-items:center;gap:4px;">'
+        + '<span class="legend-dot" style="background:' + (CORES_EQUIPES[eq]||'#888') + '"></span>'
+        + eq + ' (' + n + ')</span>').join('')
+      || '<span>Nenhum ponto encontrado</span>';
+  }
+
+  info.textContent = total > 0
+    ? total + ' ponto(s) encontrado(s). Clique em um ponto para ver os detalhes.'
+    : 'Nenhum ponto encontrado para esta equipe.';
+
+  // Invalidar tamanho do mapa após renderizar
+  setTimeout(() => { if (adminMap) adminMap.invalidateSize(); }, 200);
+}
 
 // ══════════════════════════════════════════════════
 // EDIÇÃO DE ROTA
