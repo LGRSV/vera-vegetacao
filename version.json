@@ -1,1 +1,1 @@
-{"version":"2.6.12","released":"2026-06-26","notes":"Correção do carregamento do estado compartilhado: o projeto ativo é salvo por equipe no servidor e pode ser retomado em outro dispositivo."}
+{"version":"2.6.13","released":"2026-06-26","notes":"A aba Registros agora possui botão para atualizar a sincronização do projeto ativo entre dispositivos da mesma equipe."}
