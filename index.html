@@ -847,6 +847,28 @@ button, .polo-btn, .alim-item, .tab-btn {
 .camadas-resumo{font-size:10px;line-height:1.35;color:var(--text-muted);padding:3px 4px 0;}
 @media(max-width:380px){.camadas-control{width:188px;}.cam-btn{font-size:10px;padding:6px 8px;}}
 
+
+.map-fab-gps {
+  position: absolute;
+  bottom: 82px;
+  right: 14px;
+  z-index: 800;
+  background: var(--white);
+  color: var(--green-deep);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background 0.2s;
+}
+.map-fab-gps:active { transform: scale(0.92); }
+.map-fab-gps.ativo { background: var(--green-mid); color: var(--white); }
+
 </style>
 </head>
 <body>
@@ -956,7 +978,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.4.0</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.0</div>
     </div>
   </div>
   <div class="header-right">
@@ -983,8 +1005,8 @@ button, .polo-btn, .alim-item, .tab-btn {
       <button type="button" class="cam-btn ativo" id="cam-postes" onclick="toggleCamada('postes')" aria-pressed="true">
         <span class="cam-dot postes"></span><span>Postes</span><span class="cam-count" id="cam-postes-count">—</span>
       </button>
-      <button type="button" class="cam-btn filtro" id="cam-livres" onclick="toggleCamada('livres')" aria-pressed="false" title="Exibe apenas postes que não estão próximos de um trecho de cabo">
-        <span class="cam-dot livres"></span><span>Somente sem cabo</span>
+      <button type="button" class="cam-btn filtro" id="cam-livres" onclick="toggleCamada('livres')" aria-pressed="false" title="Mostra postes que não estão sobre a rede T1/T2 (normalmente ocultos)">
+        <span class="cam-dot livres"></span><span>Postes fora da rede</span>
       </button>
       <button type="button" class="cam-btn ativo" id="cam-t1" onclick="toggleCamada('t1')" aria-pressed="true">
         <span class="cam-dot t1"></span><span>T1 · Tronco</span><span class="cam-count" id="cam-t1-count">—</span>
@@ -998,6 +1020,12 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div id="map"></div>
     <div class="gps-pill" id="gps-pill"> Aguardando GPS...</div>
     <div class="alim-chip" id="alim-chip" onclick="switchTab('config')" style="display:none;"> <span id="alim-chip-label">—</span></div>
+    <button class="map-fab-gps" onclick="centralizarNoGPS()" title="Minha localização">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
+      </svg>
+    </button>
     <button class="map-fab" onclick="switchTab('form')">＋</button>
   </div>
 
@@ -1313,7 +1341,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.4.0';
+const APP_VERSION = '2.5.0';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1532,6 +1560,43 @@ async function saveConfig() {
 let currentUser = null, currentLat = null, currentLon = null;
 let photos = [], map, userMarker, pointsLayer, watchId;
 
+
+// ══════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════
+// CENTRALIZAR NO GPS
+// ══════════════════════════════════════════════════
+function centralizarNoGPS() {
+  if (!map) return;
+  const btn = document.querySelector('.map-fab-gps');
+
+  // Se já temos a posição, centraliza direto
+  if (currentLat !== null && currentLon !== null) {
+    map.setView([currentLat, currentLon], 17, { animate: true });
+    if (btn) { btn.classList.add('ativo'); setTimeout(() => btn.classList.remove('ativo'), 1000); }
+    return;
+  }
+
+  // Senão, busca a posição agora
+  showToast('Obtendo sua localização...', '');
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      currentLat = pos.coords.latitude;
+      currentLon = pos.coords.longitude;
+      map.setView([currentLat, currentLon], 17, { animate: true });
+      if (!userMarker) {
+        userMarker = L.circleMarker([currentLat, currentLon], {
+          radius: 9, fillColor: '#e8a020', color: '#fff', weight: 3, fillOpacity: 1
+        }).addTo(map);
+      } else {
+        userMarker.setLatLng([currentLat, currentLon]);
+      }
+      if (btn) { btn.classList.add('ativo'); setTimeout(() => btn.classList.remove('ativo'), 1000); }
+    },
+    () => showToast('GPS indisponível. Verifique a permissão de localização.', 'error'),
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
 
 // ══════════════════════════════════════════════════
 // PERSISTÊNCIA DE SESSÃO (sobrevive a reload)
@@ -2408,8 +2473,15 @@ function selecionarPostesParaMapa(postes, indiceCabos = null) {
   const limite = limitePostesPorAlimentador();
   let validos = (postes || []).filter(validarPoste);
 
-  // O filtro é aplicado antes do limite; assim o mapa mostra postes realmente sem cabo,
-  // e não apenas os poucos postes sem cabo entre os primeiros mais próximos.
+  // PADRÃO: mostrar apenas postes que estão sobre a rede T1/T2.
+  // Postes fora dessas zonas (ex: trechos T3 descartados) não são exibidos.
+  if (indiceCabos && indiceCabos.grade && !camadas.livres) {
+    const sobreRede = validos.filter(poste => posteTemCabeamento(poste, indiceCabos));
+    // Só aplica o filtro se sobrar uma quantidade razoável (evita mapa vazio se o índice falhar)
+    if (sobreRede.length > 0) validos = sobreRede;
+  }
+
+  // Camada "livres": mostra o oposto — postes SEM cabo próximo
   if (camadas.livres && indiceCabos) {
     validos = validos.filter(poste => !posteTemCabeamento(poste, indiceCabos));
   }
