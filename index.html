@@ -869,6 +869,36 @@ button, .polo-btn, .alim-item, .tab-btn {
 .map-fab-gps:active { transform: scale(0.92); }
 .map-fab-gps.ativo { background: var(--green-mid); color: var(--white); }
 
+
+/* ── NÍVEL SE (subestação) ── */
+.admin-se-item { border: 1px solid rgba(0,0,0,.08); border-radius: 8px; margin: 4px 0; overflow: hidden; }
+.admin-se-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 10px; cursor: pointer;
+  background: var(--off-white); transition: background 0.15s;
+}
+.admin-se-header:hover { background: #e8f5e9; }
+.admin-se-item.sel .admin-se-header { background: #c8e6c9; }
+.admin-se-nome { font-size: 12px; font-weight: 700; color: var(--green-deep); }
+.admin-se-code { font-family: 'SF Mono','Courier New',monospace; font-size: 10px; color: var(--text-muted); margin-top:1px; }
+.admin-se-expand { display: none; padding: 4px 6px 6px; background: var(--white); border-top: 1px solid var(--border); }
+.admin-se-item.sel .admin-se-expand { display: block; }
+
+/* Equipe campo - SE */
+.se-item { border: 1px solid rgba(0,0,0,.08); border-radius: 8px; margin: 4px 0; overflow: hidden; }
+.se-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 10px; cursor: pointer;
+  background: var(--off-white); transition: background 0.15s;
+}
+.se-header:hover { background: #e8f5e9; }
+.se-item.sel .se-header { background: var(--green-deep); color: white; }
+.se-item.sel .se-sub { color: var(--green-soft); }
+.se-nome { font-size: 12px; font-weight: 700; }
+.se-sub { font-size: 10px; color: var(--text-muted); margin-top:1px; }
+.se-expand { display: none; padding: 4px 6px 6px; background: var(--white); border-top: 1px solid var(--border); }
+.se-item.sel .se-expand { display: block; }
+
 </style>
 </head>
 <body>
@@ -978,7 +1008,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.1</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.2</div>
     </div>
   </div>
   <div class="header-right">
@@ -1341,7 +1371,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.5.1';
+const APP_VERSION = '2.5.2';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -2156,6 +2186,7 @@ async function carregarIndice() {
 function selecionarPolo(polo) {
   poloAtivo = polo;
   municipioAtivo = null;
+  seAtiva = null;
   alimentadoresAtivos = [];
   document.querySelectorAll('.polo-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('pbtn-' + polo).classList.add('active');
@@ -2167,46 +2198,80 @@ function selecionarPolo(polo) {
   renderMunicipios();
 }
 
+let seAtiva = null;
+
 function renderMunicipios() {
   const lista = document.getElementById('mun-lista');
   if (!indicePolo || !indicePolo[poloAtivo]) {
     lista.innerHTML = '<div class="gps-locating">Sem dados para esta regional.</div>';
     return;
   }
-  // Agrupar por município
+  // Agrupar: município → SE → alimentadores
   const muns = {};
   Object.entries(indicePolo[poloAtivo]).forEach(([id, info]) => {
     const mun = info.municipio || '?';
-    if (!muns[mun]) muns[mun] = { circs: [], n_postes: 0 };
-    muns[mun].circs.push([id, info]);
+    const se  = info.se || '?';
+    const code = info.se_code || '';
+    if (!muns[mun]) muns[mun] = { ses: {}, n_postes: 0 };
+    if (!muns[mun].ses[se]) muns[mun].ses[se] = { circs: [], code, n_postes: 0 };
+    muns[mun].ses[se].circs.push([id, info]);
+    muns[mun].ses[se].n_postes += info.n;
     muns[mun].n_postes += info.n;
   });
 
-  lista.innerHTML = Object.entries(muns).sort((a,b) => a[0].localeCompare(b[0])).map(([mun, data]) => {
-    const sel = municipioAtivo === mun;
-    const munId = mun.replace(/[^a-zA-Z0-9]/g,'_');
-    const alimHtml = data.circs.map(([id, info]) => {
-      const checked = alimentadoresAtivos.includes(id);
-      return `<label class="alim-check-inline ${checked?'sel':''}" id="alim-il-${id}">
-        <input type="checkbox" ${checked?'checked':''} onchange="toggleAlimentadorInline('${id}','${munId}')">
-        <div>
-          <div class="alim-il">${id}</div>
-          <div class="alim-il-sub">${info.se} · ${info.n.toLocaleString('pt-BR')} postes</div>
+  lista.innerHTML = Object.entries(muns).sort((a,b) => a[0].localeCompare(b[0])).map(([mun, mdata]) => {
+    const selMun = municipioAtivo === mun;
+    const munId  = mun.replace(/[^a-zA-Z0-9]/g,'_');
+
+    const sesHtml = Object.entries(mdata.ses).sort((a,b) => a[0].localeCompare(b[0])).map(([se, sdata]) => {
+      const seId  = munId + '_se_' + se.replace(/[^a-zA-Z0-9]/g,'_');
+      const selSE = seAtiva === seId;
+
+      const alimHtml = sdata.circs.map(([id, info]) => {
+        const checked = alimentadoresAtivos.includes(id);
+        return `<label class="alim-check-inline ${checked?'sel':''}" id="alim-il-${id}">
+          <input type="checkbox" ${checked?'checked':''} onchange="toggleAlimentadorInline('${id}','${munId}')">
+          <div>
+            <div class="alim-il">${id}</div>
+            <div class="alim-il-sub">${info.n.toLocaleString('pt-BR')} postes</div>
+          </div>
+        </label>`;
+      }).join('');
+
+      return `<div class="se-item ${selSE?'sel':''}" id="${seId}">
+        <div class="se-header" onclick="selecionarSECampo('${seId}')">
+          <div>
+            <div class="se-nome">${se}</div>
+            <div class="se-sub">${sdata.code} · ${sdata.circs.length} alimentador${sdata.circs.length>1?'es':''} · ${sdata.n_postes.toLocaleString('pt-BR')} postes</div>
+          </div>
+          <span style="font-size:16px;">${selSE?'▾':'›'}</span>
         </div>
-      </label>`;
+        <div class="se-expand">${alimHtml}</div>
+      </div>`;
     }).join('');
 
-    return `<div class="mun-item ${sel?'sel':''}" id="mun-item-${munId}">
+    return `<div class="mun-item ${selMun?'sel':''}" id="mun-item-${munId}">
       <div class="mun-header" onclick="selecionarMunicipio('${mun.replace(/'/g,"\'")}','${munId}')">
         <div>
           <div class="mun-nome">${mun}</div>
-          <div class="mun-count">${data.circs.length} alimentador${data.circs.length>1?'es':''} · ${data.n_postes.toLocaleString('pt-BR')} postes</div>
+          <div class="mun-count">${mdata.n_postes.toLocaleString('pt-BR')} postes</div>
         </div>
-        <span style="font-size:18px;transition:transform 0.2s;">${sel?'▾':'›'}</span>
+        <span style="font-size:18px;">${selMun?'▾':'›'}</span>
       </div>
-      <div class="mun-alims-expand">${alimHtml}</div>
+      <div class="mun-alims-expand">${sesHtml}</div>
     </div>`;
   }).join('');
+}
+
+function selecionarSECampo(seId) {
+  seAtiva = seAtiva === seId ? null : seId;
+  renderMunicipios();
+  if (seAtiva) {
+    setTimeout(() => {
+      const el = document.getElementById(seAtiva);
+      if (el) el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }, 100);
+  }
 }
 
 function selecionarMunicipio(mun, munId) {
@@ -3128,10 +3193,12 @@ async function salvarRotas() {
 
 // ── ADMIN: selecionar polo ──
 let adminMunicipio = null;
+let adminSE = null;
 
 async function adminSelecionarPolo(polo) {
   adminPolo      = polo;
   adminMunicipio = null;
+  adminSE        = null;
   adminAlims     = [];
   document.querySelectorAll('[id^="apbtn-"]').forEach(b => b.classList.remove('active'));
   document.getElementById('apbtn-' + polo).classList.add('active');
@@ -3148,38 +3215,70 @@ async function adminSelecionarPolo(polo) {
 
 function renderAdminMunicipios() {
   const lista = document.getElementById('admin-alim-lista');
+  // Agrupar: município → SE → alimentadores
   const muns = {};
   Object.entries(indicePolo[adminPolo]).forEach(([id, info]) => {
     const mun = info.municipio || '?';
-    if (!muns[mun]) muns[mun] = { circs: [] };
-    muns[mun].circs.push([id, info]);
+    const se  = info.se || '?';
+    const code = info.se_code || '';
+    if (!muns[mun]) muns[mun] = { ses: {}, total: 0 };
+    if (!muns[mun].ses[se]) muns[mun].ses[se] = { circs: [], code };
+    muns[mun].ses[se].circs.push([id, info]);
+    muns[mun].total++;
   });
 
-  lista.innerHTML = Object.entries(muns).sort((a,b) => a[0].localeCompare(b[0])).map(([mun, data]) => {
-    const sel = adminMunicipio === mun;
-    const munId = 'adm_' + mun.replace(/[^a-zA-Z0-9]/g,'_');
-    const alimHtml = data.circs.map(([id, info]) => `
-      <div class="alim-admin-check" id="acheck-${id}">
-        <input type="checkbox" id="achk-${id}" ${adminAlims.includes(id)?'checked':''}
-          onchange="adminToggleAlim('${id}')"
-          style="width:20px;height:20px;accent-color:var(--amber);cursor:pointer;flex-shrink:0;">
-        <label for="achk-${id}" style="cursor:pointer;flex:1;">
-          <div class="alim-admin-label">${id}</div>
-          <div class="alim-admin-se">${info.se} · ${info.n.toLocaleString('pt-BR')} postes</div>
-        </label>
-      </div>`).join('');
+  lista.innerHTML = Object.entries(muns).sort((a,b) => a[0].localeCompare(b[0])).map(([mun, mdata]) => {
+    const selMun = adminMunicipio === mun;
+    const munId  = 'adm_' + mun.replace(/[^a-zA-Z0-9]/g,'_');
 
-    return `<div class="admin-mun-item ${sel?'sel':''}" id="${munId}">
+    const sesHtml = Object.entries(mdata.ses).sort((a,b) => a[0].localeCompare(b[0])).map(([se, sdata]) => {
+      const seId  = munId + '_' + se.replace(/[^a-zA-Z0-9]/g,'_');
+      const selSE = adminSE === seId;
+      const alimHtml = sdata.circs.map(([id, info]) => `
+        <div class="alim-admin-check" id="acheck-${id}">
+          <input type="checkbox" id="achk-${id}" ${adminAlims.includes(id)?'checked':''}
+            onchange="adminToggleAlim('${id}')"
+            style="width:20px;height:20px;accent-color:var(--amber);cursor:pointer;flex-shrink:0;">
+          <label for="achk-${id}" style="cursor:pointer;flex:1;">
+            <div class="alim-admin-label">${id}</div>
+            <div class="alim-admin-se">${info.n.toLocaleString('pt-BR')} postes</div>
+          </label>
+        </div>`).join('');
+
+      return `<div class="admin-se-item ${selSE?'sel':''}" id="${seId}">
+        <div class="admin-se-header" onclick="adminSelecionarSE('${seId}')">
+          <div>
+            <div class="admin-se-nome">${se}</div>
+            <div class="admin-se-code">${sdata.code} · ${sdata.circs.length} alimentador${sdata.circs.length>1?'es':''}</div>
+          </div>
+          <span style="font-size:16px;">${selSE?'▾':'›'}</span>
+        </div>
+        <div class="admin-se-expand">${alimHtml}</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="admin-mun-item ${selMun?'sel':''}" id="${munId}">
       <div class="admin-mun-header" onclick="adminSelecionarMunicipio('${mun.replace(/'/g,"\'")}','${munId}')">
         <div>
           <div class="admin-mun-nome">${mun}</div>
-          <div class="admin-mun-sub">${data.circs.length} alimentador${data.circs.length>1?'es':''}</div>
+          <div class="admin-mun-sub">${mdata.total} alimentador${mdata.total>1?'es':''}</div>
         </div>
-        <span style="font-size:18px;">${sel?'▾':'›'}</span>
+        <span style="font-size:18px;">${selMun?'▾':'›'}</span>
       </div>
-      <div class="admin-mun-expand">${alimHtml}</div>
+      <div class="admin-mun-expand">${sesHtml}</div>
     </div>`;
   }).join('');
+}
+
+function adminSelecionarSE(seId) {
+  adminSE = adminSE === seId ? null : seId;
+  renderAdminMunicipios();
+  if (adminSE) {
+    setTimeout(() => {
+      const el = document.getElementById(adminSE);
+      if (el) el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }, 100);
+  }
 }
 
 function adminSelecionarMunicipio(mun, munId) {
