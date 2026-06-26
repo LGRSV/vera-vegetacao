@@ -5,10 +5,10 @@
 // VERA v1.1.1 — limpeza única de SW antigos (sem reload automático)
 (function() {
   try {
-    const V = '2.2.1';
-    const stored = localStorage.getItem('vera_v');
-    if (stored !== V) {
+    const V = '2.3.2';
+    if (localStorage.getItem('vera_v') !== V) {
       localStorage.setItem('vera_v', V);
+      // Limpar SWs em background, sem recarregar
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(function(regs) {
           regs.forEach(function(r) { r.unregister(); });
@@ -19,8 +19,7 @@
           keys.forEach(function(k) { caches.delete(k); });
         });
       }
-      // Se havia versão anterior, recarregar para pegar versão nova limpa
-      if (stored) { window.location.reload(true); }
+      // Sem reload — a página já está carregando a versão nova
     }
   } catch(e) {}
 })();
@@ -125,8 +124,8 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
 .tab-panel.active{display:block;}
 
 /* ── MAPA ── */
-#map-panel{padding:0;}
-#map{height:calc(100vh - 140px);width:100%;}
+#map-panel{padding:0;position:relative;}
+#map{height:calc(100vh - 140px);width:100%;position:relative;z-index:0;}
 .map-fab{position:absolute;bottom:20px;right:14px;z-index:800;background:var(--green-mid);color:var(--white);border:none;border-radius:50%;width:52px;height:52px;font-size:22px;cursor:pointer;box-shadow:0 4px 16px rgba(45,90,39,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
 .map-fab:active{transform:scale(0.92);}
 .gps-pill{position:absolute;top:6px;left:50%;transform:translateX(-50%);z-index:800;background:var(--green-deep);color:var(--white);padding:5px 12px;border-radius:16px;font-size:11px;font-family:'SF Mono','Courier New',monospace;white-space:nowrap;box-shadow:var(--shadow);}
@@ -568,21 +567,95 @@ select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Cs
   margin-top: 4px;
 }
 
-/* ── ROTA ATRIBUÍDA (equipe campo) ── */
+/* ── ROTAS ATRIBUÍDAS (equipe campo) ── */
 .rota-atribuida-banner {
   background: var(--green-deep);
   color: var(--white);
   border-radius: var(--radius);
-  padding: 12px 14px;
+  padding: 14px;
   margin-bottom: 12px;
+}
+.rota-atribuida-head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
 }
-.rota-atribuida-banner .rota-icon { font-size: 22px; }
-.rota-atribuida-info { flex: 1; }
+.rota-atribuida-banner .rota-icon { font-size: 22px; line-height: 1.1; }
+.rota-atribuida-info { flex: 1; min-width: 0; }
 .rota-atribuida-title { font-size: 12px; font-weight: 700; color: var(--green-soft); }
-.rota-atribuida-alims { font-size: 13px; font-weight: 600; color: var(--white); margin-top: 2px; }
+.rota-atribuida-alims { font-size: 11px; line-height: 1.35; color: var(--white); margin-top: 3px; }
+.rotas-atribuida-lista {
+  display: grid;
+  gap: 8px;
+  max-height: 290px;
+  overflow-y: auto;
+  padding-right: 2px;
+  margin-top: 12px;
+}
+.rota-atribuida-card {
+  width: 100%;
+  appearance: none;
+  border: 1px solid rgba(255,255,255,.32);
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  color: var(--white);
+  cursor: pointer;
+  padding: 10px;
+  text-align: left;
+  font-family: inherit;
+  transition: transform .12s, background .12s, border-color .12s, box-shadow .12s;
+}
+.rota-atribuida-card:hover { background: rgba(255,255,255,.14); }
+.rota-atribuida-card:active { transform: scale(.99); }
+.rota-atribuida-card.selecionada {
+  background: var(--white);
+  color: var(--green-deep);
+  border-color: var(--white);
+  box-shadow: 0 2px 10px rgba(0,0,0,.18);
+}
+.rota-atribuida-card-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.rota-atribuida-card-titulo { font-size: 12px; font-weight: 800; }
+.rota-atribuida-card-polo {
+  flex-shrink: 0;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 2px 6px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .05em;
+}
+.rota-atribuida-card-resumo { margin-top: 5px; font-size: 11px; font-weight: 700; }
+.rota-atribuida-card-alims {
+  display: block;
+  margin-top: 3px;
+  font-family: 'SF Mono','Courier New',monospace;
+  font-size: 10px;
+  line-height: 1.35;
+  opacity: .9;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rota-atribuida-card-meta { display:block; margin-top:5px; font-size:9px; opacity:.78; }
+.btn-usar-rota-atribuida {
+  width: 100%;
+  margin-top: 12px;
+  min-height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: var(--green-live);
+  color: var(--white);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+}
+.btn-usar-rota-atribuida:disabled { background: rgba(255,255,255,.18); color: rgba(255,255,255,.72); cursor: not-allowed; }
 
 .sem-rota-banner {
   background: var(--amber-bg);
@@ -732,39 +805,52 @@ button, .polo-btn, .alim-item, .tab-btn {
 
 /* ── CONTROLE DE CAMADAS ── */
 .camadas-control {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 800;
-  background: var(--white);
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  padding: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  position:absolute;
+  top:12px;
+  left:12px;
+  z-index:1000;
+  width:min(214px,calc(100% - 24px));
+  background:var(--white);
+  border:1px solid rgba(26,46,26,0.14);
+  border-radius:12px;
+  box-shadow:0 5px 18px rgba(0,0,0,0.24);
+  padding:8px;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
 }
+.camadas-title{font-size:10px;font-weight:800;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);padding:1px 4px 4px;}
 .cam-btn {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 10px;
-  border: none;
-  background: var(--off-white);
-  border-radius: 7px;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  width:100%;
+  min-height:34px;
+  padding:7px 9px;
+  border:1px solid transparent;
+  background:var(--off-white);
+  border-radius:8px;
+  font-family:inherit;
+  font-size:11px;
+  font-weight:650;
+  color:var(--text-muted);
+  cursor:pointer;
+  transition:background .15s,border-color .15s,color .15s;
+  white-space:nowrap;
+  text-align:left;
 }
-.cam-btn.ativo { background: var(--green-deep); color: white; }
-.cam-dot { width: 12px; height: 3px; border-radius: 2px; flex-shrink: 0; }
-.cam-dot.postes { width: 8px; height: 8px; border-radius: 50%; background: #1565C0; }
-.cam-dot.t1 { background: #D32F2F; }
-.cam-dot.t2 { background: #F57C00; }
+.cam-btn:hover{border-color:var(--green-soft);}
+.cam-btn.ativo{background:var(--green-deep);color:var(--white);}
+.cam-btn.filtro{border-style:dashed;}
+.cam-btn.filtro.ativo{background:#E3F2FD;border-color:#1565C0;color:#0D47A1;}
+.cam-count{margin-left:auto;font-size:10px;font-variant-numeric:tabular-nums;opacity:.82;}
+.cam-dot{width:12px;height:3px;border-radius:2px;flex-shrink:0;}
+.cam-dot.postes{width:8px;height:8px;border-radius:50%;background:#1565C0;}
+.cam-dot.livres{width:8px;height:8px;border-radius:50%;border:2px solid #1565C0;background:transparent;}
+.cam-dot.t1{background:#D32F2F;}
+.cam-dot.t2{background:#FF8F00;height:4px;}
+.camadas-resumo{font-size:10px;line-height:1.35;color:var(--text-muted);padding:3px 4px 0;}
+@media(max-width:380px){.camadas-control{width:188px;}.cam-btn{font-size:10px;padding:6px 8px;}}
 
 </style>
 </head>
@@ -791,14 +877,19 @@ button, .polo-btn, .alim-item, .tab-btn {
 <div id="polo-screen" style="display:none;">
   <div class="polo-card">
 
-    <!-- BANNER ROTA ATRIBUÍDA -->
+    <!-- ROTAS ATRIBUÍDAS -->
     <div id="rota-atribuida-banner" class="rota-atribuida-banner" style="display:none;">
-      <div class="rota-icon"></div>
-      <div class="rota-atribuida-info">
-        <div class="rota-atribuida-title">Rota atribuída pelo supervisor</div>
-        <div class="rota-atribuida-alims" id="rota-atribuida-alims">—</div>
+      <div class="rota-atribuida-head">
+        <div class="rota-icon">🗺️</div>
+        <div class="rota-atribuida-info">
+          <div class="rota-atribuida-title">Rotas atribuídas pelo supervisor</div>
+          <div class="rota-atribuida-alims" id="rota-atribuida-alims">Selecione a rota que a equipe vai executar primeiro.</div>
+        </div>
       </div>
-      <button style="background:var(--green-live);border:none;color:white;border-radius:8px;padding:6px 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:12px;font-weight:700;cursor:pointer;" onclick="usarRotaAtribuida()">Usar →</button>
+      <div class="rotas-atribuida-lista" id="rotas-atribuida-lista"></div>
+      <button id="btn-usar-rota-atribuida" class="btn-usar-rota-atribuida" onclick="usarRotaAtribuida()" disabled>
+        Selecione uma rota para continuar
+      </button>
     </div>
     <div id="sem-rota-banner" class="sem-rota-banner" style="display:none;">
       <div class="sem-rota-icon">⏳</div>
@@ -870,7 +961,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.2.1</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.3.2</div>
     </div>
   </div>
   <div class="header-right">
@@ -892,16 +983,21 @@ button, .polo-btn, .alim-item, .tab-btn {
 
   <!-- MAPA -->
   <div class="tab-panel active" id="map-panel">
-    <div class="camadas-control" id="camadas-control" style="display:none;">
-      <button class="cam-btn ativo" id="cam-postes" onclick="toggleCamada('postes')">
-        <span class="cam-dot postes"></span>Postes
+    <div class="camadas-control" id="camadas-control" style="display:none;" aria-label="Controle de camadas do mapa">
+      <div class="camadas-title">Visualização</div>
+      <button type="button" class="cam-btn ativo" id="cam-postes" onclick="toggleCamada('postes')" aria-pressed="true">
+        <span class="cam-dot postes"></span><span>Postes</span><span class="cam-count" id="cam-postes-count">—</span>
       </button>
-      <button class="cam-btn ativo" id="cam-t1" onclick="toggleCamada('t1')">
-        <span class="cam-dot t1"></span>T1 (Tronco)
+      <button type="button" class="cam-btn filtro" id="cam-livres" onclick="toggleCamada('livres')" aria-pressed="false" title="Exibe apenas postes que não estão próximos de um trecho de cabo">
+        <span class="cam-dot livres"></span><span>Somente sem cabo</span>
       </button>
-      <button class="cam-btn ativo" id="cam-t2" onclick="toggleCamada('t2')">
-        <span class="cam-dot t2"></span>T2 (Ramal)
+      <button type="button" class="cam-btn ativo" id="cam-t1" onclick="toggleCamada('t1')" aria-pressed="true">
+        <span class="cam-dot t1"></span><span>T1 · Tronco</span><span class="cam-count" id="cam-t1-count">—</span>
       </button>
+      <button type="button" class="cam-btn ativo" id="cam-t2" onclick="toggleCamada('t2')" aria-pressed="true">
+        <span class="cam-dot t2"></span><span>T2 · Ramal</span><span class="cam-count" id="cam-t2-count">—</span>
+      </button>
+      <div class="camadas-resumo" id="camadas-resumo">Carregando camadas…</div>
     </div>
 
     <div id="map"></div>
@@ -1025,14 +1121,17 @@ button, .polo-btn, .alim-item, .tab-btn {
     </div>
 
     <div class="config-section">
-      <div class="config-title">Token GitHub (supervisor)</div>
-      <label class="field-label">Personal Access Token (classic)</label>
-      <input class="token-input" type="password" id="github-token" placeholder="ghp_...">
+      <div class="config-title">Sincronização deste aparelho</div>
+      <p style="font-size:12px;color:var(--text-muted);line-height:1.45;margin-bottom:10px;">
+        O token não é distribuído pelo aplicativo. Configure-o apenas em aparelhos autorizados e nunca o publique no repositório.
+      </p>
+      <label class="field-label">Fine-grained Personal Access Token</label>
+      <input class="token-input" type="password" id="github-token" placeholder="github_pat_..." autocomplete="off">
       <br>
       <label class="field-label" style="margin-top:10px;">Repositório</label>
-      <input class="field-input" type="text" id="github-repo" placeholder="LGRSV/vera-vegetacao" style="margin-top:5px;">
+      <input class="field-input" type="text" id="github-repo" placeholder="LGRSV/vera-vegetacao" style="margin-top:5px;" autocomplete="off">
       <br>
-      <button class="btn-save-config" onclick="saveConfig()">Salvar configuração</button>
+      <button class="btn-save-config" onclick="saveConfig()">Salvar neste aparelho</button>
       <div class="config-status" id="config-status"></div>
     </div>
 
@@ -1219,7 +1318,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.2.0';
+const APP_VERSION = '2.3.2';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1229,7 +1328,7 @@ async function verificarVersao() {
 
 async function forcarAtualizacao() {
   // Setar versão ANTES de limpar para não entrar em loop
-  localStorage.setItem('vera_v', '2.2.1');
+  localStorage.setItem('vera_v', '2.3.2');
   if ('caches' in window) {
     const keys = await caches.keys();
     await Promise.all(keys.map(k => caches.delete(k)));
@@ -1250,7 +1349,7 @@ if ('serviceWorker' in navigator) {
     caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
   }
   // Registrar SW novo
-  navigator.serviceWorker.register('sw.js?v=7').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=9').then(reg => {
     reg.update();
     // Detectar quando SW novo estiver pronto
     reg.addEventListener('updatefound', () => {
@@ -1335,8 +1434,8 @@ async function syncPendingPoints() {
   if (isSyncing || !navigator.onLine) return;
 
   const cfg = await carregarConfigGlobal();
-  const token = (cfg && cfg.token) || await getConfig('github_token');
-  const repo  = (cfg && cfg.repo)  || await getConfig('github_repo');
+  const token = await getConfig('github_token');
+  const repo  = await getConfig('github_repo') || (cfg && cfg.repo);
   if (!token || !repo) return;
 
   const all     = await dbGetAll('points');
@@ -1409,7 +1508,7 @@ async function syncNow() {
   }
   const token = await getConfig('github_token');
   if (!token) {
-    showToast('Configure o token GitHub primeiro.', 'warning');
+    showToast('Configure o token neste aparelho antes de sincronizar.', 'warning');
     switchTab('config');
     return;
   }
@@ -1421,11 +1520,12 @@ async function syncNow() {
 // ══════════════════════════════════════════════════
 async function loadConfig() {
   const token = await getConfig('github_token');
-  const repo  = await getConfig('github_repo');
+  const cfg = await carregarConfigGlobal();
+  const repo = await getConfig('github_repo') || (cfg && cfg.repo) || '';
   if (token) document.getElementById('github-token').value = '••••••••••••••••••••';
   if (repo)  document.getElementById('github-repo').value  = repo;
   if (token && repo) {
-    document.getElementById('config-status').textContent = ' Token configurado';
+    document.getElementById('config-status').textContent = ' Configurado neste aparelho';
     document.getElementById('config-status').className   = 'config-status ok';
   }
 }
@@ -1514,12 +1614,42 @@ async function trocarEquipe() {
 function doLogout() {
   currentUser = currentLat = currentLon = null;
   photos = [];
-  if (watchId) navigator.geolocation.clearWatch(watchId);
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('app-header').style.display   = 'none';
-  document.getElementById('app').style.display          = 'none';
-  document.getElementById('login-user').value           = '';
-  document.getElementById('login-pass').value           = '';
+  if (watchId !== undefined && watchId !== null) navigator.geolocation.clearWatch(watchId);
+  watchId = null;
+
+  if (map) {
+    map.remove();
+    map = null;
+  }
+  userMarker = null;
+  pointsLayer = null;
+  postesLayer = null;
+  cabosT1Layer = null;
+  cabosT2Layer = null;
+  postesRenderer = null;
+  caboRendererT1 = null;
+  caboRendererT2 = null;
+  postesCarregados = {};
+  cabosCarregados = {};
+  indicesCabos = {};
+  postesVisiveisPorCircuito = {};
+  marcadoresPostes.clear();
+  cabosIndisponiveis.clear();
+  alimentadoresAtivos = [];
+  poloAtivo = null;
+  municipioAtivo = null;
+  rotasAtribuidas = [];
+  rotaAtribuida = null;
+  camadas = { postes: true, livres: false, t1: true, t2: true };
+
+  const controle = document.getElementById('camadas-control');
+  if (controle) controle.style.display = 'none';
+  document.getElementById('polo-screen').style.display   = 'none';
+  document.getElementById('login-screen').style.display  = 'flex';
+  document.getElementById('app-header').style.display    = 'none';
+  document.getElementById('app').style.display           = 'none';
+  document.getElementById('login-user').value            = '';
+  document.getElementById('login-pass').value            = '';
 }
 
 // ══════════════════════════════════════════════════
@@ -1540,8 +1670,17 @@ function switchTab(name) {
 // MAPA
 // ══════════════════════════════════════════════════
 function initMap() {
+  if (map) {
+    map.invalidateSize();
+    return;
+  }
   map = L.map('map', { zoomControl: true }).setView([-10.18, -48.33], 12);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OpenStreetMap', maxZoom:19 }).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:'© OpenStreetMap',
+    maxZoom:19,
+    crossOrigin: true,
+  }).addTo(map);
+  criarPaineisMapa();
   pointsLayer = L.layerGroup().addTo(map);
   renderMapPoints();
 }
@@ -1850,12 +1989,27 @@ function showToast(msg, type='') {
 let indicePolo   = null;   // dados do indice.json
 let poloAtivo    = null;
 let municipioAtivo = null;
-let alimentadoresAtivos = [];  // até 3 selecionados
+let alimentadoresAtivos = [];
 let postesLayer  = null;
 let cabosT1Layer = null;
 let cabosT2Layer = null;
-let cabosCarregados = {};
-let postesCarregados = {};     // circ -> [postes]
+let cabosCarregados = {};      // polo/circuito -> { t1: [], t2: [] }
+let postesCarregados = {};     // polo/circuito -> [postes]
+let indicesCabos = {};         // polo/circuito -> índice espacial para filtro de postes
+let cabosIndisponiveis = new Set();
+let postesVisiveisPorCircuito = {};
+let marcadoresPostes = new Map();
+let ultimoPosteDestacado = null;
+let postesRenderer = null;
+let caboRendererT1 = null;
+let caboRendererT2 = null;
+
+const LIMITE_TOTAL_POSTES_MAPA = 600;
+const LIMITE_MINIMO_POSTES_POR_ALIMENTADOR = 50;
+const LIMITE_MAXIMO_POSTES_POR_ALIMENTADOR = 300;
+const RAIO_POSTES_KM = 5;
+const DISTANCIA_POSTE_CABO_M = 8;
+const GRADE_CABOS_GRAUS = 0.00025;
 
 
 async function carregarIndice() {
@@ -2079,197 +2233,471 @@ async function confirmarAlimentadores() {
   }, 300);
 }
 
+function chaveCircuito(circ) {
+  return `${poloAtivo || 'SEM_POLO'}/${circ}`;
+}
+
+function criarPaineisMapa() {
+  if (!map) return;
+  const definirPainel = (nome, zIndex) => {
+    if (!map.getPane(nome)) map.createPane(nome);
+    map.getPane(nome).style.zIndex = String(zIndex);
+  };
+
+  definirPainel('cabosT1Pane', 350);
+  definirPainel('cabosT2Pane', 360);
+  definirPainel('postesPane', 450);
+
+  postesRenderer = L.canvas({ pane: 'postesPane', padding: 0.5, tolerance: 10 });
+  caboRendererT1 = L.canvas({ pane: 'cabosT1Pane', padding: 0.5 });
+  caboRendererT2 = L.canvas({ pane: 'cabosT2Pane', padding: 0.5 });
+}
+
+function garantirCamadasMapa() {
+  if (!map) return;
+  criarPaineisMapa();
+  if (!postesLayer) postesLayer = L.featureGroup();
+  if (!cabosT1Layer) cabosT1Layer = L.layerGroup();
+  if (!cabosT2Layer) cabosT2Layer = L.layerGroup();
+  sincronizarVisibilidadeCamadas();
+}
+
+function sincronizarVisibilidadeCamadas() {
+  if (!map) return;
+  const estados = [
+    ['postes', postesLayer],
+    ['t1', cabosT1Layer],
+    ['t2', cabosT2Layer],
+  ];
+  estados.forEach(([nome, camada]) => {
+    if (!camada) return;
+    if (camadas[nome]) {
+      if (!map.hasLayer(camada)) map.addLayer(camada);
+    } else if (map.hasLayer(camada)) {
+      map.removeLayer(camada);
+    }
+  });
+}
+
+function atualizarBotoesCamadas() {
+  ['postes', 'livres', 't1', 't2'].forEach(nome => {
+    const botao = document.getElementById('cam-' + nome);
+    if (!botao) return;
+    botao.classList.toggle('ativo', Boolean(camadas[nome]));
+    botao.setAttribute('aria-pressed', String(Boolean(camadas[nome])));
+  });
+}
+
+function formatarNumeroMapa(valor) {
+  return Number(valor || 0).toLocaleString('pt-BR');
+}
+
+function atualizarResumoCamadas() {
+  let t1 = 0;
+  let t2 = 0;
+  let postes = 0;
+
+  alimentadoresAtivos.forEach(circ => {
+    const chave = chaveCircuito(circ);
+    const cabos = cabosCarregados[chave];
+    if (cabos) {
+      t1 += Array.isArray(cabos.t1) ? cabos.t1.length : 0;
+      t2 += Array.isArray(cabos.t2) ? cabos.t2.length : 0;
+    }
+    postes += postesVisiveisPorCircuito[chave]?.exibidos || 0;
+  });
+
+  const campoPostes = document.getElementById('cam-postes-count');
+  const campoT1 = document.getElementById('cam-t1-count');
+  const campoT2 = document.getElementById('cam-t2-count');
+  const resumo = document.getElementById('camadas-resumo');
+  if (campoPostes) campoPostes.textContent = formatarNumeroMapa(postes);
+  if (campoT1) campoT1.textContent = formatarNumeroMapa(t1);
+  if (campoT2) campoT2.textContent = formatarNumeroMapa(t2);
+
+  if (!resumo) return;
+  const semArquivo = alimentadoresAtivos.filter(circ => cabosIndisponiveis.has(chaveCircuito(circ))).length;
+  const textoFiltro = camadas.livres ? 'Filtro: postes sem cabo.' : 'Filtro: todos os postes.';
+  const textoArquivos = semArquivo > 0 ? ` ${semArquivo} alimentador(es) sem arquivo de cabos.` : '';
+  resumo.textContent = `${textoFiltro}${textoArquivos}`;
+}
+
+function numeroNoIntervalo(valor, minimo, maximo) {
+  if (valor === null || valor === undefined) return false;
+  if (typeof valor === 'string' && valor.trim() === '') return false;
+  const numero = Number(valor);
+  return Number.isFinite(numero) && numero >= minimo && numero <= maximo;
+}
+
+function validarPoste(poste) {
+  return poste
+    && numeroNoIntervalo(poste.lat, -90, 90)
+    && numeroNoIntervalo(poste.lon, -180, 180);
+}
+
+function limitePostesPorAlimentador() {
+  const divisao = Math.floor(LIMITE_TOTAL_POSTES_MAPA / Math.max(alimentadoresAtivos.length, 1));
+  return Math.min(LIMITE_MAXIMO_POSTES_POR_ALIMENTADOR, Math.max(LIMITE_MINIMO_POSTES_POR_ALIMENTADOR, divisao));
+}
+
+function selecionarPostesParaMapa(postes, indiceCabos = null) {
+  const limite = limitePostesPorAlimentador();
+  let validos = (postes || []).filter(validarPoste);
+
+  // O filtro é aplicado antes do limite; assim o mapa mostra postes realmente sem cabo,
+  // e não apenas os poucos postes sem cabo entre os primeiros mais próximos.
+  if (camadas.livres && indiceCabos) {
+    validos = validos.filter(poste => !posteTemCabeamento(poste, indiceCabos));
+  }
+  if (validos.length <= limite) return validos;
+
+  if (currentLat !== null && currentLon !== null) {
+    const comDistancia = validos.map(poste => ({
+      ...poste,
+      _distanciaMapa: distKm(currentLat, currentLon, Number(poste.lat), Number(poste.lon)),
+    })).sort((a, b) => a._distanciaMapa - b._distanciaMapa);
+
+    const dentroDoRaio = comDistancia.filter(poste => poste._distanciaMapa <= RAIO_POSTES_KM);
+    return (dentroDoRaio.length ? dentroDoRaio : comDistancia).slice(0, limite);
+  }
+
+  return validos.slice(0, limite);
+}
+
+function chaveCelulaCabos(lat, lon) {
+  return `${Math.floor(lat / GRADE_CABOS_GRAUS)}:${Math.floor(lon / GRADE_CABOS_GRAUS)}`;
+}
+
+function criarIndiceCabos(cabos) {
+  const grade = new Map();
+  const alcanceGraus = DISTANCIA_POSTE_CABO_M / 100000;
+  let totalSegmentos = 0;
+
+  const incluirSegmento = (a, b, tipo) => {
+    if (!Array.isArray(a) || !Array.isArray(b)) return;
+    if (!numeroNoIntervalo(a[0], -180, 180) || !numeroNoIntervalo(a[1], -90, 90)
+      || !numeroNoIntervalo(b[0], -180, 180) || !numeroNoIntervalo(b[1], -90, 90)) return;
+    const lon1 = Number(a[0]), lat1 = Number(a[1]);
+    const lon2 = Number(b[0]), lat2 = Number(b[1]);
+
+    const segmento = { lat1, lon1, lat2, lon2, tipo };
+    const latMin = Math.min(lat1, lat2) - alcanceGraus;
+    const latMax = Math.max(lat1, lat2) + alcanceGraus;
+    const lonMin = Math.min(lon1, lon2) - alcanceGraus;
+    const lonMax = Math.max(lon1, lon2) + alcanceGraus;
+    const linhaInicial = Math.floor(latMin / GRADE_CABOS_GRAUS);
+    const linhaFinal = Math.floor(latMax / GRADE_CABOS_GRAUS);
+    const colunaInicial = Math.floor(lonMin / GRADE_CABOS_GRAUS);
+    const colunaFinal = Math.floor(lonMax / GRADE_CABOS_GRAUS);
+
+    for (let linha = linhaInicial; linha <= linhaFinal; linha++) {
+      for (let coluna = colunaInicial; coluna <= colunaFinal; coluna++) {
+        const chave = `${linha}:${coluna}`;
+        if (!grade.has(chave)) grade.set(chave, []);
+        grade.get(chave).push(segmento);
+      }
+    }
+    totalSegmentos++;
+  };
+
+  ['t1', 't2'].forEach(tipo => {
+    (cabos[tipo] || []).forEach(linha => {
+      if (!Array.isArray(linha)) return;
+      for (let i = 1; i < linha.length; i++) incluirSegmento(linha[i - 1], linha[i], tipo);
+    });
+  });
+
+  return { grade, totalSegmentos };
+}
+
+function distanciaPontoSegmentoMetros(lat, lon, segmento) {
+  const fatorLat = 111132;
+  const fatorLon = 111320 * Math.cos((lat * Math.PI) / 180);
+  const ax = (segmento.lon1 - lon) * fatorLon;
+  const ay = (segmento.lat1 - lat) * fatorLat;
+  const bx = (segmento.lon2 - lon) * fatorLon;
+  const by = (segmento.lat2 - lat) * fatorLat;
+  const dx = bx - ax;
+  const dy = by - ay;
+  const tamanho2 = dx * dx + dy * dy;
+  if (tamanho2 === 0) return Math.hypot(ax, ay);
+  const t = Math.max(0, Math.min(1, -(ax * dx + ay * dy) / tamanho2));
+  return Math.hypot(ax + t * dx, ay + t * dy);
+}
+
+function posteTemCabeamento(poste, indice) {
+  if (!indice?.grade || !validarPoste(poste)) return false;
+  const lat = Number(poste.lat);
+  const lon = Number(poste.lon);
+  const linha = Math.floor(lat / GRADE_CABOS_GRAUS);
+  const coluna = Math.floor(lon / GRADE_CABOS_GRAUS);
+  const alcance = Math.max(1, Math.ceil((DISTANCIA_POSTE_CABO_M / 111320) / GRADE_CABOS_GRAUS));
+
+  for (let i = linha - alcance; i <= linha + alcance; i++) {
+    for (let j = coluna - alcance; j <= coluna + alcance; j++) {
+      const candidatos = indice.grade.get(`${i}:${j}`);
+      if (!candidatos) continue;
+      for (const segmento of candidatos) {
+        if (distanciaPontoSegmentoMetros(lat, lon, segmento) <= DISTANCIA_POSTE_CABO_M) return true;
+      }
+    }
+  }
+  return false;
+}
+
 async function carregarPostes() {
   if (!map) return;
-  if (!postesLayer) postesLayer = L.layerGroup().addTo(map);
-  if (!cabosT1Layer) cabosT1Layer = L.layerGroup().addTo(map);
-  if (!cabosT2Layer) cabosT2Layer = L.layerGroup().addTo(map);
+  garantirCamadasMapa();
   postesLayer.clearLayers();
   cabosT1Layer.clearLayers();
   cabosT2Layer.clearLayers();
+  postesVisiveisPorCircuito = {};
+  marcadoresPostes.clear();
+  ultimoPosteDestacado = null;
+  cabosIndisponiveis.clear();
+  atualizarBotoesCamadas();
 
   const total = alimentadoresAtivos.length;
-  showToast(`Carregando ${total} alimentador${total > 1 ? 'es' : ''}...`, '');
-
+  showToast(`Carregando ${total} alimentador${total > 1 ? 'es' : ''}…`, '');
   let ok = 0;
+
   for (const circ of alimentadoresAtivos) {
-    if (postesCarregados[circ]) {
-      renderPostesNoMapa(circ, postesCarregados[circ]);
-      // Cabos: do cache ou recarregar
-      if (cabosCarregados[circ]) {
-        renderCabos(circ, cabosCarregados[circ]);
-      } else {
-        await carregarCabos(circ);
-      }
-      ok++;
-      continue;
-    }
+    if (!map) return;
+    const chave = chaveCircuito(circ);
     try {
-      const r = await fetch(`${GITHUB_RAW}/dados/${poloAtivo}/${circ}.json?t=` + Date.now(), { cache: 'no-store' });
-      if (!r.ok) throw new Error('Não encontrado');
-      const postes = await r.json();
-      postesCarregados[circ] = postes;
-      renderPostesNoMapa(circ, postes);
-      // Carregar cabos T1/T2 do circuito
+      let postes = postesCarregados[chave];
+      if (!postes) {
+        const resposta = await fetch(`${GITHUB_RAW}/dados/${poloAtivo}/${circ}.json?t=${Date.now()}`, { cache: 'no-store' });
+        if (!resposta.ok) throw new Error(`Postes indisponíveis (${resposta.status})`);
+        postes = await resposta.json();
+        postesCarregados[chave] = Array.isArray(postes) ? postes : [];
+      }
+
+      // Mesmo com postes em cache, os cabos são redesenhados após cada limpeza de camada.
       await carregarCabos(circ);
+      await renderPostesNoMapa(circ, postesCarregados[chave]);
       ok++;
-      showToast(` ${ok}/${total} — ${circ} carregado`, 'success');
-    } catch(e) {
+      showToast(`${ok}/${total} — ${circ} carregado`, 'success');
+    } catch (erro) {
+      console.error(`Erro ao carregar ${circ}:`, erro);
       showToast(`Erro ao carregar ${circ}`, 'error');
     }
   }
-  document.getElementById('camadas-control').style.display = 'flex';
+
+  sincronizarVisibilidadeCamadas();
+  atualizarResumoCamadas();
+  const controle = document.getElementById('camadas-control');
+  if (controle) controle.style.display = 'flex';
+
   if (ok === total) {
-    showToast(` ${total} alimentador${total > 1 ? 'es' : ''} prontos!`, 'success');
-    // Centralizar mapa nos postes carregados
-    if (map && postesLayer) {
-      try { map.fitBounds(postesLayer.getBounds(), { padding: [20, 20] }); } catch(e) {}
+    const bounds = postesLayer.getBounds();
+    if (map && bounds?.isValid?.()) {
+      try { map.fitBounds(bounds, { padding: [24, 24], maxZoom: 16 }); } catch (erro) {}
     }
+    showToast(`${total} alimentador${total > 1 ? 'es' : ''} pronto${total > 1 ? 's' : ''}!`, 'success');
   }
 }
 
 function renderPostesNoMapa(circ, postes) {
-  // Filtrar por raio de 5km do GPS atual
-  let visiveis = postes;
-  if (currentLat && currentLon) {
-    visiveis = postes.filter(p => distKm(currentLat, currentLon, p.lat, p.lon) <= 5);
-    if (visiveis.length < 30) {
-      visiveis = postes
-        .map(p => ({ ...p, _d: distKm(currentLat, currentLon, p.lat, p.lon) }))
-        .sort((a, b) => a._d - b._d)
-        .slice(0, 300);
-    }
-  } else {
-    visiveis = postes.slice(0, 300);
-  }
+  return new Promise(resolve => {
+    if (!postesLayer || !map) { resolve(); return; }
+    const chave = chaveCircuito(circ);
+    const indice = indicesCabos[chave];
+    const visiveis = selecionarPostesParaMapa(postes, indice);
 
-  const renderer = L.canvas({ padding: 0.5, tolerance: 10 });
-  const LOTE = 100; // postes por frame — evita travar o iOS
-  let idx = 0;
+    postesVisiveisPorCircuito[chave] = {
+      total: Array.isArray(postes) ? postes.length : 0,
+      candidatos: visiveis.length,
+      exibidos: visiveis.length,
+      livres: camadas.livres,
+    };
 
-  function plotarLote() {
-    const fim = Math.min(idx + LOTE, visiveis.length);
-    for (let i = idx; i < fim; i++) {
-      const p = visiveis[i];
+    const lote = 80;
+    let indicePoste = 0;
 
-      // Hit area invisível grande (facilita toque iOS)
-      const hit = L.circleMarker([p.lat, p.lon], {
-        radius: 22,
-        fillColor: 'transparent',
-        color: 'transparent',
-        weight: 0,
-        fillOpacity: 0,
-        interactive: true,
-        bubblingMouseEvents: false,
-      });
+    function plotarLote() {
+      if (!map || !postesLayer) { resolve(); return; }
+      const fim = Math.min(indicePoste + lote, visiveis.length);
+      for (let i = indicePoste; i < fim; i++) {
+        const poste = visiveis[i];
+        const key = `${circ}|${poste.id}`;
 
-      // Visual azul
-      const vis = L.circleMarker([p.lat, p.lon], {
-        radius: 7,
-        fillColor: '#1565C0',
-        color: '#ffffff',
-        weight: 2,
-        fillOpacity: 0.9,
-        renderer,
-        interactive: false,
-      });
+        const hit = L.circleMarker([poste.lat, poste.lon], {
+          pane: 'postesPane',
+          radius: 12,
+          fillColor: 'transparent',
+          color: 'transparent',
+          weight: 0,
+          fillOpacity: 0,
+          interactive: true,
+          bubblingMouseEvents: false,
+          _posteKey: key,
+          _posteId: String(poste.id),
+        });
 
-      const popupHtml = '<div class="poste-popup">'
-        + '<div class="poste-id">Poste ' + p.id + '</div>'
-        + '<div class="poste-circ">Alimentador: ' + circ + '</div>'
-        + '<button class="btn-usar" onclick="usarPoste(\'' + p.id + '\',\'' + circ + '\')"> Usar este poste</button>'
-        + '</div>';
+        const visual = L.circleMarker([poste.lat, poste.lon], {
+          pane: 'postesPane',
+          radius: 5,
+          fillColor: '#1565C0',
+          color: '#ffffff',
+          weight: 1.5,
+          fillOpacity: 0.9,
+          renderer: postesRenderer,
+          interactive: false,
+          _posteKey: key,
+          _posteId: String(poste.id),
+        });
 
-      hit.bindPopup(popupHtml, { maxWidth: 220, autoPan: false });
-      hit.on('touchstart', function(e) {
-        L.DomEvent.stopPropagation(e);
-        L.DomEvent.preventDefault(e);
-        this.openPopup();
-      });
-      hit.on('click', function() { this.openPopup(); });
+        const popupHtml = '<div class="poste-popup">'
+          + '<div class="poste-id">Poste ' + poste.id + '</div>'
+          + '<div class="poste-circ">Alimentador: ' + circ + '</div>'
+          + '<button class="btn-usar" onclick="usarPoste(\'' + poste.id + '\',\'' + circ + '\')">Usar este poste</button>'
+          + '</div>';
 
-      postesLayer.addLayer(vis);
-      postesLayer.addLayer(hit);
-    }
-    idx = fim;
-    if (idx < visiveis.length) {
-      requestAnimationFrame(plotarLote);
-    } else {
-      const total = postes.length;
-      const msg = visiveis.length < total
-        ? (circ + ': ' + visiveis.length + ' postes próximos')
-        : (circ + ': ' + visiveis.length + ' postes');
-      showToast(msg, 'success');
-      if (alimentadoresAtivos[0] === circ && visiveis.length > 0) {
-        map.setView([visiveis[0].lat, visiveis[0].lon], 15);
+        hit.bindPopup(popupHtml, { maxWidth: 220, autoPan: false });
+        hit.on('touchstart', function(evento) {
+          L.DomEvent.stopPropagation(evento);
+          L.DomEvent.preventDefault(evento);
+          this.openPopup();
+        });
+        hit.on('click', function() { this.openPopup(); });
+
+        postesLayer.addLayer(visual);
+        postesLayer.addLayer(hit);
+        marcadoresPostes.set(key, visual);
+      }
+      indicePoste = fim;
+      if (indicePoste < visiveis.length) {
+        requestAnimationFrame(plotarLote);
+      } else {
+        resolve();
       }
     }
+
+    if (visiveis.length === 0) { resolve(); return; }
+    requestAnimationFrame(plotarLote);
+  });
+}
+
+function destacarPosteNoMapa(circ, id) {
+  if (!map) return;
+  if (ultimoPosteDestacado) {
+    ultimoPosteDestacado.setStyle({ fillColor: '#1565C0', color: '#ffffff', weight: 1.5 });
+    ultimoPosteDestacado.setRadius(5);
   }
-
-  requestAnimationFrame(plotarLote);
+  const marker = marcadoresPostes.get(`${circ}|${id}`);
+  if (!marker) return;
+  marker.setStyle({ fillColor: '#FF8F00', color: '#ffffff', weight: 2 });
+  marker.setRadius(8);
+  ultimoPosteDestacado = marker;
+  map.panTo(marker.getLatLng());
 }
-
-function usarPoste(id, circ) {
-  // Preenche o campo poste e vai para o formulário
-  document.getElementById('f-poste').value = id;
-  document.getElementById('f-area').value  = circ;
-  map.closePopup();
-  switchTab('form');
-  showToast(`Poste ${id} selecionado! `, 'success');
-}
-
-// ── Override do doLogin para ir para polo-screen ──
-const _doLoginOriginal = doLogin;
-
-
 
 // ══════════════════════════════════════════════════
 // CABOS T1/T2
 // ══════════════════════════════════════════════════
 async function carregarCabos(circ) {
-  if (cabosCarregados[circ]) {
-    renderCabos(circ, cabosCarregados[circ]);
-    return;
+  const chave = chaveCircuito(circ);
+  let cabos = cabosCarregados[chave];
+
+  if (!cabos) {
+    try {
+      const resposta = await fetch(`${GITHUB_RAW}/cabos/${poloAtivo}/${circ}.json?t=${Date.now()}`, { cache: 'no-store' });
+      if (!resposta.ok) {
+        cabosIndisponiveis.add(chave);
+        return false;
+      }
+      const dados = await resposta.json();
+      cabos = {
+        t1: Array.isArray(dados.t1) ? dados.t1 : [],
+        t2: Array.isArray(dados.t2) ? dados.t2 : [],
+      };
+      cabosCarregados[chave] = cabos;
+      indicesCabos[chave] = criarIndiceCabos(cabos);
+    } catch (erro) {
+      console.warn(`Erro ao carregar cabos de ${circ}:`, erro);
+      cabosIndisponiveis.add(chave);
+      return false;
+    }
   }
-  try {
-    const r = await fetch(`${GITHUB_RAW}/cabos/${poloAtivo}/${circ}.json?t=` + Date.now(), { cache: 'no-store' });
-    if (!r.ok) return; // circuito sem cabos processados
-    const cabos = await r.json();
-    cabosCarregados[circ] = cabos;
-    renderCabos(circ, cabos);
-  } catch(e) {}
+
+  renderCabos(circ, cabos);
+  return true;
+}
+
+function normalizarLinhas(linhas) {
+  return (linhas || [])
+    .filter(linha => Array.isArray(linha) && linha.length >= 2)
+    .map(linha => linha
+      .filter(ponto => Array.isArray(ponto)
+        && numeroNoIntervalo(ponto[0], -180, 180)
+        && numeroNoIntervalo(ponto[1], -90, 90))
+      .map(ponto => [Number(ponto[1]), Number(ponto[0])]))
+    .filter(linha => linha.length >= 2);
 }
 
 function renderCabos(circ, cabos) {
-  // T1 — tronco principal (vermelho mais grosso)
-  (cabos.t1 || []).forEach(linha => {
-    const pts = linha.map(c => [c[1], c[0]]); // [lat,lon]
-    L.polyline(pts, { color: '#D32F2F', weight: 3, opacity: 0.85 }).addTo(cabosT1Layer);
-  });
-  // T2 — após 1º religador (laranja mais fino)
-  (cabos.t2 || []).forEach(linha => {
-    const pts = linha.map(c => [c[1], c[0]]);
-    L.polyline(pts, { color: '#F57C00', weight: 2, opacity: 0.8 }).addTo(cabosT2Layer);
-  });
+  if (!map || !cabosT1Layer || !cabosT2Layer) return;
+  const t1 = normalizarLinhas(cabos.t1);
+  const t2 = normalizarLinhas(cabos.t2);
+
+  // Uma multipolilinha por circuito/tipo reduz milhares de objetos individuais no Leaflet.
+  if (t1.length) {
+    L.polyline(t1, {
+      pane: 'cabosT1Pane',
+      renderer: caboRendererT1,
+      color: '#D32F2F',
+      weight: 2.5,
+      opacity: 0.84,
+      interactive: false,
+      bubblingMouseEvents: false,
+      lineCap: 'round',
+      lineJoin: 'round',
+    }).addTo(cabosT1Layer);
+  }
+
+  if (t2.length) {
+    L.polyline(t2, {
+      pane: 'cabosT2Pane',
+      renderer: caboRendererT2,
+      color: '#FF8F00',
+      weight: 5,
+      opacity: 0.96,
+      interactive: false,
+      bubblingMouseEvents: false,
+      lineCap: 'round',
+      lineJoin: 'round',
+    }).addTo(cabosT2Layer);
+  }
 }
 
 // ── CONTROLE DE CAMADAS ──
-let camadas = { postes: true, t1: true, t2: true };
+let camadas = { postes: true, livres: false, t1: true, t2: true };
 
-function toggleCamada(nome) {
+async function toggleCamada(nome) {
+  if (!(nome in camadas)) return;
   camadas[nome] = !camadas[nome];
-  const btn = document.getElementById('cam-' + nome);
-  if (btn) btn.classList.toggle('ativo', camadas[nome]);
 
-  if (nome === 'postes' && postesLayer) {
-    camadas.postes ? map.addLayer(postesLayer) : map.removeLayer(postesLayer);
+  if (nome === 'livres') {
+    atualizarBotoesCamadas();
+    if (!postesLayer) return;
+    postesLayer.clearLayers();
+    marcadoresPostes.clear();
+    ultimoPosteDestacado = null;
+    postesVisiveisPorCircuito = {};
+
+    for (const circ of alimentadoresAtivos) {
+      const postes = postesCarregados[chaveCircuito(circ)];
+      if (postes) await renderPostesNoMapa(circ, postes);
+    }
+    sincronizarVisibilidadeCamadas();
+    atualizarResumoCamadas();
+    showToast(camadas.livres ? 'Exibindo apenas postes sem cabo.' : 'Exibindo todos os postes.', 'success');
+    return;
   }
-  if (nome === 't1' && cabosT1Layer) {
-    camadas.t1 ? map.addLayer(cabosT1Layer) : map.removeLayer(cabosT1Layer);
-  }
-  if (nome === 't2' && cabosT2Layer) {
-    camadas.t2 ? map.addLayer(cabosT2Layer) : map.removeLayer(cabosT2Layer);
-  }
+
+  atualizarBotoesCamadas();
+  sincronizarVisibilidadeCamadas();
 }
 
 // ══════════════════════════════════════════════════
@@ -2363,15 +2791,8 @@ function selecionarPoste(id, circ, dist) {
   document.querySelectorAll('.poste-opcao').forEach(el => el.classList.remove('sel'));
   document.getElementById(`poste-op-${id}`)?.classList.add('sel');
 
-  // Destacar no mapa
-  if (postesLayer && map) {
-    postesLayer.eachLayer(m => {
-      if (m.options._posteId === String(id)) {
-        m.setStyle({ fillColor: '#FF6F00', radius: 8 });
-        map.panTo(m.getLatLng());
-      }
-    });
-  }
+  // Destacar no mapa sem depender de varrer todos os marcadores.
+  if (postesLayer && map) destacarPosteNoMapa(circ, id);
 }
 
 function resetBtnPoste() {
@@ -2392,29 +2813,20 @@ function usarPoste(id, circ) {
 
 
 // ══════════════════════════════════════════════════
-// CONFIG AUTOMÁTICA (token via config.json)
+// CONFIGURAÇÃO GLOBAL (somente repositório)
 // ══════════════════════════════════════════════════
 let appConfig = null;
-
-function desofuscarToken(codigos) {
-  const chars = codigos.map(c => String.fromCharCode(c - 7));
-  return chars.join('').split('').reverse().join('');
-}
 
 async function carregarConfigGlobal() {
   if (appConfig) return appConfig;
   try {
     const r = await fetch(GITHUB_RAW + '/config.json?t=' + Date.now(), { cache: 'no-store' });
     const data = await r.json();
-    appConfig = {
-      repo: data.repo,
-      token: data.k ? desofuscarToken(data.k) : null
-    };
-    // Salvar no IndexedDB para uso offline
-    if (appConfig.token) await setConfig('github_token', appConfig.token);
-    if (appConfig.repo)  await setConfig('github_repo', appConfig.repo);
+    appConfig = { repo: data.repo || null };
+    // O repositório pode ser pré-preenchido, mas o token permanece somente no aparelho autorizado.
+    if (appConfig.repo && !await getConfig('github_repo')) await setConfig('github_repo', appConfig.repo);
   } catch(e) {
-    appConfig = null;
+    appConfig = { repo: null };
   }
   return appConfig;
 }
@@ -2432,8 +2844,12 @@ async function carregarDadosEquipe() {
 
   info.textContent = 'Carregando dados...';
   const cfg = await carregarConfigGlobal();
-  const token = cfg ? cfg.token : null;
-  if (!token) { info.textContent = 'Token não disponível.'; return; }
+  const token = await getConfig('github_token');
+  const repo = await getConfig('github_repo') || (cfg && cfg.repo) || GH_REPO;
+  if (!token || !repo) {
+    info.textContent = 'Configure o token neste aparelho para consultar os dados.';
+    return;
+  }
 
   const equipes = equipe === '__todas__'
     ? ['Equipe Energisa','Enecol Norte','Enecol Centro','Enecol Sul']
@@ -2443,7 +2859,7 @@ async function carregarDadosEquipe() {
   for (const eq of equipes) {
     const pasta = 'dados/' + eq.replace(/\s+/g,'-');
     try {
-      const r = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + pasta, {
+      const r = await fetch('https://api.github.com/repos/' + repo + '/contents/' + pasta, {
         headers: { 'Authorization': 'token ' + token }
       });
       if (!r.ok) continue;
@@ -2524,17 +2940,15 @@ function baixarArquivo(nome, conteudo, tipo) {
 // ══════════════════════════════════════════════════
 // SISTEMA DE ROTAS
 // ══════════════════════════════════════════════════
-let rotasData     = { rotas: [] };
-let adminPolo     = null;
-let adminAlims    = [];
-let rotaAtribuida = null;
+let rotasData       = { rotas: [] };
+let adminPolo       = null;
+let adminAlims      = [];
+let rotasAtribuidas = [];
+let rotaAtribuida   = null;
 
-const GH_TOKEN_KEY = 'vera_gh_token';
 const GH_REPO      = 'LGRSV/vera-vegetacao';
 
 async function getGhToken() {
-  const cfg = await carregarConfigGlobal();
-  if (cfg && cfg.token) return cfg.token;
   return await getConfig('github_token');
 }
 
@@ -2549,12 +2963,14 @@ async function carregarRotas() {
 
 async function salvarRotas() {
   const token = await getGhToken();
-  if (!token) { showToast('Configure o token GitHub na aba Config.', 'error'); return false; }
+  const cfg = await carregarConfigGlobal();
+  const repo = await getConfig('github_repo') || (cfg && cfg.repo) || GH_REPO;
+  if (!token || !repo) { showToast('Configure o token GitHub neste aparelho.', 'error'); return false; }
 
   // Buscar SHA atual
   let sha = null;
   try {
-    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/rotas.json`,
+    const r = await fetch(`https://api.github.com/repos/${repo}/contents/rotas.json`,
       { headers: { 'Authorization': 'token ' + token } });
     if (r.ok) { const d = await r.json(); sha = d.sha; }
   } catch(e) {}
@@ -2565,7 +2981,7 @@ async function salvarRotas() {
   if (sha) body.sha = sha;
 
   try {
-    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/rotas.json`, {
+    const r = await fetch(`https://api.github.com/repos/${repo}/contents/rotas.json`, {
       method: 'PUT',
       headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
@@ -2746,41 +3162,99 @@ async function renderRotasAdmin() {
     </div>`).join('');
 }
 
-// ── EQUIPE CAMPO: verificar rota atribuída ──
-async function verificarRotaAtribuida(user) {
+// ── EQUIPE CAMPO: rotas atribuídas ──
+async function verificarRotasAtribuidas(user) {
   await carregarRotas();
-  // Pegar a rota mais recente desta equipe
-  const minhasRotas = rotasData.rotas.filter(r => r.equipe === user);
-  if (minhasRotas.length === 0) return null;
-  return minhasRotas[minhasRotas.length - 1]; // mais recente
+  // Cada rota permanece disponível até o supervisor excluí-la.
+  // A equipe escolhe explicitamente qual deseja executar primeiro.
+  return (rotasData.rotas || [])
+    .filter(r => r && r.equipe === user && r.polo && Array.isArray(r.alimentadores) && r.alimentadores.length)
+    .slice()
+    .reverse(); // exibir as atribuições mais recentes primeiro
+}
+
+function escaparHtml(texto) {
+  return String(texto == null ? '' : texto)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function renderRotasAtribuidas() {
+  const lista = document.getElementById('rotas-atribuida-lista');
+  const resumo = document.getElementById('rota-atribuida-alims');
+  const btn = document.getElementById('btn-usar-rota-atribuida');
+  if (!lista || !resumo || !btn) return;
+
+  const quantidade = rotasAtribuidas.length;
+  resumo.textContent = quantidade === 1
+    ? '1 rota disponível. Selecione-a para entrar no campo.'
+    : quantidade + ' rotas disponíveis. Selecione qual a equipe vai executar primeiro.';
+
+  lista.innerHTML = rotasAtribuidas.map((rota, indice) => {
+    const selecionada = rotaAtribuida && String(rotaAtribuida.id) === String(rota.id);
+    const alimentadores = rota.alimentadores.map(escaparHtml).join(', ');
+    const qtd = rota.alimentadores.length;
+    const titulo = 'Rota ' + String(indice + 1).padStart(2, '0');
+    const idSeguro = String(rota.id).replace(/'/g, "\\'");
+    return `<button type="button" class="rota-atribuida-card ${selecionada ? 'selecionada' : ''}" onclick="selecionarRotaAtribuida('${idSeguro}')" aria-pressed="${selecionada}">
+      <span class="rota-atribuida-card-topo">
+        <span class="rota-atribuida-card-titulo">${titulo}</span>
+        <span class="rota-atribuida-card-polo">${escaparHtml(rota.polo)}</span>
+      </span>
+      <span class="rota-atribuida-card-resumo">${qtd} alimentador${qtd === 1 ? '' : 'es'}</span>
+      <span class="rota-atribuida-card-alims" title="${alimentadores}">${alimentadores}</span>
+      <span class="rota-atribuida-card-meta">Atribuída em ${escaparHtml(rota.criada || 'data não informada')}</span>
+    </button>`;
+  }).join('');
+
+  const pronta = !!rotaAtribuida;
+  btn.disabled = !pronta;
+  btn.textContent = pronta ? 'Usar rota selecionada →' : 'Selecione uma rota para continuar';
+}
+
+function selecionarRotaAtribuida(id) {
+  rotaAtribuida = rotasAtribuidas.find(r => String(r.id) === String(id)) || null;
+  renderRotasAtribuidas();
+  if (rotaAtribuida) {
+    showToast('Rota selecionada. Confirme para carregar os alimentadores.', 'success');
+  }
 }
 
 async function mostrarRotaAtribuida(user) {
-  const rota = await verificarRotaAtribuida(user);
-  const banner   = document.getElementById('rota-atribuida-banner');
-  const semRota  = document.getElementById('sem-rota-banner');
+  const banner  = document.getElementById('rota-atribuida-banner');
+  const semRota = document.getElementById('sem-rota-banner');
+  if (!banner || !semRota) return;
 
-  if (rota) {
-    rotaAtribuida = rota;
-    banner.style.display  = 'flex';
+  rotasAtribuidas = await verificarRotasAtribuidas(user);
+  rotaAtribuida = null; // a escolha deve ser feita pela equipe
+
+  if (rotasAtribuidas.length) {
+    banner.style.display = 'block';
     semRota.style.display = 'none';
-    document.getElementById('rota-atribuida-alims').textContent =
-      rota.polo + ' — ' + rota.alimentadores.join(', ');
+    renderRotasAtribuidas();
   } else {
-    rotaAtribuida = null;
-    banner.style.display  = 'none';
+    banner.style.display = 'none';
     semRota.style.display = 'block';
   }
 }
 
 async function usarRotaAtribuida() {
-  if (!rotaAtribuida) return;
-  poloAtivo           = rotaAtribuida.polo;
+  if (!rotaAtribuida) {
+    showToast('Selecione uma rota antes de continuar.', 'warning');
+    return;
+  }
+
+  poloAtivo = rotaAtribuida.polo;
   alimentadoresAtivos = [...rotaAtribuida.alimentadores];
 
-  // Feedback visual antes de entrar
-  const btn = document.querySelector('[onclick="usarRotaAtribuida()"]');
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ Carregando...'; }
+  const btn = document.getElementById('btn-usar-rota-atribuida');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ Carregando rota...';
+  }
 
   await confirmarAlimentadores();
 }
