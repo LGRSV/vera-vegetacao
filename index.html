@@ -5,10 +5,10 @@
 // VERA v1.1.1 — limpeza única de SW antigos (sem reload automático)
 (function() {
   try {
-    const V = '2.2.0';
-    if (localStorage.getItem('vera_v') !== V) {
+    const V = '2.2.1';
+    const stored = localStorage.getItem('vera_v');
+    if (stored !== V) {
       localStorage.setItem('vera_v', V);
-      // Limpar SWs em background, sem recarregar
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(function(regs) {
           regs.forEach(function(r) { r.unregister(); });
@@ -19,7 +19,8 @@
           keys.forEach(function(k) { caches.delete(k); });
         });
       }
-      // Sem reload — a página já está carregando a versão nova
+      // Se havia versão anterior, recarregar para pegar versão nova limpa
+      if (stored) { window.location.reload(true); }
     }
   } catch(e) {}
 })();
@@ -869,7 +870,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.2.0</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.2.1</div>
     </div>
   </div>
   <div class="header-right">
@@ -1228,7 +1229,7 @@ async function verificarVersao() {
 
 async function forcarAtualizacao() {
   // Setar versão ANTES de limpar para não entrar em loop
-  localStorage.setItem('vera_v', '2.2.0');
+  localStorage.setItem('vera_v', '2.2.1');
   if ('caches' in window) {
     const keys = await caches.keys();
     await Promise.all(keys.map(k => caches.delete(k)));
@@ -2094,6 +2095,12 @@ async function carregarPostes() {
   for (const circ of alimentadoresAtivos) {
     if (postesCarregados[circ]) {
       renderPostesNoMapa(circ, postesCarregados[circ]);
+      // Cabos: do cache ou recarregar
+      if (cabosCarregados[circ]) {
+        renderCabos(circ, cabosCarregados[circ]);
+      } else {
+        await carregarCabos(circ);
+      }
       ok++;
       continue;
     }
