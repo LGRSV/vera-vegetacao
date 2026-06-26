@@ -15,5 +15,16 @@
   "area": "Urbano",
   "acesso": "Sim",
   "usuario": "Equipe Energisa",
-  "photos": "3 foto(s)"
+  "syncedAt": null,
+  "fotos_ids": [
+    "VER0002F1",
+    "VER0002F2",
+    "VER0002F3"
+  ],
+  "fotos_github": [
+    "fotos/Equipe-Energisa/VER0002F1.jpg",
+    "fotos/Equipe-Energisa/VER0002F2.jpg",
+    "fotos/Equipe-Energisa/VER0002F3.jpg"
+  ],
+  "fotos_count": 3
 }
