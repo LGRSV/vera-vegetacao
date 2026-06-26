@@ -1,5 +1,32 @@
 {
   "version": 1,
-  "updatedAt": null,
-  "equipes": {}
+  "updatedAt": "2026-06-26T20:26:43.483Z",
+  "equipes": {
+    "Equipe Energisa": {
+      "projetoAtivo": {
+        "rotaId": "1782473731429",
+        "nomeProjeto": "Projeto sem nome",
+        "polo": "CENTRO",
+        "alimentadores": [
+          "AL02059122"
+        ],
+        "iniciadoEm": "2026-06-26T20:26:43.483Z",
+        "atualizadoEm": "2026-06-26T20:26:43.483Z",
+        "atualizadoPor": "Equipe Energisa"
+      },
+      "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1782473731429",
+          "nomeProjeto": "Projeto sem nome",
+          "polo": "CENTRO",
+          "alimentadores": [
+            "AL02059122"
+          ],
+          "data": "2026-06-26T20:26:43.483Z",
+          "equipe": "Equipe Energisa"
+        }
+      ]
+    }
+  }
 }
