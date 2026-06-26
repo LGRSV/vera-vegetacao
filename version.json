@@ -1,1 +1,1 @@
-{"version":"2.6.1","released":"2026-06-26","notes":"ID unico por foto VER0001F1 separados por ; no CSV"}
+{"version":"2.6.2","released":"2026-06-26","notes":"Sync robusto: compressao fotos 1280px, token resiliente, feedback de erro"}
