@@ -76,6 +76,12 @@
         'versão interna'
       );
       html = html.replace(/v2\.6\.4/g, 'v2.6.5');
+      html = substituirUmaVez(
+        html,
+        '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.5</div>',
+        '<div style="display:inline-flex;align-items:center;margin-top:10px;padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--off-white);font-size:10px;font-weight:800;color:var(--green-mid);letter-spacing:0.08em;">VERSÃO 2.6.5</div>',
+        'selo de versão na tela de login'
+      );
 
       document.open();
       document.write(html);
