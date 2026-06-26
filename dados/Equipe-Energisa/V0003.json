@@ -15,5 +15,16 @@
   "area": "",
   "acesso": "Sim",
   "usuario": "Equipe Energisa",
-  "photos": "3 foto(s)"
+  "syncedAt": null,
+  "fotos_ids": [
+    "VER0003F1",
+    "VER0003F2",
+    "VER0003F3"
+  ],
+  "fotos_github": [
+    "fotos/Equipe-Energisa/VER0003F1.jpg",
+    "fotos/Equipe-Energisa/VER0003F2.jpg",
+    "fotos/Equipe-Energisa/VER0003F3.jpg"
+  ],
+  "fotos_count": 3
 }
