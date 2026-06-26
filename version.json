@@ -1,1 +1,1 @@
-{"version":"2.6.9","released":"2026-06-26","notes":"Painel administrativo com fotos no mapa e renomeação de projetos; regras de campo da versão 2.6.8 preservadas."}
+{"version":"2.6.10","released":"2026-06-26","notes":"Correção de inicialização: restaura o carregamento estável do VERA e preserva as regras de campo da 2.6.8."}
