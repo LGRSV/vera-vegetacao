@@ -1081,7 +1081,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="login-icon">VERA</div>
     <div class="login-title">VERA</div>
     <div class="login-subtitle">Vegetação em Rede Ativa<br>Energisa Tocantins</div>
-    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.0</div>
+    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.1</div>
     <div class="field-group">
       <label class="field-label">Equipe / Usuário</label>
       <select class="field-input" id="login-user">
@@ -1108,7 +1108,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.6.0</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.6.1</div>
     </div>
   </div>
   <div class="header-right">
@@ -1513,7 +1513,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.6.0';
+const APP_VERSION = '2.6.1';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1648,21 +1648,26 @@ async function syncPendingPoints() {
     try {
       const pasta = point.usuario.replace(/\s+/g, '-');
 
-      // ── 1. Subir fotos para fotos/{equipe}/{id}_foto{n}.jpg ──
+      // ── 1. Subir fotos com ID único: VER{num}F{n} ──
       const fotosGithub = [];
+      const fotosIds    = [];
       if (Array.isArray(point.photos) && point.photos.length > 0) {
+        // ID base: ponto V0001 → num 0001
+        const numPonto = point.id.replace(/[^0-9]/g, '').padStart(4, '0');
         for (let i = 0; i < point.photos.length; i++) {
           const foto = point.photos[i];
           if (!foto || !foto.startsWith('data:')) continue;
           try {
-            const partes  = foto.split(',');
-            const b64foto = partes[1];
-            const ext     = partes[0].includes('png') ? 'png' : 'jpg';
-            const fotoPath = `fotos/${pasta}/${point.id}_foto${i + 1}.${ext}`;
+            const partes   = foto.split(',');
+            const b64foto  = partes[1];
+            const ext      = partes[0].includes('png') ? 'png' : 'jpg';
+            const fotoId   = 'VER' + numPonto + 'F' + (i + 1);   // ex: VER0001F1
+            const fotoPath = 'fotos/' + pasta + '/' + fotoId + '.' + ext;
             const res = await ghPut(fotoPath, b64foto,
-              `VERA: foto ${point.id} foto${i + 1}`);
+              'VERA: foto ' + fotoId);
             if (res.ok) {
               fotosGithub.push(fotoPath);
+              fotosIds.push(fotoId);
             }
           } catch(ef) {
             console.warn('Erro ao enviar foto', i + 1, ef);
@@ -1673,9 +1678,10 @@ async function syncPendingPoints() {
       // ── 2. Salvar JSON do ponto (com caminhos das fotos, sem base64) ──
       const pointParaSalvar = {
         ...point,
-        photos: undefined,          // remover base64 do JSON
+        photos: undefined,                // remover base64 do JSON
         fotos_count: Array.isArray(point.photos) ? point.photos.length : 0,
-        fotos_github: fotosGithub,  // caminhos no GitHub
+        fotos_ids:    fotosIds,           // IDs das fotos: ['VER0001F1','VER0001F2']
+        fotos_github: fotosGithub,        // caminhos no GitHub
       };
       const conteudo = JSON.stringify(pointParaSalvar, null, 2);
       const b64json  = btoa(unescape(encodeURIComponent(conteudo)));
@@ -1686,6 +1692,7 @@ async function syncPendingPoints() {
       if (res.ok) {
         point.synced   = true;
         point.syncedAt = new Date().toISOString();
+        if (fotosIds.length > 0)    point.fotos_ids    = fotosIds;
         if (fotosGithub.length > 0) point.fotos_github = fotosGithub;
         await dbPut('points', point);
         enviados++;
@@ -3384,7 +3391,7 @@ function exportarDadosAdmin(formato) {
   const nomeBase = 'VERA_' + (equipe === '__todas__' ? 'todas' : equipe.replace(/\s+/g,'-')) + '_' + new Date().toISOString().slice(0,10);
 
   if (formato === 'csv') {
-    const headers = ['WKT','ID','DATA','POSTE','ESPECIE','LATITUDE','LONGITUDE','ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DIAM.TRONCO(cm)','Area','Acesso LV','Equipe','Fotos','URLs_Fotos'];
+    const headers = ['WKT','ID','DATA','POSTE','ESPECIE','LATITUDE','LONGITUDE','ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DIAM.TRONCO(cm)','Area','Acesso LV','Equipe','Fotos','IDs_Fotos'];
     const rows = dadosEquipeCarregados.map(r => {
       const fotos = Array.isArray(r.photos) ? r.photos.length
                   : (typeof r.photos === 'number' ? r.photos
