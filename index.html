@@ -1107,7 +1107,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.7</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.8</div>
     </div>
   </div>
   <div class="header-right">
@@ -1512,7 +1512,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.5.7';
+const APP_VERSION = '2.5.8';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -3378,8 +3378,7 @@ function exportarDadosAdmin(formato) {
         fotos
       ].join(';');
     });
-    baixarArquivo(nomeBase + '.csv', '﻿' + [headers.join(';'), ...rows].join('
-'), 'text/csv');
+    baixarArquivo(nomeBase + '.csv', '\uFEFF' + [headers.join(';'), ...rows].join('\n'), 'text/csv');
   } else {
     // KML
     let kml = '<?xml version="1.0" encoding="UTF-8"?>\n';
