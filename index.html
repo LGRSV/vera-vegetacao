@@ -2,24 +2,19 @@
 <html lang="pt-BR">
 <head>
 <script>
-// VERA v1.1.1 — limpeza única de SW antigos (sem reload automático)
+// VERA — desinstalação permanente de Service Workers (fim dos bugs de cache)
 (function() {
   try {
-    const V = '2.3.2';
-    if (localStorage.getItem('vera_v') !== V) {
-      localStorage.setItem('vera_v', V);
-      // Limpar SWs em background, sem recarregar
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(regs) {
-          regs.forEach(function(r) { r.unregister(); });
-        });
-      }
-      if ('caches' in window) {
-        caches.keys().then(function(keys) {
-          keys.forEach(function(k) { caches.delete(k); });
-        });
-      }
-      // Sem reload — a página já está carregando a versão nova
+    // Mata QUALQUER service worker e cache, sempre, em background
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        regs.forEach(function(r) { r.unregister(); });
+      }).catch(function(){});
+    }
+    if ('caches' in window) {
+      caches.keys().then(function(keys) {
+        keys.forEach(function(k) { caches.delete(k); });
+      }).catch(function(){});
     }
   } catch(e) {}
 })();
@@ -961,7 +956,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.3.2</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.3.3</div>
     </div>
   </div>
   <div class="header-right">
@@ -1318,12 +1313,20 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.3.2';
+const APP_VERSION = '2.3.3';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
-  // Desabilitado — sem auto-reload para evitar loop no iOS
-  // Banner de atualização controlado apenas pelo SW
+  // Checa se há versão nova no servidor e mostra banner (sem reload automático)
+  try {
+    const r = await fetch(GITHUB_RAW + '/version.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) return;
+    const data = await r.json();
+    if (data.version && data.version !== APP_VERSION) {
+      const banner = document.getElementById('update-banner');
+      if (banner) banner.classList.add('show');
+    }
+  } catch(e) {}
 }
 
 async function forcarAtualizacao() {
@@ -1333,40 +1336,13 @@ async function forcarAtualizacao() {
     const keys = await caches.keys();
     await Promise.all(keys.map(k => caches.delete(k)));
   }
-  if ('serviceWorker' in navigator) {
-    const regs = await navigator.serviceWorker.getRegistrations();
-    await Promise.all(regs.map(r => r.unregister()));
-  }
-  window.location.reload(true);
+  // Service Worker REMOVIDO permanentemente — era a causa dos bugs de cache.
+  // O app agora sempre carrega do servidor. Atualização do GitHub Pages é
+  // praticamente instantânea e o navegador pega a versão nova sozinho.
 }
 
-if ('serviceWorker' in navigator) {
-  // Desregistrar SWs antigos + limpar caches na primeira carga
-  navigator.serviceWorker.getRegistrations().then(regs => {
-    regs.forEach(r => r.unregister());
-  });
-  if ('caches' in window) {
-    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-  }
-  // Registrar SW novo
-  navigator.serviceWorker.register('sw.js?v=9').then(reg => {
-    reg.update();
-    // Detectar quando SW novo estiver pronto
-    reg.addEventListener('updatefound', () => {
-      const novo = reg.installing;
-      novo.addEventListener('statechange', () => {
-        if (novo.state === 'installed' && navigator.serviceWorker.controller) {
-          document.getElementById('update-banner').classList.add('show');
-        }
-      });
-    });
-  });
-  navigator.serviceWorker.addEventListener('message', e => {
-    if (e.data?.type === 'DO_SYNC') syncPendingPoints();
-  });
-}
-
-// Verificação de versão desabilitada (evita reload loop)
+// Sem Service Worker, sem registro, sem loop de reload.
+setTimeout(verificarVersao, 3000);
 
 // ══════════════════════════════════════════════════
 // INSTALL PROMPT
