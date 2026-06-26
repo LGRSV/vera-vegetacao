@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#1a2e1a">
   <title>VERA — Vegetação em Rede Ativa</title>
   <style>
-    :root{color-scheme:light;--verde:#1a2e1a;--verde-medio:#2d5a27;--fundo:#f5f7f2;--texto:#1a2e1a;--muted:#5a7a55;}
+    :root{color-scheme:light;--verde:#1a2e1a;--fundo:#f5f7f2;--texto:#1a2e1a;--muted:#5a7a55;}
     *{box-sizing:border-box} body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--fundo);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--texto)}
     main{width:min(100%,390px);padding:28px 24px;border-radius:16px;background:#fff;box-shadow:0 12px 36px rgba(26,46,26,.16);text-align:center}
     .mark{width:48px;height:48px;display:grid;place-items:center;margin:0 auto 14px;border-radius:12px;background:var(--verde);color:#fff;font-size:22px;font-weight:800}.status{font-size:14px;line-height:1.45;color:var(--muted)}
@@ -16,126 +16,55 @@
 <body>
   <main>
     <div class="mark">V</div>
-    <strong>Carregando VERA 2.6.8</strong>
-    <p class="status" id="status">Preparando regras de coleta em campo…</p>
+    <strong>Carregando VERA 2.6.9</strong>
+    <p class="status" id="status">Preparando painel administrativo…</p>
     <div class="error" id="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
   </main>
   <script>
-  (async function iniciarVera(){
-    'use strict';
-    const SOURCE_URL = 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/backup/v2.6.4-antes-validacoes-20260626/index.html';
-    const status = document.getElementById('status');
-    const errorBox = document.getElementById('error');
-    const errorDetail = document.getElementById('error-detail');
+(async function carregarAtualizacao(){
+  'use strict';
+  const LOADER_ANTERIOR = 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/de7cd85146399af6217e6c0e67e4039e7da13fce/index.html';
+  const status = document.getElementById('status');
+  const errorBox = document.getElementById('error');
+  const errorDetail = document.getElementById('error-detail');
 
-    function substituirUmaVez(html, procurar, substituir, nome){
-      const primeira = html.indexOf(procurar);
-      if (primeira < 0) throw new Error('Trecho não encontrado: ' + nome + '.');
-      if (html.indexOf(procurar, primeira + procurar.length) >= 0) throw new Error('Trecho duplicado: ' + nome + '.');
-      return html.slice(0, primeira) + substituir + html.slice(primeira + procurar.length);
-    }
+  function substituirUmaVez(codigo, procurar, substituir, nome){
+    const primeira = codigo.indexOf(procurar);
+    if (primeira < 0) throw new Error('Trecho não encontrado: ' + nome + '.');
+    if (codigo.indexOf(procurar, primeira + procurar.length) >= 0) throw new Error('Trecho duplicado: ' + nome + '.');
+    return codigo.slice(0, primeira) + substituir + codigo.slice(primeira + procurar.length);
+  }
 
-    try {
-      status.textContent = 'Carregando a versão protegida e aplicando as validações…';
-      const response = await fetch(SOURCE_URL + '?v=2.6.8', { cache: 'no-store' });
-      if (!response.ok) throw new Error('Backup indisponível (' + response.status + ').');
-      let html = await response.text();
+  try {
+    status.textContent = 'Carregando VERA 2.6.9…';
+    const resposta = await fetch(LOADER_ANTERIOR + '?v=2.6.9', { cache: 'no-store' });
+    if (!resposta.ok) throw new Error('Versão anterior indisponível (' + resposta.status + ').');
+    let codigo = await resposta.text();
 
-      html = substituirUmaVez(
-        html,
-        "  ['f-dtbt','f-dtmt','f-dtat'].forEach(id => {\n    const sel = document.getElementById(id);\n    if (sel && sel.options.length === 0) {\n      sel.innerHTML = '<option value=\"\">Selecione...</option>';\n      for (let d = 0; d <= 300; d += 5) sel.innerHTML += '<option value=\"' + d + '\">' + d + ' cm</option>';\n    }\n  });\n  const dap = document.getElementById('f-dap');",
-        "  ['f-dtbt','f-dtmt','f-dtat'].forEach(id => {\n    const sel = document.getElementById(id);\n    if (sel && sel.options.length === 0) {\n      sel.innerHTML = '<option value=\"\">Selecione...</option>';\n      for (let d = 0; d <= 300; d += 50) sel.innerHTML += '<option value=\"' + d + '\">' + d + ' cm</option>';\n    }\n  });\n  const dtatPadrao = document.getElementById('f-dtat');\n  if (dtatPadrao && !dtatPadrao.value) dtatPadrao.value = '0';\n  const dap = document.getElementById('f-dap');",
-        'distâncias em 50 cm e DT AT padrão'
-      );
+    codigo = substituirUmaVez(
+      codigo,
+      '    try {',
+      "function aplicarAdminV269(html) {\n  html = html.replace(/v2\\.6\\.8/g, 'v2.6.9');\n  html = html.replace(/VERSÃO 2\\.6\\.8/g, 'VERSÃO 2.6.9');\n  html = html.replace(\"const APP_VERSION = '2.6.8';\", \"const APP_VERSION = '2.6.9';\");\n\n  const substituicoesAdmin = [\n  [\n    \"async function carregarPontosAdmin() {\",\n    \"function abrirFotosPontoAdmin(serializado, repo) {\\n  let fotos = [];\\n  try { fotos = JSON.parse(atob(serializado)); } catch(e) {}\\n  if (!Array.isArray(fotos) || fotos.length === 0) {\\n    showToast('Nenhuma foto disponível para este ponto.', 'warning');\\n    return;\\n  }\\n\\n  const anterior = document.getElementById('admin-photo-modal');\\n  if (anterior) anterior.remove();\\n\\n  const fundo = document.createElement('div');\\n  fundo.id = 'admin-photo-modal';\\n  fundo.style.cssText = 'position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:18px;';\\n\\n  const painel = document.createElement('div');\\n  painel.style.cssText = 'width:min(100%,640px);max-height:88vh;overflow:auto;background:#fff;border-radius:14px;padding:16px;box-shadow:0 16px 48px rgba(0,0,0,.35);';\\n\\n  const topo = document.createElement('div');\\n  topo.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;';\\n\\n  const titulo = document.createElement('strong');\\n  titulo.textContent = fotos.length + ' foto(s) do ponto';\\n\\n  const fechar = document.createElement('button');\\n  fechar.type = 'button';\\n  fechar.textContent = 'Fechar';\\n  fechar.style.cssText = 'border:1px solid #c8dbc4;background:#f5f7f2;color:#1a2e1a;border-radius:8px;padding:7px 10px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;';\\n  fechar.addEventListener('click', function() { fundo.remove(); });\\n\\n  const grade = document.createElement('div');\\n  grade.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;';\\n\\n  fotos.forEach(function(caminho, indice) {\\n    const link = document.createElement('a');\\n    link.href = 'https://raw.githubusercontent.com/' + (repo || GH_REPO) + '/main/' + encodeURI(caminho) + '?t=' + Date.now();\\n    link.target = '_blank';\\n    link.rel = 'noopener';\\n    link.style.cssText = 'display:block;border:1px solid #c8dbc4;border-radius:10px;overflow:hidden;background:#f5f7f2;text-decoration:none;';\\n\\n    const img = document.createElement('img');\\n    img.src = link.href;\\n    img.alt = 'Foto ' + (indice + 1) + ' do ponto';\\n    img.loading = 'lazy';\\n    img.style.cssText = 'display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:#e8eee6;';\\n    img.onerror = function() { link.style.display = 'none'; };\\n\\n    const legenda = document.createElement('span');\\n    legenda.textContent = 'Foto ' + (indice + 1) + ' — abrir em tamanho maior';\\n    legenda.style.cssText = 'display:block;padding:7px;color:#2d5a27;font:600 11px -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;';\\n\\n    link.appendChild(img);\\n    link.appendChild(legenda);\\n    grade.appendChild(link);\\n  });\\n\\n  topo.appendChild(titulo);\\n  topo.appendChild(fechar);\\n  painel.appendChild(topo);\\n  painel.appendChild(grade);\\n  fundo.appendChild(painel);\\n  fundo.addEventListener('click', function(event) { if (event.target === fundo) fundo.remove(); });\\n  document.body.appendChild(fundo);\\n}\\n\\nasync function carregarPontosAdmin() {\",\n    \"galeria de fotos do painel administrativo\"\n  ],\n  [\n    \"          const fotos = pt.fotos_ids && pt.fotos_ids.length > 0\\n            ? pt.fotos_ids.join(', ')\\n            : (pt.fotos_count > 0 ? pt.fotos_count + ' foto(s)' : 'Sem fotos');\",\n    \"          const fotosPaths = Array.isArray(pt.fotos_github) && pt.fotos_github.length\\n            ? pt.fotos_github\\n            : (Array.isArray(pt.fotos_ids)\\n                ? pt.fotos_ids.map(id => 'fotos/' + eq.replace(/\\\\s+/g, '-') + '/' + id + '.jpg')\\n                : []);\\n          const fotos = fotosPaths.length > 0\\n            ? fotosPaths.length + ' foto(s)'\\n            : (pt.fotos_count > 0 ? pt.fotos_count + ' foto(s)' : 'Sem fotos');\\n          const fotosPayload = fotosPaths.length ? btoa(JSON.stringify(fotosPaths)) : '';\\n          const fotoUrl = fotosPaths.length\\n            ? 'https://raw.githubusercontent.com/' + repo + '/main/' + fotosPaths[0] + '?t=' + Date.now()\\n            : '';\\n          const fotoPreview = fotosPaths.length\\n            ? '<button type=\\\"button\\\" class=\\\"admin-view-photo\\\" data-fotos=\\\"' + fotosPayload + '\\\" data-repo=\\\"' + repo + '\\\" style=\\\"display:block;width:100%;margin-top:8px;padding:0;border:1px solid #c8dbc4;border-radius:8px;overflow:hidden;background:#f5f7f2;cursor:pointer;\\\">'\\n              + '<img src=\\\"' + fotoUrl + '\\\" alt=\\\"Ver foto do ponto\\\" style=\\\"display:block;width:100%;height:120px;object-fit:cover;background:#e8eee6;\\\">'\\n              + '<span style=\\\"display:block;padding:6px 8px;text-align:left;color:#2d5a27;font-size:11px;font-weight:700;\\\">Ver ' + fotosPaths.length + ' foto(s)</span></button>'\\n            : '';\",\n    \"previsualização de fotos no mapa\"\n  ],\n  [\n    \"               <b>Fotos:</b> ${fotos}\\n             </div></div>`;\",\n    \"               <b>Fotos:</b> ${fotos}<br>\\n               ${fotoPreview}\\n             </div></div>`;\",\n    \"botão de fotos no popup\"\n  ],\n  [\n    \"          L.marker([pt.lat, pt.lon], { icon })\\n            .bindPopup(popup, { maxWidth: 230 })\\n            .addTo(adminMapLayer);\",\n    \"          const marker = L.marker([pt.lat, pt.lon], { icon })\\n            .bindPopup(popup, { maxWidth: 230 })\\n            .addTo(adminMapLayer);\\n          marker.on('popupopen', function(event) {\\n            const botaoFotos = event.popup && event.popup.getElement()\\n              ? event.popup.getElement().querySelector('.admin-view-photo')\\n              : null;\\n            if (!botaoFotos || botaoFotos.dataset.bound === '1') return;\\n            botaoFotos.dataset.bound = '1';\\n            botaoFotos.addEventListener('click', function() {\\n              abrirFotosPontoAdmin(botaoFotos.dataset.fotos, botaoFotos.dataset.repo);\\n            });\\n          });\",\n    \"abrir galeria de fotos no mapa\"\n  ],\n  [\n    \"    <div class=\\\"modal-secao\\\">\\n      <div class=\\\"modal-label\\\">Equipe</div>\",\n    \"    <div class=\\\"modal-secao\\\">\\n      <div class=\\\"modal-label\\\">Nome do Projeto</div>\\n      <input class=\\\"field-input\\\" type=\\\"text\\\" id=\\\"edit-rota-nome\\\" placeholder=\\\"Ex: Poda 2026 - Araguaína Norte\\\">\\n    </div>\\n\\n    <div class=\\\"modal-secao\\\">\\n      <div class=\\\"modal-label\\\">Equipe</div>\",\n    \"campo de renomear projeto\"\n  ],\n  [\n    \"  // Preencher campos\\n  document.getElementById('edit-rota-equipe').value = rotaEmEdicao.equipe;\",\n    \"  // Preencher campos\\n  document.getElementById('edit-rota-nome').value = rotaEmEdicao.nomeProjeto || '';\\n  document.getElementById('edit-rota-equipe').value = rotaEmEdicao.equipe;\",\n    \"preencher nome do projeto na edição\"\n  ],\n  [\n    \"  const novaEquipe = document.getElementById('edit-rota-equipe').value;\\n\\n  // Atualizar rota\\n  rotaEmEdicao.equipe       = novaEquipe;\",\n    \"  const novoNome = document.getElementById('edit-rota-nome').value.trim();\\n  if (!novoNome) { showToast('Informe o nome do projeto.', 'error'); return; }\\n  const novaEquipe = document.getElementById('edit-rota-equipe').value;\\n\\n  // Atualizar rota\\n  rotaEmEdicao.nomeProjeto  = novoNome;\\n  rotaEmEdicao.equipe       = novaEquipe;\",\n    \"salvar nome do projeto\"\n  ],\n  [\n    \"    const titulo = 'Rota ' + String(indice + 1).padStart(2, '0');\",\n    \"    const titulo = rota.nomeProjeto || ('Rota ' + String(indice + 1).padStart(2, '0'));\",\n    \"exibir nome do projeto para a equipe\"\n  ]\n];\n  substituicoesAdmin.forEach(function(item) {\n    html = substituirUmaVez(html, item[0], item[1], item[2]);\n  });\n  return html;\n}\n\n    try {",
+      'injetar recursos administrativos'
+    );
 
-      html = substituirUmaVez(
-        html,
-        '<div class="photo-label">Toque para fotografar ou escolher da galeria</div>',
-        '<div class="photo-label">Adicione no mínimo 3 fotos obrigatórias.</div>\n       <div id="photo-requirement" style="font-size:11px;color:var(--danger);font-weight:600;margin-top:6px;line-height:1.4;" aria-live="polite">0 de 3 fotos adicionadas — registre frente, lateral e a proximidade com a rede.</div>',
-        'aviso de fotos'
-      );
+    codigo = substituirUmaVez(
+      codigo,
+      '      document.open();\n      document.write(html);\n      document.close();',
+      '      html = aplicarAdminV269(html);\n      document.open();\n      document.write(html);\n      document.close();',
+      'aplicar recursos administrativos'
+    );
 
-      html = substituirUmaVez(
-        html,
-        "    c.appendChild(div);\n  });\n}\n\nfunction removePhoto(i)",
-        "    c.appendChild(div);\n  });\n  const requirement = document.getElementById('photo-requirement');\n  if (requirement) {\n    const completas = photos.length >= 3;\n    requirement.textContent = completas\n      ? photos.length + ' foto(s) adicionada(s) — evidências completas.'\n      : photos.length + ' de 3 fotos adicionadas — registre frente, lateral e a proximidade com a rede.';\n    requirement.style.color = completas ? 'var(--green-mid)' : 'var(--danger)';\n  }\n}\n\nfunction removePhoto(i)",
-        'contador de fotos'
-      );
-
-      html = substituirUmaVez(
-        html,
-        "  if (!especie) { showToast('Informe a espécie da árvore!','error'); return; }\n\n  const all = await dbGetAll('points');",
-        "  if (!especie) { showToast('Informe a espécie da árvore!','error'); return; }\n  if (photos.length < 3) {\n    const faltam = 3 - photos.length;\n    showToast('Adicione 3 fotos obrigatórias: frente, lateral e proximidade com a rede. Faltam ' + faltam + '.', 'error');\n    return;\n  }\n\n  const all = await dbGetAll('points');",
-        'bloqueio de registro sem fotos'
-      );
-
-      html = substituirUmaVez(
-        html,
-        "const APP_VERSION = '2.6.4';",
-        "const APP_VERSION = '2.6.8';",
-        'versão interna'
-      );
-      html = html.replace(/v2\.6\.4/g, 'v2.6.8');
-
-      html = substituirUmaVez(
-        html,
-        '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.8</div>',
-        '<div style="display:inline-flex;align-items:center;margin-top:10px;padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--off-white);font-size:10px;font-weight:800;color:var(--green-mid);letter-spacing:0.08em;">VERSÃO 2.6.8</div>',
-        'selo de versão na tela de login'
-      );
-
-      html = substituirUmaVez(
-        html,
-        "function salvarSessao() {\n  try {\n    const sessao = {\n      user: currentUser,\n      polo: poloAtivo,\n      alimentadores: alimentadoresAtivos,\n      ts: Date.now(),\n    };\n    localStorage.setItem(SESSAO_KEY, JSON.stringify(sessao));\n  } catch(e) {}\n}",
-        "function salvarSessao() {\n  try {\n    const sessao = {\n      user: currentUser,\n      rotaId: rotaAtribuida ? String(rotaAtribuida.id) : null,\n      ts: Date.now(),\n    };\n    localStorage.setItem(SESSAO_KEY, JSON.stringify(sessao));\n  } catch(e) {}\n}",
-        'sessão vinculada ao projeto atribuído'
-      );
-
-      html = substituirUmaVez(
-        html,
-        "  // EQUIPE DE CAMPO com alimentadores ativos\n  if (sessao.polo && Array.isArray(sessao.alimentadores) && sessao.alimentadores.length) {\n    poloAtivo = sessao.polo;\n    alimentadoresAtivos = sessao.alimentadores;\n    await carregarIndice();\n    await confirmarAlimentadores();\n    return true;\n  }\n\n  // Equipe sem rota escolhida — volta pra seleção de polo\n  document.getElementById('polo-screen').style.display  = 'flex';\n  document.getElementById('polo-user-label').textContent = sessao.user;\n  carregarIndice();\n  mostrarRotaAtribuida(sessao.user);\n  return true;",
-        "  // EQUIPE DE CAMPO: somente projetos atribuídos pelo supervisor\n  if (sessao.rotaId) {\n    await carregarRotas();\n    const rotaRestaurada = (rotasData.rotas || []).find(r =>\n      r && String(r.id) === String(sessao.rotaId) && r.equipe === currentUser\n    );\n    if (rotaRestaurada) {\n      rotaAtribuida = rotaRestaurada;\n      poloAtivo = rotaRestaurada.polo;\n      alimentadoresAtivos = [...rotaRestaurada.alimentadores];\n      await carregarIndice();\n      await confirmarAlimentadores();\n      return true;\n    }\n  }\n\n  // Sessões antigas ou projetos removidos não podem manter rota manual.\n  limparSessao();\n  document.getElementById('polo-screen').style.display = 'flex';\n  document.getElementById('polo-user-label').textContent = sessao.user;\n  carregarIndice();\n  mostrarRotaAtribuida(sessao.user);\n  return true;",
-        'restauração restrita a projeto atribuído'
-      );
-
-      html = substituirUmaVez(
-        html,
-        '<p>O supervisor ainda não definiu sua rota.<br>Você pode selecionar os alimentadores manualmente abaixo.</p>',
-        '<p>O supervisor ainda não definiu um projeto para esta equipe.<br>Aguarde a atribuição para iniciar a coleta.</p>',
-        'aviso sem projeto atribuído'
-      );
-
-      html = substituirUmaVez(
-        html,
-        'async function mostrarRotaAtribuida(user) {',
-        "function bloquearSelecaoManualRota() {\n  const card = document.querySelector('#polo-screen .polo-card');\n  if (!card) return;\n  Array.from(card.children).forEach(el => {\n    if (el.id === 'rota-atribuida-banner' || el.id === 'sem-rota-banner') return;\n    el.style.display = 'none';\n  });\n}\n\nasync function mostrarRotaAtribuida(user) {\n  bloquearSelecaoManualRota();",
-        'bloqueio da seleção manual de rota'
-      );
-
-      html = substituirUmaVez(
-        html,
-        '<div class="field-group"><label class="field-label">Área</label><input class="field-input" type="text" id="f-area" placeholder="Identificação da área"></div>',
-        '<div class="field-group"><label class="field-label">Área</label><select class="field-input" id="f-area"><option value="URBANO" selected>URBANO</option><option value="RURAL">RURAL</option></select></div>',
-        'seletor de área urbana ou rural'
-      );
-
-      html = substituirUmaVez(
-        html,
-        "function clearForm() {\n  ['f-especie','f-area','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => document.getElementById(id).value = '');\n  const espSel = document.getElementById('f-especie-select');",
-        "function clearForm() {\n  ['f-especie','f-altura','f-dtbt','f-dtmt','f-dap'].forEach(id => document.getElementById(id).value = '');\n  const areaSel = document.getElementById('f-area');\n  if (areaSel) areaSel.value = 'URBANO';\n  const dtatSel = document.getElementById('f-dtat');\n  if (dtatSel) dtatSel.value = '0';\n  const espSel = document.getElementById('f-especie-select');",
-        'padrões de área e DT AT após limpar formulário'
-      );
-
-      document.open();
-      document.write(html);
-      document.close();
-    } catch (error) {
-      status.textContent = 'A inicialização foi interrompida para preservar os dados.';
-      errorBox.style.display = 'block';
-      errorDetail.textContent = String(error && error.message ? error.message : error);
-      console.error('VERA bootstrap:', error);
-    }
-  })();
+    document.open();
+    document.write(codigo);
+    document.close();
+  } catch (error) {
+    status.textContent = 'A inicialização foi interrompida para preservar os dados.';
+    errorBox.style.display = 'block';
+    errorDetail.textContent = String(error && error.message ? error.message : error);
+    console.error('VERA bootstrap v2.6.9:', error);
+  }
+})();
   </script>
 </body>
 </html>
