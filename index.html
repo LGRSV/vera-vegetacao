@@ -16,7 +16,7 @@
 <body>
   <main>
     <div class="mark">V</div>
-    <strong>Carregando VERA 2.6.7</strong>
+    <strong>Carregando VERA 2.6.8</strong>
     <p class="status" id="status">Preparando regras de coleta em campo…</p>
     <div class="error" id="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
   </main>
@@ -37,15 +37,15 @@
 
     try {
       status.textContent = 'Carregando a versão protegida e aplicando as validações…';
-      const response = await fetch(SOURCE_URL + '?v=2.6.7', { cache: 'no-store' });
+      const response = await fetch(SOURCE_URL + '?v=2.6.8', { cache: 'no-store' });
       if (!response.ok) throw new Error('Backup indisponível (' + response.status + ').');
       let html = await response.text();
 
       html = substituirUmaVez(
         html,
-        "for (let d = 0; d <= 300; d += 5) sel.innerHTML += '<option value=\"' + d + '\">' + d + ' cm</option>';",
-        "for (let d = 0; d <= 300; d += 50) sel.innerHTML += '<option value=\"' + d + '\">' + d + ' cm</option>';",
-        'incremento de distância'
+        "  ['f-dtbt','f-dtmt','f-dtat'].forEach(id => {\n    const sel = document.getElementById(id);\n    if (sel && sel.options.length === 0) {\n      sel.innerHTML = '<option value=\"\">Selecione...</option>';\n      for (let d = 0; d <= 300; d += 5) sel.innerHTML += '<option value=\"' + d + '\">' + d + ' cm</option>';\n    }\n  });\n  const dap = document.getElementById('f-dap');",
+        "  ['f-dtbt','f-dtmt','f-dtat'].forEach(id => {\n    const sel = document.getElementById(id);\n    if (sel && sel.options.length === 0) {\n      sel.innerHTML = '<option value=\"\">Selecione...</option>';\n      for (let d = 0; d <= 300; d += 50) sel.innerHTML += '<option value=\"' + d + '\">' + d + ' cm</option>';\n    }\n  });\n  const dtatPadrao = document.getElementById('f-dtat');\n  if (dtatPadrao && !dtatPadrao.value) dtatPadrao.value = '0';\n  const dap = document.getElementById('f-dap');",
+        'distâncias em 50 cm e DT AT padrão'
       );
 
       html = substituirUmaVez(
@@ -72,15 +72,15 @@
       html = substituirUmaVez(
         html,
         "const APP_VERSION = '2.6.4';",
-        "const APP_VERSION = '2.6.7';",
+        "const APP_VERSION = '2.6.8';",
         'versão interna'
       );
-      html = html.replace(/v2\.6\.4/g, 'v2.6.7');
+      html = html.replace(/v2\.6\.4/g, 'v2.6.8');
 
       html = substituirUmaVez(
         html,
-        '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.7</div>',
-        '<div style="display:inline-flex;align-items:center;margin-top:10px;padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--off-white);font-size:10px;font-weight:800;color:var(--green-mid);letter-spacing:0.08em;">VERSÃO 2.6.7</div>',
+        '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.8</div>',
+        '<div style="display:inline-flex;align-items:center;margin-top:10px;padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--off-white);font-size:10px;font-weight:800;color:var(--green-mid);letter-spacing:0.08em;">VERSÃO 2.6.8</div>',
         'selo de versão na tela de login'
       );
 
@@ -122,8 +122,8 @@
       html = substituirUmaVez(
         html,
         "function clearForm() {\n  ['f-especie','f-area','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => document.getElementById(id).value = '');\n  const espSel = document.getElementById('f-especie-select');",
-        "function clearForm() {\n  ['f-especie','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => document.getElementById(id).value = '');\n  const areaSel = document.getElementById('f-area');\n  if (areaSel) areaSel.value = 'URBANO';\n  const espSel = document.getElementById('f-especie-select');",
-        'área urbana padrão após limpar formulário'
+        "function clearForm() {\n  ['f-especie','f-altura','f-dtbt','f-dtmt','f-dap'].forEach(id => document.getElementById(id).value = '');\n  const areaSel = document.getElementById('f-area');\n  if (areaSel) areaSel.value = 'URBANO';\n  const dtatSel = document.getElementById('f-dtat');\n  if (dtatSel) dtatSel.value = '0';\n  const espSel = document.getElementById('f-especie-select');",
+        'padrões de área e DT AT após limpar formulário'
       );
 
       document.open();
