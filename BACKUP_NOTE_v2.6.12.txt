@@ -1,0 +1,1 @@
+Ponto de recuperação da versão 2.6.12 antes de incluir a sincronização visual na aba Registros.
