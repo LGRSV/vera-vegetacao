@@ -16,7 +16,7 @@
 <body>
   <main>
     <div class="mark">V</div>
-    <strong>Carregando VERA 2.6.6</strong>
+    <strong>Carregando VERA 2.6.7</strong>
     <p class="status" id="status">Preparando regras de coleta em campo…</p>
     <div class="error" id="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
   </main>
@@ -37,7 +37,7 @@
 
     try {
       status.textContent = 'Carregando a versão protegida e aplicando as validações…';
-      const response = await fetch(SOURCE_URL + '?v=2.6.6', { cache: 'no-store' });
+      const response = await fetch(SOURCE_URL + '?v=2.6.7', { cache: 'no-store' });
       if (!response.ok) throw new Error('Backup indisponível (' + response.status + ').');
       let html = await response.text();
 
@@ -72,15 +72,15 @@
       html = substituirUmaVez(
         html,
         "const APP_VERSION = '2.6.4';",
-        "const APP_VERSION = '2.6.6';",
+        "const APP_VERSION = '2.6.7';",
         'versão interna'
       );
-      html = html.replace(/v2\.6\.4/g, 'v2.6.6');
+      html = html.replace(/v2\.6\.4/g, 'v2.6.7');
 
       html = substituirUmaVez(
         html,
-        '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.6</div>',
-        '<div style="display:inline-flex;align-items:center;margin-top:10px;padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--off-white);font-size:10px;font-weight:800;color:var(--green-mid);letter-spacing:0.08em;">VERSÃO 2.6.6</div>',
+        '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.7</div>',
+        '<div style="display:inline-flex;align-items:center;margin-top:10px;padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--off-white);font-size:10px;font-weight:800;color:var(--green-mid);letter-spacing:0.08em;">VERSÃO 2.6.7</div>',
         'selo de versão na tela de login'
       );
 
@@ -110,6 +110,20 @@
         'async function mostrarRotaAtribuida(user) {',
         "function bloquearSelecaoManualRota() {\n  const card = document.querySelector('#polo-screen .polo-card');\n  if (!card) return;\n  Array.from(card.children).forEach(el => {\n    if (el.id === 'rota-atribuida-banner' || el.id === 'sem-rota-banner') return;\n    el.style.display = 'none';\n  });\n}\n\nasync function mostrarRotaAtribuida(user) {\n  bloquearSelecaoManualRota();",
         'bloqueio da seleção manual de rota'
+      );
+
+      html = substituirUmaVez(
+        html,
+        '<div class="field-group"><label class="field-label">Área</label><input class="field-input" type="text" id="f-area" placeholder="Identificação da área"></div>',
+        '<div class="field-group"><label class="field-label">Área</label><select class="field-input" id="f-area"><option value="URBANO" selected>URBANO</option><option value="RURAL">RURAL</option></select></div>',
+        'seletor de área urbana ou rural'
+      );
+
+      html = substituirUmaVez(
+        html,
+        "function clearForm() {\n  ['f-especie','f-area','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => document.getElementById(id).value = '');\n  const espSel = document.getElementById('f-especie-select');",
+        "function clearForm() {\n  ['f-especie','f-altura','f-dtbt','f-dtmt','f-dtat','f-dap'].forEach(id => document.getElementById(id).value = '');\n  const areaSel = document.getElementById('f-area');\n  if (areaSel) areaSel.value = 'URBANO';\n  const espSel = document.getElementById('f-especie-select');",
+        'área urbana padrão após limpar formulário'
       );
 
       document.open();
