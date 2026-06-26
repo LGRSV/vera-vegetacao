@@ -1107,7 +1107,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.4</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.5</div>
     </div>
   </div>
   <div class="header-right">
@@ -1509,7 +1509,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.5.4';
+const APP_VERSION = '2.5.5';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1754,7 +1754,7 @@ function centralizarNoGPS() {
       map.setView([currentLat, currentLon], 17, { animate: true });
       if (!userMarker) {
         userMarker = L.circleMarker([currentLat, currentLon], {
-          radius: 9, fillColor: '#e8a020', color: '#fff', weight: 3, fillOpacity: 1
+          pane: 'usuarioPane', radius: 9, fillColor: '#e8a020', color: '#fff', weight: 3, fillOpacity: 1, interactive: false
         }).addTo(map);
       } else {
         userMarker.setLatLng([currentLat, currentLon]);
@@ -1907,6 +1907,9 @@ async function trocarEquipe() {
 
 function doLogout() {
   limparSessao();
+  pararGPSWatch();
+  userMarker = null;
+  userAccuracyCircle = null;
   currentUser = currentLat = currentLon = null;
   photos = [];
   if (watchId !== undefined && watchId !== null) navigator.geolocation.clearWatch(watchId);
@@ -2002,20 +2005,100 @@ async function renderMapPoints() {
   });
 }
 
+let userAccuracyCircle = null;
+let gpsPrimeiraFixacao = true;
+let gpsUltimaAtualizacao = 0;
+
 function startGPSWatch() {
-  if (!navigator.geolocation) return;
-  watchId = navigator.geolocation.watchPosition(pos => {
-    currentLat = pos.coords.latitude;
-    currentLon = pos.coords.longitude;
-    document.getElementById('gps-pill').textContent = ` ${currentLat.toFixed(6)}, ${currentLon.toFixed(6)}`;
-    if (!map) return;
-    if (!userMarker) {
-      userMarker = L.circleMarker([currentLat,currentLon], { radius:10, fillColor:'#e8a020', color:'#fff', weight:3, fillOpacity:1 }).addTo(map);
-      map.setView([currentLat,currentLon], 15);
-    } else {
-      userMarker.setLatLng([currentLat,currentLon]);
+  if (!navigator.geolocation) {
+    const pill = document.getElementById('gps-pill');
+    if (pill) pill.textContent = 'GPS não suportado';
+    return;
+  }
+
+  // Limpar watch anterior para não acumular múltiplos rastreadores
+  if (watchId !== null && watchId !== undefined) {
+    try { navigator.geolocation.clearWatch(watchId); } catch(e) {}
+  }
+  gpsPrimeiraFixacao = true;
+
+  watchId = navigator.geolocation.watchPosition(
+    pos => {
+      currentLat = pos.coords.latitude;
+      currentLon = pos.coords.longitude;
+      const precisao = pos.coords.accuracy || 0;
+      gpsUltimaAtualizacao = Date.now();
+
+      const pill = document.getElementById('gps-pill');
+      if (pill) {
+        const precTxt = precisao ? ' (±' + Math.round(precisao) + 'm)' : '';
+        pill.textContent = currentLat.toFixed(6) + ', ' + currentLon.toFixed(6) + precTxt;
+      }
+
+      if (!map) return;
+      garantirCamadasMapa();
+
+      // Círculo de precisão (mostra a margem de erro do GPS)
+      if (precisao > 0) {
+        if (!userAccuracyCircle) {
+          userAccuracyCircle = L.circle([currentLat, currentLon], {
+            pane: 'usuarioPane',
+            radius: precisao,
+            color: '#e8a020',
+            fillColor: '#e8a020',
+            fillOpacity: 0.12,
+            weight: 1,
+            interactive: false,
+          }).addTo(map);
+        } else {
+          userAccuracyCircle.setLatLng([currentLat, currentLon]);
+          userAccuracyCircle.setRadius(precisao);
+        }
+      }
+
+      // Marcador do usuário (ponto laranja)
+      if (!userMarker) {
+        userMarker = L.circleMarker([currentLat, currentLon], {
+          pane: 'usuarioPane',
+          radius: 9,
+          fillColor: '#e8a020',
+          color: '#fff',
+          weight: 3,
+          fillOpacity: 1,
+          interactive: false,
+        }).addTo(map);
+      } else {
+        userMarker.setLatLng([currentLat, currentLon]);
+      }
+
+      // Centralizar só na primeira fixação (depois respeita a navegação do usuário)
+      if (gpsPrimeiraFixacao) {
+        map.setView([currentLat, currentLon], 16, { animate: true });
+        gpsPrimeiraFixacao = false;
+      }
+    },
+    erro => {
+      const pill = document.getElementById('gps-pill');
+      if (pill) {
+        if (erro.code === 1) pill.textContent = 'GPS bloqueado — permita a localização';
+        else if (erro.code === 2) pill.textContent = 'GPS indisponível';
+        else if (erro.code === 3) pill.textContent = 'GPS demorando...';
+        else pill.textContent = 'GPS indisponível';
+      }
+    },
+    {
+      enableHighAccuracy: true,   // usa o GPS real do aparelho (preciso em campo)
+      maximumAge: 0,              // sempre posição nova, nunca cacheada — tempo real
+      timeout: 20000,
     }
-  }, ()=>{ document.getElementById('gps-pill').textContent='️ GPS indisponível'; }, { enableHighAccuracy:false, maximumAge:10000, timeout:15000 });
+  );
+}
+
+function pararGPSWatch() {
+  if (watchId !== null && watchId !== undefined) {
+    try { navigator.geolocation.clearWatch(watchId); } catch(e) {}
+    watchId = null;
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -2580,6 +2663,7 @@ function criarPaineisMapa() {
   definirPainel('cabosT1Pane',   420);  // T1 sobre os postes visualmente
   definirPainel('cabosT2Pane',   430);  // T2 sobre T1
   definirPainel('postesHitPane', 460);  // hit areas acima de tudo — clicável
+  definirPainel('usuarioPane',   500);  // marcador do usuário sempre no topo
   // Garantir que os canvas dos cabos não bloqueiam cliques
   ['cabosT1Pane','cabosT2Pane'].forEach(nome => {
     const el = map.getPane(nome);
