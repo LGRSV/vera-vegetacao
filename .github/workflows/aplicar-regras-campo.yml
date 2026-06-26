@@ -1,0 +1,108 @@
+name: Aplicar regras de coleta VERA
+
+on:
+  push:
+    branches:
+      - feature/field-photo-distance-validation
+    paths:
+      - '.github/aplicar-regras-campo.flag'
+
+permissions:
+  contents: write
+
+jobs:
+  aplicar-regras:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Aplicar validações de distância e fotos
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          index_path = Path('index.html')
+          html = index_path.read_text(encoding='utf-8')
+
+          html, distance_count = re.subn(
+              r'for \(let d = 0; d <= 300; d \+= 5\) sel\.innerHTML \+= \'<option value="\' \+ d \+ \'">\' \+ d \+ \' cm</option>\';',
+              'for (let d = 0; d <= 300; d += 50) sel.innerHTML += \'<option value="\' + d + \'">\' + d + \' cm</option>\';',
+              html
+          )
+          if distance_count == 0:
+              raise SystemExit('Não foi encontrado o gerador de opções de distância em 5 cm.')
+
+          old_label = '<div class="photo-label">Toque para fotografar ou escolher da galeria</div>'
+          new_label = '''<div class="photo-label">Adicione no mínimo 3 fotos obrigatórias.</div>
+       <div id="photo-requirement" style="font-size:11px;color:var(--danger);font-weight:600;margin-top:6px;line-height:1.4;" aria-live="polite">0 de 3 fotos adicionadas — registre frente, lateral e a proximidade com a rede.</div>'''
+          if old_label not in html:
+              raise SystemExit('Não foi encontrado o aviso da área de fotos.')
+          html = html.replace(old_label, new_label, 1)
+
+          anchor = '''    c.appendChild(div);
+  });
+}
+
+function removePhoto(i)'''
+          replacement = '''    c.appendChild(div);
+  });
+  const requirement = document.getElementById('photo-requirement');
+  if (requirement) {
+    const completas = photos.length >= 3;
+    requirement.textContent = completas
+      ? photos.length + ' foto(s) adicionada(s) — evidências completas.'
+      : photos.length + ' de 3 fotos adicionadas — registre frente, lateral e a proximidade com a rede.';
+    requirement.style.color = completas ? 'var(--green-mid)' : 'var(--danger)';
+  }
+}
+
+function removePhoto(i)'''
+          if anchor not in html:
+              raise SystemExit('Não foi encontrado o renderizador de fotos.')
+          html = html.replace(anchor, replacement, 1)
+
+          validation = """  if (!especie) { showToast('Informe a espécie da árvore!','error'); return; }
+
+  const all = await dbGetAll('points');"""
+          validation_new = """  if (!especie) { showToast('Informe a espécie da árvore!','error'); return; }
+  if (photos.length < 3) {
+    const faltam = 3 - photos.length;
+    showToast('Adicione 3 fotos obrigatórias: frente, lateral e proximidade com a rede. Faltam ' + faltam + '.', 'error');
+    return;
+  }
+
+  const all = await dbGetAll('points');"""
+          if validation not in html:
+              raise SystemExit('Não foi encontrado o ponto de validação do registro.')
+          html = html.replace(validation, validation_new, 1)
+
+          html = html.replace("const APP_VERSION = '2.6.4';", "const APP_VERSION = '2.6.5';", 1)
+          html = html.replace('v2.6.4', 'v2.6.5')
+          index_path.write_text(html, encoding='utf-8')
+
+          Path('version.json').write_text(
+              '{"version":"2.6.5","released":"2026-06-26","notes":"Distâncias em incrementos de 50 cm e 3 fotos obrigatórias com orientação de ângulos"}\n',
+              encoding='utf-8'
+          )
+
+      - name: Validar resultado
+        run: |
+          git diff --check
+          grep -q "d += 50" index.html
+          grep -q "photos.length < 3" index.html
+          grep -q "frente, lateral e a proximidade com a rede" index.html
+
+      - name: Consolidar alteração
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm .github/aplicar-regras-campo.flag
+          git rm .github/workflows/aplicar-regras-campo.yml
+          git add index.html version.json
+          git commit -m "feat: exigir três fotos e distâncias de 50 cm"
+          git push
