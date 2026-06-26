@@ -1,1 +1,1 @@
-{"version":"2.6.7","released":"2026-06-26","notes":"Campo Área agora usa URBANO como padrão, com opções URBANO e RURAL para as equipes."}
+{"version":"2.6.8","released":"2026-06-26","notes":"DT AT inicia em 0 cm e retorna a 0 cm ao limpar o formulário; demais regras de campo preservadas."}
