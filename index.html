@@ -956,7 +956,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.3.4</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.4.0</div>
     </div>
   </div>
   <div class="header-right">
@@ -1313,7 +1313,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.3.4';
+const APP_VERSION = '2.4.0';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1532,6 +1532,90 @@ async function saveConfig() {
 let currentUser = null, currentLat = null, currentLon = null;
 let photos = [], map, userMarker, pointsLayer, watchId;
 
+
+// ══════════════════════════════════════════════════
+// PERSISTÊNCIA DE SESSÃO (sobrevive a reload)
+// ══════════════════════════════════════════════════
+const SESSAO_KEY = 'vera_sessao';
+
+function salvarSessao() {
+  try {
+    const sessao = {
+      user: currentUser,
+      polo: poloAtivo,
+      alimentadores: alimentadoresAtivos,
+      ts: Date.now(),
+    };
+    localStorage.setItem(SESSAO_KEY, JSON.stringify(sessao));
+  } catch(e) {}
+}
+
+function salvarSessaoAdmin() {
+  try {
+    localStorage.setItem(SESSAO_KEY, JSON.stringify({ user: currentUser, admin: true, ts: Date.now() }));
+  } catch(e) {}
+}
+
+function limparSessao() {
+  try { localStorage.removeItem(SESSAO_KEY); } catch(e) {}
+}
+
+function lerSessao() {
+  try {
+    const s = localStorage.getItem(SESSAO_KEY);
+    if (!s) return null;
+    const sessao = JSON.parse(s);
+    // Sessão expira em 12 horas
+    if (!sessao.ts || (Date.now() - sessao.ts) > 12*60*60*1000) {
+      limparSessao();
+      return null;
+    }
+    return sessao;
+  } catch(e) { return null; }
+}
+
+async function restaurarSessao() {
+  const sessao = lerSessao();
+  if (!sessao || !sessao.user || !USERS[sessao.user]) return false;
+
+  currentUser = sessao.user;
+  await carregarConfigGlobal();
+  document.getElementById('login-screen').style.display = 'none';
+
+  // ADMIN
+  if (sessao.admin || sessao.user === ADMIN_USER) {
+    document.getElementById('app-header').style.display = 'flex';
+    document.getElementById('app').style.display        = 'block';
+    document.getElementById('header-user').textContent  = sessao.user;
+    document.getElementById('tab-admin').style.display  = 'flex';
+    document.getElementById('btn-config-header').style.display = 'block';
+    document.getElementById('tab-map').style.display    = 'none';
+    document.getElementById('tab-form').style.display   = 'none';
+    document.getElementById('tab-records').style.display= 'none';
+    initMap();
+    loadConfig();
+    switchTab('admin');
+    renderRotasAdmin();
+    return true;
+  }
+
+  // EQUIPE DE CAMPO com alimentadores ativos
+  if (sessao.polo && Array.isArray(sessao.alimentadores) && sessao.alimentadores.length) {
+    poloAtivo = sessao.polo;
+    alimentadoresAtivos = sessao.alimentadores;
+    await carregarIndice();
+    await confirmarAlimentadores();
+    return true;
+  }
+
+  // Equipe sem rota escolhida — volta pra seleção de polo
+  document.getElementById('polo-screen').style.display  = 'flex';
+  document.getElementById('polo-user-label').textContent = sessao.user;
+  carregarIndice();
+  mostrarRotaAtribuida(sessao.user);
+  return true;
+}
+
 function doLogin() {
   const user = document.getElementById('login-user').value;
   const pass = document.getElementById('login-pass').value;
@@ -1557,6 +1641,7 @@ function doLogin() {
     loadConfig();
     switchTab('admin');
     renderRotasAdmin();
+    salvarSessaoAdmin();
   } else {
     // Equipe de campo vai para seleção de polo
     document.getElementById('polo-screen').style.display  = 'flex';
@@ -1588,6 +1673,7 @@ async function trocarEquipe() {
 }
 
 function doLogout() {
+  limparSessao();
   currentUser = currentLat = currentLon = null;
   photos = [];
   if (watchId !== undefined && watchId !== null) navigator.geolocation.clearWatch(watchId);
@@ -2182,6 +2268,8 @@ function toggleAlimentador(id) {
 
 async function confirmarAlimentadores() {
   if (alimentadoresAtivos.length === 0) return;
+  // Salvar sessão para restaurar após reload
+  salvarSessao();
   // Ir para o app
   document.getElementById('polo-screen').style.display = 'none';
   document.getElementById('app-header').style.display  = 'flex';
@@ -3238,8 +3326,14 @@ async function usarRotaAtribuida() {
 // ══════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════
-initDB().then(() => {
+initDB().then(async () => {
   updateConnectionStatus();
+  // Restaurar sessão anterior (se houver) para não voltar à tela inicial após reload
+  try {
+    await restaurarSessao();
+  } catch(e) {
+    console.error('Erro ao restaurar sessão:', e);
+  }
 }).catch(err => {
   console.error('Erro ao iniciar DB:', err);
   showToast('Erro ao iniciar banco de dados.','error');
