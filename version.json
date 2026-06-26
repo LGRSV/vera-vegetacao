@@ -1,1 +1,1 @@
-{"version":"2.6.11","released":"2026-06-26","notes":"O projeto ativo agora é salvo por equipe no servidor, com data/hora de início e histórico de ativações; pode ser retomado em outro dispositivo da mesma equipe."}
+{"version":"2.6.12","released":"2026-06-26","notes":"Correção do carregamento do estado compartilhado: o projeto ativo é salvo por equipe no servidor e pode ser retomado em outro dispositivo."}
