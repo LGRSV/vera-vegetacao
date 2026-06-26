@@ -956,7 +956,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.3.3</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.3.4</div>
     </div>
   </div>
   <div class="header-right">
@@ -1313,7 +1313,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.3.3';
+const APP_VERSION = '2.3.4';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1980,10 +1980,10 @@ let postesRenderer = null;
 let caboRendererT1 = null;
 let caboRendererT2 = null;
 
-const LIMITE_TOTAL_POSTES_MAPA = 600;
-const LIMITE_MINIMO_POSTES_POR_ALIMENTADOR = 50;
-const LIMITE_MAXIMO_POSTES_POR_ALIMENTADOR = 300;
-const RAIO_POSTES_KM = 5;
+const LIMITE_TOTAL_POSTES_MAPA = 12000;
+const LIMITE_MINIMO_POSTES_POR_ALIMENTADOR = 3000;
+const LIMITE_MAXIMO_POSTES_POR_ALIMENTADOR = 8000;
+const RAIO_POSTES_KM = 8;
 const DISTANCIA_POSTE_CABO_M = 8;
 const GRADE_CABOS_GRAUS = 0.00025;
 
@@ -2488,7 +2488,7 @@ function renderPostesNoMapa(circ, postes) {
       livres: camadas.livres,
     };
 
-    const lote = 80;
+    const lote = 200;
     let indicePoste = 0;
 
     function plotarLote() {
@@ -2500,7 +2500,7 @@ function renderPostesNoMapa(circ, postes) {
 
         const hit = L.circleMarker([poste.lat, poste.lon], {
           pane: 'postesPane',
-          radius: 12,
+          radius: 18,
           fillColor: 'transparent',
           color: 'transparent',
           weight: 0,
@@ -2513,10 +2513,10 @@ function renderPostesNoMapa(circ, postes) {
 
         const visual = L.circleMarker([poste.lat, poste.lon], {
           pane: 'postesPane',
-          radius: 5,
+          radius: 7,
           fillColor: '#1565C0',
           color: '#ffffff',
-          weight: 1.5,
+          weight: 2,
           fillOpacity: 0.9,
           renderer: postesRenderer,
           interactive: false,
