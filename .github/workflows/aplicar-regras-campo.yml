@@ -1,11 +1,11 @@
 name: Aplicar regras de coleta VERA
 
 on:
-  push:
+  pull_request:
     branches:
-      - feature/field-photo-distance-validation
-    paths:
-      - '.github/aplicar-regras-campo.flag'
+      - main
+    types:
+      - opened
 
 permissions:
   contents: write
@@ -14,10 +14,10 @@ jobs:
   aplicar-regras:
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar código
+      - name: Baixar código da branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Aplicar validações de distância e fotos
