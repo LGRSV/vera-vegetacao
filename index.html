@@ -1081,6 +1081,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="login-icon">VERA</div>
     <div class="login-title">VERA</div>
     <div class="login-subtitle">Vegetação em Rede Ativa<br>Energisa Tocantins</div>
+    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.5.9</div>
     <div class="field-group">
       <label class="field-label">Equipe / Usuário</label>
       <select class="field-input" id="login-user">
@@ -1107,7 +1108,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.8</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.9</div>
     </div>
   </div>
   <div class="header-right">
@@ -1512,7 +1513,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.5.8';
+const APP_VERSION = '2.5.9';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -3562,10 +3563,7 @@ async function salvarEdicaoRota() {
   }
 }
 
-// Fechar modal clicando fora
-document.getElementById('modal-editar-rota').addEventListener('click', function(e) {
-  if (e.target === this) fecharModalRota();
-});
+// Fechar modal clicando fora — movido para initDB.then (após DOM pronto)
 
 
 // ══════════════════════════════════════════════════
@@ -3975,6 +3973,15 @@ async function usarRotaAtribuida() {
 // ══════════════════════════════════════════════════
 initDB().then(async () => {
   updateConnectionStatus();
+
+  // Listeners seguros — DOM garantidamente pronto aqui
+  const modalEl = document.getElementById('modal-editar-rota');
+  if (modalEl) {
+    modalEl.addEventListener('click', function(e) {
+      if (e.target === this) fecharModalRota();
+    });
+  }
+
   // Restaurar sessão anterior (se houver) para não voltar à tela inicial após reload
   try {
     await restaurarSessao();
