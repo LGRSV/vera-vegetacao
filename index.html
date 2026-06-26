@@ -1081,7 +1081,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="login-icon">VERA</div>
     <div class="login-title">VERA</div>
     <div class="login-subtitle">Vegetação em Rede Ativa<br>Energisa Tocantins</div>
-    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.1</div>
+    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.2</div>
     <div class="field-group">
       <label class="field-label">Equipe / Usuário</label>
       <select class="field-input" id="login-user">
@@ -1108,7 +1108,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.6.1</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.6.2</div>
     </div>
   </div>
   <div class="header-right">
@@ -1513,7 +1513,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.6.1';
+const APP_VERSION = '2.6.2';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1606,107 +1606,153 @@ window.addEventListener('offline', updateConnectionStatus);
 // ══════════════════════════════════════════════════
 let isSyncing = false;
 
-async function syncPendingPoints() {
-  if (isSyncing || !navigator.onLine) return;
+// Comprime imagem base64 para máximo de 1280px e qualidade 80%
+async function comprimirFoto(dataUrl, maxPx) {
+  return new Promise(resolve => {
+    try {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > maxPx || h > maxPx) {
+          if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+          else       { w = Math.round(w * maxPx / h); h = maxPx; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.80));
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    } catch(e) { resolve(dataUrl); }
+  });
+}
 
-  const cfg = await carregarConfigGlobal();
-  const token = await getConfig('github_token');
-  const repo  = await getConfig('github_repo') || (cfg && cfg.repo);
-  if (!token || !repo) return;
+async function syncPendingPoints() {
+  if (isSyncing) return;
+  if (!navigator.onLine) {
+    showToast('Sem conexão — pontos serão enviados ao conectar.', '');
+    return;
+  }
+
+  // Token: tenta config global primeiro (mais confiável), depois IndexedDB
+  const cfg   = await carregarConfigGlobal().catch(() => null);
+  const token = (cfg && cfg.token) || await getConfig('github_token').catch(() => null);
+  const repo  = (cfg && cfg.repo)  || await getConfig('github_repo').catch(() => null) || GH_REPO;
+
+  if (!token) {
+    showToast('Token não configurado. Verifique a aba Config.', 'error');
+    return;
+  }
 
   const all     = await dbGetAll('points');
   const pending = all.filter(r => !r.synced);
   if (pending.length === 0) return;
 
   isSyncing = true;
-  const bar = document.getElementById('status-bar');
-  const dot = document.getElementById('status-dot');
-  bar.className = 'syncing';
-  dot.classList.add('pulse');
-  document.getElementById('status-text').textContent = `Enviando ${pending.length} ponto(s)...`;
+  const bar  = document.getElementById('status-bar');
+  const dot  = document.getElementById('status-dot');
+  if (bar) bar.className = 'syncing';
+  if (dot) dot.classList.add('pulse');
+  const setStatus = txt => { const el = document.getElementById('status-text'); if (el) el.textContent = txt; };
+  setStatus('Enviando ' + pending.length + ' ponto(s)...');
 
-  let enviados = 0;
-
-  // Helper: criar ou atualizar arquivo no GitHub
-  async function ghPut(path, b64content, msg) {
+  // Helper PUT GitHub (arrow function — sem problemas de hoisting)
+  const ghPut = async (path, b64content, msg) => {
     let sha = null;
     try {
-      const chk = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,
-        { headers: { 'Authorization': `token ${token}` } });
+      const chk = await fetch('https://api.github.com/repos/' + repo + '/contents/' + path,
+        { headers: { 'Authorization': 'token ' + token } });
       if (chk.ok) { const d = await chk.json(); sha = d.sha; }
     } catch(e) {}
     const body = { message: msg, content: b64content };
     if (sha) body.sha = sha;
-    return fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+    const r = await fetch('https://api.github.com/repos/' + repo + '/contents/' + path, {
       method: 'PUT',
-      headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+      headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
-  }
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      console.warn('ghPut erro', r.status, path, err.message);
+    }
+    return r;
+  };
+
+  let enviados = 0, erros = 0;
 
   for (const point of pending) {
     try {
       const pasta = point.usuario.replace(/\s+/g, '-');
 
-      // ── 1. Subir fotos com ID único: VER{num}F{n} ──
+      // ── 1. Comprimir e subir fotos ──
       const fotosGithub = [];
       const fotosIds    = [];
       if (Array.isArray(point.photos) && point.photos.length > 0) {
-        // ID base: ponto V0001 → num 0001
         const numPonto = point.id.replace(/[^0-9]/g, '').padStart(4, '0');
         for (let i = 0; i < point.photos.length; i++) {
-          const foto = point.photos[i];
-          if (!foto || !foto.startsWith('data:')) continue;
+          const fotoOriginal = point.photos[i];
+          if (!fotoOriginal || !fotoOriginal.startsWith('data:')) continue;
+          setStatus('Enviando foto ' + (i+1) + '/' + point.photos.length + ' do ponto ' + point.id + '...');
           try {
-            const partes   = foto.split(',');
-            const b64foto  = partes[1];
-            const ext      = partes[0].includes('png') ? 'png' : 'jpg';
-            const fotoId   = 'VER' + numPonto + 'F' + (i + 1);   // ex: VER0001F1
-            const fotoPath = 'fotos/' + pasta + '/' + fotoId + '.' + ext;
-            const res = await ghPut(fotoPath, b64foto,
-              'VERA: foto ' + fotoId);
-            if (res.ok) {
+            // Comprimir para máx 1280px antes de subir (tablet = câmera grande)
+            const fotoComprimida = await comprimirFoto(fotoOriginal, 1280);
+            const partes  = fotoComprimida.split(',');
+            const b64foto = partes[1];
+            const fotoId   = 'VER' + numPonto + 'F' + (i + 1);
+            const fotoPath = 'fotos/' + pasta + '/' + fotoId + '.jpg';
+            const res = await ghPut(fotoPath, b64foto, 'VERA: foto ' + fotoId);
+            if (res && res.ok) {
               fotosGithub.push(fotoPath);
               fotosIds.push(fotoId);
             }
           } catch(ef) {
-            console.warn('Erro ao enviar foto', i + 1, ef);
+            console.warn('Erro foto', i+1, ef);
           }
         }
       }
 
-      // ── 2. Salvar JSON do ponto (com caminhos das fotos, sem base64) ──
+      // ── 2. Subir JSON do ponto ──
+      setStatus('Salvando ponto ' + point.id + '...');
       const pointParaSalvar = {
         ...point,
-        photos: undefined,                // remover base64 do JSON
-        fotos_count: Array.isArray(point.photos) ? point.photos.length : 0,
-        fotos_ids:    fotosIds,           // IDs das fotos: ['VER0001F1','VER0001F2']
-        fotos_github: fotosGithub,        // caminhos no GitHub
+        photos:       undefined,
+        fotos_count:  Array.isArray(point.photos) ? point.photos.length : 0,
+        fotos_ids:    fotosIds,
+        fotos_github: fotosGithub,
       };
       const conteudo = JSON.stringify(pointParaSalvar, null, 2);
       const b64json  = btoa(unescape(encodeURIComponent(conteudo)));
-      const path     = `dados/${pasta}/${point.id}.json`;
+      const path     = 'dados/' + pasta + '/' + point.id + '.json';
       const res = await ghPut(path, b64json,
-        `VERA: ponto ${point.id} — ${point.especie || 'sem espécie'}`);
+        'VERA: ponto ' + point.id + ' — ' + (point.especie || 'sem espécie'));
 
-      if (res.ok) {
-        point.synced   = true;
-        point.syncedAt = new Date().toISOString();
-        if (fotosIds.length > 0)    point.fotos_ids    = fotosIds;
-        if (fotosGithub.length > 0) point.fotos_github = fotosGithub;
+      if (res && res.ok) {
+        point.synced      = true;
+        point.syncedAt    = new Date().toISOString();
+        point.fotos_ids    = fotosIds;
+        point.fotos_github = fotosGithub;
         await dbPut('points', point);
         enviados++;
+      } else {
+        erros++;
       }
-    } catch (err) {
-      console.warn('Erro ao enviar ponto:', point.id, err);
+    } catch(err) {
+      console.warn('Erro ponto', point.id, err);
+      erros++;
     }
   }
 
   isSyncing = false;
   updateConnectionStatus();
-  if (enviados > 0) {
-    showToast(` ${enviados} ponto(s) enviado(s) ao GitHub!`, 'success');
-    renderRecords();
+  renderRecords && renderRecords();
+
+  if (enviados > 0 && erros === 0) {
+    showToast(enviados + ' ponto(s) enviado(s) com sucesso!', 'success');
+  } else if (enviados > 0 && erros > 0) {
+    showToast(enviados + ' enviado(s), ' + erros + ' com erro. Tente sincronizar novamente.', '');
+  } else if (erros > 0) {
+    showToast('Erro ao enviar. Verifique a conexão e tente novamente.', 'error');
   }
 }
 
