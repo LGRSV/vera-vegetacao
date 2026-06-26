@@ -1107,7 +1107,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.6</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.7</div>
     </div>
   </div>
   <div class="header-right">
@@ -1377,10 +1377,12 @@ button, .polo-btn, .alim-item, .tab-btn {
         <option value="__todas__">Todas as equipes</option>
       </select>
       <div id="export-info" style="font-size:12px;color:var(--text-muted);margin-bottom:12px;"></div>
-      <div style="display:flex;gap:8px;">
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
         <button class="btn-export" style="flex:1;justify-content:center;" onclick="exportarDadosAdmin('csv')">Exportar CSV</button>
         <button class="btn-export" style="flex:1;justify-content:center;background:var(--green-mid);" onclick="exportarDadosAdmin('kml')">Exportar KML</button>
       </div>
+      <button class="btn-export" style="width:100%;justify-content:center;background:#5C6BC0;" onclick="exportarFotosLocais()">Exportar fotos deste dispositivo</button>
+      <p style="font-size:10px;color:var(--text-muted);margin-top:6px;">Fotos ficam salvas no aparelho de cada equipe. Para obter todas as fotos, exporte em cada dispositivo.</p>
     </div>
   </div>
 
@@ -1510,7 +1512,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.5.6';
+const APP_VERSION = '2.5.7';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -3273,11 +3275,14 @@ async function carregarDadosEquipe() {
   if (!equipe) { info.textContent = ''; dadosEquipeCarregados = []; return; }
 
   info.textContent = 'Carregando dados...';
+
+  // Garantir que o token está carregado
   const cfg = await carregarConfigGlobal();
-  const token = await getConfig('github_token');
-  const repo = await getConfig('github_repo') || (cfg && cfg.repo) || GH_REPO;
-  if (!token || !repo) {
-    info.textContent = 'Configure o token neste aparelho para consultar os dados.';
+  const token = (cfg && cfg.token) || await getConfig('github_token');
+  const repo  = (cfg && cfg.repo)  || await getConfig('github_repo') || GH_REPO;
+
+  if (!token) {
+    info.textContent = 'Token não configurado. Verifique a aba Config.';
     return;
   }
 
@@ -3285,28 +3290,61 @@ async function carregarDadosEquipe() {
     ? ['Equipe Energisa','Enecol Norte','Enecol Centro','Enecol Sul']
     : [equipe];
 
+  // Listar todas as pastas de dados para achar o nome real da pasta
+  let pastasMapa = {};
+  try {
+    const r = await fetch('https://api.github.com/repos/' + repo + '/contents/dados', {
+      headers: { 'Authorization': 'token ' + token }
+    });
+    if (r.ok) {
+      const items = await r.json();
+      items.forEach(item => {
+        if (item.type === 'dir') pastasMapa[item.name.toLowerCase()] = item.name;
+      });
+    }
+  } catch(e) {}
+
   dadosEquipeCarregados = [];
+  let totalArquivos = 0;
+
   for (const eq of equipes) {
-    const pasta = 'dados/' + eq.replace(/\s+/g,'-');
+    // Tentar nome normalizado (espaço → hífen)
+    const nomePasta = eq.replace(/\s+/g, '-');
+    // Buscar no mapa de pastas (case insensitive)
+    const pastaReal = pastasMapa[nomePasta.toLowerCase()] || nomePasta;
+    const pasta = 'dados/' + pastaReal;
+
     try {
       const r = await fetch('https://api.github.com/repos/' + repo + '/contents/' + pasta, {
         headers: { 'Authorization': 'token ' + token }
       });
-      if (!r.ok) continue;
+      if (!r.ok) {
+        console.warn('Pasta não encontrada:', pasta, r.status);
+        continue;
+      }
       const arquivos = await r.json();
-      for (const arq of arquivos) {
-        if (!arq.name.endsWith('.json')) continue;
+      const jsons = arquivos.filter(a => a.name.endsWith('.json'));
+      totalArquivos += jsons.length;
+      info.textContent = 'Baixando ' + totalArquivos + ' arquivo(s)...';
+
+      for (const arq of jsons) {
         try {
           const rp = await fetch(arq.download_url + '?t=' + Date.now(), { cache: 'no-store' });
+          if (!rp.ok) continue;
           const ponto = await rp.json();
           ponto._equipe = eq;
+          ponto._pasta  = pastaReal;
           dadosEquipeCarregados.push(ponto);
-        } catch(e) {}
+        } catch(e) { console.warn('Erro ao baixar', arq.name, e); }
       }
-    } catch(e) {}
+    } catch(e) { console.warn('Erro ao listar pasta', pasta, e); }
   }
 
-  info.textContent = dadosEquipeCarregados.length + ' ponto(s) encontrado(s).';
+  if (dadosEquipeCarregados.length === 0) {
+    info.textContent = 'Nenhum ponto encontrado para esta equipe.';
+  } else {
+    info.textContent = dadosEquipeCarregados.length + ' ponto(s) encontrado(s). Pronto para exportar.';
+  }
 }
 
 function exportarDadosAdmin(formato) {
@@ -3319,13 +3357,29 @@ function exportarDadosAdmin(formato) {
   const nomeBase = 'VERA_' + (equipe === '__todas__' ? 'todas' : equipe.replace(/\s+/g,'-')) + '_' + new Date().toISOString().slice(0,10);
 
   if (formato === 'csv') {
-    const headers = ['WKT','ID','DATA','POSTE','ESPECIE','LATITUDE','LONGITUDE','ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DAP(cm)','Area','Acesso LV','Equipe'];
-    const rows = dadosEquipeCarregados.map(r => [
-      '"' + (r.wkt||'') + '"', r.id, '"' + (r.data||'') + '"', '"' + (r.poste||'') + '"',
-      '"' + (r.especie||'') + '"', r.lat, r.lon, r.altura||'', r.dtbt||'', r.dtmt||'',
-      r.dtat||'', r.dap||'', '"' + (r.area||'') + '"', '"' + (r.acesso||'') + '"', '"' + (r._equipe||'') + '"'
-    ].join(';'));
-    baixarArquivo(nomeBase + '.csv', '\uFEFF' + [headers.join(';'), ...rows].join('\n'), 'text/csv');
+    const headers = ['WKT','ID','DATA','POSTE','ESPECIE','LATITUDE','LONGITUDE','ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DIAM.TRONCO(cm)','Area','Acesso LV','Equipe','Fotos'];
+    const rows = dadosEquipeCarregados.map(r => {
+      const fotos = Array.isArray(r.photos) ? r.photos.length
+                  : (typeof r.photos === 'number' ? r.photos
+                  : (typeof r.photos === 'string' ? r.photos : 0));
+      return [
+        '"' + (r.wkt||'') + '"',
+        r.id,
+        '"' + (r.data||'') + '"',
+        '"' + (r.poste||'') + '"',
+        '"' + (r.especie||'') + '"',
+        r.lat, r.lon,
+        r.altura||'',
+        r.dtbt||'', r.dtmt||'', r.dtat||'',
+        r.dap||'',
+        '"' + (r.area||'') + '"',
+        '"' + (r.acesso||'') + '"',
+        '"' + (r._equipe||'') + '"',
+        fotos
+      ].join(';');
+    });
+    baixarArquivo(nomeBase + '.csv', '﻿' + [headers.join(';'), ...rows].join('
+'), 'text/csv');
   } else {
     // KML
     let kml = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -3360,11 +3414,28 @@ function escapeXml(s) {
 }
 
 function baixarArquivo(nome, conteudo, tipo) {
-  const blob = new Blob([conteudo], { type: tipo + ';charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = nome; a.click();
-  URL.revokeObjectURL(url);
+  try {
+    // Método moderno (Android Chrome, Desktop)
+    const blob = new Blob([conteudo], { type: tipo + ';charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nome;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch(e) {
+    // Fallback iOS Safari — abre numa nova aba para o usuário salvar manualmente
+    try {
+      const blob = new Blob([conteudo], { type: tipo + ';charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      showToast('Arquivo aberto em nova aba. Use "Compartilhar" para salvar.', '');
+    } catch(e2) {
+      showToast('Erro ao exportar: ' + e2.message, 'error');
+    }
+  }
 }
 
 
@@ -3496,6 +3567,52 @@ async function salvarEdicaoRota() {
 document.getElementById('modal-editar-rota').addEventListener('click', function(e) {
   if (e.target === this) fecharModalRota();
 });
+
+
+// ══════════════════════════════════════════════════
+// EXPORTAR FOTOS (do IndexedDB local)
+// ══════════════════════════════════════════════════
+async function exportarFotosLocais() {
+  const equipe = document.getElementById('export-equipe').value;
+  const info   = document.getElementById('export-info');
+
+  const all = await dbGetAll('points');
+  let pontos = all;
+  if (equipe && equipe !== '__todas__') {
+    pontos = all.filter(p => p.usuario === equipe);
+  }
+
+  const comFotos = pontos.filter(p => Array.isArray(p.photos) && p.photos.length > 0);
+  if (comFotos.length === 0) {
+    showToast('Nenhuma foto encontrada neste dispositivo para a equipe selecionada.', 'error');
+    return;
+  }
+
+  // Baixar cada foto como arquivo individual
+  let total = 0;
+  for (const ponto of comFotos) {
+    for (let i = 0; i < ponto.photos.length; i++) {
+      const foto = ponto.photos[i];
+      if (!foto || !foto.startsWith('data:')) continue;
+      const ext = foto.startsWith('data:image/png') ? 'png' : 'jpg';
+      const nome = ponto.id + '_foto' + (i+1) + '.' + ext;
+      // Converter base64 para blob
+      try {
+        const res = await fetch(foto);
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = nome;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        total++;
+        await new Promise(r => setTimeout(r, 300)); // pequeno delay entre downloads
+      } catch(e) { console.warn('Erro foto', nome, e); }
+    }
+  }
+  showToast(total + ' foto(s) exportada(s) deste dispositivo.', 'success');
+  info.textContent = total + ' foto(s) exportada(s) do dispositivo.';
+}
 
 // ══════════════════════════════════════════════════
 // SISTEMA DE ROTAS
