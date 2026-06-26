@@ -1081,7 +1081,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="login-icon">VERA</div>
     <div class="login-title">VERA</div>
     <div class="login-subtitle">Vegetação em Rede Ativa<br>Energisa Tocantins</div>
-    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.5.9</div>
+    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.0</div>
     <div class="field-group">
       <label class="field-label">Equipe / Usuário</label>
       <select class="field-input" id="login-user">
@@ -1108,7 +1108,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.9</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.6.0</div>
     </div>
   </div>
   <div class="header-right">
@@ -1382,8 +1382,8 @@ button, .polo-btn, .alim-item, .tab-btn {
         <button class="btn-export" style="flex:1;justify-content:center;" onclick="exportarDadosAdmin('csv')">Exportar CSV</button>
         <button class="btn-export" style="flex:1;justify-content:center;background:var(--green-mid);" onclick="exportarDadosAdmin('kml')">Exportar KML</button>
       </div>
-      <button class="btn-export" style="width:100%;justify-content:center;background:#5C6BC0;" onclick="exportarFotosLocais()">Exportar fotos deste dispositivo</button>
-      <p style="font-size:10px;color:var(--text-muted);margin-top:6px;">Fotos ficam salvas no aparelho de cada equipe. Para obter todas as fotos, exporte em cada dispositivo.</p>
+      <button class="btn-export" style="width:100%;justify-content:center;background:#5C6BC0;" onclick="exportarFotosLocais()">Baixar fotos de todas as equipes</button>
+      <p style="font-size:10px;color:var(--text-muted);margin-top:6px;">Fotos são enviadas ao servidor junto com os pontos. Disponíveis aqui após a sincronização das equipes.</p>
     </div>
   </div>
 
@@ -1513,7 +1513,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.5.9';
+const APP_VERSION = '2.6.0';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -1626,41 +1626,67 @@ async function syncPendingPoints() {
   document.getElementById('status-text').textContent = `Enviando ${pending.length} ponto(s)...`;
 
   let enviados = 0;
+
+  // Helper: criar ou atualizar arquivo no GitHub
+  async function ghPut(path, b64content, msg) {
+    let sha = null;
+    try {
+      const chk = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,
+        { headers: { 'Authorization': `token ${token}` } });
+      if (chk.ok) { const d = await chk.json(); sha = d.sha; }
+    } catch(e) {}
+    const body = { message: msg, content: b64content };
+    if (sha) body.sha = sha;
+    return fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+      method: 'PUT',
+      headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+  }
+
   for (const point of pending) {
     try {
-      // Salva JSON do ponto no GitHub
-      const conteudo = JSON.stringify({...point, photos: point.photos ? `${point.photos.length} foto(s)` : 0}, null, 2);
-      const b64 = btoa(unescape(encodeURIComponent(conteudo)));
-      const path = `dados/${point.usuario.replace(/\s+/g,'-')}/${point.id}.json`;
+      const pasta = point.usuario.replace(/\s+/g, '-');
 
-      // Verifica se arquivo já existe (para pegar o SHA)
-      let sha = null;
-      const check = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-        headers: { 'Authorization': `token ${token}` }
-      });
-      if (check.ok) {
-        const existing = await check.json();
-        sha = existing.sha;
+      // ── 1. Subir fotos para fotos/{equipe}/{id}_foto{n}.jpg ──
+      const fotosGithub = [];
+      if (Array.isArray(point.photos) && point.photos.length > 0) {
+        for (let i = 0; i < point.photos.length; i++) {
+          const foto = point.photos[i];
+          if (!foto || !foto.startsWith('data:')) continue;
+          try {
+            const partes  = foto.split(',');
+            const b64foto = partes[1];
+            const ext     = partes[0].includes('png') ? 'png' : 'jpg';
+            const fotoPath = `fotos/${pasta}/${point.id}_foto${i + 1}.${ext}`;
+            const res = await ghPut(fotoPath, b64foto,
+              `VERA: foto ${point.id} foto${i + 1}`);
+            if (res.ok) {
+              fotosGithub.push(fotoPath);
+            }
+          } catch(ef) {
+            console.warn('Erro ao enviar foto', i + 1, ef);
+          }
+        }
       }
 
-      const body = {
-        message: `VERA: ponto ${point.id} — ${point.especie || 'sem espécie'}`,
-        content: b64,
+      // ── 2. Salvar JSON do ponto (com caminhos das fotos, sem base64) ──
+      const pointParaSalvar = {
+        ...point,
+        photos: undefined,          // remover base64 do JSON
+        fotos_count: Array.isArray(point.photos) ? point.photos.length : 0,
+        fotos_github: fotosGithub,  // caminhos no GitHub
       };
-      if (sha) body.sha = sha;
-
-      const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `token ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
+      const conteudo = JSON.stringify(pointParaSalvar, null, 2);
+      const b64json  = btoa(unescape(encodeURIComponent(conteudo)));
+      const path     = `dados/${pasta}/${point.id}.json`;
+      const res = await ghPut(path, b64json,
+        `VERA: ponto ${point.id} — ${point.especie || 'sem espécie'}`);
 
       if (res.ok) {
-        point.synced    = true;
-        point.syncedAt  = new Date().toISOString();
+        point.synced   = true;
+        point.syncedAt = new Date().toISOString();
+        if (fotosGithub.length > 0) point.fotos_github = fotosGithub;
         await dbPut('points', point);
         enviados++;
       }
@@ -3358,7 +3384,7 @@ function exportarDadosAdmin(formato) {
   const nomeBase = 'VERA_' + (equipe === '__todas__' ? 'todas' : equipe.replace(/\s+/g,'-')) + '_' + new Date().toISOString().slice(0,10);
 
   if (formato === 'csv') {
-    const headers = ['WKT','ID','DATA','POSTE','ESPECIE','LATITUDE','LONGITUDE','ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DIAM.TRONCO(cm)','Area','Acesso LV','Equipe','Fotos'];
+    const headers = ['WKT','ID','DATA','POSTE','ESPECIE','LATITUDE','LONGITUDE','ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DIAM.TRONCO(cm)','Area','Acesso LV','Equipe','Fotos','URLs_Fotos'];
     const rows = dadosEquipeCarregados.map(r => {
       const fotos = Array.isArray(r.photos) ? r.photos.length
                   : (typeof r.photos === 'number' ? r.photos
@@ -3376,7 +3402,10 @@ function exportarDadosAdmin(formato) {
         '"' + (r.area||'') + '"',
         '"' + (r.acesso||'') + '"',
         '"' + (r._equipe||'') + '"',
-        fotos
+        fotos,
+        '"' + (Array.isArray(r.fotos_github) ? r.fotos_github.map(f =>
+          'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/' + f
+        ).join(' | ') : '') + '"'
       ].join(';');
     });
     baixarArquivo(nomeBase + '.csv', '\uFEFF' + [headers.join(';'), ...rows].join('\n'), 'text/csv');
@@ -3572,43 +3601,57 @@ async function salvarEdicaoRota() {
 async function exportarFotosLocais() {
   const equipe = document.getElementById('export-equipe').value;
   const info   = document.getElementById('export-info');
+  info.textContent = 'Buscando fotos no servidor...';
 
-  const all = await dbGetAll('points');
-  let pontos = all;
-  if (equipe && equipe !== '__todas__') {
-    pontos = all.filter(p => p.usuario === equipe);
-  }
+  const cfg   = await carregarConfigGlobal();
+  const token = (cfg && cfg.token) || await getConfig('github_token');
+  const repo  = (cfg && cfg.repo)  || await getConfig('github_repo') || GH_REPO;
 
-  const comFotos = pontos.filter(p => Array.isArray(p.photos) && p.photos.length > 0);
-  if (comFotos.length === 0) {
-    showToast('Nenhuma foto encontrada neste dispositivo para a equipe selecionada.', 'error');
-    return;
-  }
+  const equipes = (!equipe || equipe === '__todas__')
+    ? ['Equipe Energisa','Enecol Norte','Enecol Centro','Enecol Sul']
+    : [equipe];
 
-  // Baixar cada foto como arquivo individual
   let total = 0;
-  for (const ponto of comFotos) {
-    for (let i = 0; i < ponto.photos.length; i++) {
-      const foto = ponto.photos[i];
-      if (!foto || !foto.startsWith('data:')) continue;
-      const ext = foto.startsWith('data:image/png') ? 'png' : 'jpg';
-      const nome = ponto.id + '_foto' + (i+1) + '.' + ext;
-      // Converter base64 para blob
-      try {
-        const res = await fetch(foto);
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = nome;
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-        total++;
-        await new Promise(r => setTimeout(r, 300)); // pequeno delay entre downloads
-      } catch(e) { console.warn('Erro foto', nome, e); }
-    }
+  let erros = 0;
+
+  for (const eq of equipes) {
+    const pasta = 'fotos/' + eq.replace(/\s+/g, '-');
+    try {
+      const r = await fetch('https://api.github.com/repos/' + repo + '/contents/' + pasta, {
+        headers: { 'Authorization': 'token ' + token }
+      });
+      if (!r.ok) continue;
+      const arquivos = await r.json();
+      const fotos = arquivos.filter(a =>
+        a.name.match(/\.(jpg|jpeg|png)$/i));
+
+      info.textContent = eq + ': baixando ' + fotos.length + ' foto(s)...';
+
+      for (const arq of fotos) {
+        try {
+          const url = 'https://raw.githubusercontent.com/' + repo + '/main/' + pasta + '/' + arq.name;
+          const res = await fetch(url + '?t=' + Date.now());
+          if (!res.ok) { erros++; continue; }
+          const blob = await res.blob();
+          const burl = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = burl; a.download = eq.replace(/\s+/g,'-') + '_' + arq.name;
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(burl), 2000);
+          total++;
+          await new Promise(resolve => setTimeout(resolve, 400));
+        } catch(e) { erros++; }
+      }
+    } catch(e) {}
   }
-  showToast(total + ' foto(s) exportada(s) deste dispositivo.', 'success');
-  info.textContent = total + ' foto(s) exportada(s) do dispositivo.';
+
+  if (total === 0 && erros === 0) {
+    info.textContent = 'Nenhuma foto encontrada no servidor ainda.';
+    showToast('Nenhuma foto encontrada. As fotos sobem junto com o ponto quando sincronizar.', '');
+  } else {
+    info.textContent = total + ' foto(s) baixada(s)' + (erros ? ', ' + erros + ' erro(s)' : '') + '.';
+    showToast(total + ' foto(s) exportada(s)!', 'success');
+  }
 }
 
 // ══════════════════════════════════════════════════
