@@ -7,64 +7,38 @@
   <title>VERA — Vegetação em Rede Ativa</title>
   <style>
     :root{color-scheme:light;--verde:#1a2e1a;--fundo:#f5f7f2;--texto:#1a2e1a;--muted:#5a7a55;}
-    *{box-sizing:border-box} body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--fundo);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--texto)}
-    main{width:min(100%,390px);padding:28px 24px;border-radius:16px;background:#fff;box-shadow:0 12px 36px rgba(26,46,26,.16);text-align:center}
-    .mark{width:48px;height:48px;display:grid;place-items:center;margin:0 auto 14px;border-radius:12px;background:var(--verde);color:#fff;font-size:22px;font-weight:800}.status{font-size:14px;line-height:1.45;color:var(--muted)}
-    .error{display:none;margin-top:14px;padding:12px;border-radius:10px;background:#fdecea;color:#8f261d;text-align:left;font-size:13px;line-height:1.45}.error code{display:block;margin-top:8px;word-break:break-word;font-size:11px}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--fundo);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--texto)}
+    main{width:min(100%,390px);padding:28px 24px;border-radius:16px;background:#fff;box-shadow:0 12px 36px rgba(26,46,26,.16);text-align:center}.mark{width:48px;height:48px;display:grid;place-items:center;margin:0 auto 14px;border-radius:12px;background:var(--verde);color:#fff;font-size:22px;font-weight:800}.status{font-size:14px;line-height:1.45;color:var(--muted)}.error{display:none;margin-top:14px;padding:12px;border-radius:10px;background:#fdecea;color:#8f261d;text-align:left;font-size:13px;line-height:1.45}.error code{display:block;margin-top:8px;word-break:break-word;font-size:11px}
   </style>
 </head>
 <body>
   <main>
     <div class="mark">V</div>
-    <strong>Carregando VERA 2.6.9</strong>
-    <p class="status" id="status">Preparando painel administrativo…</p>
-    <div class="error" id="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
+    <strong>Carregando VERA</strong>
+    <p id="status" class="status">Preparando versão estável…</p>
+    <div id="error" class="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
   </main>
   <script>
-(async function carregarAtualizacao(){
-  'use strict';
-  const LOADER_ANTERIOR = 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/de7cd85146399af6217e6c0e67e4039e7da13fce/index.html';
-  const status = document.getElementById('status');
-  const errorBox = document.getElementById('error');
-  const errorDetail = document.getElementById('error-detail');
-
-  function substituirUmaVez(codigo, procurar, substituir, nome){
-    const primeira = codigo.indexOf(procurar);
-    if (primeira < 0) throw new Error('Trecho não encontrado: ' + nome + '.');
-    if (codigo.indexOf(procurar, primeira + procurar.length) >= 0) throw new Error('Trecho duplicado: ' + nome + '.');
-    return codigo.slice(0, primeira) + substituir + codigo.slice(primeira + procurar.length);
-  }
-
-  try {
-    status.textContent = 'Carregando VERA 2.6.9…';
-    const resposta = await fetch(LOADER_ANTERIOR + '?v=2.6.9', { cache: 'no-store' });
-    if (!resposta.ok) throw new Error('Versão anterior indisponível (' + resposta.status + ').');
-    let codigo = await resposta.text();
-
-    codigo = substituirUmaVez(
-      codigo,
-      '    try {',
-      "function aplicarAdminV269(html) {\n  html = html.replace(/v2\\.6\\.8/g, 'v2.6.9');\n  html = html.replace(/VERSÃO 2\\.6\\.8/g, 'VERSÃO 2.6.9');\n  html = html.replace(\"const APP_VERSION = '2.6.8';\", \"const APP_VERSION = '2.6.9';\");\n\n  const substituicoesAdmin = [\n  [\n    \"async function carregarPontosAdmin() {\",\n    \"function abrirFotosPontoAdmin(serializado, repo) {\\n  let fotos = [];\\n  try { fotos = JSON.parse(atob(serializado)); } catch(e) {}\\n  if (!Array.isArray(fotos) || fotos.length === 0) {\\n    showToast('Nenhuma foto disponível para este ponto.', 'warning');\\n    return;\\n  }\\n\\n  const anterior = document.getElementById('admin-photo-modal');\\n  if (anterior) anterior.remove();\\n\\n  const fundo = document.createElement('div');\\n  fundo.id = 'admin-photo-modal';\\n  fundo.style.cssText = 'position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:18px;';\\n\\n  const painel = document.createElement('div');\\n  painel.style.cssText = 'width:min(100%,640px);max-height:88vh;overflow:auto;background:#fff;border-radius:14px;padding:16px;box-shadow:0 16px 48px rgba(0,0,0,.35);';\\n\\n  const topo = document.createElement('div');\\n  topo.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;';\\n\\n  const titulo = document.createElement('strong');\\n  titulo.textContent = fotos.length + ' foto(s) do ponto';\\n\\n  const fechar = document.createElement('button');\\n  fechar.type = 'button';\\n  fechar.textContent = 'Fechar';\\n  fechar.style.cssText = 'border:1px solid #c8dbc4;background:#f5f7f2;color:#1a2e1a;border-radius:8px;padding:7px 10px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;';\\n  fechar.addEventListener('click', function() { fundo.remove(); });\\n\\n  const grade = document.createElement('div');\\n  grade.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;';\\n\\n  fotos.forEach(function(caminho, indice) {\\n    const link = document.createElement('a');\\n    link.href = 'https://raw.githubusercontent.com/' + (repo || GH_REPO) + '/main/' + encodeURI(caminho) + '?t=' + Date.now();\\n    link.target = '_blank';\\n    link.rel = 'noopener';\\n    link.style.cssText = 'display:block;border:1px solid #c8dbc4;border-radius:10px;overflow:hidden;background:#f5f7f2;text-decoration:none;';\\n\\n    const img = document.createElement('img');\\n    img.src = link.href;\\n    img.alt = 'Foto ' + (indice + 1) + ' do ponto';\\n    img.loading = 'lazy';\\n    img.style.cssText = 'display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:#e8eee6;';\\n    img.onerror = function() { link.style.display = 'none'; };\\n\\n    const legenda = document.createElement('span');\\n    legenda.textContent = 'Foto ' + (indice + 1) + ' — abrir em tamanho maior';\\n    legenda.style.cssText = 'display:block;padding:7px;color:#2d5a27;font:600 11px -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;';\\n\\n    link.appendChild(img);\\n    link.appendChild(legenda);\\n    grade.appendChild(link);\\n  });\\n\\n  topo.appendChild(titulo);\\n  topo.appendChild(fechar);\\n  painel.appendChild(topo);\\n  painel.appendChild(grade);\\n  fundo.appendChild(painel);\\n  fundo.addEventListener('click', function(event) { if (event.target === fundo) fundo.remove(); });\\n  document.body.appendChild(fundo);\\n}\\n\\nasync function carregarPontosAdmin() {\",\n    \"galeria de fotos do painel administrativo\"\n  ],\n  [\n    \"          const fotos = pt.fotos_ids && pt.fotos_ids.length > 0\\n            ? pt.fotos_ids.join(', ')\\n            : (pt.fotos_count > 0 ? pt.fotos_count + ' foto(s)' : 'Sem fotos');\",\n    \"          const fotosPaths = Array.isArray(pt.fotos_github) && pt.fotos_github.length\\n            ? pt.fotos_github\\n            : (Array.isArray(pt.fotos_ids)\\n                ? pt.fotos_ids.map(id => 'fotos/' + eq.replace(/\\\\s+/g, '-') + '/' + id + '.jpg')\\n                : []);\\n          const fotos = fotosPaths.length > 0\\n            ? fotosPaths.length + ' foto(s)'\\n            : (pt.fotos_count > 0 ? pt.fotos_count + ' foto(s)' : 'Sem fotos');\\n          const fotosPayload = fotosPaths.length ? btoa(JSON.stringify(fotosPaths)) : '';\\n          const fotoUrl = fotosPaths.length\\n            ? 'https://raw.githubusercontent.com/' + repo + '/main/' + fotosPaths[0] + '?t=' + Date.now()\\n            : '';\\n          const fotoPreview = fotosPaths.length\\n            ? '<button type=\\\"button\\\" class=\\\"admin-view-photo\\\" data-fotos=\\\"' + fotosPayload + '\\\" data-repo=\\\"' + repo + '\\\" style=\\\"display:block;width:100%;margin-top:8px;padding:0;border:1px solid #c8dbc4;border-radius:8px;overflow:hidden;background:#f5f7f2;cursor:pointer;\\\">'\\n              + '<img src=\\\"' + fotoUrl + '\\\" alt=\\\"Ver foto do ponto\\\" style=\\\"display:block;width:100%;height:120px;object-fit:cover;background:#e8eee6;\\\">'\\n              + '<span style=\\\"display:block;padding:6px 8px;text-align:left;color:#2d5a27;font-size:11px;font-weight:700;\\\">Ver ' + fotosPaths.length + ' foto(s)</span></button>'\\n            : '';\",\n    \"previsualização de fotos no mapa\"\n  ],\n  [\n    \"               <b>Fotos:</b> ${fotos}\\n             </div></div>`;\",\n    \"               <b>Fotos:</b> ${fotos}<br>\\n               ${fotoPreview}\\n             </div></div>`;\",\n    \"botão de fotos no popup\"\n  ],\n  [\n    \"          L.marker([pt.lat, pt.lon], { icon })\\n            .bindPopup(popup, { maxWidth: 230 })\\n            .addTo(adminMapLayer);\",\n    \"          const marker = L.marker([pt.lat, pt.lon], { icon })\\n            .bindPopup(popup, { maxWidth: 230 })\\n            .addTo(adminMapLayer);\\n          marker.on('popupopen', function(event) {\\n            const botaoFotos = event.popup && event.popup.getElement()\\n              ? event.popup.getElement().querySelector('.admin-view-photo')\\n              : null;\\n            if (!botaoFotos || botaoFotos.dataset.bound === '1') return;\\n            botaoFotos.dataset.bound = '1';\\n            botaoFotos.addEventListener('click', function() {\\n              abrirFotosPontoAdmin(botaoFotos.dataset.fotos, botaoFotos.dataset.repo);\\n            });\\n          });\",\n    \"abrir galeria de fotos no mapa\"\n  ],\n  [\n    \"    <div class=\\\"modal-secao\\\">\\n      <div class=\\\"modal-label\\\">Equipe</div>\",\n    \"    <div class=\\\"modal-secao\\\">\\n      <div class=\\\"modal-label\\\">Nome do Projeto</div>\\n      <input class=\\\"field-input\\\" type=\\\"text\\\" id=\\\"edit-rota-nome\\\" placeholder=\\\"Ex: Poda 2026 - Araguaína Norte\\\">\\n    </div>\\n\\n    <div class=\\\"modal-secao\\\">\\n      <div class=\\\"modal-label\\\">Equipe</div>\",\n    \"campo de renomear projeto\"\n  ],\n  [\n    \"  // Preencher campos\\n  document.getElementById('edit-rota-equipe').value = rotaEmEdicao.equipe;\",\n    \"  // Preencher campos\\n  document.getElementById('edit-rota-nome').value = rotaEmEdicao.nomeProjeto || '';\\n  document.getElementById('edit-rota-equipe').value = rotaEmEdicao.equipe;\",\n    \"preencher nome do projeto na edição\"\n  ],\n  [\n    \"  const novaEquipe = document.getElementById('edit-rota-equipe').value;\\n\\n  // Atualizar rota\\n  rotaEmEdicao.equipe       = novaEquipe;\",\n    \"  const novoNome = document.getElementById('edit-rota-nome').value.trim();\\n  if (!novoNome) { showToast('Informe o nome do projeto.', 'error'); return; }\\n  const novaEquipe = document.getElementById('edit-rota-equipe').value;\\n\\n  // Atualizar rota\\n  rotaEmEdicao.nomeProjeto  = novoNome;\\n  rotaEmEdicao.equipe       = novaEquipe;\",\n    \"salvar nome do projeto\"\n  ],\n  [\n    \"    const titulo = 'Rota ' + String(indice + 1).padStart(2, '0');\",\n    \"    const titulo = rota.nomeProjeto || ('Rota ' + String(indice + 1).padStart(2, '0'));\",\n    \"exibir nome do projeto para a equipe\"\n  ]\n];\n  substituicoesAdmin.forEach(function(item) {\n    html = substituirUmaVez(html, item[0], item[1], item[2]);\n  });\n  return html;\n}\n\n    try {",
-      'injetar recursos administrativos'
-    );
-
-    codigo = substituirUmaVez(
-      codigo,
-      '      document.open();\n      document.write(html);\n      document.close();',
-      '      html = aplicarAdminV269(html);\n      document.open();\n      document.write(html);\n      document.close();',
-      'aplicar recursos administrativos'
-    );
-
-    document.open();
-    document.write(codigo);
-    document.close();
-  } catch (error) {
-    status.textContent = 'A inicialização foi interrompida para preservar os dados.';
-    errorBox.style.display = 'block';
-    errorDetail.textContent = String(error && error.message ? error.message : error);
-    console.error('VERA bootstrap v2.6.9:', error);
-  }
-})();
+  (async function(){
+    const status = document.getElementById('status');
+    const errorBox = document.getElementById('error');
+    const errorDetail = document.getElementById('error-detail');
+    const source = 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/backup/v2.6.8-antes-admin-fotos-renomeacao-20260626/index.html';
+    try {
+      const response = await fetch(source + '?recover=1', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Versão estável indisponível (' + response.status + ').');
+      let html = await response.text();
+      html = html.replaceAll('2.6.8', '2.6.10');
+      document.open();
+      document.write(html);
+      document.close();
+    } catch (error) {
+      status.textContent = 'A inicialização foi interrompida para preservar os dados.';
+      errorBox.style.display = 'block';
+      errorDetail.textContent = String(error && error.message ? error.message : error);
+      console.error('VERA recovery:', error);
+    }
+  })();
   </script>
 </body>
 </html>
