@@ -905,6 +905,99 @@ button, .polo-btn, .alim-item, .tab-btn {
 .leaflet-cabosT1Pane-pane,
 .leaflet-cabosT2Pane-pane { pointer-events: none !important; }
 
+
+/* ── EDIÇÃO DE ROTA ── */
+.rota-acoes {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.btn-editar-rota {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  color: var(--green-deep);
+  cursor: pointer;
+  border-radius: 7px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.btn-editar-rota:hover { background: #e8f5e9; }
+.btn-excluir-rota {
+  background: #fff0f0;
+  border: 1px solid #ffcdd2;
+  color: var(--danger);
+  cursor: pointer;
+  border-radius: 7px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.btn-excluir-rota:hover { background: #ffebee; }
+
+/* Modal de edição */
+#modal-editar-rota {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(0,0,0,0.5);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+#modal-editar-rota.aberto { display: flex; }
+.modal-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-titulo {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green-deep);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.btn-fechar-modal {
+  background: var(--off-white);
+  border: none;
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+}
+.modal-secao { margin-bottom: 14px; }
+.modal-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.modal-alims-lista { max-height: 260px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; }
+.btn-salvar-rota {
+  width: 100%;
+  padding: 13px;
+  background: var(--green-mid);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.btn-salvar-rota:hover { background: var(--green-deep); }
+
 </style>
 </head>
 <body>
@@ -1014,7 +1107,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.3</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.4</div>
     </div>
   </div>
   <div class="header-right">
@@ -1290,6 +1383,45 @@ button, .polo-btn, .alim-item, .tab-btn {
     </div>
   </div>
 
+
+<!-- MODAL EDITAR ROTA -->
+<div id="modal-editar-rota">
+  <div class="modal-card">
+    <div class="modal-titulo">
+      Editar Rota
+      <button class="btn-fechar-modal" onclick="fecharModalRota()">✕</button>
+    </div>
+
+    <div class="modal-secao">
+      <div class="modal-label">Equipe</div>
+      <select class="field-input" id="edit-rota-equipe">
+        <option>Equipe Energisa</option>
+        <option>Enecol Norte</option>
+        <option>Enecol Centro</option>
+        <option>Enecol Sul</option>
+      </select>
+    </div>
+
+    <div class="modal-secao">
+      <div class="modal-label">Polo</div>
+      <div class="polo-btns" style="margin-bottom:0;">
+        <button class="polo-btn" onclick="editPoloSelect('NORTE')" id="epbtn-NORTE">Norte</button>
+        <button class="polo-btn" onclick="editPoloSelect('CENTRO')" id="epbtn-CENTRO">Centro</button>
+        <button class="polo-btn" onclick="editPoloSelect('SUL')" id="epbtn-SUL">Sul</button>
+      </div>
+    </div>
+
+    <div class="modal-secao">
+      <div class="modal-label">Alimentadores selecionados: <span id="edit-alim-count" style="color:var(--amber);">0</span></div>
+      <div class="modal-alims-lista" id="edit-alims-lista">
+        <div style="padding:12px;font-size:12px;color:var(--text-muted);">Selecione um polo primeiro...</div>
+      </div>
+    </div>
+
+    <button class="btn-salvar-rota" onclick="salvarEdicaoRota()">Salvar alterações</button>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -1377,7 +1509,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.5.3';
+const APP_VERSION = '2.5.4';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -3150,6 +3282,136 @@ function baixarArquivo(nome, conteudo, tipo) {
   URL.revokeObjectURL(url);
 }
 
+
+// ══════════════════════════════════════════════════
+// EDIÇÃO DE ROTA
+// ══════════════════════════════════════════════════
+let rotaEmEdicao = null;
+let editPoloAtivo = null;
+let editAlims = [];
+
+async function abrirModalEditarRota(id) {
+  await carregarRotas();
+  await carregarIndice();
+  rotaEmEdicao = rotasData.rotas.find(r => r.id === id);
+  if (!rotaEmEdicao) return;
+
+  // Preencher campos
+  document.getElementById('edit-rota-equipe').value = rotaEmEdicao.equipe;
+  editPoloAtivo = rotaEmEdicao.polo;
+  editAlims = [...rotaEmEdicao.alimentadores];
+
+  // Botões polo
+  document.querySelectorAll('[id^="epbtn-"]').forEach(b => b.classList.remove('active'));
+  const pb = document.getElementById('epbtn-' + editPoloAtivo);
+  if (pb) pb.classList.add('active');
+
+  renderEditAlims();
+  document.getElementById('modal-editar-rota').classList.add('aberto');
+}
+
+function fecharModalRota() {
+  document.getElementById('modal-editar-rota').classList.remove('aberto');
+  rotaEmEdicao = null;
+  editPoloAtivo = null;
+  editAlims = [];
+}
+
+function editPoloSelect(polo) {
+  editPoloAtivo = polo;
+  editAlims = [];
+  document.querySelectorAll('[id^="epbtn-"]').forEach(b => b.classList.remove('active'));
+  document.getElementById('epbtn-' + polo).classList.add('active');
+  renderEditAlims();
+}
+
+function renderEditAlims() {
+  const lista = document.getElementById('edit-alims-lista');
+  const count = document.getElementById('edit-alim-count');
+  if (!editPoloAtivo || !indicePolo || !indicePolo[editPoloAtivo]) {
+    lista.innerHTML = '<div style="padding:12px;font-size:12px;color:var(--text-muted);">Selecione um polo.</div>';
+    return;
+  }
+  // Agrupar por município → SE
+  const muns = {};
+  Object.entries(indicePolo[editPoloAtivo]).forEach(([id, info]) => {
+    const mun = info.municipio || '?';
+    const se  = info.se || '?';
+    if (!muns[mun]) muns[mun] = {};
+    if (!muns[mun][se]) muns[mun][se] = [];
+    muns[mun][se].push([id, info]);
+  });
+
+  lista.innerHTML = Object.entries(muns).sort((a,b)=>a[0].localeCompare(b[0])).map(([mun, ses]) => {
+    const sesHtml = Object.entries(ses).sort((a,b)=>a[0].localeCompare(b[0])).map(([se, circs]) => {
+      const alimHtml = circs.map(([id, info]) => {
+        const checked = editAlims.includes(id);
+        return `<div class="alim-admin-check" style="padding:6px 8px;">
+          <input type="checkbox" id="ea-${id}" ${checked?'checked':''}
+            onchange="editToggleAlim('${id}')"
+            style="width:18px;height:18px;accent-color:var(--amber);cursor:pointer;flex-shrink:0;">
+          <label for="ea-${id}" style="cursor:pointer;flex:1;font-size:11px;">
+            <div style="font-weight:700;">${id}</div>
+            <div style="color:var(--text-muted);font-size:10px;">${info.n.toLocaleString('pt-BR')} postes</div>
+          </label>
+        </div>`;
+      }).join('');
+      return `<details style="padding:4px 6px;border-bottom:1px solid var(--border);">
+        <summary style="font-size:11px;font-weight:700;cursor:pointer;padding:4px 0;">${se}</summary>
+        ${alimHtml}
+      </details>`;
+    }).join('');
+    return `<details open style="border-bottom:1px solid var(--border);">
+      <summary style="padding:8px;font-size:12px;font-weight:700;cursor:pointer;background:var(--off-white);">${mun}</summary>
+      ${sesHtml}
+    </details>`;
+  }).join('');
+
+  count.textContent = editAlims.length;
+}
+
+function editToggleAlim(id) {
+  const idx = editAlims.indexOf(id);
+  if (idx >= 0) editAlims.splice(idx, 1);
+  else editAlims.push(id);
+  document.getElementById('edit-alim-count').textContent = editAlims.length;
+  // Atualizar visual
+  const lbl = document.getElementById('ea-' + id);
+  if (lbl) lbl.closest('.alim-admin-check').classList.toggle('sel', editAlims.includes(id));
+}
+
+async function salvarEdicaoRota() {
+  if (!rotaEmEdicao) return;
+  if (editAlims.length === 0) { showToast('Selecione ao menos um alimentador.', 'error'); return; }
+
+  const novaEquipe = document.getElementById('edit-rota-equipe').value;
+
+  // Atualizar rota
+  rotaEmEdicao.equipe       = novaEquipe;
+  rotaEmEdicao.polo         = editPoloAtivo;
+  rotaEmEdicao.alimentadores = [...editAlims];
+  rotaEmEdicao.editada      = new Date().toLocaleString('pt-BR');
+
+  const btn = document.querySelector('.btn-salvar-rota');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+
+  const ok = await salvarRotas();
+  btn.disabled = false; btn.textContent = 'Salvar alterações';
+
+  if (ok) {
+    showToast('Rota atualizada com sucesso!', 'success');
+    fecharModalRota();
+    renderRotasAdmin();
+  } else {
+    showToast('Erro ao salvar. Tente novamente.', 'error');
+  }
+}
+
+// Fechar modal clicando fora
+document.getElementById('modal-editar-rota').addEventListener('click', function(e) {
+  if (e.target === this) fecharModalRota();
+});
+
 // ══════════════════════════════════════════════════
 // SISTEMA DE ROTAS
 // ══════════════════════════════════════════════════
@@ -3391,9 +3653,10 @@ async function renderRotasAdmin() {
           <div class="rota-equipe">${r.equipe}</div>
           <div class="rota-meta">Criada em ${r.criada} por ${r.criadaPor}</div>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;">
+        <div class="rota-acoes">
           <span class="rota-polo-badge">${r.polo}</span>
-          <button class="btn-excluir-rota" onclick="excluirRota(${r.id})"></button>
+          <button class="btn-editar-rota" onclick="abrirModalEditarRota(${r.id})">Editar</button>
+          <button class="btn-excluir-rota" onclick="excluirRota(${r.id})">Excluir</button>
         </div>
       </div>
       <div class="rota-alims">
