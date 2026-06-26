@@ -899,6 +899,12 @@ button, .polo-btn, .alim-item, .tab-btn {
 .se-expand { display: none; padding: 4px 6px 6px; background: var(--white); border-top: 1px solid var(--border); }
 .se-item.sel .se-expand { display: block; }
 
+
+/* Hit pane — garante que cliques chegam nos postes */
+.leaflet-postesHitPane-pane { pointer-events: auto !important; }
+.leaflet-cabosT1Pane-pane,
+.leaflet-cabosT2Pane-pane { pointer-events: none !important; }
+
 </style>
 </head>
 <body>
@@ -1008,7 +1014,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.2</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.5.3</div>
     </div>
   </div>
   <div class="header-right">
@@ -1371,7 +1377,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.5.2';
+const APP_VERSION = '2.5.3';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -2438,9 +2444,15 @@ function criarPaineisMapa() {
     map.getPane(nome).style.zIndex = String(zIndex);
   };
 
-  definirPainel('postesPane',  350);   // postes abaixo
-  definirPainel('cabosT1Pane', 420);   // T1 passa por cima dos postes
-  definirPainel('cabosT2Pane', 430);   // T2 passa por cima do T1
+  definirPainel('postesPane',    350);  // visual dos postes — abaixo dos cabos
+  definirPainel('cabosT1Pane',   420);  // T1 sobre os postes visualmente
+  definirPainel('cabosT2Pane',   430);  // T2 sobre T1
+  definirPainel('postesHitPane', 460);  // hit areas acima de tudo — clicável
+  // Garantir que os canvas dos cabos não bloqueiam cliques
+  ['cabosT1Pane','cabosT2Pane'].forEach(nome => {
+    const el = map.getPane(nome);
+    if (el) el.style.pointerEvents = 'none';
+  });
 
   postesRenderer = L.canvas({ pane: 'postesPane', padding: 0.5, tolerance: 10 });
   caboRendererT1 = L.canvas({ pane: 'cabosT1Pane', padding: 0.5 });
@@ -2724,8 +2736,8 @@ function renderPostesNoMapa(circ, postes) {
         const key = `${circ}|${poste.id}`;
 
         const hit = L.circleMarker([poste.lat, poste.lon], {
-          pane: 'postesPane',
-          radius: 18,
+          pane: 'postesHitPane',
+          radius: 22,
           fillColor: 'transparent',
           color: 'transparent',
           weight: 0,
