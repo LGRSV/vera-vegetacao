@@ -1,1 +1,1 @@
-{"version":"2.5.8","released":"2026-06-26","notes":"Corrigir erro de sintaxe JS"}
+{"version":"2.5.9","released":"2026-06-26","notes":"Corrigir crash no login - listener do modal solto no JS"}
