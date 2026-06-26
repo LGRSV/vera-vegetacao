@@ -1056,13 +1056,13 @@ button, .polo-btn, .alim-item, .tab-btn {
       <div class="rota-atribuida-head">
         <div class="rota-icon">🗺️</div>
         <div class="rota-atribuida-info">
-          <div class="rota-atribuida-title">Rotas atribuídas pelo supervisor</div>
+          <div class="rota-atribuida-title">Projetos atribuídos pelo supervisor</div>
           <div class="rota-atribuida-alims" id="rota-atribuida-alims">Selecione a rota que a equipe vai executar primeiro.</div>
         </div>
       </div>
       <div class="rotas-atribuida-lista" id="rotas-atribuida-lista"></div>
       <button id="btn-usar-rota-atribuida" class="btn-usar-rota-atribuida" onclick="usarRotaAtribuida()" disabled>
-        Selecione uma rota para continuar
+        Selecione um projeto para continuar
       </button>
     </div>
     <div id="sem-rota-banner" class="sem-rota-banner" style="display:none;">
@@ -1109,7 +1109,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="login-icon">VERA</div>
     <div class="login-title">VERA</div>
     <div class="login-subtitle">Vegetação em Rede Ativa<br>Energisa Tocantins</div>
-    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.3</div>
+    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">v2.6.4</div>
     <div class="field-group">
       <label class="field-label">Equipe / Usuário</label>
       <select class="field-input" id="login-user">
@@ -1136,7 +1136,7 @@ button, .polo-btn, .alim-item, .tab-btn {
     <div class="logo-mark">V</div>
     <div>
       <div class="logo-text">VERA</div>
-      <div class="logo-sub">Vegetação em Rede Ativa · v2.6.3</div>
+      <div class="logo-sub">Vegetação em Rede Ativa · v2.6.4</div>
     </div>
   </div>
   <div class="header-right">
@@ -1377,7 +1377,11 @@ button, .polo-btn, .alim-item, .tab-btn {
 
     <!-- CRIAR ROTA -->
     <div class="rota-form">
-      <div class="rota-form-title">Criar Nova Rota</div>
+      <div class="rota-form-title">Criar Novo Projeto</div>
+
+      <label class="field-label">Nome do Projeto</label>
+      <input class="field-input" type="text" id="admin-nome-projeto"
+        placeholder="Ex: Poda 2026 - Araguaína Norte" style="margin-bottom:10px;">
 
       <label class="field-label">Equipe</label>
       <select class="field-input" id="admin-equipe" style="margin-bottom:10px;">
@@ -1400,12 +1404,12 @@ button, .polo-btn, .alim-item, .tab-btn {
         <div style="font-size:12px;color:var(--text-muted);padding:8px;">Selecione um polo primeiro...</div>
       </div>
 
-      <button class="btn-criar-rota" onclick="criarRota()"> Criar Rota</button>
+      <button class="btn-criar-rota" onclick="criarRota()"> Criar Projeto</button>
     </div>
 
     <!-- ROTAS EXISTENTES -->
     <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">
-      Rotas Ativas
+      Projetos Ativos
     </div>
     <div class="rotas-lista" id="rotas-lista">
       <div style="text-align:center;padding:30px;color:var(--text-muted);font-size:13px;">Carregando rotas...</div>
@@ -1562,7 +1566,7 @@ async function setConfig(key, value) {
 // SERVICE WORKER
 // ══════════════════════════════════════════════════
 // ── VERSÃO DO APP ──
-const APP_VERSION = '2.6.3';
+const APP_VERSION = '2.6.4';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
@@ -2093,7 +2097,7 @@ function switchTab(name) {
   if (name === 'map' && map) setTimeout(() => map.invalidateSize(), 100);
   if (name === 'records') renderRecords();
   if (name === 'config') { updatePendingBadge(); loadConfig(); }
-  if (name === 'admin') { renderRotasAdmin(); setTimeout(iniciarMapaAdmin, 300); }
+  if (name === 'admin') { renderRotasAdmin(); setTimeout(carregarPontosAdmin, 400); }
 }
 
 // ══════════════════════════════════════════════════
@@ -2354,6 +2358,7 @@ async function savePoint() {
     area:   document.getElementById('f-area').value.trim(),
     acesso: document.getElementById('f-acesso').value,
     usuario: currentUser,
+    projeto: rotaAtribuida ? (rotaAtribuida.nomeProjeto || '') : '',
     photos: [...photos],
   };
 
@@ -3486,7 +3491,7 @@ function exportarDadosAdmin(formato) {
   const nomeBase = 'VERA_' + (equipe === '__todas__' ? 'todas' : equipe.replace(/\s+/g,'-')) + '_' + new Date().toISOString().slice(0,10);
 
   if (formato === 'csv') {
-    const headers = ['WKT','ID','DATA','POSTE','ESPECIE','LATITUDE','LONGITUDE','ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DIAM.TRONCO(cm)','Area','Acesso LV','Equipe','Fotos','IDs_Fotos'];
+    const headers = ['WKT','ID','DATA','PROJETO','POSTE','ESPECIE','LATITUDE','LONGITUDE','ALTURA(M)','DT BT(cm)','DT MT(cm)','DT AT(cm)','DIAM.TRONCO(cm)','Area','Acesso LV','Equipe','Fotos','IDs_Fotos'];
     const rows = dadosEquipeCarregados.map(r => {
       const fotos = Array.isArray(r.photos) ? r.photos.length
                   : (typeof r.photos === 'number' ? r.photos
@@ -3495,6 +3500,7 @@ function exportarDadosAdmin(formato) {
         '"' + (r.wkt||'') + '"',
         r.id,
         '"' + (r.data||'') + '"',
+        '"' + (r.projeto||'') + '"',
         '"' + (r.poste||'') + '"',
         '"' + (r.especie||'') + '"',
         r.lat, r.lon,
@@ -3615,13 +3621,15 @@ function iniciarMapaAdmin() {
 
 async function carregarPontosAdmin() {
   iniciarMapaAdmin();
-  const info    = document.getElementById('admin-map-info');
-  const equipe  = document.getElementById('admin-map-equipe').value;
+  const info   = document.getElementById('admin-map-info');
+  const equipe = document.getElementById('admin-map-equipe').value;
   info.textContent = 'Carregando pontos...';
 
   const cfg   = await carregarConfigGlobal().catch(() => null);
   const token = (cfg && cfg.token) || await getConfig('github_token').catch(() => null);
-  const repo  = (cfg && cfg.repo)  || GH_REPO;
+  const repo  = (cfg && cfg.repo) || GH_REPO;
+
+  if (!token) { info.textContent = 'Token não configurado.'; return; }
 
   const equipes = equipe === '__todas__'
     ? ['Equipe Energisa','Enecol Norte','Enecol Centro','Enecol Sul']
@@ -3632,66 +3640,99 @@ async function carregarPontosAdmin() {
   let total = 0;
   const contPorEquipe = {};
 
+  // Ícone de flag por equipe (sigla)
+  const SIGLAS = {
+    'Equipe Energisa': 'ENE',
+    'Enecol Norte':    'N',
+    'Enecol Centro':   'C',
+    'Enecol Sul':      'S',
+  };
+
   for (const eq of equipes) {
-    const pasta = 'dados/' + eq.replace(/\s+/g, '-');
-    const cor   = CORES_EQUIPES[eq] || '#888';
+    const pasta  = 'dados/' + eq.replace(/\s+/g, '-');
+    const sigla  = SIGLAS[eq] || eq.charAt(0);
     contPorEquipe[eq] = 0;
+
     try {
       const r = await fetch('https://api.github.com/repos/' + repo + '/contents/' + pasta,
         { headers: { 'Authorization': 'token ' + token } });
-      if (!r.ok) continue;
+      if (!r.ok) { console.warn('Pasta não encontrada:', pasta, r.status); continue; }
       const arquivos = await r.json();
-      for (const arq of arquivos.filter(a => a.name.endsWith('.json'))) {
+      const jsons = arquivos.filter(a => a.name.endsWith('.json'));
+
+      for (const arq of jsons) {
         try {
           const rp = await fetch(arq.download_url + '?t=' + Date.now(), { cache: 'no-store' });
           if (!rp.ok) continue;
           const pt = await rp.json();
           if (!pt.lat || !pt.lon) continue;
+
           const fotos = pt.fotos_ids && pt.fotos_ids.length > 0
             ? pt.fotos_ids.join(', ')
             : (pt.fotos_count > 0 ? pt.fotos_count + ' foto(s)' : 'Sem fotos');
-          const popup = '<div style="font-family:inherit;min-width:160px;">'
-            + '<div style="font-weight:700;font-size:13px;color:' + cor + ';">' + (pt.especie || 'Sem espécie') + '</div>'
-            + '<div style="font-size:10px;color:#666;margin:2px 0;">' + eq + '</div>'
-            + '<hr style="margin:5px 0;border-color:#eee;">'
-            + '<div style="font-size:11px;"><b>Ponto:</b> ' + pt.id + '</div>'
-            + '<div style="font-size:11px;"><b>Poste:</b> ' + (pt.poste || '-') + '</div>'
-            + '<div style="font-size:11px;"><b>Data:</b> ' + (pt.data || '-') + '</div>'
-            + '<div style="font-size:11px;"><b>Altura:</b> ' + (pt.altura || '-') + ' m</div>'
-            + '<div style="font-size:11px;"><b>Fotos:</b> ' + fotos + '</div>'
-            + '</div>';
-          const m = L.circleMarker([pt.lat, pt.lon], {
-            radius: 8, fillColor: cor, color: '#fff', weight: 2, fillOpacity: 0.9
-          }).bindPopup(popup);
-          adminMapLayer.addLayer(m);
+
+          // Popup com info completa
+          const popup = `<div style="font-family:inherit;min-width:170px;">
+            <div style="font-weight:700;font-size:13px;color:#2E7D32;">${pt.especie || 'Sem espécie'}</div>
+            <div style="font-size:10px;color:#666;margin:2px 0 5px;">${eq}</div>
+            <div style="font-size:11px;line-height:1.7;">
+              <b>Ponto:</b> ${pt.id}<br>
+              <b>Projeto:</b> ${pt.projeto || '-'}<br>
+              <b>Poste:</b> ${pt.poste || '-'}<br>
+              <b>Data:</b> ${pt.data || '-'}<br>
+              <b>Altura:</b> ${pt.altura || '-'} m<br>
+              <b>Fotos:</b> ${fotos}
+            </div></div>`;
+
+          // Ícone customizado — ponto verde com sigla da equipe
+          const icon = L.divIcon({
+            className: '',
+            html: `<div style="
+              background:#2E7D32;color:#fff;
+              border:2px solid #fff;border-radius:50%;
+              width:24px;height:24px;
+              display:flex;align-items:center;justify-content:center;
+              font-size:8px;font-weight:700;
+              box-shadow:0 2px 6px rgba(0,0,0,0.3);
+              font-family:-apple-system,sans-serif;">
+              ${sigla}
+            </div>`,
+            iconSize: [24, 24],
+            iconAnchor: [12, 12],
+            popupAnchor: [0, -14],
+          });
+
+          L.marker([pt.lat, pt.lon], { icon })
+            .bindPopup(popup, { maxWidth: 230 })
+            .addTo(adminMapLayer);
+
           bounds.push([pt.lat, pt.lon]);
           total++;
           contPorEquipe[eq]++;
-        } catch(e) {}
+        } catch(e) { console.warn('Erro ponto', arq.name, e); }
       }
-    } catch(e) {}
+    } catch(e) { console.warn('Erro pasta', pasta, e); }
   }
 
   if (bounds.length > 0) {
-    adminMap.fitBounds(bounds, { padding: [30, 30] });
+    adminMap.fitBounds(L.latLngBounds(bounds), { padding: [30, 30] });
   }
 
   // Legenda
   const legEl = document.getElementById('admin-map-legend');
   if (legEl) {
-    legEl.innerHTML = Object.entries(contPorEquipe)
-      .filter(([,n]) => n > 0)
-      .map(([eq, n]) => '<span style="display:flex;align-items:center;gap:4px;">'
-        + '<span class="legend-dot" style="background:' + (CORES_EQUIPES[eq]||'#888') + '"></span>'
-        + eq + ' (' + n + ')</span>').join('')
-      || '<span>Nenhum ponto encontrado</span>';
+    const itens = Object.entries(contPorEquipe).filter(([,n]) => n > 0)
+      .map(([eq, n]) => `<span style="display:flex;align-items:center;gap:4px;">
+        <span style="background:#2E7D32;color:#fff;border-radius:50%;width:16px;height:16px;
+          display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;">
+          ${SIGLAS[eq]||eq.charAt(0)}</span>${eq} (${n})</span>`);
+    legEl.innerHTML = itens.length ? itens.join('') : '<span>Nenhum ponto encontrado</span>';
   }
 
   info.textContent = total > 0
-    ? total + ' ponto(s) encontrado(s). Clique em um ponto para ver os detalhes.'
-    : 'Nenhum ponto encontrado para esta equipe.';
+    ? total + ' ponto(s) encontrado(s). Toque para ver detalhes.'
+    : 'Nenhum ponto registrado ainda.';
 
-  // Invalidar tamanho do mapa após renderizar
   setTimeout(() => { if (adminMap) adminMap.invalidateSize(); }, 200);
 }
 
@@ -4059,13 +4100,16 @@ async function criarRota() {
   if (!adminPolo)       { showToast('Selecione o polo.', 'error'); return; }
   if (adminAlims.length === 0) { showToast('Selecione ao menos um alimentador.', 'error'); return; }
 
+  const nomeProjeto = (document.getElementById('admin-nome-projeto').value.trim())
+    || ('Projeto ' + new Date().toLocaleDateString('pt-BR'));
   const novaRota = {
-    id:          Date.now(),
+    id:           Date.now(),
+    nomeProjeto,
     equipe,
-    polo:        adminPolo,
+    polo:         adminPolo,
     alimentadores: [...adminAlims],
-    criada:      new Date().toLocaleString('pt-BR'),
-    criadaPor:   currentUser,
+    criada:       new Date().toLocaleString('pt-BR'),
+    criadaPor:    currentUser,
   };
 
   await carregarRotas();
@@ -4075,6 +4119,7 @@ async function criarRota() {
   if (ok) {
     showToast('Rota criada para ' + equipe + '! ', 'success');
     // Limpar form
+    document.getElementById('admin-nome-projeto').value = '';
     document.getElementById('admin-equipe').value = '';
     adminPolo  = null;
     adminAlims = [];
@@ -4102,7 +4147,7 @@ async function renderRotasAdmin() {
   if (!lista) return;
 
   if (rotasData.rotas.length === 0) {
-    lista.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);font-size:13px;">Nenhuma rota criada ainda.</div>';
+    lista.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);font-size:13px;">Nenhum projeto criado ainda.</div>';
     return;
   }
 
@@ -4119,8 +4164,9 @@ async function renderRotasAdmin() {
     <div class="rota-card">
       <div class="rota-card-header">
         <div>
-          <div class="rota-equipe">${r.equipe}</div>
-          <div class="rota-meta">Criada em ${r.criada} por ${r.criadaPor}</div>
+          <div class="rota-equipe">${r.nomeProjeto || 'Projeto'}</div>
+          <div style="font-size:11px;color:var(--text-muted);">${r.equipe}</div>
+          <div class="rota-meta">Criado em ${r.criada} por ${r.criadaPor}</div>
         </div>
         <div class="rota-acoes">
           <span class="rota-polo-badge">${r.polo}</span>
@@ -4169,8 +4215,8 @@ function renderRotasAtribuidas() {
 
   const quantidade = rotasAtribuidas.length;
   resumo.textContent = quantidade === 1
-    ? '1 rota disponível. Selecione-a para entrar no campo.'
-    : quantidade + ' rotas disponíveis. Selecione qual a equipe vai executar primeiro.';
+    ? '1 projeto disponível. Selecione-a para entrar no campo.'
+    : quantidade + ' projetos disponíveis. Selecione qual a equipe vai executar primeiro.';
 
   lista.innerHTML = rotasAtribuidas.map((rota, indice) => {
     const selecionada = rotaAtribuida && String(rotaAtribuida.id) === String(rota.id);
@@ -4191,14 +4237,14 @@ function renderRotasAtribuidas() {
 
   const pronta = !!rotaAtribuida;
   btn.disabled = !pronta;
-  btn.textContent = pronta ? 'Usar rota selecionada →' : 'Selecione uma rota para continuar';
+  btn.textContent = pronta ? 'Usar projeto selecionado →' : 'Selecione um projeto para continuar';
 }
 
 function selecionarRotaAtribuida(id) {
   rotaAtribuida = rotasAtribuidas.find(r => String(r.id) === String(id)) || null;
   renderRotasAtribuidas();
   if (rotaAtribuida) {
-    showToast('Rota selecionada. Confirme para carregar os alimentadores.', 'success');
+    showToast('Projeto selecionado. Confirme para carregar os alimentadores.', 'success');
   }
 }
 
@@ -4222,7 +4268,7 @@ async function mostrarRotaAtribuida(user) {
 
 async function usarRotaAtribuida() {
   if (!rotaAtribuida) {
-    showToast('Selecione uma rota antes de continuar.', 'warning');
+    showToast('Selecione um projeto antes de continuar.', 'warning');
     return;
   }
 
