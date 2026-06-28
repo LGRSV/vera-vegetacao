@@ -127,19 +127,35 @@
       );
 
 
-      // v2.6.14: performance + cabos unificados
+      // ── v2.6.14: performance + cabos unificados ──
       html = html
-        .replace(
-          '  // PADRÃO: mostrar apenas postes que estão sobre a rede T1/T2.\n  // Postes fora dessas zonas (ex: trechos T3 descartados) não são exibidos.\n  if (indiceCabos && indiceCabos.grade && !camadas.livres) {\n    const sobreRede = validos.filter(poste => posteTemCabeamento(poste, indiceCabos));\n    // Só aplica o filtro se sobrar uma quantidade razoável (evita mapa vazio se o índice falhar)\n    if (sobreRede.length > 0) validos = sobreRede;\n  }',
-          '  // v2.6.14: filtro de cabo desativado.'
-        )
+
+        // FIX 2: T1 e T2 mesma cor azul — sem distinção visual
         .replace("pane: 'cabosT2Pane',\n      renderer: caboRendererT2,", "pane: 'cabosT1Pane',\n      renderer: caboRendererT1,")
         .replace("color: '#FF8F00',\n      weight: 5,\n      opacity: 0.96,", "color: '#1565C0',\n      weight: 2,\n      opacity: 0.80,")
         .replace("color: '#D32F2F',\n      weight: 2.5,", "color: '#1565C0',\n      weight: 2,")
+
+        // FIX 2: Renomear botões T1/T2 para "Rede MT" (remover distinção na UI)
+        .replace(
+          "<span class=\"cam-dot t1\"></span><span>T1 · Tronco</span>",
+          "<span class=\"cam-dot t1\"></span><span>Rede MT</span>"
+        )
+        .replace(
+          '<button type="button" class="cam-btn ativo" id="cam-t2" onclick="toggleCamada('t2')" aria-pressed="true">\n        <span class="cam-dot t2"></span><span>T2 · Ramal</span><span class="cam-count" id="cam-t2-count">—</span>\n      </button>',
+          ''
+        )
+
+        // FIX 3: Reativar filtro posteTemCabeamento (mostra só postes sobre a rede do KML)
+        // O filtro estava correto — agora funciona pois os cabos vieram do KML consolidado
+        // (sem patch de remoção = filtro ativo por padrão)
+
+        // FIX 3: Aumentar limites e batch
         .replace('const LIMITE_TOTAL_POSTES_MAPA = 12000;', 'const LIMITE_TOTAL_POSTES_MAPA = 15000;')
         .replace('const LIMITE_MAXIMO_POSTES_POR_ALIMENTADOR = 8000;', 'const LIMITE_MAXIMO_POSTES_POR_ALIMENTADOR = 5000;')
         .replace('const LIMITE_MINIMO_POSTES_POR_ALIMENTADOR = 3000;', 'const LIMITE_MINIMO_POSTES_POR_ALIMENTADOR = 500;')
         .replace('const lote = 200;', 'const lote = 300;')
+
+        // FIX 4: Versão correta no app
         .replace("const APP_VERSION = '2.6.8';", "const APP_VERSION = '2.6.14';")
         .replaceAll('v2.6.8', 'v2.6.14');
       document.open();
