@@ -135,15 +135,16 @@
         .replace("color: '#FF8F00',\n      weight: 5,\n      opacity: 0.96,", "color: '#1565C0',\n      weight: 2,\n      opacity: 0.80,")
         .replace("color: '#D32F2F',\n      weight: 2.5,", "color: '#1565C0',\n      weight: 2,")
 
-        // FIX 2: Renomear botões T1/T2 para "Rede MT" (remover distinção na UI)
+        // FIX 2: Rede MT unificada — esconde T2 via CSS, renomeia T1 (sem mexer em DOM via regex)
         .replace(
-          "<span class=\"cam-dot t1\"></span><span>T1 · Tronco</span>",
-          "<span class=\"cam-dot t1\"></span><span>Rede MT</span>"
+          '<span class="cam-dot t1"></span><span>T1 · Tronco</span>',
+          '<span class="cam-dot t1"></span><span>Rede MT</span>'
         )
         .replace(
-          '<button type="button" class="cam-btn ativo" id="cam-t2" onclick="toggleCamada('t2')" aria-pressed="true">\n        <span class="cam-dot t2"></span><span>T2 · Ramal</span><span class="cam-count" id="cam-t2-count">—</span>\n      </button>',
-          ''
+          '<span class="cam-dot t2"></span><span>T2 · Ramal</span>',
+          '<span class="cam-dot t2"></span><span>T2 (oculto)</span>'
         )
+        .replace('</style>', '#cam-t2{display:none !important;}</style>')
 
         // FIX 3: Reativar filtro posteTemCabeamento (mostra só postes sobre a rede do KML)
         // O filtro estava correto — agora funciona pois os cabos vieram do KML consolidado
