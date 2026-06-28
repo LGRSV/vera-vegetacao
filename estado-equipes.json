@@ -1,28 +1,31 @@
 {
   "version": 1,
-  "updatedAt": "2026-06-28T23:05:04.865Z",
+  "updatedAt": "2026-06-28T23:06:16.600Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
-        "rotaId": "1782505876921",
-        "nomeProjeto": "Porto Nacional",
+        "rotaId": "1782473731429",
+        "nomeProjeto": "Projeto sem nome",
         "polo": "CENTRO",
         "alimentadores": [
-          "AL06072001",
-          "AL05072001",
-          "AL02072001",
-          "AL01072001",
-          "LD02072001",
-          "LD01072001",
-          "AL03072001",
-          "AL04072001",
-          "LD03072001"
+          "AL02059122"
         ],
-        "iniciadoEm": "2026-06-28T23:05:04.865Z",
-        "atualizadoEm": "2026-06-28T23:05:04.865Z",
+        "iniciadoEm": "2026-06-28T23:06:16.600Z",
+        "atualizadoEm": "2026-06-28T23:06:16.600Z",
         "atualizadoPor": "Equipe Energisa"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1782473731429",
+          "nomeProjeto": "Projeto sem nome",
+          "polo": "CENTRO",
+          "alimentadores": [
+            "AL02059122"
+          ],
+          "data": "2026-06-28T23:06:16.600Z",
+          "equipe": "Equipe Energisa"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1782505876921",
