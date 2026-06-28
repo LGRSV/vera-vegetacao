@@ -14,7 +14,7 @@
 <body>
   <main>
     <div class="mark">V</div>
-    <strong>Carregando VERA 2.6.13</strong>
+    <strong>Carregando VERA 2.6.14</strong>
     <p id="status" class="status">Preparando sincronização entre dispositivos…</p>
     <div id="error" class="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
   </main>
@@ -23,15 +23,15 @@
     const status = document.getElementById('status');
     const errorBox = document.getElementById('error');
     const errorDetail = document.getElementById('error-detail');
-    const source = 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/backup/v2.6.8-antes-admin-fotos-renomeacao-20260626/index.html';
+    const source = 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/backup/v2.6.14-perf-cabos-unificados/index.html';
     try {
-      const response = await fetch(source + '?team-state=2.6.13', { cache: 'no-store' });
+      const response = await fetch(source + '?team-state=2.6.14', { cache: 'no-store' });
       if (!response.ok) throw new Error('Versão estável indisponível (' + response.status + ').');
       let html = await response.text();
-      html = html.replaceAll('2.6.8', '2.6.13');
+      html = html.replaceAll('2.6.14', '2.6.14');
 
       const fimDoApp = '      document.open();\n      document.write(html);\n      document.close();';
-      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?v=2.6.13"><\\/script><script src="sincronizacao-dispositivos.js?v=2.6.13"><\\/script></body>\');\n' + fimDoApp;
+      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?v=2.6.14"><\\/script><script src="sincronizacao-dispositivos.js?v=2.6.14"><\\/script></body>\');\n' + fimDoApp;
       if (html.indexOf(fimDoApp) < 0) throw new Error('Não foi possível conectar a sincronização ao app.');
       html = html.replace(fimDoApp, fimComRecursos);
 
