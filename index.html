@@ -172,59 +172,16 @@
           '</style>'
         )
 
-        // Botão Visualizar rota
+        
+
+        // Botão Visualizar (função em sincronizacao-dispositivos.js)
         .replace(
           '<button class="btn-editar-rota" onclick="abrirModalEditarRota(${r.id})">Editar</button>',
-          '<button class="btn-ver-rota" onclick="visualizarRota(${r.id})">Visualizar</button>' +
-          '<button class="btn-editar-rota" onclick="abrirModalEditarRota(${r.id})">Editar</button>'
+          '<button class="btn-ver-rota" onclick="visualizarRota(${r.id})">Visualizar</button>'
+          + '<button class="btn-editar-rota" onclick="abrirModalEditarRota(${r.id})">Editar</button>'
         )
-
-        // CSS do botão Visualizar
-        .replace(
-          '</style>',
-          '.btn-ver-rota{background:#e3f2fd;border:1px solid #90caf9;color:#1565C0;cursor:pointer;border-radius:7px;padding:5px 10px;font-size:11px;font-weight:600;font-family:inherit;transition:background .15s}.btn-ver-rota:hover{background:#bbdefb}' +
-          '</style>'
-        )
-
-        // Função visualizarRota
-        .replace(
-          'async function abrirModalEditarRota(id) {',
-          \`async function visualizarRota(id) {
-  await carregarRotas();
-  const rota = rotasData.rotas.find(r => r.id === id);
-  if (!rota) return;
-  iniciarMapaAdmin();
-  adminMapLayer.clearLayers();
-  const polo = rota.polo;
-  const alims = rota.alimentadores || [];
-  const info = document.getElementById('admin-map-info');
-  if (info) info.textContent = 'Carregando rede da rota: ' + (rota.nomeProjeto || rota.id) + '...';
-  let total = 0;
-  const bounds = [];
-  for (const circ of alims) {
-    try {
-      const url = GITHUB_RAW + '/cabos/' + polo + '/' + circ + '.json?t=' + Date.now();
-      const r2 = await fetch(url, { cache: 'no-store' });
-      if (!r2.ok) continue;
-      const cabos = await r2.json();
-      const linhas = [...(cabos.t1||[]), ...(cabos.t2||[])];
-      linhas.forEach(linha => {
-        const pts = normalizarLinhas([linha]);
-        if (pts.length) {
-          L.polyline(pts, { color:'#1565C0', weight:2, opacity:0.85, interactive:false }).addTo(adminMapLayer);
-          pts.forEach(p => { if(Array.isArray(p)) bounds.push(p); });
-        }
-      });
-      total += linhas.length;
-    } catch(e) {}
-  }
-  if (bounds.length) adminMap.fitBounds(L.latLngBounds(bounds), { padding:[30,30] });
-  if (info) info.textContent = (rota.nomeProjeto || 'Rota') + ': ' + total + ' trechos | ' + alims.length + ' alimentadores. Clique em "Atualizar" para ver os pontos registrados.';
-  setTimeout(() => { if (adminMap) adminMap.invalidateSize(); }, 200);
-  document.getElementById('admin-map').scrollIntoView({ behavior:'smooth', block:'start' });
-}
-
-async function abrirModalEditarRota(id) {\`
+        .replace('</style>',
+          '.btn-ver-rota{background:#e3f2fd;border:1px solid #90caf9;color:#1565C0;cursor:pointer;border-radius:7px;padding:5px 10px;font-size:11px;font-weight:700;font-family:inherit;transition:background .15s}.btn-ver-rota:hover{background:#bbdefb}</style>'
         )
         .replace("const APP_VERSION = '2.6.8';", "const APP_VERSION = '2.6.14';")
         .replaceAll('v2.6.8', 'v2.6.14');
