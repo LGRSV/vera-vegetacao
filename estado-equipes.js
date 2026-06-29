@@ -99,8 +99,11 @@
       return false;
     }
 
-    for (let tentativa = 0; tentativa < 2; tentativa++) {
+    for (let tentativa = 0; tentativa < 4; tentativa++) {
       try {
+        if (tentativa > 0) {
+          await new Promise(function(res) { setTimeout(res, 600 * tentativa); });
+        }
         const leitura = await lerEstadoParaGravar(credenciais.repo, credenciais.token);
         const estado = leitura.estado;
         const anterior = estado.equipes[equipe] || {};
@@ -151,14 +154,15 @@
         });
 
         if (resposta.ok) return true;
-        if (resposta.status === 409 && tentativa === 0) continue;
+        // 409 = conflito de SHA (outro dispositivo salvou antes) — relê e tenta de novo
+        if (resposta.status === 409) continue;
 
         const detalhe = await resposta.json().catch(function () { return {}; });
-        throw new Error(detalhe.message || 'Erro ao gravar o estado da equipe.');
+        throw new Error(detalhe.message || 'Erro ao gravar o estado da equipe (' + resposta.status + ').');
       } catch (erro) {
-        console.warn('VERA salvar estado da equipe:', erro);
-        if (tentativa === 1 && typeof showToast === 'function') {
-          showToast('Não foi possível salvar o projeto ativo da equipe. Tente novamente.', 'error');
+        console.warn('VERA salvar estado da equipe (tentativa ' + (tentativa+1) + '):', erro);
+        if (tentativa === 3 && typeof showToast === 'function') {
+          showToast('Não foi possível salvar o projeto. Verifique a conexão e tente novamente.', 'error');
         }
       }
     }
