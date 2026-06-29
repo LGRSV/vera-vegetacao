@@ -1,1 +1,1 @@
-{"version":"2.6.14","released":"2026-06-28","notes":"Rede MT unificada, filtro postes sobre KML, performance"}
+{"version":"2.6.15","released":"2026-06-29","notes":"Fix: entrar na rota mesmo se save falhar + token fallback"}
