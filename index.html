@@ -31,7 +31,7 @@
       html = html.replaceAll('2.6.14', '2.6.14');
 
       const fimDoApp = '      document.open();\n      document.write(html);\n      document.close();';
-      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=1782735957"><\\/script><script src="sincronizacao-dispositivos.js?t=1782735957"><\\/script><script src="ui-visualizacao.js?t=1782739287"><\\/script></body>\');\n' + fimDoApp;
+      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=1782735957"><\\/script><script src="sincronizacao-dispositivos.js?t=1782735957"><\\/script></body>\');\n' + fimDoApp;
       if (html.indexOf(fimDoApp) < 0) throw new Error('Não foi possível conectar a sincronização ao app.');
       html = html.replace(fimDoApp, fimComRecursos);
 
