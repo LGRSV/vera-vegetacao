@@ -183,3 +183,54 @@
   window.sincronizarDispositivosDaEquipe = sincronizarDispositivosDaEquipe;
   integrarComRegistros();
 })();
+
+// ── VISUALIZAR ROTA (botão no painel admin) ──
+window.visualizarRota = async function visualizarRota(id) {
+  if (typeof carregarRotas !== 'function') return;
+  await carregarRotas();
+  var rota = (rotasData.rotas || []).find(function(r) { return r.id === id; });
+  if (!rota) return;
+
+  if (typeof iniciarMapaAdmin === 'function') iniciarMapaAdmin();
+  if (adminMapLayer) adminMapLayer.clearLayers();
+
+  var polo  = rota.polo;
+  var alims = rota.alimentadores || [];
+  var info  = document.getElementById('admin-map-info');
+  if (info) info.textContent = 'Carregando rede: ' + (rota.nomeProjeto || String(id)) + '...';
+
+  var bounds = [];
+  for (var ci = 0; ci < alims.length; ci++) {
+    try {
+      var url = (typeof GITHUB_RAW !== 'undefined' ? GITHUB_RAW : 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main')
+        + '/cabos/' + polo + '/' + alims[ci] + '.json?t=' + Date.now();
+      var resp = await fetch(url, { cache: 'no-store' });
+      if (!resp.ok) continue;
+      var cab = await resp.json();
+      var linhas = (cab.t1 || []).concat(cab.t2 || []);
+      for (var li = 0; li < linhas.length; li++) {
+        if (typeof normalizarLinhas === 'function') {
+          var pts = normalizarLinhas([linhas[li]]);
+        } else {
+          var pts = linhas[li].map ? [linhas[li].map(function(c) { return [c[1], c[0]]; })] : [];
+        }
+        if (pts.length && typeof L !== 'undefined') {
+          L.polyline(pts, { color: '#1565C0', weight: 2, opacity: 0.85, interactive: false })
+            .addTo(adminMapLayer);
+          pts.forEach(function(p) { if (Array.isArray(p)) bounds.push(p); });
+        }
+      }
+    } catch(e) { console.warn('visualizarRota erro circ', alims[ci], e); }
+  }
+
+  if (bounds.length && adminMap) {
+    adminMap.fitBounds(L.latLngBounds(bounds), { padding: [30, 30] });
+  }
+  if (info) {
+    info.textContent = (rota.nomeProjeto || 'Rota') + ' — '
+      + alims.length + ' alim. | Pressione Atualizar para ver pontos.';
+  }
+  setTimeout(function() { if (adminMap) adminMap.invalidateSize(); }, 200);
+  var mapEl = document.getElementById('admin-map');
+  if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
