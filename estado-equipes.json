@@ -117,31 +117,11 @@
           "LD02072001",
           "LD03072001"
         ],
-        "iniciadoEm": "2026-06-28T23:25:24.627Z",
-        "atualizadoEm": "2026-06-29T11:39:38.864Z",
+        "iniciadoEm": "2026-06-29T12:00:00.000Z",
+        "atualizadoEm": "2026-06-29T12:00:00.000Z",
         "atualizadoPor": "Enecol Centro"
       },
-      "historico": [
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1782688959998",
-          "nomeProjeto": "Rota Teste Porto Nacional",
-          "polo": "CENTRO",
-          "alimentadores": [
-            "AL01072001",
-            "AL02072001",
-            "AL03072001",
-            "AL04072001",
-            "AL05072001",
-            "AL06072001",
-            "LD01072001",
-            "LD02072001",
-            "LD03072001"
-          ],
-          "data": "2026-06-28T23:25:24.627Z",
-          "equipe": "Enecol Centro"
-        }
-      ]
+      "historico": []
     }
   }
 }
