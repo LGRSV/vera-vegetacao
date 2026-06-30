@@ -1,21 +1,22 @@
 {
   "id": "V0002",
   "synced": false,
-  "wkt": "POINT (-48.328663 -10.177249)",
-  "data": "26/06/2026, 09:12:23",
-  "poste": "140161",
-  "especie": "Outros",
-  "lat": -10.1772494,
-  "lon": -48.3286629,
-  "altura": "3",
-  "dtbt": "200",
-  "dtmt": "300",
+  "wkt": "POINT (-48.352728 -10.215357)",
+  "data": "30/06/2026, 20:26:40",
+  "poste": "402081",
+  "especie": "Babaçu",
+  "lat": -10.215356958072663,
+  "lon": -48.35272768675436,
+  "altura": "4",
+  "dtbt": "150",
+  "dtmt": "150",
   "dtat": "0",
-  "dap": "45",
-  "area": "Urbano",
-  "acesso": "Sim",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Não",
   "usuario": "Equipe Energisa",
-  "syncedAt": null,
+  "projeto": "",
+  "fotos_count": 3,
   "fotos_ids": [
     "VER0002F1",
     "VER0002F2",
@@ -25,6 +26,5 @@
     "fotos/Equipe-Energisa/VER0002F1.jpg",
     "fotos/Equipe-Energisa/VER0002F2.jpg",
     "fotos/Equipe-Energisa/VER0002F3.jpg"
-  ],
-  "fotos_count": 3
+  ]
 }
