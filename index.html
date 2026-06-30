@@ -1749,17 +1749,22 @@ async function syncPendingPoints() {
     const body = { message: msg, content: b64content };
     if (sha) body.sha = sha;
     let r;
-    for (let tent = 0; tent < 3; tent++) {
-      if (tent > 0) await new Promise(function(res){ setTimeout(res, 800 * tent); });
+    const MAX_TENT = 5;
+    for (let tent = 0; tent < MAX_TENT; tent++) {
+      if (tent > 0) await new Promise(function(res){ setTimeout(res, 700 * tent); });
       try {
+        const ctrl = new AbortController();
+        const timeoutId = setTimeout(function(){ ctrl.abort(); }, 20000); // 20s timeout por tentativa
         r = await fetch('https://api.github.com/repos/' + repo + '/contents/' + path, {
           method: 'PUT',
           headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
+          signal: ctrl.signal,
         });
+        clearTimeout(timeoutId);
       } catch (eRede) {
-        console.warn('ghPut rede falhou tent ' + (tent+1), eRede);
-        continue; // tenta de novo
+        console.warn('ghPut rede falhou tent ' + (tent+1) + '/' + MAX_TENT, eRede && eRede.message);
+        continue; // timeout ou rede caiu — tenta de novo
       }
       if (r.ok) return r;
       // 409 = conflito de SHA, relê e tenta de novo
@@ -1771,9 +1776,14 @@ async function syncPendingPoints() {
         } catch(e) {}
         continue;
       }
+      // 403 = rate limit ou token sem permissão — não adianta insistir rapido
+      if (r.status === 403) {
+        await new Promise(function(res){ setTimeout(res, 3000); });
+        continue;
+      }
       const err = await r.json().catch(() => ({}));
       console.warn('ghPut erro', r.status, path, err.message);
-      // 422/413 (muito grande) ou outro erro: não adianta repetir
+      // 422/413 (muito grande) ou outro erro definitivo: não adianta repetir
       if (r.status === 422 || r.status === 413) break;
     }
     return r;
