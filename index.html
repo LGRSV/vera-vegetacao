@@ -46,18 +46,22 @@
       html = html
         .replace(
           '<div class="camadas-title">Visualização</div>',
-          '<div class=\"camadas-title\" id=\"camadas-title-row\" style=\"display:flex;align-items:center;justify-content:space-between;cursor:pointer;\" onclick=\"toggleMinimizarCamadas()\"><span>Visualização</span><span id=\"camadas-min-icon\" style=\"font-size:13px;font-weight:700;\">\u2212</span></div>'
+          '<div class="camadas-title" id="camadas-title-row" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleMinimizarCamadas()"><span>Visualização</span><span id="camadas-min-icon" style="font-size:13px;font-weight:700;">−</span></div>'
         )
         .replace('</style>',
           '.camadas-control.minimizado .cam-btn,.camadas-control.minimizado .camadas-resumo{display:none!important;}.camadas-control.minimizado{padding:6px 8px;gap:0;}.camadas-control.minimizado .camadas-title{padding:0;}</style>'
         )
         .replace('</body>',
-          '<' + 'script>function toggleMinimizarCamadas(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(!c)return;var min=c.classList.toggle("minimizado");if(ic)ic.textContent=min?"+":"\u2212";try{localStorage.setItem("vera_camadas_min",min?"1":"0");}catch(e){}}(function(){try{if(localStorage.getItem("vera_camadas_min")==="1"){var apl=function(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(c){c.classList.add("minimizado");if(ic)ic.textContent="+";}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",apl);else apl();}}catch(e){}})();<' + '/script></body>'
+          '<' + 'script>function toggleMinimizarCamadas(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(!c)return;var min=c.classList.toggle("minimizado");if(ic)ic.textContent=min?"+":"−";try{localStorage.setItem("vera_camadas_min",min?"1":"0");}catch(e){}}(function(){try{if(localStorage.getItem("vera_camadas_min")==="1"){var apl=function(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(c){c.classList.add("minimizado");if(ic)ic.textContent="+";}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",apl);else apl();}}catch(e){}})();<' + '/script></body>'
         )
-        .replaceAll('2.6.14', '2.6.17');
+        .replaceAll('2.6.14', '2.6.17')
+        .replace(
+          "if (primeira < 0) throw new Error('Trecho não encontrado: ' + nome + '.');",
+          "if (primeira < 0) { console.warn('Trecho não encontrado:', nome); return html; }"
+        );
 
       const fimDoApp = '      document.open();\n      document.write(html);\n      document.close();';
-      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
+      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script><script src="hotfix-fotos.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
       if (html.indexOf(fimDoApp) < 0) throw new Error('Não foi possível conectar a sincronização ao app.');
       html = html.replace(fimDoApp, fimComRecursos);
 
