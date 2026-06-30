@@ -1584,15 +1584,32 @@ async function verificarVersao() {
 }
 
 async function forcarAtualizacao() {
-  // Setar versão ANTES de limpar para não entrar em loop
-  localStorage.setItem('vera_v', '2.3.2');
-  if ('caches' in window) {
-    const keys = await caches.keys();
-    await Promise.all(keys.map(k => caches.delete(k)));
+  // Feedback visual imediato
+  const banner = document.getElementById('update-banner');
+  if (banner) {
+    const btn = banner.querySelector('button');
+    if (btn) { btn.disabled = true; btn.textContent = 'Atualizando...'; }
   }
-  // Service Worker REMOVIDO permanentemente — era a causa dos bugs de cache.
-  // O app agora sempre carrega do servidor. Atualização do GitHub Pages é
-  // praticamente instantânea e o navegador pega a versão nova sozinho.
+  try {
+    // 1. Desregistrar qualquer Service Worker
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(function(r){ return r.unregister(); }));
+    }
+    // 2. Limpar todos os caches
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(function(k){ return caches.delete(k); }));
+    }
+  } catch(e) { console.warn('Limpeza ao atualizar:', e); }
+
+  // 3. RECARREGAR a página com cache-bust na URL (fura cache do GitHub Pages e do navegador)
+  try {
+    const base = window.location.href.split('#')[0].split('?')[0];
+    window.location.replace(base + '?v=' + Date.now());
+  } catch(e) {
+    window.location.reload(true);
+  }
 }
 
 // Sem Service Worker, sem registro, sem loop de reload.
