@@ -69,12 +69,6 @@
         'bloqueio de registro sem fotos'
       );
 
-      html = substituirUmaVez(
-        html,
-        "const APP_VERSION = '2.6.4';",
-        "const APP_VERSION = '2.6.8';",
-        'versão interna'
-      );
       html = html.replace(/v2\.6\.4/g, 'v2.6.8');
 
       html = substituirUmaVez(
