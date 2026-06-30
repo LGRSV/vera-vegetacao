@@ -1,6 +1,6 @@
 {
   "id": "V0003",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-48.387053 -10.737121)",
   "data": "30/06/2026, 15:55:23",
   "poste": "431430",
@@ -16,7 +16,7 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Teste Porto Nacional",
-  "syncedAt": "2026-06-30T23:26:42.465Z",
+  "syncedAt": null,
   "fotos_ids": [
     "VER0003F1",
     "VER0003F2",
