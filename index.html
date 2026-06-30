@@ -40,7 +40,7 @@
     }
 
     try {
-      const response = await fetch(source + '?t=1782816100', { cache: 'no-store' });
+      const response = await fetch(source + '?t=1782840951', { cache: 'no-store' });
       if (!response.ok) throw new Error('Versão estável indisponível (' + response.status + ').');
       let html = await response.text();
       html = html
@@ -54,10 +54,10 @@
         .replace('</body>',
           '<' + 'script>function toggleMinimizarCamadas(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(!c)return;var min=c.classList.toggle("minimizado");if(ic)ic.textContent=min?"+":"\u2212";try{localStorage.setItem("vera_camadas_min",min?"1":"0");}catch(e){}}(function(){try{if(localStorage.getItem("vera_camadas_min")==="1"){var apl=function(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(c){c.classList.add("minimizado");if(ic)ic.textContent="+";}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",apl);else apl();}}catch(e){}})();<' + '/script></body>'
         )
-        .replaceAll('2.6.14', '2.6.16');
+        .replaceAll('2.6.14', '2.6.17');
 
       const fimDoApp = '      document.open();\n      document.write(html);\n      document.close();';
-      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=1782816100"><\\/script><script src="sincronizacao-dispositivos.js?t=1782816100"><\\/script></body>\');\n' + fimDoApp;
+      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=1782840951"><\\/script><script src="sincronizacao-dispositivos.js?t=1782840951"><\\/script></body>\');\n' + fimDoApp;
       if (html.indexOf(fimDoApp) < 0) throw new Error('Não foi possível conectar a sincronização ao app.');
       html = html.replace(fimDoApp, fimComRecursos);
 
