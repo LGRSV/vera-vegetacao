@@ -1680,32 +1680,53 @@ let isSyncing = false;
 // Comprime imagem base64 para máximo de 1280px e qualidade 80%
 async function comprimirFoto(dataUrl, maxPx) {
   return new Promise(resolve => {
+    let resolvido = false;
+    const finalizar = (valor) => {
+      if (resolvido) return;
+      resolvido = true;
+      resolve(valor);
+    };
+    // Timeout de seguranca: se onload/onerror nunca disparar (trava em alguns
+    // navegadores Android com certas imagens), usa a foto original em até 6s
+    // em vez de travar o envio para sempre.
+    const timeoutId = setTimeout(function() {
+      console.warn('comprimirFoto: timeout, usando foto sem comprimir de novo');
+      finalizar(dataUrl);
+    }, 6000);
     try {
       const img = new Image();
       img.onload = () => {
-        let w = img.width, h = img.height;
-        if (w > maxPx || h > maxPx) {
-          if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
-          else       { w = Math.round(w * maxPx / h); h = maxPx; }
+        clearTimeout(timeoutId);
+        try {
+          let w = img.width, h = img.height;
+          if (w > maxPx || h > maxPx) {
+            if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+            else       { w = Math.round(w * maxPx / h); h = maxPx; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          let q = 0.72;
+          let out = canvas.toDataURL('image/jpeg', q);
+          while (out.length > 950000 && q > 0.35) {
+            q -= 0.12;
+            out = canvas.toDataURL('image/jpeg', q);
+          }
+          finalizar(out);
+        } catch (eCanvas) {
+          console.warn('comprimirFoto: erro no canvas, usando original', eCanvas);
+          finalizar(dataUrl);
         }
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(0, 0, w, h);
-        ctx.drawImage(img, 0, 0, w, h);
-        // Qualidade adaptativa: reduz até a foto caber em ~700KB base64
-        let q = 0.72;
-        let out = canvas.toDataURL('image/jpeg', q);
-        while (out.length > 950000 && q > 0.35) {
-          q -= 0.12;
-          out = canvas.toDataURL('image/jpeg', q);
-        }
-        resolve(out);
       };
-      img.onerror = () => resolve(dataUrl);
+      img.onerror = () => { clearTimeout(timeoutId); finalizar(dataUrl); };
       img.src = dataUrl;
-    } catch(e) { resolve(dataUrl); }
+    } catch(e) {
+      clearTimeout(timeoutId);
+      finalizar(dataUrl);
+    }
   });
 }
 
