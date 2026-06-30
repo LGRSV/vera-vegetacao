@@ -1,21 +1,22 @@
 {
   "id": "V0001",
   "synced": false,
-  "wkt": "POINT (-48.329017 -10.177372)",
-  "data": "26/06/2026, 09:03:08",
+  "wkt": "POINT (-48.328450 -10.177689)",
+  "data": "30/06/2026, 15:22:39",
   "poste": "443539",
-  "especie": "Outros",
-  "lat": -10.1773717,
-  "lon": -48.3290173,
-  "altura": "5.5",
-  "dtbt": "30",
-  "dtmt": "45",
+  "especie": "Mangueira",
+  "lat": -10.177689302381243,
+  "lon": -48.328449547502835,
+  "altura": "3.5",
+  "dtbt": "0",
+  "dtmt": "250",
   "dtat": "0",
-  "dap": "40",
-  "area": "",
+  "dap": "45",
+  "area": "URBANO",
   "acesso": "Sim",
   "usuario": "Equipe Energisa",
-  "syncedAt": null,
+  "projeto": "",
+  "fotos_count": 3,
   "fotos_ids": [
     "VER0001F1",
     "VER0001F2",
@@ -25,6 +26,5 @@
     "fotos/Equipe-Energisa/VER0001F1.jpg",
     "fotos/Equipe-Energisa/VER0001F2.jpg",
     "fotos/Equipe-Energisa/VER0001F3.jpg"
-  ],
-  "fotos_count": 3
+  ]
 }
