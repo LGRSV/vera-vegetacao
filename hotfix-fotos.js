@@ -6,6 +6,7 @@
 
   const fetchOriginal = window.fetch.bind(window);
   const fotosPorPonto = new Map();
+  let sincronizandoForcado = false;
 
   function caminhoGithub(input) {
     const url = typeof input === 'string' ? input : (input && input.url ? input.url : '');
@@ -47,6 +48,214 @@
     return '';
   }
 
+  function avisar(texto, tipo) {
+    const status = document.getElementById('status-text');
+    if (status) status.textContent = texto;
+    if (typeof window.showToast === 'function') window.showToast(texto, tipo || '');
+  }
+
+  function b64Texto(texto) {
+    return btoa(unescape(encodeURIComponent(texto)));
+  }
+
+  async function detalheHttp(resposta) {
+    let detalhe = '';
+    try {
+      const corpo = await resposta.clone().json();
+      detalhe = corpo && (corpo.message || corpo.error) ? String(corpo.message || corpo.error) : '';
+    } catch (e) {}
+    return 'HTTP ' + resposta.status + (detalhe ? ' — ' + detalhe : '');
+  }
+
+  async function putGithub(repo, token, caminho, conteudoBase64, mensagem) {
+    const url = 'https://api.github.com/repos/' + repo + '/contents/' + caminho;
+    let sha = null;
+
+    try {
+      const consulta = await fetchOriginal(url, {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github+json' }
+      });
+      if (consulta.ok) {
+        const atual = await consulta.json();
+        sha = atual.sha || null;
+      }
+    } catch (e) {}
+
+    for (let tentativa = 1; tentativa <= 3; tentativa++) {
+      const corpo = { message: mensagem, content: conteudoBase64 };
+      if (sha) corpo.sha = sha;
+
+      let resposta;
+      try {
+        resposta = await fetchOriginal(url, {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'token ' + token,
+            'Accept': 'application/vnd.github+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(corpo)
+        });
+      } catch (erroRede) {
+        if (tentativa === 3) throw new Error('falha de conexão');
+        await new Promise(function (ok) { setTimeout(ok, 900 * tentativa); });
+        continue;
+      }
+
+      if (resposta.ok) return;
+
+      if (resposta.status === 409 && tentativa < 3) {
+        try {
+          const novaConsulta = await fetchOriginal(url, {
+            headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github+json' }
+          });
+          if (novaConsulta.ok) {
+            const atual = await novaConsulta.json();
+            sha = atual.sha || null;
+          }
+        } catch (e) {}
+        await new Promise(function (ok) { setTimeout(ok, 900 * tentativa); });
+        continue;
+      }
+
+      throw new Error(await detalheHttp(resposta));
+    }
+  }
+
+  async function obterConfiguracao() {
+    let cfg = null;
+    try {
+      if (typeof window.carregarConfigGlobal === 'function') cfg = await window.carregarConfigGlobal();
+    } catch (e) {}
+
+    let token = cfg && cfg.token;
+    let repo = cfg && cfg.repo;
+
+    try {
+      if (!token && typeof window.getConfig === 'function') token = await window.getConfig('github_token');
+      if (!repo && typeof window.getConfig === 'function') repo = await window.getConfig('github_repo');
+    } catch (e) {}
+
+    return {
+      token: token || '',
+      repo: repo || 'LGRSV/vera-vegetacao'
+    };
+  }
+
+  function precisaReenviar(ponto) {
+    if (!ponto || !ponto.synced) return true;
+    const locais = Array.isArray(ponto.photos) ? ponto.photos.length : 0;
+    const remotas = Array.isArray(ponto.fotos_github) ? ponto.fotos_github.length : 0;
+    return locais > remotas;
+  }
+
+  async function sincronizarPontoForcado(ponto, repo, token) {
+    const pasta = String(ponto.usuario || 'Equipe sem nome').replace(/\s+/g, '-');
+    const fotos = Array.isArray(ponto.photos) ? ponto.photos : [];
+    const fotosGithub = [];
+    const fotosIds = [];
+    const numero = String(ponto.id || '').replace(/[^0-9]/g, '').padStart(4, '0');
+
+    for (let i = 0; i < fotos.length; i++) {
+      const original = fotos[i];
+      if (!original || !String(original).startsWith('data:')) {
+        throw new Error('foto ' + (i + 1) + ' não está disponível no aparelho');
+      }
+
+      avisar('Reenviando foto ' + (i + 1) + '/' + fotos.length + ' do ponto ' + ponto.id + '...', '');
+      const comprimida = typeof window.comprimirFoto === 'function'
+        ? await window.comprimirFoto(original, 640)
+        : original;
+      const base64 = String(comprimida).split(',')[1];
+      if (!base64) throw new Error('não foi possível preparar a foto ' + (i + 1));
+
+      const fotoId = 'VER' + numero + 'F' + (i + 1);
+      const fotoPath = 'fotos/' + pasta + '/' + fotoId + '.jpg';
+      await putGithub(repo, token, fotoPath, base64, 'VERA: foto ' + fotoId);
+      fotosGithub.push(fotoPath);
+      fotosIds.push(fotoId);
+    }
+
+    avisar('Salvando ponto ' + ponto.id + '...', '');
+    const pontoServidor = Object.assign({}, ponto, {
+      photos: undefined,
+      synced: true,
+      syncedAt: new Date().toISOString(),
+      fotos_count: fotos.length,
+      fotos_ids: fotosIds,
+      fotos_github: fotosGithub
+    });
+    const jsonPath = 'dados/' + pasta + '/' + ponto.id + '.json';
+    await putGithub(
+      repo,
+      token,
+      jsonPath,
+      b64Texto(JSON.stringify(pontoServidor, null, 2)),
+      'VERA: ponto ' + ponto.id + ' — ' + (ponto.especie || 'sem espécie')
+    );
+
+    ponto.synced = true;
+    ponto.syncedAt = new Date().toISOString();
+    ponto.fotos_ids = fotosIds;
+    ponto.fotos_github = fotosGithub;
+    if (typeof window.dbPut === 'function') await window.dbPut('points', ponto);
+  }
+
+  async function forcarSincronizacaoOnline() {
+    if (sincronizandoForcado) return;
+    if (!navigator.onLine) {
+      avisar('Sem conexão. Os pontos continuam guardados neste aparelho.', 'warning');
+      return;
+    }
+    if (typeof window.dbGetAll !== 'function' || typeof window.dbPut !== 'function') {
+      setTimeout(forcarSincronizacaoOnline, 1500);
+      return;
+    }
+
+    sincronizandoForcado = true;
+    try {
+      const config = await obterConfiguracao();
+      if (!config.token) {
+        avisar('Token de sincronização não encontrado neste aparelho. Abra Config e salve o token.', 'error');
+        return;
+      }
+
+      const todos = await window.dbGetAll('points');
+      const pendentes = todos.filter(precisaReenviar);
+      if (!pendentes.length) {
+        avisar('Nenhum ponto pendente neste aparelho.', '');
+        return;
+      }
+
+      let enviados = 0;
+      const falhas = [];
+      for (const ponto of pendentes) {
+        try {
+          await sincronizarPontoForcado(ponto, config.repo, config.token);
+          enviados++;
+        } catch (erro) {
+          const mensagem = 'Ponto ' + (ponto.id || '?') + ': ' + (erro && erro.message ? erro.message : 'erro ao reenviar');
+          falhas.push(mensagem);
+          window.__veraUltimoErroFoto = mensagem;
+          console.warn('VERA reenvio forçado:', mensagem, erro);
+        }
+      }
+
+      if (typeof window.renderRecords === 'function') window.renderRecords();
+      if (typeof window.updatePendingBadge === 'function') window.updatePendingBadge();
+
+      if (falhas.length) {
+        avisar((enviados ? enviados + ' ponto(s) enviado(s). ' : '') + falhas[0], 'error');
+      } else {
+        avisar(enviados + ' ponto(s) enviado(s) com sucesso.', 'success');
+      }
+    } catch (erroGeral) {
+      avisar('Falha na sincronização: ' + (erroGeral && erroGeral.message ? erroGeral.message : 'erro inesperado'), 'error');
+    } finally {
+      sincronizandoForcado = false;
+    }
+  }
+
   const comprimirOriginal = window.comprimirFoto;
   if (typeof comprimirOriginal === 'function') {
     window.comprimirFoto = async function (dataUrl, maxPx) {
@@ -79,9 +288,8 @@
     try {
       const resposta = await fetchOriginal(input, init);
       if (envioFoto) {
-        const ponto = pontoDaFoto(caminho);
         registrarFoto(
-          ponto,
+          pontoDaFoto(caminho),
           caminho,
           resposta.ok,
           resposta.ok ? '' : ('foto recusada pelo servidor (HTTP ' + resposta.status + ')')
@@ -90,12 +298,7 @@
       return resposta;
     } catch (erro) {
       if (envioFoto) {
-        registrarFoto(
-          pontoDaFoto(caminho),
-          caminho,
-          false,
-          'falha de conexão ao enviar a foto'
-        );
+        registrarFoto(pontoDaFoto(caminho), caminho, false, 'falha de conexão ao enviar a foto');
       }
       throw erro;
     }
@@ -110,4 +313,20 @@
       return toastOriginal(mensagem, tipo);
     };
   }
+
+  window.forcarSincronizacaoOnline = forcarSincronizacaoOnline;
+
+  document.addEventListener('click', function (evento) {
+    const botao = evento.target && evento.target.closest ? evento.target.closest('.btn-sync-now') : null;
+    if (!botao || !/sincronizar agora/i.test(botao.textContent || '')) return;
+    evento.preventDefault();
+    evento.stopImmediatePropagation();
+    forcarSincronizacaoOnline();
+  }, true);
+
+  window.addEventListener('online', function () { setTimeout(forcarSincronizacaoOnline, 600); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') setTimeout(forcarSincronizacaoOnline, 800);
+  });
+  setTimeout(forcarSincronizacaoOnline, 1800);
 })();
