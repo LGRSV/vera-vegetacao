@@ -1,1 +1,1 @@
-{"version":"2.6.15","released":"2026-06-29","notes":"Fix: entrar na rota mesmo se save falhar + token fallback"}
+{"version":"2.6.17","released":"2026-06-30","notes":"Fix envio de fotos: compressao adaptativa + retry no upload"}
