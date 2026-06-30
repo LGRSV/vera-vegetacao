@@ -1673,8 +1673,18 @@ async function comprimirFoto(dataUrl, maxPx) {
         }
         const canvas = document.createElement('canvas');
         canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', 0.80));
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+        // Qualidade adaptativa: reduz até a foto caber em ~700KB base64
+        let q = 0.72;
+        let out = canvas.toDataURL('image/jpeg', q);
+        while (out.length > 950000 && q > 0.35) {
+          q -= 0.12;
+          out = canvas.toDataURL('image/jpeg', q);
+        }
+        resolve(out);
       };
       img.onerror = () => resolve(dataUrl);
       img.src = dataUrl;
@@ -1721,14 +1731,33 @@ async function syncPendingPoints() {
     } catch(e) {}
     const body = { message: msg, content: b64content };
     if (sha) body.sha = sha;
-    const r = await fetch('https://api.github.com/repos/' + repo + '/contents/' + path, {
-      method: 'PUT',
-      headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    if (!r.ok) {
+    let r;
+    for (let tent = 0; tent < 3; tent++) {
+      if (tent > 0) await new Promise(function(res){ setTimeout(res, 800 * tent); });
+      try {
+        r = await fetch('https://api.github.com/repos/' + repo + '/contents/' + path, {
+          method: 'PUT',
+          headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+      } catch (eRede) {
+        console.warn('ghPut rede falhou tent ' + (tent+1), eRede);
+        continue; // tenta de novo
+      }
+      if (r.ok) return r;
+      // 409 = conflito de SHA, relê e tenta de novo
+      if (r.status === 409) {
+        try {
+          const chk2 = await fetch('https://api.github.com/repos/' + repo + '/contents/' + path,
+            { headers: { 'Authorization': 'token ' + token } });
+          if (chk2.ok) { const d2 = await chk2.json(); body.sha = d2.sha; }
+        } catch(e) {}
+        continue;
+      }
       const err = await r.json().catch(() => ({}));
       console.warn('ghPut erro', r.status, path, err.message);
+      // 422/413 (muito grande) ou outro erro: não adianta repetir
+      if (r.status === 422 || r.status === 413) break;
     }
     return r;
   };
@@ -1750,7 +1779,7 @@ async function syncPendingPoints() {
           setStatus('Enviando foto ' + (i+1) + '/' + point.photos.length + ' do ponto ' + point.id + '...');
           try {
             // Comprimir para máx 1280px antes de subir (tablet = câmera grande)
-            const fotoComprimida = await comprimirFoto(fotoOriginal, 1280);
+            const fotoComprimida = await comprimirFoto(fotoOriginal, 1024);
             const partes  = fotoComprimida.split(',');
             const b64foto = partes[1];
             const fotoId   = 'VER' + numPonto + 'F' + (i + 1);
