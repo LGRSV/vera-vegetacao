@@ -14,7 +14,7 @@
 <body>
   <main>
     <div class="mark">V</div>
-    <strong>Carregando VERA 2.6.14</strong>
+    <strong>Carregando VERA 2.6.18</strong>
     <p id="status" class="status">Preparando sincronização entre dispositivos…</p>
     <div id="error" class="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
   </main>
@@ -54,14 +54,14 @@
         .replace('</body>',
           '<' + 'script>function toggleMinimizarCamadas(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(!c)return;var min=c.classList.toggle("minimizado");if(ic)ic.textContent=min?"+":"−";try{localStorage.setItem("vera_camadas_min",min?"1":"0");}catch(e){}}(function(){try{if(localStorage.getItem("vera_camadas_min")==="1"){var apl=function(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(c){c.classList.add("minimizado");if(ic)ic.textContent="+";}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",apl);else apl();}}catch(e){}})();<' + '/script></body>'
         )
-        .replaceAll('2.6.14', '2.6.17')
+        .replaceAll('2.6.14', '2.6.18')
         .replace(
           "if (primeira < 0) throw new Error('Trecho não encontrado: ' + nome + '.');",
           "if (primeira < 0) { console.warn('Trecho não encontrado:', nome); return html; }"
         );
 
       const fimDoApp = '      document.open();\n      document.write(html);\n      document.close();';
-      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script><script src="hotfix-fotos.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
+      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script><script src="protege-ids-remotos.js?t=' + Date.now() + '"><\\/script><script src="hotfix-fotos.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
       if (html.indexOf(fimDoApp) < 0) throw new Error('Não foi possível conectar a sincronização ao app.');
       html = html.replace(fimDoApp, fimComRecursos);
 
