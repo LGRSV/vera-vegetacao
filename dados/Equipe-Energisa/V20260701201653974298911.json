@@ -1,0 +1,28 @@
+{
+  "id": "V20260701201653974298911",
+  "synced": true,
+  "wkt": "POINT (-48.348494 -10.210092)",
+  "data": "24/06/2026, 01:48:01",
+  "poste": "651375",
+  "especie": "Mangueira",
+  "lat": -10.210091690678944,
+  "lon": -48.34849406315539,
+  "altura": "2",
+  "dtbt": "30",
+  "dtmt": "0",
+  "dtat": "0",
+  "dap": "40",
+  "area": "Teste",
+  "acesso": "Sim",
+  "usuario": "Equipe Energisa",
+  "syncedAt": "2026-07-01T23:16:55.623Z",
+  "fotos_count": 1,
+  "fotos_ids": [
+    "VER20260701201653974298911F1"
+  ],
+  "fotos_github": [
+    "fotos/Equipe-Energisa/VER20260701201653974298911F1.jpg"
+  ],
+  "legacy_id": "V0001",
+  "remote_id": "V20260701201653974298911"
+}
