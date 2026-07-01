@@ -1,0 +1,30 @@
+{
+  "id": "V0038",
+  "synced": false,
+  "wkt": "POINT (-48.409856 -10.714823)",
+  "data": "01/07/2026, 16:49:09",
+  "poste": "451988",
+  "especie": "Mogno",
+  "lat": -10.714823,
+  "lon": -48.4098558,
+  "altura": "6",
+  "dtbt": "300",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "100",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Teste Porto Nacional",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER0038F1",
+    "VER0038F2",
+    "VER0038F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER0038F1.jpg",
+    "fotos/Enecol-Centro/VER0038F2.jpg",
+    "fotos/Enecol-Centro/VER0038F3.jpg"
+  ]
+}
