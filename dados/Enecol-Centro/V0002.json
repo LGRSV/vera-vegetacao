@@ -1,22 +1,22 @@
 {
   "id": "V0002",
   "synced": false,
-  "wkt": "POINT (-48.385020 -10.735574)",
-  "data": "30/06/2026, 15:03:08",
-  "poste": "20105073",
-  "especie": "Outros",
-  "lat": -10.7355744,
-  "lon": -48.3850198,
-  "altura": "5",
-  "dtbt": "0",
-  "dtmt": "300",
+  "wkt": "POINT (-48.386644 -10.727479)",
+  "data": "01/07/2026, 08:27:57",
+  "poste": "432467",
+  "especie": "Pequi",
+  "lat": -10.7274788,
+  "lon": -48.3866436,
+  "altura": "7",
+  "dtbt": "50",
+  "dtmt": "200",
   "dtat": "0",
-  "dap": "40",
+  "dap": "120",
   "area": "URBANO",
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Teste Porto Nacional",
-  "syncedAt": null,
+  "fotos_count": 3,
   "fotos_ids": [
     "VER0002F1",
     "VER0002F2",
@@ -26,6 +26,5 @@
     "fotos/Enecol-Centro/VER0002F1.jpg",
     "fotos/Enecol-Centro/VER0002F2.jpg",
     "fotos/Enecol-Centro/VER0002F3.jpg"
-  ],
-  "fotos_count": 3
+  ]
 }
