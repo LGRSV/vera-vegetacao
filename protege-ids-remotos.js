@@ -146,13 +146,20 @@
   };
 })();
 
-(function carregarMapaCompartilhado() {
+(function carregarRecursosDeMapa() {
   if (window.__veraCarregouMapaCompartilhado) return;
   window.__veraCarregouMapaCompartilhado = true;
 
-  const script = document.createElement('script');
-  script.src = 'mapa-pontos-compartilhados.js?t=' + Date.now();
-  script.async = true;
-  script.onerror = function () { console.warn('VERA: não foi possível carregar o mapa de pontos compartilhados.'); };
-  (document.head || document.documentElement).appendChild(script);
+  function carregar(arquivo, proximo) {
+    const script = document.createElement('script');
+    script.src = arquivo + '?t=' + Date.now();
+    script.async = false;
+    script.onerror = function () { console.warn('VERA: não foi possível carregar ' + arquivo + '.'); };
+    if (typeof proximo === 'function') script.onload = proximo;
+    (document.head || document.documentElement).appendChild(script);
+  }
+
+  carregar('contexto-mapa-compartilhado.js', function () {
+    carregar('mapa-pontos-compartilhados.js');
+  });
 })();
