@@ -25,7 +25,6 @@
     const errorDetail = document.getElementById('error-detail');
     const source = 'https://raw.githubusercontent.com/LGRSV/vera-vegetacao/backup/v2.6.14-perf-cabos-unificados/index.html';
 
-    // Limpar Service Workers e caches antigos (garante que o dispositivo pegue a versao nova)
     try {
       if ('serviceWorker' in navigator) {
         const regs = await navigator.serviceWorker.getRegistrations();
@@ -61,7 +60,7 @@
         );
 
       const fimDoApp = '      document.open();\n      document.write(html);\n      document.close();';
-      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script><script src="protege-ids-remotos.js?t=' + Date.now() + '"><\\/script><script src="hotfix-fotos.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
+      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script><script src="protege-ids-remotos.js?t=' + Date.now() + '"><\\/script><script src="hotfix-fotos.js?t=' + Date.now() + '"><\\/script><script src="admin-historico-estavel.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
       if (html.indexOf(fimDoApp) < 0) throw new Error('Não foi possível conectar a sincronização ao app.');
       html = html.replace(fimDoApp, fimComRecursos);
 
