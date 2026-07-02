@@ -1,17 +1,15 @@
 (function () {
   'use strict';
-
   if (window.__veraProtegeIdsRemotos) return;
   window.__veraProtegeIdsRemotos = true;
 
   const fetchNativo = window.fetch.bind(window);
   const CHAVE_SESSAO = 'vera_mapa_ids_remotos_v1';
   let mapa = {};
-
   try { mapa = JSON.parse(sessionStorage.getItem(CHAVE_SESSAO) || '{}') || {}; } catch (e) { mapa = {}; }
+
   function salvarMapa() { try { sessionStorage.setItem(CHAVE_SESSAO, JSON.stringify(mapa)); } catch (e) {} }
   function codificarCaminho(caminho) { return caminho.split('/').map(function (parte) { return encodeURIComponent(parte); }).join('/'); }
-
   function idRemoto(pasta, idLegado) {
     const chave = String(pasta || '') + '|' + String(idLegado || '').toUpperCase();
     if (mapa[chave]) return mapa[chave];
@@ -25,12 +23,8 @@
     salvarMapa();
     return mapa[chave];
   }
-
-  function textoDeBase64(valor) {
-    return decodeURIComponent(Array.prototype.map.call(atob(valor), function (caractere) { return '%' + ('00' + caractere.charCodeAt(0).toString(16)).slice(-2); }).join(''));
-  }
+  function textoDeBase64(valor) { return decodeURIComponent(Array.prototype.map.call(atob(valor), function (caractere) { return '%' + ('00' + caractere.charCodeAt(0).toString(16)).slice(-2); }).join('')); }
   function base64DeTexto(valor) { return btoa(unescape(encodeURIComponent(valor))); }
-
   function atualizarConteudoDoPonto(base64, idAntigo, idNovo) {
     try {
       const ponto = JSON.parse(textoDeBase64(base64));
@@ -46,7 +40,6 @@
       return base64DeTexto(JSON.stringify(ponto, null, 2));
     } catch (e) { return base64; }
   }
-
   function analisarCaminho(caminho) {
     const foto = caminho.match(/^fotos\/(.+)\/VER(\d+)F(\d+)\.(jpg|jpeg|png)$/i);
     if (foto && foto[2].length <= 6) {
@@ -62,7 +55,6 @@
     }
     return null;
   }
-
   window.fetch = async function (input, init) {
     const url = typeof input === 'string' ? input : (input && input.url ? input.url : '');
     const metodo = String((init && init.method) || (input && input.method) || 'GET').toUpperCase();
@@ -89,8 +81,8 @@
 
 (function () {
   'use strict';
-  if (window.__veraHistoricoAdminV2) return;
-  window.__veraHistoricoAdminV2 = true;
+  if (window.__veraHistoricoAdminV3) return;
+  window.__veraHistoricoAdminV3 = true;
 
   const REPO = 'LGRSV/vera-vegetacao';
   const LOTES = [
@@ -105,13 +97,11 @@
   function esc(v) { return String(v == null ? '' : v).replace(/[&<>'"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[c]; }); }
   function idExibido(r) { return r.lote.etiqueta + ' · ' + String(r.ponto.id || 'Sem ID'); }
   function status(texto) { const el = document.getElementById('vera-historico-admin-status'); if (el) el.textContent = texto; }
-
   function obterCamada() {
     if (!existeMapaAdmin()) return null;
     if (!estado.camada || estado.camada._map !== adminMap) estado.camada = L.layerGroup().addTo(adminMap);
     return estado.camada;
   }
-
   async function carregarLote(lote) {
     const tarefas = [];
     for (let n = 1; n <= lote.quantidade; n++) {
@@ -124,7 +114,6 @@
     const retorno = await Promise.allSettled(tarefas);
     return retorno.filter(function (x) { return x.status === 'fulfilled'; }).map(function (x) { return x.value; });
   }
-
   async function carregar() {
     if (estado.registros.length) return estado.registros;
     if (estado.carregando) return [];
@@ -139,7 +128,6 @@
       return [];
     } finally { estado.carregando = false; }
   }
-
   function popup(r) {
     const p = r.ponto;
     const fotos = Array.isArray(p.fotos_github) ? p.fotos_github : [];
@@ -150,7 +138,6 @@
     }).join('');
     return '<div style="min-width:240px;max-width:330px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;color:#183b2b;"><div style="font-size:11px;font-weight:800;color:' + r.lote.cor + ';">LOTE ' + esc(r.lote.titulo) + '</div><div style="font-size:17px;font-weight:800;margin:3px 0 9px;">' + esc(idExibido(r)) + '</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px;line-height:1.35;margin-bottom:9px;"><div><b>Espécie</b><br>' + esc(p.especie || '—') + '</div><div><b>Poste</b><br>' + esc(p.poste || '—') + '</div><div><b>Data</b><br>' + esc(p.data || '—') + '</div><div><b>Altura</b><br>' + esc(p.altura || '—') + ' m</div></div><div style="font-size:11px;font-weight:800;margin-bottom:5px;">Fotos (' + fotos.length + ')</div>' + (imagens || '<div style="font-size:11px;color:#64766c;">Sem fotos.</div>') + '</div>';
   }
-
   function ativos() { return estado.modo === 'todos' ? estado.registros.slice() : estado.registros.filter(function (r) { return r.lote.chave === estado.modo; }); }
   function marcarBotoes() {
     const painel = document.getElementById('vera-historico-admin');
@@ -162,14 +149,12 @@
       b.style.borderColor = ativo ? '#163d2a' : '#c7dfce';
     });
   }
-
-  async function exibir() {
+  async function exibir(manterEnquadramento) {
     const camada = obterCamada();
     if (!camada) return;
     const registros = await carregar();
     if (!registros.length) return;
     camada.clearLayers();
-    if (typeof adminMapLayer !== 'undefined' && adminMapLayer && typeof adminMapLayer.clearLayers === 'function') adminMapLayer.clearLayers();
     const limites = [];
     ativos().forEach(function (r) {
       const lat = Number(r.ponto.lat), lon = Number(r.ponto.lon);
@@ -180,33 +165,57 @@
       m.addTo(camada);
       limites.push([lat, lon]);
     });
-    if (limites.length && typeof adminMap.fitBounds === 'function') adminMap.fitBounds(L.latLngBounds(limites), { padding: [28, 28], maxZoom: 15 });
+    if (!manterEnquadramento && limites.length && typeof adminMap.fitBounds === 'function') adminMap.fitBounds(L.latLngBounds(limites), { padding: [28, 28], maxZoom: 15 });
     const texto = estado.modo === 'todos' ? '23 de 30/06 + 48 de 01/07: 71 pontos exibidos.' : (estado.modo === 'ontem' ? '23 pontos de 30/06 exibidos.' : '48 pontos de 01/07 exibidos.');
-    status(texto + ' Toque em um marcador para abrir ponto e fotos.');
+    status(texto + (manterEnquadramento ? ' Rota e pontos exibidos juntos.' : ' Toque em um marcador para abrir ponto e fotos.'));
     const info = document.getElementById('admin-map-info');
     if (info) info.textContent = 'Histórico Enecol Centro — ' + texto;
   }
-
+  async function obterRotaAtualEnecolCentro() {
+    const padrao = '1782688959998';
+    try {
+      const resposta = await fetch('https://raw.githubusercontent.com/' + REPO + '/main/estado-equipes.json?t=' + Date.now(), { cache: 'no-store' });
+      if (!resposta.ok) return padrao;
+      const estadoEquipe = await resposta.json();
+      const rotaId = estadoEquipe && estadoEquipe.equipes && estadoEquipe.equipes['Enecol Centro'] && estadoEquipe.equipes['Enecol Centro'].projetoAtivo && estadoEquipe.equipes['Enecol Centro'].projetoAtivo.rotaId;
+      return rotaId ? String(rotaId) : padrao;
+    } catch (e) { return padrao; }
+  }
+  async function mostrarRotaComPontos() {
+    status('Carregando a rota ativa e os pontos marcados…');
+    const rotaId = await obterRotaAtualEnecolCentro();
+    if (typeof window.visualizarRota !== 'function') {
+      status('A rota ainda não está disponível. Toque em Atualizar e tente novamente.');
+      return;
+    }
+    try {
+      await window.visualizarRota(rotaId);
+      await exibir(true);
+    } catch (e) {
+      status('Não foi possível carregar a rota agora. Atualize a página e tente novamente.');
+    }
+  }
   function criarPainel() {
     const mapaEl = document.getElementById('admin-map');
     if (!mapaEl || document.getElementById('vera-historico-admin')) return;
     const painel = document.createElement('section');
     painel.id = 'vera-historico-admin';
     painel.style.cssText = 'margin:8px 0 12px;padding:12px;border:1px solid #c9dfce;border-radius:12px;background:#f8fbf8;';
-    painel.innerHTML = '<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;"><div><div style="font-size:13px;font-weight:800;color:#173b2b;">Histórico Enecol Centro</div><div style="font-size:11px;line-height:1.35;color:#5e7666;margin-top:3px;">Pontos iguais foram separados por lote e data.</div></div><b style="font-size:11px;color:#173b2b;white-space:nowrap;">71 pontos</b></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;"><button type="button" data-lote-vera="todos" style="padding:8px 10px;border:1px solid #c7dfce;border-radius:8px;font:700 11px inherit;cursor:pointer;">Todos · 71</button><button type="button" data-lote-vera="ontem" style="padding:8px 10px;border:1px solid #c7dfce;border-radius:8px;font:700 11px inherit;cursor:pointer;">30/06 · 23</button><button type="button" data-lote-vera="hoje" style="padding:8px 10px;border:1px solid #c7dfce;border-radius:8px;font:700 11px inherit;cursor:pointer;">01/07 · 48</button></div><div id="vera-historico-admin-status" style="margin-top:9px;font-size:11px;line-height:1.35;color:#577062;">Carregando histórico no mapa…</div>';
+    painel.innerHTML = '<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;"><div><div style="font-size:13px;font-weight:800;color:#173b2b;">Histórico Enecol Centro</div><div style="font-size:11px;line-height:1.35;color:#5e7666;margin-top:3px;">Pontos iguais foram separados por lote e data.</div></div><b style="font-size:11px;color:#173b2b;white-space:nowrap;">71 pontos</b></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;"><button type="button" data-lote-vera="todos" style="padding:8px 10px;border:1px solid #c7dfce;border-radius:8px;font:700 11px inherit;cursor:pointer;">Todos · 71</button><button type="button" data-lote-vera="ontem" style="padding:8px 10px;border:1px solid #c7dfce;border-radius:8px;font:700 11px inherit;cursor:pointer;">30/06 · 23</button><button type="button" data-lote-vera="hoje" style="padding:8px 10px;border:1px solid #c7dfce;border-radius:8px;font:700 11px inherit;cursor:pointer;">01/07 · 48</button><button type="button" id="vera-rota-pontos" style="padding:8px 10px;border:1px solid #163d2a;border-radius:8px;background:#163d2a;color:#fff;font:700 11px inherit;cursor:pointer;">Rota + pontos</button></div><div id="vera-historico-admin-status" style="margin-top:9px;font-size:11px;line-height:1.35;color:#577062;">Carregando histórico no mapa…</div>';
     mapaEl.parentElement.insertBefore(painel, mapaEl);
-    painel.querySelectorAll('[data-lote-vera]').forEach(function (b) { b.addEventListener('click', function () { estado.modo = b.getAttribute('data-lote-vera'); marcarBotoes(); exibir(); }); });
+    painel.querySelectorAll('[data-lote-vera]').forEach(function (b) { b.addEventListener('click', function () { estado.modo = b.getAttribute('data-lote-vera'); marcarBotoes(); exibir(false); }); });
+    const botaoRota = document.getElementById('vera-rota-pontos');
+    if (botaoRota) botaoRota.addEventListener('click', mostrarRotaComPontos);
     marcarBotoes();
-    setTimeout(exibir, 120);
+    setTimeout(function () { exibir(false); }, 120);
   }
-
   function instalar() {
     if (!existeMapaAdmin()) return setTimeout(instalar, 300);
     criarPainel();
   }
   document.addEventListener('click', function (ev) {
     const b = ev.target && ev.target.closest ? ev.target.closest('button') : null;
-    if (b && /^atualizar$/i.test(String(b.textContent || '').trim()) && document.getElementById('vera-historico-admin')) setTimeout(exibir, 700);
+    if (b && /^atualizar$/i.test(String(b.textContent || '').trim()) && document.getElementById('vera-historico-admin')) setTimeout(function () { exibir(false); }, 700);
   }, true);
   instalar();
 })();
