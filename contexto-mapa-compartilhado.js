@@ -21,7 +21,17 @@
     });
   }
 
+  function carregarCorUnica() {
+    if (window.__veraCorUnicaPontos || document.querySelector('script[data-vera-cor-unica]')) return;
+    const script = document.createElement('script');
+    script.src = 'cor-unica-pontos.js?t=' + Date.now();
+    script.async = true;
+    script.setAttribute('data-vera-cor-unica', '1');
+    (document.head || document.documentElement).appendChild(script);
+  }
+
   espelhar();
   const intervalo = setInterval(espelhar, 300);
   setTimeout(function () { clearInterval(intervalo); }, 120000);
+  setTimeout(carregarCorUnica, 800);
 })();
