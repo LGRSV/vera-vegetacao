@@ -1365,6 +1365,8 @@ button, .polo-btn, .alim-item, .tab-btn {
             <option>Enecol Sul</option>
           </select>
           <button onclick="carregarPontosAdmin()" style="padding:4px 10px;font-size:11px;border:1px solid var(--border);border-radius:6px;background:var(--white);cursor:pointer;font-family:inherit;">Atualizar</button>
+          <button id="btn-ver-rede" onclick="toggleRedeAdmin()" style="padding:4px 10px;font-size:11px;border:1.5px solid #1565C0;border-radius:6px;background:#fff;color:#1565C0;cursor:pointer;font-family:inherit;font-weight:600;">Ver Rede</button>
+          <button id="btn-limpar-rede" onclick="limparRedeAdmin()" style="display:none;padding:4px 10px;font-size:11px;border:1.5px solid #c62828;border-radius:6px;background:#fff;color:#c62828;cursor:pointer;font-family:inherit;font-weight:600;">Limpar Rede</button>
         </div>
       </div>
       <div id="admin-map-container">
@@ -4440,6 +4442,82 @@ function toggleMinimizarCamadas(){
     }
   }catch(e){}
 })();
+
+async function toggleRedeAdmin() {
+  if (!adminMap) { iniciarMapaAdmin(); }
+  const btnVer  = document.getElementById('btn-ver-rede');
+  const btnLimp = document.getElementById('btn-limpar-rede');
+  const info    = document.getElementById('admin-map-info');
+
+  // Descobrir projeto selecionado (usa o filtro de equipe como referência)
+  // Carregar rotas e deixar usuário escolher qual projeto visualizar
+  if (typeof rotasData === 'undefined' || !rotasData) {
+    await carregarRotas().catch(() => {});
+  }
+  if (!rotasData || !rotasData.rotas || !rotasData.rotas.length) {
+    if (info) info.textContent = 'Nenhum projeto encontrado.';
+    return;
+  }
+
+  // Montar seletor de projeto inline (simples prompt de escolha)
+  const nomes = rotasData.rotas.map(function(r, i) {
+    return (i+1) + '. ' + (r.nomeProjeto || r.id) + ' — ' + r.equipe;
+  }).join('\n');
+  const escolha = prompt('Selecione o projeto (número):\n' + nomes);
+  if (!escolha) return;
+  const idx = parseInt(escolha, 10) - 1;
+  const rota = rotasData.rotas[idx];
+  if (!rota) { alert('Projeto inválido.'); return; }
+
+  // Carregar cabos dos alimentadores do projeto
+  if (info) info.textContent = 'Carregando rede de ' + (rota.nomeProjeto || rota.id) + '...';
+  if (btnVer)  { btnVer.disabled = true; btnVer.textContent = 'Carregando...'; }
+
+  if (!window._adminRedeLayer) {
+    window._adminRedeLayer = L.layerGroup().addTo(adminMap);
+  } else {
+    window._adminRedeLayer.clearLayers();
+  }
+
+  const polo  = rota.polo;
+  const alims = rota.alimentadores || [];
+  let trechos = 0;
+  const bounds = [];
+
+  for (let i = 0; i < alims.length; i++) {
+    try {
+      const url = GITHUB_RAW + '/cabos/' + polo + '/' + alims[i] + '.json?t=' + Date.now();
+      const resp = await fetch(url, { cache: 'no-store' });
+      if (!resp.ok) continue;
+      const cab = await resp.json();
+      const linhas = (cab.t1 || []).concat(cab.t2 || []);
+      linhas.forEach(function(linha) {
+        const pts = normalizarLinhas([linha]);
+        if (pts.length) {
+          L.polyline(pts, { color: '#1565C0', weight: 2, opacity: 0.85, interactive: false })
+            .addTo(window._adminRedeLayer);
+          pts.forEach(function(p) { if (Array.isArray(p)) bounds.push(p); });
+        }
+      });
+      trechos += linhas.length;
+    } catch(e) { console.warn('Erro cabo', alims[i], e); }
+  }
+
+  if (bounds.length && adminMap) {
+    adminMap.fitBounds(L.latLngBounds(bounds), { padding: [20, 20] });
+  }
+  if (info) info.textContent = (rota.nomeProjeto || rota.id) + ' — ' + trechos + ' trechos carregados. Pressione Atualizar para sobrepor os pontos.';
+  if (btnVer)  { btnVer.disabled = false; btnVer.textContent = 'Ver Rede'; }
+  if (btnLimp) { btnLimp.style.display = 'inline-block'; }
+}
+
+function limparRedeAdmin() {
+  if (window._adminRedeLayer) window._adminRedeLayer.clearLayers();
+  const btnLimp = document.getElementById('btn-limpar-rede');
+  if (btnLimp) btnLimp.style.display = 'none';
+  const info = document.getElementById('admin-map-info');
+  if (info) info.textContent = 'Rede removida.';
+}
 </script>
 </body>
 </html>
