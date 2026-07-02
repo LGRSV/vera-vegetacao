@@ -3697,16 +3697,36 @@ const CORES_EQUIPES = {
   'Enecol Sul':      '#6A1B9A',
 };
 
+let adminBaseTile = null;
+let adminBaseMode = 'sat';
+
 function iniciarMapaAdmin() {
   if (adminMap) return;
   const el = document.getElementById('admin-map');
   if (!el) return;
   adminMap = L.map('admin-map', { zoomControl: true });
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    { attribution: '© OpenStreetMap', maxZoom: 19 }).addTo(adminMap);
+  adminBaseTile = L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+    { attribution: '© Google', maxZoom: 21, subdomains: ['0','1','2','3'] }).addTo(adminMap);
   adminMapLayer = L.layerGroup().addTo(adminMap);
-  // Centro do Tocantins como default
   adminMap.setView([-10.2, -48.3], 7);
+}
+
+function toggleAdminBase() {
+  if (!adminMap) return;
+  if (adminBaseTile) { adminMap.removeLayer(adminBaseTile); }
+  if (adminBaseMode === 'sat') {
+    adminBaseTile = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      { attribution: '© OpenStreetMap', maxZoom: 19 });
+    adminBaseMode = 'map';
+  } else {
+    adminBaseTile = L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+      { attribution: '© Google', maxZoom: 21, subdomains: ['0','1','2','3'] });
+    adminBaseMode = 'sat';
+  }
+  adminBaseTile.addTo(adminMap);
+  adminBaseTile.bringToBack();
+  const btn = document.getElementById('btn-admin-base');
+  if (btn) btn.textContent = adminBaseMode === 'sat' ? '🗺 Mapa' : '🛰 Satélite';
 }
 
 async function carregarPontosAdmin() {
