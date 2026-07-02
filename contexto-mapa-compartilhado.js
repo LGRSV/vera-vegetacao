@@ -29,8 +29,9 @@
     estilo.id = 'vera-marker-enecol-style';
     estilo.textContent = ''
       + '.vera-marker-enecol{background:transparent!important;border:0!important;}'
-      + '.vera-marker-enecol__inner{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-sizing:border-box;background:' + VERDE_ENECOL + ';border:3px solid #fff;color:#fff;font:800 14px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 1px 5px rgba(0,0,0,.28);}'
-      + '.vera-marker-enecol__inner:after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,.22);pointer-events:none;}';
+      + '.vera-marker-enecol__inner{position:relative;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-sizing:border-box;background:' + VERDE_ENECOL + ';border:3px solid #fff;color:#fff;font:800 14px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 1px 5px rgba(0,0,0,.28);}'
+      + '.vera-marker-enecol__inner:after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,.22);pointer-events:none;}'
+      + '.leaflet-popup-content [style*="color:#2467a8"],.leaflet-popup-content [style*="color: #2467a8"]{color:' + VERDE_ENECOL + '!important;}';
     (document.head || document.documentElement).appendChild(estilo);
   }
 
