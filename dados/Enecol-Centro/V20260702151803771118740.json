@@ -1,0 +1,32 @@
+{
+  "id": "V20260702151803771118740",
+  "synced": false,
+  "wkt": "POINT (-48.401987 -10.689270)",
+  "data": "02/07/2026, 15:18:02",
+  "poste": "45898620",
+  "especie": "Pequi",
+  "lat": -10.6892705,
+  "lon": -48.4019871,
+  "altura": "10",
+  "dtbt": "0",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "110",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Teste Porto Nacional",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260702151803771118740F1",
+    "VER20260702151803771118740F2",
+    "VER20260702151803771118740F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260702151803771118740F1.jpg",
+    "fotos/Enecol-Centro/VER20260702151803771118740F2.jpg",
+    "fotos/Enecol-Centro/VER20260702151803771118740F3.jpg"
+  ],
+  "legacy_id": "V0044",
+  "remote_id": "V20260702151803771118740"
+}
