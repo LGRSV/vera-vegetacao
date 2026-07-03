@@ -1453,6 +1453,11 @@ button, .polo-btn, .alim-item, .tab-btn {
     </div>
 
     <div class="modal-secao">
+      <div class="modal-label">Nome do Projeto</div>
+      <input class="field-input" type="text" id="edit-rota-nome" placeholder="Nome do projeto">
+    </div>
+
+    <div class="modal-secao">
       <div class="modal-label">Equipe</div>
       <select class="field-input" id="edit-rota-equipe">
         <option>Equipe Energisa</option>
@@ -1963,6 +1968,7 @@ let photos = [], map, userMarker, pointsLayer, watchId;
 // CENTRALIZAR NO GPS
 // ══════════════════════════════════════════════════
 function centralizarNoGPS() {
+  iniciarBussola();
   if (!map) return;
   const btn = document.querySelector('.map-fab-gps');
 
@@ -1984,9 +1990,11 @@ function centralizarNoGPS() {
         userMarker = L.circleMarker([currentLat, currentLon], {
           pane: 'usuarioPane', radius: 9, fillColor: '#e8a020', color: '#fff', weight: 3, fillOpacity: 1, interactive: false
         }).addTo(map);
+        iniciarBussola();
       } else {
         userMarker.setLatLng([currentLat, currentLon]);
       }
+      atualizarSetaBussola();
       if (btn) { btn.classList.add('ativo'); setTimeout(() => btn.classList.remove('ativo'), 1000); }
     },
     () => showToast('GPS indisponível. Verifique a permissão de localização.', 'error'),
@@ -3862,6 +3870,8 @@ async function abrirModalEditarRota(id) {
   if (!rotaEmEdicao) return;
 
   // Preencher campos
+  const enm = document.getElementById('edit-rota-nome');
+  if (enm) enm.value = rotaEmEdicao.nomeProjeto || '';
   document.getElementById('edit-rota-equipe').value = rotaEmEdicao.equipe;
   editPoloAtivo = rotaEmEdicao.polo;
   editAlims = [...rotaEmEdicao.alimentadores];
@@ -3952,6 +3962,8 @@ async function salvarEdicaoRota() {
   const novaEquipe = document.getElementById('edit-rota-equipe').value;
 
   // Atualizar rota
+  const enmS = document.getElementById('edit-rota-nome');
+  if (enmS && enmS.value.trim()) rotaEmEdicao.nomeProjeto = enmS.value.trim();
   rotaEmEdicao.equipe       = novaEquipe;
   rotaEmEdicao.polo         = editPoloAtivo;
   rotaEmEdicao.alimentadores = [...editAlims];
@@ -4517,6 +4529,63 @@ function limparRedeAdmin() {
   if (btnLimp) btnLimp.style.display = 'none';
   const info = document.getElementById('admin-map-info');
   if (info) info.textContent = 'Rede removida.';
+}
+
+// ── BÚSSOLA: seta de direção no marcador GPS ──
+let bussolaHeading = null;
+let bussolaMarker  = null;
+let bussolaAtiva   = false;
+
+function atualizarSetaBussola() {
+  if (!map || currentLat == null || currentLon == null) return;
+  if (bussolaHeading == null) return;
+  const html = '<div style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;' +
+    'transform:rotate(' + bussolaHeading + 'deg);transition:transform .18s linear;">' +
+    '<div style="width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;' +
+    'border-bottom:16px solid #e8a020;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4));margin-bottom:20px;"></div></div>';
+  const icon = L.divIcon({ className: '', html: html, iconSize: [34,34], iconAnchor: [17,17] });
+  if (!bussolaMarker) {
+    bussolaMarker = L.marker([currentLat, currentLon], { icon: icon, pane: 'usuarioPane', interactive: false }).addTo(map);
+  } else {
+    bussolaMarker.setLatLng([currentLat, currentLon]);
+    bussolaMarker.setIcon(icon);
+  }
+}
+
+function iniciarBussola() {
+  if (bussolaAtiva) return;
+  function aoOrientar(ev) {
+    let h = null;
+    if (typeof ev.webkitCompassHeading === 'number') {
+      h = ev.webkitCompassHeading; // iOS: já é em relação ao norte
+    } else if (typeof ev.alpha === 'number') {
+      h = 360 - ev.alpha; // Android: alpha cresce anti-horário
+    }
+    if (h != null && isFinite(h)) {
+      bussolaHeading = (h + 360) % 360;
+      atualizarSetaBussola();
+    }
+  }
+  try {
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      // iOS 13+: precisa de permissão via gesto do usuário
+      DeviceOrientationEvent.requestPermission().then(function(p) {
+        if (p === 'granted') {
+          window.addEventListener('deviceorientation', aoOrientar, true);
+          bussolaAtiva = true;
+        }
+      }).catch(function(){});
+    } else {
+      // Android/Chrome: direto, preferindo o evento absoluto
+      if ('ondeviceorientationabsolute' in window) {
+        window.addEventListener('deviceorientationabsolute', aoOrientar, true);
+      } else {
+        window.addEventListener('deviceorientation', aoOrientar, true);
+      }
+      bussolaAtiva = true;
+    }
+  } catch(e) { console.warn('Bussola indisponivel:', e); }
 }
 </script>
 </body>
