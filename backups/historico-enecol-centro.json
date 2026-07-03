@@ -1,0 +1,37 @@
+{
+  "versao": 1,
+  "descricao": "Índice estático dos lotes preservados da Enecol Centro. Não depende da API do GitHub no navegador.",
+  "lotes": [
+    {
+      "chave": "30-06",
+      "titulo": "30/06/2026",
+      "data": "20260630",
+      "branch": "backup/enecol-centro-2026-06-30",
+      "arquivos": [
+        "dados/Enecol-Centro/V0001.json",
+        "dados/Enecol-Centro/V0002.json",
+        "dados/Enecol-Centro/V0003.json",
+        "dados/Enecol-Centro/V0004.json",
+        "dados/Enecol-Centro/V0005.json",
+        "dados/Enecol-Centro/V0006.json",
+        "dados/Enecol-Centro/V0007.json",
+        "dados/Enecol-Centro/V0008.json",
+        "dados/Enecol-Centro/V0009.json",
+        "dados/Enecol-Centro/V0010.json",
+        "dados/Enecol-Centro/V0011.json",
+        "dados/Enecol-Centro/V0012.json",
+        "dados/Enecol-Centro/V0013.json",
+        "dados/Enecol-Centro/V0014.json",
+        "dados/Enecol-Centro/V0015.json",
+        "dados/Enecol-Centro/V0016.json",
+        "dados/Enecol-Centro/V0017.json",
+        "dados/Enecol-Centro/V0018.json",
+        "dados/Enecol-Centro/V0019.json",
+        "dados/Enecol-Centro/V0020.json",
+        "dados/Enecol-Centro/V0021.json",
+        "dados/Enecol-Centro/V0022.json",
+        "dados/Enecol-Centro/V0023.json"
+      ]
+    }
+  ]
+}
