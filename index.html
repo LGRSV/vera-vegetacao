@@ -1578,15 +1578,17 @@ const APP_VERSION = '2.6.8';
 const VERSION_KEY = 'vera_app_version';
 
 async function verificarVersao() {
-  // Checa se há versão nova no servidor e mostra banner (sem reload automático)
   try {
     const r = await fetch(GITHUB_RAW + '/version.json?t=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) return;
     const data = await r.json();
-    if (data.version && data.version !== APP_VERSION) {
-      const banner = document.getElementById('update-banner');
-      if (banner) banner.classList.add('show');
-    }
+    if (!data.version || data.version === APP_VERSION) return;
+    // Se o usuário já atualizou para esta versão, não mostrar banner de novo
+    try {
+      if (localStorage.getItem('vera_versao_vista') === data.version) return;
+    } catch(e) {}
+    const banner = document.getElementById('update-banner');
+    if (banner) banner.classList.add('show');
   } catch(e) {}
 }
 
