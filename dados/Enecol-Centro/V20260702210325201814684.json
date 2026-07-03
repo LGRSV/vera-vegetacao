@@ -1,0 +1,33 @@
+{
+  "id": "V20260702210325201814684",
+  "synced": false,
+  "wkt": "POINT (-48.404035 -10.687933)",
+  "data": "02/07/2026, 15:06:00",
+  "poste": "446205",
+  "especie": "Babaçu",
+  "lat": -10.6879332,
+  "lon": -48.4040352,
+  "altura": "7",
+  "dtbt": "0",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "80",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Teste Porto Nacional",
+  "syncedAt": null,
+  "fotos_ids": [
+    "VER20260702210325201814684F1",
+    "VER20260702210325201814684F2",
+    "VER20260702210325201814684F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260702210325201814684F1.jpg",
+    "fotos/Enecol-Centro/VER20260702210325201814684F2.jpg",
+    "fotos/Enecol-Centro/VER20260702210325201814684F3.jpg"
+  ],
+  "fotos_count": 3,
+  "legacy_id": "V0039",
+  "remote_id": "V20260702210325201814684"
+}
