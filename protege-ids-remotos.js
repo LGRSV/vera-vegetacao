@@ -5,17 +5,22 @@
   window.__veraProtegeIdsRemotos = true;
 
   const fetchNativo = window.fetch.bind(window);
-  const CHAVE_SESSAO = 'vera_mapa_ids_remotos_v1';
+  const CHAVE_SESSAO = 'vera_mapa_ids_remotos_v2';
   let mapa = {};
 
   try {
-    mapa = JSON.parse(sessionStorage.getItem(CHAVE_SESSAO) || '{}') || {};
+    // localStorage: o mapeamento legado->remoto persiste entre sessões,
+    // evitando que reenvios criem IDs (e pontos) duplicados no servidor.
+    mapa = JSON.parse(localStorage.getItem(CHAVE_SESSAO) || '{}') || {};
+    // migrar mapeamentos da sessão atual, se existirem
+    const antigo = JSON.parse(sessionStorage.getItem('vera_mapa_ids_remotos_v1') || '{}') || {};
+    Object.keys(antigo).forEach(function (k) { if (!mapa[k]) mapa[k] = antigo[k]; });
   } catch (e) {
     mapa = {};
   }
 
   function salvarMapa() {
-    try { sessionStorage.setItem(CHAVE_SESSAO, JSON.stringify(mapa)); } catch (e) {}
+    try { localStorage.setItem(CHAVE_SESSAO, JSON.stringify(mapa)); } catch (e) {}
   }
 
   function codificarCaminho(caminho) {
@@ -132,13 +137,25 @@
     const novaUrl = url.slice(0, indice + marcador.length) + codificarCaminho(regra.novoCaminho);
     let novaInit = init;
 
-    if (metodo === 'PUT' && regra.tipo === 'ponto' && init && init.body) {
+    if (metodo === 'PUT' && init && init.body) {
       try {
         const carga = JSON.parse(init.body);
-        if (carga && carga.content) {
+        if (regra.tipo === 'ponto' && carga && carga.content) {
           carga.content = atualizarConteudoDoPonto(carga.content, regra.legado, regra.remoto);
-          novaInit = Object.assign({}, init, { body: JSON.stringify(carga) });
         }
+        // Se o arquivo já existe no destino, incluir o sha para SOBRESCREVER
+        // (sem isso o GitHub retorna 422 e o reenvio falharia)
+        if (carga && !carga.sha) {
+          try {
+            const cab = (init && init.headers) || {};
+            const consulta = await fetchNativo(novaUrl.split('?')[0] + '?t=' + Date.now(), { headers: cab, cache: 'no-store' });
+            if (consulta.ok) {
+              const existente = await consulta.json();
+              if (existente && existente.sha) carga.sha = existente.sha;
+            }
+          } catch (eSha) {}
+        }
+        novaInit = Object.assign({}, init, { body: JSON.stringify(carga) });
       } catch (e) {}
     }
 
