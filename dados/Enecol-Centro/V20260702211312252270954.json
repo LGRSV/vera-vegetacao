@@ -1,0 +1,33 @@
+{
+  "id": "V20260702211312252270954",
+  "synced": true,
+  "wkt": "POINT (-48.407738 -10.699314)",
+  "data": "02/07/2026, 17:33:12",
+  "poste": "430657",
+  "especie": "Oiti",
+  "lat": -10.6993136,
+  "lon": -48.4077376,
+  "altura": "12",
+  "dtbt": "300",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "130",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Teste Porto Nacional",
+  "syncedAt": "2026-07-03T00:13:30.612Z",
+  "fotos_ids": [
+    "VER20260702211312252270954F1",
+    "VER20260702211312252270954F2",
+    "VER20260702211312252270954F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260702211312252270954F1.jpg",
+    "fotos/Enecol-Centro/VER20260702211312252270954F2.jpg",
+    "fotos/Enecol-Centro/VER20260702211312252270954F3.jpg"
+  ],
+  "fotos_count": 3,
+  "legacy_id": "V0069",
+  "remote_id": "V20260702211312252270954"
+}
