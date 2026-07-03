@@ -2908,8 +2908,9 @@ function criarPaineisMapa() {
   });
 
   postesRenderer = L.canvas({ pane: 'postesPane', padding: 0.5, tolerance: 10 });
+  // Um único canvas para todos os cabos: metade dos redraws em zoom/pan
   caboRendererT1 = L.canvas({ pane: 'cabosT1Pane', padding: 0.5 });
-  caboRendererT2 = L.canvas({ pane: 'cabosT2Pane', padding: 0.5 });
+  caboRendererT2 = caboRendererT1;
 }
 
 function garantirCamadasMapa() {
@@ -3178,7 +3179,7 @@ function renderPostesNoMapa(circ, postes) {
       livres: camadas.livres,
     };
 
-    const lote = 200;
+    const lote = 400;
     let indicePoste = 0;
 
     function plotarLote() {
