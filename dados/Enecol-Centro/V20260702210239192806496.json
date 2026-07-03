@@ -1,6 +1,6 @@
 {
   "id": "V20260702210239192806496",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-48.403680 -10.687424)",
   "data": "02/07/2026, 15:01:22",
   "poste": "1187371",
@@ -16,7 +16,7 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Teste Porto Nacional",
-  "syncedAt": "2026-07-03T00:02:49.767Z",
+  "syncedAt": null,
   "fotos_ids": [
     "VER20260702210239192806496F1",
     "VER20260702210239192806496F2",
