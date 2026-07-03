@@ -7,6 +7,7 @@
       "titulo": "30/06/2026",
       "data": "20260630",
       "branch": "backup/enecol-centro-2026-06-30",
+      "ref": "cc87a60570e3c95fbf71169bcf0af8d95669424f",
       "arquivos": [
         "dados/Enecol-Centro/V0001.json",
         "dados/Enecol-Centro/V0002.json",
