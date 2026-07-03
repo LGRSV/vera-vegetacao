@@ -1,0 +1,33 @@
+{
+  "id": "V20260702210518750076872",
+  "synced": true,
+  "wkt": "POINT (-48.403980 -10.690671)",
+  "data": "02/07/2026, 15:26:35",
+  "poste": "1603302",
+  "especie": "Jatobá",
+  "lat": -10.6906708,
+  "lon": -48.4039799,
+  "altura": "20",
+  "dtbt": "200",
+  "dtmt": "150",
+  "dtat": "0",
+  "dap": "200",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Teste Porto Nacional",
+  "syncedAt": "2026-07-03T00:05:35.021Z",
+  "fotos_ids": [
+    "VER20260702210518750076872F1",
+    "VER20260702210518750076872F2",
+    "VER20260702210518750076872F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260702210518750076872F1.jpg",
+    "fotos/Enecol-Centro/VER20260702210518750076872F2.jpg",
+    "fotos/Enecol-Centro/VER20260702210518750076872F3.jpg"
+  ],
+  "fotos_count": 3,
+  "legacy_id": "V0047",
+  "remote_id": "V20260702210518750076872"
+}
