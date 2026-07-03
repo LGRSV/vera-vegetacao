@@ -158,7 +158,7 @@
           return respostaArquivo.json();
         })
         .then(function (ponto) {
-          return { lote: lote, ponto: ponto, caminho: arquivo.path };
+          return { lote: lote, ponto: ponto, caminho: arquivo.path, sha: arquivo.sha };
         });
     }));
 
@@ -182,16 +182,16 @@
       await descobrirLotes();
       var grupos = await Promise.all(LOTES.map(listarArquivosDoLote));
       var todos = [].concat.apply([], grupos);
-      // Dedupe: arquivos de formato novo (nome com timestamp V2026...) são únicos —
-      // se aparecem em mais de um lote, mantém apenas o lote mais antigo.
+      // Dedupe por CONTEÚDO: mesmo arquivo (nome + sha do git) em mais de um lote
+      // é o mesmo ponto — mantém apenas no lote mais antigo. Arquivos de nome igual
+      // mas conteúdo diferente (IDs reutilizados entre dias) continuam separados.
       var vistos = {};
       var unicos = [];
       todos.forEach(function (registro) {
         var nome = String(registro.caminho || '').split('/').pop();
-        if (/^V20\d{6,}/.test(nome)) {
-          if (vistos[nome]) return;
-          vistos[nome] = true;
-        }
+        var chave = nome + '@' + String(registro.sha || '');
+        if (vistos[chave]) return;
+        vistos[chave] = true;
         unicos.push(registro);
       });
       estado.registros = ordenarRegistros(unicos);
