@@ -2046,6 +2046,7 @@ function lerSessao() {
 }
 
 async function restaurarSessao() {
+  try { localStorage.setItem('vera_versao_vista', APP_VERSION); } catch(e) {}
   const sessao = lerSessao();
   if (!sessao || !sessao.user || !USERS[sessao.user]) return false;
 
