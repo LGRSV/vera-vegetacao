@@ -2854,8 +2854,11 @@ function toggleAlimentador(id) {
   renderAlimentadoresMunicipio();
 }
 
+let _confirmarEmAndamento = false;
 async function confirmarAlimentadores() {
   if (alimentadoresAtivos.length === 0) return;
+  if (_confirmarEmAndamento) return;
+  _confirmarEmAndamento = true;
   // Salvar sessão para restaurar após reload
   salvarSessao();
   // Ir para o app
@@ -3163,6 +3166,7 @@ async function carregarPostes() {
     }
     showToast(`${total} alimentador${total > 1 ? 'es' : ''} pronto${total > 1 ? 's' : ''}!`, 'success');
   }
+  _confirmarEmAndamento = false;
 }
 
 function renderPostesNoMapa(circ, postes) {
