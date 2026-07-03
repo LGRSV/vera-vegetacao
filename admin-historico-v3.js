@@ -237,10 +237,15 @@
     return estado.registros.filter(function (registro) { return dataDoPonto(registro.ponto).chave === estado.modo; });
   }
 
-  function criarIcone(cor) {
+  function siglaEquipe(usuario) {
+    var SIGLAS = { 'Equipe Energisa': 'ENE', 'Enecol Norte': 'N', 'Enecol Centro': 'C', 'Enecol Sul': 'S' };
+    return SIGLAS[usuario] || (usuario ? usuario.charAt(0).toUpperCase() : 'C');
+  }
+
+  function criarIcone(cor, sigla) {
     return window.L.divIcon({
       className: 'vera-historico-completo-icone',
-      html: '<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:' + esc(cor) + ';border:3px solid #fff;color:#fff;font:800 12px/1 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;box-shadow:0 1px 5px rgba(0,0,0,.30);">H</div>',
+      html: '<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:' + esc(cor) + ';border:3px solid #fff;color:#fff;font:800 12px/1 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;box-shadow:0 1px 5px rgba(0,0,0,.30);">' + esc(sigla || 'C') + '</div>',
       iconSize: [30, 30], iconAnchor: [15, 15], popupAnchor: [0, -17], tooltipAnchor: [0, -17]
     });
   }
@@ -316,7 +321,7 @@
       ativos.forEach(function (registro) {
         var coordenadas = coordenadasDoPonto(registro.ponto || {});
         if (!coordenadas) { estado.falhas.push(String(registro.ponto && registro.ponto.id || 'Sem ID') + ' · coordenadas inválidas'); return; }
-        var marcador = window.L.marker(coordenadas, { icon: criarIcone(registro.cor), title: idExibido(registro), riseOnHover: true });
+        var marcador = window.L.marker(coordenadas, { icon: criarIcone(registro.cor, siglaEquipe((registro.ponto || {}).usuario)), title: idExibido(registro), riseOnHover: true });
         marcador.bindTooltip(idExibido(registro) + ' · tocar para abrir', { direction: 'top', offset: [0, -17], opacity: 0.96 });
         marcador.bindPopup(popup(registro), { maxWidth: 360, minWidth: 250, autoPanPadding: [22, 22] });
         marcador.on('click', function () { marcador.openPopup(); });
