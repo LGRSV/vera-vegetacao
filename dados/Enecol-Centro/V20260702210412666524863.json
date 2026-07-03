@@ -1,0 +1,33 @@
+{
+  "id": "V20260702210412666524863",
+  "synced": true,
+  "wkt": "POINT (-48.402402 -10.689388)",
+  "data": "02/07/2026, 15:16:12",
+  "poste": "45898600",
+  "especie": "Cajueiro",
+  "lat": -10.6893875,
+  "lon": -48.4024024,
+  "altura": "7",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Teste Porto Nacional",
+  "syncedAt": "2026-07-03T00:04:26.445Z",
+  "fotos_ids": [
+    "VER20260702210412666524863F1",
+    "VER20260702210412666524863F2",
+    "VER20260702210412666524863F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260702210412666524863F1.jpg",
+    "fotos/Enecol-Centro/VER20260702210412666524863F2.jpg",
+    "fotos/Enecol-Centro/VER20260702210412666524863F3.jpg"
+  ],
+  "fotos_count": 3,
+  "legacy_id": "V0043",
+  "remote_id": "V20260702210412666524863"
+}
