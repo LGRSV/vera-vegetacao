@@ -5,30 +5,56 @@
   window.__veraHistoricoAdminEstavel = true;
 
   var REPO = 'LGRSV/vera-vegetacao';
-  var LOTES = []; // descobertos dinamicamente a partir dos branches backup/enecol-centro-*
+  var ARQUIVO_INDICE = 'backups/historico-enecol-centro.json';
+  var LOTES = [];
   var CORES = ['#2467a8', '#2e8b57', '#a85524', '#6a4fa8', '#a82467', '#24a89b', '#8ba824'];
 
-  async function descobrirLotes() {
-    if (LOTES.length) return LOTES;
-    var resposta = await fetch('https://api.github.com/repos/' + REPO + '/branches?per_page=100&t=' + Date.now(),
-      { cache: 'no-store', headers: { 'Accept': 'application/vnd.github+json' } });
-    if (!resposta.ok) throw new Error('Não foi possível listar os lotes (HTTP ' + resposta.status + ')');
-    var branches = await resposta.json();
-    var achados = [];
-    (branches || []).forEach(function (b) {
-      var nome = String(b && b.name || '');
-      var m = nome.match(/^backup\/enecol-centro-(\d{4})-(\d{2})-(\d{2})/);
-      if (!m) return;
-      achados.push({
-        chave:  m[3] + '-' + m[2],
-        titulo: m[3] + '/' + m[2] + '/' + m[1],
-        data:   m[1] + m[2] + m[3],
-        branch: nome
-      });
+  function esc(valor) {
+    return String(valor == null ? '' : valor).replace(/[&<>'"]/g, function (caractere) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[caractere];
     });
-    achados.sort(function (a, b) { return a.data.localeCompare(b.data); });
-    achados.forEach(function (l, i) { l.cor = CORES[i % CORES.length]; });
-    LOTES = achados;
+  }
+
+  function raw(ref, caminho) {
+    return 'https://raw.githubusercontent.com/' + REPO + '/' + ref + '/' + caminho;
+  }
+
+  function normalizarLotes(indice) {
+    var entrada = Array.isArray(indice) ? indice : (indice && Array.isArray(indice.lotes) ? indice.lotes : []);
+
+    return entrada.map(function (lote) {
+      var arquivos = Array.isArray(lote && lote.arquivos) ? lote.arquivos.filter(function (caminho) {
+        return typeof caminho === 'string' && /\.json$/i.test(caminho);
+      }) : [];
+
+      return {
+        chave: String((lote && lote.chave) || (lote && lote.data) || ''),
+        titulo: String((lote && lote.titulo) || (lote && lote.data) || 'Lote sem data'),
+        data: String((lote && lote.data) || ''),
+        branch: String((lote && lote.branch) || ''),
+        arquivos: arquivos
+      };
+    }).filter(function (lote) {
+      return lote.chave && lote.branch && lote.arquivos.length;
+    }).sort(function (a, b) {
+      return a.data.localeCompare(b.data);
+    }).map(function (lote, indiceLote) {
+      lote.cor = CORES[indiceLote % CORES.length];
+      return lote;
+    });
+  }
+
+  async function descobrirLotes(forcar) {
+    if (LOTES.length && !forcar) return LOTES;
+
+    var resposta = await fetch(raw('main', ARQUIVO_INDICE) + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!resposta.ok) throw new Error('Não foi possível carregar o índice preservado (HTTP ' + resposta.status + ')');
+
+    var indice = await resposta.json();
+    var lotes = normalizarLotes(indice);
+    if (!lotes.length) throw new Error('Nenhum lote preservado foi encontrado no índice');
+
+    LOTES = lotes;
     return LOTES;
   }
 
@@ -42,20 +68,6 @@
     mapa: null,
     painel: null
   };
-
-  function esc(valor) {
-    return String(valor == null ? '' : valor).replace(/[&<>'"]/g, function (caractere) {
-      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[caractere];
-    });
-  }
-
-  function raw(ref, caminho) {
-    return 'https://raw.githubusercontent.com/' + REPO + '/' + ref + '/' + caminho;
-  }
-
-  function api(ref) {
-    return 'https://api.github.com/repos/' + REPO + '/contents/dados/Enecol-Centro?ref=' + encodeURIComponent(ref) + '&t=' + Date.now();
-  }
 
   function dataDoPonto(ponto, lote) {
     var valor = String((ponto && ponto.data) || '');
@@ -135,31 +147,14 @@
   }
 
   async function listarArquivosDoLote(lote) {
-    var resposta = await fetch(api(lote.branch), {
-      cache: 'no-store',
-      headers: { 'Accept': 'application/vnd.github+json' }
-    });
-    if (!resposta.ok) throw new Error(lote.titulo + ' · índice HTTP ' + resposta.status);
-
-    var itens = await resposta.json();
-    if (!Array.isArray(itens)) throw new Error(lote.titulo + ' · índice inválido');
-
-    var arquivos = itens.filter(function (item) {
-      return item && item.type === 'file' && /\.json$/i.test(item.name || '');
-    }).sort(function (a, b) {
-      return String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR', { numeric: true });
-    });
-
-    var resultados = await Promise.allSettled(arquivos.map(function (arquivo) {
-      var url = arquivo.download_url || raw(lote.branch, arquivo.path);
-      return fetch(url + (url.indexOf('?') >= 0 ? '&' : '?') + 't=' + Date.now(), { cache: 'no-store' })
+    var resultados = await Promise.allSettled(lote.arquivos.map(function (caminho) {
+      var url = raw(lote.branch, caminho) + '?t=' + Date.now();
+      return fetch(url, { cache: 'no-store' })
         .then(function (respostaArquivo) {
-          if (!respostaArquivo.ok) throw new Error(arquivo.name + ' · HTTP ' + respostaArquivo.status);
+          if (!respostaArquivo.ok) throw new Error(caminho.split('/').pop() + ' · HTTP ' + respostaArquivo.status);
           return respostaArquivo.json();
         })
-        .then(function (ponto) {
-          return { lote: lote, ponto: ponto, caminho: arquivo.path };
-        });
+        .then(function (ponto) { return { lote: lote, ponto: ponto, caminho: caminho }; });
     }));
 
     var bons = [];
@@ -176,24 +171,22 @@
 
     estado.carregando = true;
     estado.falhas = [];
-    status('Lendo os lotes preservados diretamente dos backups…');
+    status('Lendo os lotes preservados…');
 
     try {
-      await descobrirLotes();
+      await descobrirLotes(forcar);
       var grupos = await Promise.all(LOTES.map(listarArquivosDoLote));
       var todos = [].concat.apply([], grupos);
-      // Dedupe: arquivos de formato novo (nome com timestamp V2026...) são únicos —
-      // se aparecem em mais de um lote, mantém apenas o lote mais antigo.
       var vistos = {};
       var unicos = [];
+
       todos.forEach(function (registro) {
-        var nome = String(registro.caminho || '').split('/').pop();
-        if (/^V20\d{6,}/.test(nome)) {
-          if (vistos[nome]) return;
-          vistos[nome] = true;
-        }
+        var chave = registro.lote.branch + '/' + String(registro.caminho || '');
+        if (vistos[chave]) return;
+        vistos[chave] = true;
         unicos.push(registro);
       });
+
       estado.registros = ordenarRegistros(unicos);
       estado.carregado = true;
       return estado.registros;
@@ -250,18 +243,19 @@
         limites.push([lat, lon]);
       });
 
-      if (!manterEnquadramento && limites.length) {
-        mapa.fitBounds(window.L.latLngBounds(limites), { padding: [28, 28], maxZoom: 15 });
-      }
-
       atualizarBotoes();
       var total = document.getElementById('vera-historico-total');
       if (total) total.textContent = estado.registros.length + ' pontos';
+
       var falha = estado.falhas.length ? ' · ' + estado.falhas.length + ' arquivo(s) não puderam ser lidos.' : '';
       status(ativos.length + ' ponto(s) exibido(s)' + falha + ' Toque em um marcador para abrir dados e fotos.');
 
       var info = document.getElementById('admin-map-info');
       if (info) info.textContent = 'Histórico Enecol Centro — ' + ativos.length + ' ponto(s) exibido(s).';
+
+      if (!manterEnquadramento && limites.length) {
+        mapa.fitBounds(window.L.latLngBounds(limites), { padding: [28, 28], maxZoom: 15 });
+      }
     } catch (erro) {
       status('Falha ao carregar o histórico: ' + String(erro && erro.message ? erro.message : erro) + '. Toque em Atualizar histórico para tentar novamente.');
       console.warn('VERA: histórico admin', erro);
@@ -271,6 +265,7 @@
   async function atualizarHistorico() {
     estado.carregado = false;
     estado.registros = [];
+    LOTES = [];
     status('Atualizando o índice e os pontos preservados…');
     try {
       await carregar(true);
@@ -309,7 +304,7 @@
 
     var chips = [{ chave: 'todos', rotulo: 'Todos · ' + estado.registros.length }];
     LOTES.forEach(function (lote) {
-      chips.push({ chave: lote.chave, rotulo: lote.chave.replace('-', '/') + ' · ' + totalDoLote(lote.chave) });
+      chips.push({ chave: lote.chave, rotulo: lote.titulo + ' · ' + totalDoLote(lote.chave) });
     });
 
     wrap.innerHTML = chips.map(function (chip) {
@@ -353,7 +348,6 @@
       + '</div><div id="vera-historico-admin-status" style="margin-top:9px;font-size:11px;line-height:1.35;color:#577062;">Preparando histórico…</div>';
 
     estado.painel = painel;
-
     var atualizar = document.getElementById('vera-historico-atualizar');
     if (atualizar) atualizar.addEventListener('click', atualizarHistorico);
     var rota = document.getElementById('vera-historico-rota');
