@@ -53,7 +53,7 @@
         .replace('</body>',
           '<' + 'script>function toggleMinimizarCamadas(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(!c)return;var min=c.classList.toggle("minimizado");if(ic)ic.textContent=min?"+":"−";try{localStorage.setItem("vera_camadas_min",min?"1":"0");}catch(e){}}(function(){try{if(localStorage.getItem("vera_camadas_min")==="1"){var apl=function(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(c){c.classList.add("minimizado");if(ic)ic.textContent="+";}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",apl);else apl();}}catch(e){}})();<' + '/script></body>'
         )
-        .replaceAll('2.6.14', '2.6.19')
+        .replaceAll('2.6.14', '2.6.20')
         .replace(
           "if (primeira < 0) throw new Error('Trecho não encontrado: ' + nome + '.');",
           "if (primeira < 0) { console.warn('Trecho não encontrado:', nome); return html; }"
