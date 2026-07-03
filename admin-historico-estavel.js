@@ -5,10 +5,32 @@
   window.__veraHistoricoAdminEstavel = true;
 
   var REPO = 'LGRSV/vera-vegetacao';
-  var LOTES = [
-    { chave: '30-06', titulo: '30/06/2026', branch: 'backup/enecol-centro-2026-06-30', cor: '#2467a8' },
-    { chave: '01-07', titulo: '01/07/2026', branch: 'backup/enecol-centro-2026-07-01-48-pontos', cor: '#2e8b57' }
-  ];
+  var LOTES = []; // descobertos dinamicamente a partir dos branches backup/enecol-centro-*
+  var CORES = ['#2467a8', '#2e8b57', '#a85524', '#6a4fa8', '#a82467', '#24a89b', '#8ba824'];
+
+  async function descobrirLotes() {
+    if (LOTES.length) return LOTES;
+    var resposta = await fetch('https://api.github.com/repos/' + REPO + '/branches?per_page=100&t=' + Date.now(),
+      { cache: 'no-store', headers: { 'Accept': 'application/vnd.github+json' } });
+    if (!resposta.ok) throw new Error('Não foi possível listar os lotes (HTTP ' + resposta.status + ')');
+    var branches = await resposta.json();
+    var achados = [];
+    (branches || []).forEach(function (b) {
+      var nome = String(b && b.name || '');
+      var m = nome.match(/^backup\/enecol-centro-(\d{4})-(\d{2})-(\d{2})/);
+      if (!m) return;
+      achados.push({
+        chave:  m[3] + '-' + m[2],
+        titulo: m[3] + '/' + m[2] + '/' + m[1],
+        data:   m[1] + m[2] + m[3],
+        branch: nome
+      });
+    });
+    achados.sort(function (a, b) { return a.data.localeCompare(b.data); });
+    achados.forEach(function (l, i) { l.cor = CORES[i % CORES.length]; });
+    LOTES = achados;
+    return LOTES;
+  }
 
   var estado = {
     carregando: false,
@@ -157,8 +179,22 @@
     status('Lendo os lotes preservados diretamente dos backups…');
 
     try {
+      await descobrirLotes();
       var grupos = await Promise.all(LOTES.map(listarArquivosDoLote));
-      estado.registros = ordenarRegistros([].concat.apply([], grupos));
+      var todos = [].concat.apply([], grupos);
+      // Dedupe: arquivos de formato novo (nome com timestamp V2026...) são únicos —
+      // se aparecem em mais de um lote, mantém apenas o lote mais antigo.
+      var vistos = {};
+      var unicos = [];
+      todos.forEach(function (registro) {
+        var nome = String(registro.caminho || '').split('/').pop();
+        if (/^V20\d{6,}/.test(nome)) {
+          if (vistos[nome]) return;
+          vistos[nome] = true;
+        }
+        unicos.push(registro);
+      });
+      estado.registros = ordenarRegistros(unicos);
       estado.carregado = true;
       return estado.registros;
     } catch (erro) {
@@ -218,6 +254,7 @@
         mapa.fitBounds(window.L.latLngBounds(limites), { padding: [28, 28], maxZoom: 15 });
       }
 
+      atualizarBotoes();
       var total = document.getElementById('vera-historico-total');
       if (total) total.textContent = estado.registros.length + ' pontos';
       var falha = estado.falhas.length ? ' · ' + estado.falhas.length + ' arquivo(s) não puderam ser lidos.' : '';
@@ -267,19 +304,29 @@
 
   function atualizarBotoes() {
     if (!estado.painel) return;
-    estado.painel.querySelectorAll('[data-vera-historico-lote]').forEach(function (botao) {
-      var ativo = botao.getAttribute('data-vera-historico-lote') === estado.modo;
-      botao.style.background = ativo ? '#163d2a' : '#fff';
-      botao.style.color = ativo ? '#fff' : '#1f4933';
-      botao.style.borderColor = ativo ? '#163d2a' : '#c7dfce';
+    var wrap = document.getElementById('vera-historico-chips');
+    if (!wrap) return;
+
+    var chips = [{ chave: 'todos', rotulo: 'Todos · ' + estado.registros.length }];
+    LOTES.forEach(function (lote) {
+      chips.push({ chave: lote.chave, rotulo: lote.chave.replace('-', '/') + ' · ' + totalDoLote(lote.chave) });
     });
 
-    var todos = estado.painel.querySelector('[data-vera-historico-lote="todos"]');
-    var primeiro = estado.painel.querySelector('[data-vera-historico-lote="30-06"]');
-    var segundo = estado.painel.querySelector('[data-vera-historico-lote="01-07"]');
-    if (todos) todos.textContent = 'Todos · ' + estado.registros.length;
-    if (primeiro) primeiro.textContent = '30/06 · ' + totalDoLote('30-06');
-    if (segundo) segundo.textContent = '01/07 · ' + totalDoLote('01-07');
+    wrap.innerHTML = chips.map(function (chip) {
+      var ativo = chip.chave === estado.modo;
+      return '<button type="button" data-vera-historico-lote="' + esc(chip.chave) + '" style="padding:8px 10px;'
+        + 'border:1px solid ' + (ativo ? '#163d2a' : '#c7dfce') + ';border-radius:8px;'
+        + 'background:' + (ativo ? '#163d2a' : '#fff') + ';color:' + (ativo ? '#fff' : '#1f4933') + ';'
+        + 'font:700 11px inherit;cursor:pointer;">' + esc(chip.rotulo) + '</button>';
+    }).join('');
+
+    wrap.querySelectorAll('[data-vera-historico-lote]').forEach(function (botao) {
+      botao.addEventListener('click', function () {
+        estado.modo = botao.getAttribute('data-vera-historico-lote');
+        atualizarBotoes();
+        desenhar(false);
+      });
+    });
   }
 
   function montarPainel() {
@@ -299,23 +346,14 @@
       + '<div><div style="font-size:13px;font-weight:800;color:#173b2b;">Histórico Enecol Centro</div>'
       + '<div style="font-size:11px;line-height:1.35;color:#5e7666;margin-top:3px;">Lotes independentes, lidos diretamente dos backups. IDs repetidos não se sobrepõem.</div></div>'
       + '<b id="vera-historico-total" style="font-size:11px;color:#173b2b;white-space:nowrap;">Carregando…</b></div>'
-      + '<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;">'
-      + '<button type="button" data-vera-historico-lote="todos" style="padding:8px 10px;border:1px solid #c7dfce;border-radius:8px;font:700 11px inherit;cursor:pointer;">Todos</button>'
-      + '<button type="button" data-vera-historico-lote="30-06" style="padding:8px 10px;border:1px solid #c7dfce;border-radius:8px;font:700 11px inherit;cursor:pointer;">30/06</button>'
-      + '<button type="button" data-vera-historico-lote="01-07" style="padding:8px 10px;border:1px solid #c7dfce;border-radius:8px;font:700 11px inherit;cursor:pointer;">01/07</button>'
+      + '<div id="vera-historico-chips" style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;"></div>'
+      + '<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:7px;">'
       + '<button type="button" id="vera-historico-atualizar" style="padding:8px 10px;border:1px solid #b9d2bf;border-radius:8px;background:#fff;color:#173b2b;font:700 11px inherit;cursor:pointer;">↻ Atualizar histórico</button>'
       + '<button type="button" id="vera-historico-rota" style="padding:8px 10px;border:1px solid #163d2a;border-radius:8px;background:#163d2a;color:#fff;font:700 11px inherit;cursor:pointer;">Rota + pontos</button>'
       + '</div><div id="vera-historico-admin-status" style="margin-top:9px;font-size:11px;line-height:1.35;color:#577062;">Preparando histórico…</div>';
 
     estado.painel = painel;
 
-    painel.querySelectorAll('[data-vera-historico-lote]').forEach(function (botao) {
-      botao.addEventListener('click', function () {
-        estado.modo = botao.getAttribute('data-vera-historico-lote');
-        atualizarBotoes();
-        desenhar(false);
-      });
-    });
     var atualizar = document.getElementById('vera-historico-atualizar');
     if (atualizar) atualizar.addEventListener('click', atualizarHistorico);
     var rota = document.getElementById('vera-historico-rota');
