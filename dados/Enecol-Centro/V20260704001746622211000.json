@@ -1,0 +1,33 @@
+{
+  "id": "V20260704001746622211000",
+  "synced": false,
+  "wkt": "POINT (-48.406540 -10.691443)",
+  "data": "02/07/2026, 16:11:16",
+  "poste": "526714",
+  "especie": "Outros",
+  "lat": -10.6914432,
+  "lon": -48.4065402,
+  "altura": "10",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "120",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Teste Porto Nacional",
+  "syncedAt": null,
+  "fotos_ids": [
+    "VER20260704001746622211000F1",
+    "VER20260704001746622211000F2",
+    "VER20260704001746622211000F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260704001746622211000F1.jpg",
+    "fotos/Enecol-Centro/VER20260704001746622211000F2.jpg",
+    "fotos/Enecol-Centro/VER20260704001746622211000F3.jpg"
+  ],
+  "fotos_count": 3,
+  "legacy_id": "V0052",
+  "remote_id": "V20260704001746622211000"
+}
