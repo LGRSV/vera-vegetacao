@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-04T16:32:52.306Z",
+  "updatedAt": "2026-07-06T15:56:27.330Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -262,7 +262,7 @@
           "LD03072001"
         ],
         "iniciadoEm": "2026-06-29T12:00:00.000Z",
-        "atualizadoEm": "2026-07-04T16:32:52.306Z",
+        "atualizadoEm": "2026-07-06T15:56:27.330Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": []
