@@ -1,9 +1,9 @@
 name: Exportar fotos Enecol Centro
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - tmp/exportar-fotos-enecol-centro-20260707
 
 jobs:
   exportar:
