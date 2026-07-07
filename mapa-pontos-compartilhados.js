@@ -292,6 +292,10 @@
   }
 
   function criarPainelAdmin() {
+    // Painel "Histórico Enecol Centro · Rota + pontos" (71 pontos) desativado:
+    // duplicava o painel da base completa (admin-historico-v3.js, 403 pontos) e
+    // ainda desenhava marcadores extras no mapa. A parte do técnico segue ativa.
+    return;
     const mapa = mapaAdmin();
     const elementoMapa = document.getElementById('admin-map');
     if (!mapa || !elementoMapa || document.getElementById('vera-historico-admin')) return;

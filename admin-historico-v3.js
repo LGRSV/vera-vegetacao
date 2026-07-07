@@ -311,6 +311,9 @@
       await carregar(false);
       if (!estado.camada || estado.mapa !== mapa) {
         estado.mapa = mapa;
+        // Renderizador canvas: com centenas de pontos e' muito mais leve que
+        // marcadores HTML (divIcon), que criam um DOM por ponto e travam o mapa.
+        estado.renderer = window.L.canvas({ padding: 0.5 });
         estado.camada = window.L.layerGroup().addTo(mapa);
       }
       estado.camada.clearLayers();
@@ -321,8 +324,12 @@
       ativos.forEach(function (registro) {
         var coordenadas = coordenadasDoPonto(registro.ponto || {});
         if (!coordenadas) { estado.falhas.push(String(registro.ponto && registro.ponto.id || 'Sem ID') + ' · coordenadas inválidas'); return; }
-        var marcador = window.L.marker(coordenadas, { icon: criarIcone(registro.cor, siglaEquipe((registro.ponto || {}).usuario)), title: idExibido(registro), riseOnHover: true });
-        marcador.bindTooltip(idExibido(registro) + ' · tocar para abrir', { direction: 'top', offset: [0, -17], opacity: 0.96 });
+        var marcador = window.L.circleMarker(coordenadas, {
+          renderer: estado.renderer,
+          radius: 8, color: '#fff', weight: 2,
+          fillColor: registro.cor, fillOpacity: 0.95
+        });
+        marcador.bindTooltip(idExibido(registro) + ' · tocar para abrir', { direction: 'top', offset: [0, -10], opacity: 0.96 });
         marcador.bindPopup(popup(registro), { maxWidth: 360, minWidth: 250, autoPanPadding: [22, 22] });
         marcador.on('click', function () { marcador.openPopup(); });
         marcador.addTo(estado.camada);
