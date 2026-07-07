@@ -1,0 +1,32 @@
+{
+  "id": "V20260707165938966536937",
+  "synced": false,
+  "wkt": "POINT (-48.404278 -10.692729)",
+  "data": "07/07/2026, 16:59:34",
+  "poste": "1066770",
+  "especie": "Mangueira",
+  "lat": -10.6927286,
+  "lon": -48.4042779,
+  "altura": "7",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Teste Porto Nacional",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260707165938966536937F1",
+    "VER20260707165938966536937F2",
+    "VER20260707165938966536937F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260707165938966536937F1.jpg",
+    "fotos/Enecol-Centro/VER20260707165938966536937F2.jpg",
+    "fotos/Enecol-Centro/VER20260707165938966536937F3.jpg"
+  ],
+  "legacy_id": "V0219",
+  "remote_id": "V20260707165938966536937"
+}
