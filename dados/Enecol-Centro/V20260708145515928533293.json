@@ -1,0 +1,32 @@
+{
+  "id": "V20260708145515928533293",
+  "synced": false,
+  "wkt": "POINT (-48.402662 -10.693198)",
+  "data": "08/07/2026, 14:55:15",
+  "poste": "140642",
+  "especie": "Coqueiro",
+  "lat": -10.6931983,
+  "lon": -48.4026615,
+  "altura": "",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "20",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Teste Porto Nacional",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260708145515928533293F1",
+    "VER20260708145515928533293F2",
+    "VER20260708145515928533293F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260708145515928533293F1.jpg",
+    "fotos/Enecol-Centro/VER20260708145515928533293F2.jpg",
+    "fotos/Enecol-Centro/VER20260708145515928533293F3.jpg"
+  ],
+  "legacy_id": "V0001",
+  "remote_id": "V20260708145515928533293"
+}
