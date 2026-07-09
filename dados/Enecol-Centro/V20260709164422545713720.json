@@ -1,0 +1,32 @@
+{
+  "id": "V20260709164422545713720",
+  "synced": false,
+  "wkt": "POINT (-48.398003 -10.703546)",
+  "data": "09/07/2026, 16:06:57",
+  "poste": "473486",
+  "especie": "Mogno",
+  "lat": -10.703546,
+  "lon": -48.3980033,
+  "altura": "3",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "20",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Porto Nacional",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260709164422545713720F1",
+    "VER20260709164422545713720F2",
+    "VER20260709164422545713720F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260709164422545713720F1.jpg",
+    "fotos/Enecol-Centro/VER20260709164422545713720F2.jpg",
+    "fotos/Enecol-Centro/VER20260709164422545713720F3.jpg"
+  ],
+  "legacy_id": "V0099",
+  "remote_id": "V20260709164422545713720"
+}
