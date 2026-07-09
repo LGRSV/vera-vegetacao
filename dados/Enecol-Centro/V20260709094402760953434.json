@@ -1,0 +1,32 @@
+{
+  "id": "V20260709094402760953434",
+  "synced": false,
+  "wkt": "POINT (-48.399372 -10.693825)",
+  "data": "09/07/2026, 09:44:01",
+  "poste": "429087",
+  "especie": "Cajueiro",
+  "lat": -10.6938246,
+  "lon": -48.3993715,
+  "altura": "11",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "80",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Porto Nacional",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260709094402760953434F1",
+    "VER20260709094402760953434F2",
+    "VER20260709094402760953434F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260709094402760953434F1.jpg",
+    "fotos/Enecol-Centro/VER20260709094402760953434F2.jpg",
+    "fotos/Enecol-Centro/VER20260709094402760953434F3.jpg"
+  ],
+  "legacy_id": "V0049",
+  "remote_id": "V20260709094402760953434"
+}
