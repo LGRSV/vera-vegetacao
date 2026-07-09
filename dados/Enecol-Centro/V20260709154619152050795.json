@@ -1,0 +1,34 @@
+{
+  "id": "V20260709154619152050795",
+  "synced": false,
+  "wkt": "POINT (-48.396341 -10.701132)",
+  "data": "09/07/2026, 15:46:17",
+  "poste": "472965",
+  "especie": "Jatobá",
+  "lat": -10.7011322,
+  "lon": -48.396341,
+  "altura": "20",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "140",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Porto Nacional",
+  "fotos_count": 4,
+  "fotos_ids": [
+    "VER20260709154619152050795F1",
+    "VER20260709154619152050795F2",
+    "VER20260709154619152050795F3",
+    "VER20260709154619152050795F4"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260709154619152050795F1.jpg",
+    "fotos/Enecol-Centro/VER20260709154619152050795F2.jpg",
+    "fotos/Enecol-Centro/VER20260709154619152050795F3.jpg",
+    "fotos/Enecol-Centro/VER20260709154619152050795F4.jpg"
+  ],
+  "legacy_id": "V0090",
+  "remote_id": "V20260709154619152050795"
+}
