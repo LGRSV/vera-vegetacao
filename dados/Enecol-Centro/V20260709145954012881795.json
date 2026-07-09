@@ -1,6 +1,6 @@
 {
   "id": "V20260709145954012881795",
-  "synced": false,
+  "synced": true,
   "wkt": "POINT (-48.396283 -10.699419)",
   "data": "09/07/2026, 14:59:51",
   "poste": "1603789",
@@ -16,6 +16,7 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Porto Nacional",
+  "syncedAt": "2026-07-09T18:00:19.481Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260709145954012881795F1",
