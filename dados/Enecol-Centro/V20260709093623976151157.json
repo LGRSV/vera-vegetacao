@@ -1,0 +1,32 @@
+{
+  "id": "V20260709093623976151157",
+  "synced": false,
+  "wkt": "POINT (-48.395854 -10.691876)",
+  "data": "09/07/2026, 09:36:22",
+  "poste": "472283",
+  "especie": "Coqueiro",
+  "lat": -10.6918757,
+  "lon": -48.3958545,
+  "altura": "",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Porto Nacional",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260709093623976151157F1",
+    "VER20260709093623976151157F2",
+    "VER20260709093623976151157F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260709093623976151157F1.jpg",
+    "fotos/Enecol-Centro/VER20260709093623976151157F2.jpg",
+    "fotos/Enecol-Centro/VER20260709093623976151157F3.jpg"
+  ],
+  "legacy_id": "V0048",
+  "remote_id": "V20260709093623976151157"
+}
