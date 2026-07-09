@@ -1,0 +1,33 @@
+{
+  "id": "V20260709171216339797932",
+  "synced": true,
+  "wkt": "POINT (-48.398058 -10.706188)",
+  "data": "09/07/2026, 17:12:13",
+  "poste": "1603568",
+  "especie": "Laranja",
+  "lat": -10.7061882,
+  "lon": -48.3980577,
+  "altura": "8",
+  "dtbt": "200",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Porto Nacional",
+  "syncedAt": "2026-07-09T20:15:23.115Z",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260709171216339797932F1",
+    "VER20260709171216339797932F2",
+    "VER20260709171216339797932F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260709171216339797932F1.jpg",
+    "fotos/Enecol-Centro/VER20260709171216339797932F2.jpg",
+    "fotos/Enecol-Centro/VER20260709171216339797932F3.jpg"
+  ],
+  "legacy_id": "V0103",
+  "remote_id": "V20260709171216339797932"
+}
