@@ -1,0 +1,32 @@
+{
+  "id": "V20260709180340710929772",
+  "synced": false,
+  "wkt": "POINT (-48.395446 -10.709206)",
+  "data": "09/07/2026, 18:03:38",
+  "poste": "471937",
+  "especie": "Mangueira",
+  "lat": -10.7092059,
+  "lon": -48.3954463,
+  "altura": "8",
+  "dtbt": "",
+  "dtmt": "200",
+  "dtat": "0",
+  "dap": "80",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Porto Nacional",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260709180340710929772F1",
+    "VER20260709180340710929772F2",
+    "VER20260709180340710929772F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260709180340710929772F1.jpg",
+    "fotos/Enecol-Centro/VER20260709180340710929772F2.jpg",
+    "fotos/Enecol-Centro/VER20260709180340710929772F3.jpg"
+  ],
+  "legacy_id": "V0112",
+  "remote_id": "V20260709180340710929772"
+}
