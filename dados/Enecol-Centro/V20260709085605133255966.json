@@ -1,0 +1,32 @@
+{
+  "id": "V20260709085605133255966",
+  "synced": false,
+  "wkt": "POINT (-48.390205 -10.690966)",
+  "data": "09/07/2026, 08:56:04",
+  "poste": "338956",
+  "especie": "Outros",
+  "lat": -10.6909662,
+  "lon": -48.3902046,
+  "altura": "8",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "80",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Porto Nacional",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260709085605133255966F1",
+    "VER20260709085605133255966F2",
+    "VER20260709085605133255966F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260709085605133255966F1.jpg",
+    "fotos/Enecol-Centro/VER20260709085605133255966F2.jpg",
+    "fotos/Enecol-Centro/VER20260709085605133255966F3.jpg"
+  ],
+  "legacy_id": "V0041",
+  "remote_id": "V20260709085605133255966"
+}
