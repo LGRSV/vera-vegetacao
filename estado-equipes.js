@@ -282,6 +282,7 @@
   substituirFuncoesDeEquipe();
   window.VERA_ESTADO_EQUIPE = {
     obterProjetoAtivo: localizarProjetoAtivoDaEquipe,
-    salvarProjetoAtivo: salvarProjetoAtivoDaEquipe
+    salvarProjetoAtivo: salvarProjetoAtivoDaEquipe,
+    obterCredenciais: obterCredenciais
   };
 })();
