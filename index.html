@@ -3,21 +3,47 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#1a2e1a">
+  <meta name="theme-color" content="#0d1a12">
   <title>VERA — Vegetação em Rede Ativa</title>
   <style>
-    :root{color-scheme:light;--verde:#1a2e1a;--fundo:#f5f7f2;--texto:#1a2e1a;--muted:#5a7a55;}
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--fundo);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--texto)}
-    main{width:min(100%,390px);padding:28px 24px;border-radius:16px;background:#fff;box-shadow:0 12px 36px rgba(26,46,26,.16);text-align:center}.mark{width:48px;height:48px;display:grid;place-items:center;margin:0 auto 14px;border-radius:12px;background:var(--verde);color:#fff;font-size:22px;font-weight:800}.status{font-size:14px;line-height:1.45;color:var(--muted)}.error{display:none;margin-top:14px;padding:12px;border-radius:10px;background:#fdecea;color:#8f261d;text-align:left;font-size:13px;line-height:1.45}.error code{display:block;margin-top:8px;word-break:break-word;font-size:11px}
+    :root{color-scheme:dark;}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;overflow:hidden;background:#0a140e;color:#eaf3e8;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+    .splash{position:fixed;inset:0;overflow:hidden;background:#0a140e;}
+    /* palco ancorado ao aspecto da arte (941x1672) para que os overlays a acompanhem em qualquer tela */
+    .stage{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:100%;width:56.28vh;}
+    @supports (aspect-ratio:1){.stage{width:auto;aspect-ratio:941/1672;}}
+    .stage-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+    /* brilho animado percorrendo a barra de progresso da arte (~65% da altura) */
+    .bar-track{position:absolute;top:65.1%;left:50%;transform:translate(-50%,-50%);width:46%;height:6px;overflow:hidden;border-radius:99px;pointer-events:none;}
+    .bar-dot{position:absolute;top:50%;left:-40%;width:40%;height:14px;transform:translateY(-50%);border-radius:99px;
+      background:radial-gradient(closest-side,rgba(170,255,165,.95),rgba(120,240,120,.35),transparent 72%);
+      filter:blur(1px);animation:vera-sweep 1.9s ease-in-out infinite;}
+    @keyframes vera-sweep{0%{left:-40%}50%{left:100%}100%{left:-40%}}
+    /* status fica só no DOM (a arte já mostra a mensagem padrão); usado pelo script */
+    #status{position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;}
+    /* erro: card que cobre a faixa de status/versão da arte quando algo falha */
+    #error{display:none;position:absolute;top:63%;left:50%;transform:translateX(-50%);width:min(86%,340px);z-index:3;
+      padding:14px 16px;border-radius:14px;background:rgba(8,18,12,.94);border:1px solid rgba(192,57,43,.5);
+      box-shadow:0 20px 50px rgba(0,0,0,.55);color:#ffb3ab;text-align:left;font-size:13px;line-height:1.45;}
+    #error::before{content:"";position:absolute;left:50%;top:-16px;transform:translateX(-50%);width:180vw;height:calc(100% + 40px);z-index:-1;pointer-events:none;
+      background:radial-gradient(60% 60% at 50% 45%,rgba(6,13,9,.96),rgba(6,13,9,.7) 55%,transparent 78%);}
+    #error strong{color:#ffd0cb}
+    #error code{display:block;margin-top:8px;word-break:break-word;font-size:11px;opacity:.85;color:#e9b9b3}
+    @media(prefers-reduced-motion:reduce){.bar-dot{animation:none;left:30%}}
   </style>
 </head>
 <body>
-  <main>
-    <div class="mark">V</div>
-    <strong>Carregando VERA 2.6.18</strong>
-    <p id="status" class="status">Preparando sincronização entre dispositivos…</p>
-    <div id="error" class="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
-  </main>
+  <div class="splash">
+    <div class="stage">
+      <img class="stage-bg" src="capa-splash.png" alt="VERA — Vegetação em Rede Ativa" fetchpriority="high">
+      <div class="bar-track" aria-hidden="true"><span class="bar-dot"></span></div>
+      <p id="status">Preparando sincronização entre dispositivos…</p>
+      <div id="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
+    </div>
+  </div>
   <script>
   (async function(){
     const status = document.getElementById('status');
@@ -61,14 +87,14 @@
         .replace('</body>',
           '<' + 'script>function toggleMinimizarCamadas(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(!c)return;var min=c.classList.toggle("minimizado");if(ic)ic.textContent=min?"+":"−";try{localStorage.setItem("vera_camadas_min",min?"1":"0");}catch(e){}}(function(){try{if(localStorage.getItem("vera_camadas_min")==="1"){var apl=function(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(c){c.classList.add("minimizado");if(ic)ic.textContent="+";}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",apl);else apl();}}catch(e){}})();function toggleTelaCheiaAdminMapa(){var c=document.getElementById("admin-map-container");if(!c)return;var ativo=c.classList.toggle("vera-tela-cheia");document.body.style.overflow=ativo?"hidden":"";setTimeout(function(){if(typeof adminMap!=="undefined"&&adminMap&&adminMap.invalidateSize)adminMap.invalidateSize();},220);}document.addEventListener("keydown",function(ev){if(ev.key==="Escape"){var c=document.getElementById("admin-map-container");if(c&&c.classList.contains("vera-tela-cheia"))toggleTelaCheiaAdminMapa();}});<' + '/script></body>'
         )
-        .replaceAll('2.6.14', '2.6.19')
+        .replaceAll('2.6.14', '2.6.20')
         .replace(
           "if (primeira < 0) throw new Error('Trecho não encontrado: ' + nome + '.');",
           "if (primeira < 0) { console.warn('Trecho não encontrado:', nome); return html; }"
         );
 
       const fimDoApp = '      document.open();\n      document.write(html);\n      document.close();';
-      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script><script src="protege-ids-remotos.js?t=' + Date.now() + '"><\\/script><script src="hotfix-fotos.js?t=' + Date.now() + '"><\\/script><script src="admin-historico-v3.js?t=' + Date.now() + '"><\\/script><script src="admin-armazenamento.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
+      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script><script src="protege-ids-remotos.js?t=' + Date.now() + '"><\\/script><script src="hotfix-fotos.js?t=' + Date.now() + '"><\\/script><script src="admin-historico-v3.js?t=' + Date.now() + '"><\\/script><script src="admin-armazenamento.js?t=' + Date.now() + '"><\\/script><script src="conclusao-rotas.js?t=' + Date.now() + '"><\\/script><script src="capa-visual.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
       if (html.indexOf(fimDoApp) < 0) throw new Error('Não foi possível conectar a sincronização ao app.');
       html = html.replace(fimDoApp, fimComRecursos);
 
@@ -84,5 +110,5 @@
   })();
   </script>
 </body>
-<!-- bust 1782841492 -->
+<!-- bust 1782901820 -->
 </html>
