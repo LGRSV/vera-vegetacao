@@ -1,0 +1,32 @@
+{
+  "id": "V20260710141629712110894",
+  "synced": false,
+  "wkt": "POINT (-48.391101 -10.728158)",
+  "data": "10/07/2026, 14:16:26",
+  "poste": "1585221",
+  "especie": "Oiti",
+  "lat": -10.7281583,
+  "lon": -48.391101,
+  "altura": "4",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Porto Nacional",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260710141629712110894F1",
+    "VER20260710141629712110894F2",
+    "VER20260710141629712110894F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260710141629712110894F1.jpg",
+    "fotos/Enecol-Centro/VER20260710141629712110894F2.jpg",
+    "fotos/Enecol-Centro/VER20260710141629712110894F3.jpg"
+  ],
+  "legacy_id": "V0151",
+  "remote_id": "V20260710141629712110894"
+}
