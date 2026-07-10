@@ -1,0 +1,32 @@
+{
+  "id": "V20260710133142225752048",
+  "synced": false,
+  "wkt": "POINT (-48.398147 -10.703871)",
+  "data": "10/07/2026, 13:31:39",
+  "poste": "473707",
+  "especie": "Babaçu",
+  "lat": -10.7038705,
+  "lon": -48.3981473,
+  "altura": "11",
+  "dtbt": "250",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Porto Nacional",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260710133142225752048F1",
+    "VER20260710133142225752048F2",
+    "VER20260710133142225752048F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260710133142225752048F1.jpg",
+    "fotos/Enecol-Centro/VER20260710133142225752048F2.jpg",
+    "fotos/Enecol-Centro/VER20260710133142225752048F3.jpg"
+  ],
+  "legacy_id": "V0143",
+  "remote_id": "V20260710133142225752048"
+}
