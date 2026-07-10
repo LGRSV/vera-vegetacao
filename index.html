@@ -3,21 +3,48 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#1a2e1a">
+  <meta name="theme-color" content="#0d1a12">
   <title>VERA — Vegetação em Rede Ativa</title>
   <style>
-    :root{color-scheme:light;--verde:#1a2e1a;--fundo:#f5f7f2;--texto:#1a2e1a;--muted:#5a7a55;}
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--fundo);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--texto)}
-    main{width:min(100%,390px);padding:28px 24px;border-radius:16px;background:#fff;box-shadow:0 12px 36px rgba(26,46,26,.16);text-align:center}.mark{width:48px;height:48px;display:grid;place-items:center;margin:0 auto 14px;border-radius:12px;background:var(--verde);color:#fff;font-size:22px;font-weight:800}.status{font-size:14px;line-height:1.45;color:var(--muted)}.error{display:none;margin-top:14px;padding:12px;border-radius:10px;background:#fdecea;color:#8f261d;text-align:left;font-size:13px;line-height:1.45}.error code{display:block;margin-top:8px;word-break:break-word;font-size:11px}
+    :root{color-scheme:dark;}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:24px;overflow:hidden;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#eaf3e8;background:#0d1a12;
+      background:radial-gradient(120% 80% at 50% -10%,rgba(76,175,80,.28),transparent 60%),radial-gradient(90% 60% at 50% 120%,rgba(45,90,39,.35),transparent 60%),linear-gradient(160deg,#14261a 0%,#0d1a12 55%,#0a140e 100%);}
+    .capa{width:min(100%,360px);text-align:center}
+    .capa-card{position:relative;padding:34px 28px 30px;border-radius:24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);box-shadow:0 24px 70px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+    .mark{width:74px;height:74px;margin:0 auto 18px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(150deg,#2f6d33,#173d1e);box-shadow:0 10px 26px rgba(20,50,25,.55),inset 0 1px 0 rgba(255,255,255,.18)}
+    .mark svg{width:40px;height:40px;display:block}
+    .wordmark{font-size:26px;font-weight:800;letter-spacing:.14em;color:#fff;margin:0 0 4px}
+    .tagline{font-size:12px;letter-spacing:.03em;color:#a8d5a2;margin:0 0 20px;line-height:1.5}
+    .loader-bar{position:relative;height:4px;width:150px;margin:0 auto 16px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
+    .loader-bar::before{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;border-radius:99px;background:linear-gradient(90deg,transparent,#6fce6a,transparent);animation:vera-slide 1.2s ease-in-out infinite}
+    @keyframes vera-slide{0%{transform:translateX(-120%)}100%{transform:translateX(320%)}}
+    .status{font-size:13px;line-height:1.5;color:#bcd8b6;min-height:1.2em;margin:0}
+    .version{margin-top:16px;font-size:10px;letter-spacing:.18em;color:rgba(168,213,162,.6);text-transform:uppercase}
+    .error{display:none;margin-top:16px;padding:12px 14px;border-radius:12px;background:rgba(192,57,43,.16);border:1px solid rgba(192,57,43,.4);color:#ffb3ab;text-align:left;font-size:13px;line-height:1.45}.error strong{color:#ffd0cb}.error code{display:block;margin-top:8px;word-break:break-word;font-size:11px;opacity:.8}
+    @media(prefers-reduced-motion:reduce){.loader-bar::before{animation:none;left:30%}}
   </style>
 </head>
 <body>
-  <main>
-    <div class="mark">V</div>
-    <strong>Carregando VERA 2.6.20</strong>
-    <p id="status" class="status">Preparando sincronização entre dispositivos…</p>
-    <div id="error" class="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
-  </main>
+  <div class="capa">
+    <div class="capa-card">
+      <div class="mark">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M25 7C15 10 9 19 10 31c0 1 .4 2 .9 3C22 33 31 26 35 16c1.6-4 1.4-7 .6-10-3.8 1-7.4 1.6-11.2 1z" fill="#6fce6a" fill-opacity=".22"/>
+          <path d="M11 34C13 22 19 13 30 9" stroke="#9fe89a" stroke-width="2.2" stroke-linecap="round"/>
+          <g stroke="#7fdb79" stroke-width="1.6" stroke-linecap="round"><path d="M22.5 15.5l6-4.5"/><path d="M16.5 24l6-5"/><path d="M12 33l5-6.5"/></g>
+          <g fill="#c8f7c0"><circle cx="30" cy="9" r="2.6"/><circle cx="22.5" cy="15.5" r="2"/><circle cx="16.5" cy="24" r="2"/><circle cx="12" cy="33" r="2.4"/></g>
+        </svg>
+      </div>
+      <div class="wordmark">VERA</div>
+      <div class="tagline">Vegetação em Rede Ativa<br>Energisa Tocantins</div>
+      <div class="loader-bar" aria-hidden="true"></div>
+      <p id="status" class="status">Preparando sincronização entre dispositivos…</p>
+      <div class="version">Versão 2.6.20</div>
+      <div id="error" class="error"><strong>Não foi possível iniciar o VERA.</strong><br>Verifique a conexão e atualize a página.<code id="error-detail"></code></div>
+    </div>
+  </div>
   <script>
   (async function(){
     const status = document.getElementById('status');
@@ -68,7 +95,7 @@
         );
 
       const fimDoApp = '      document.open();\n      document.write(html);\n      document.close();';
-      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script><script src="protege-ids-remotos.js?t=' + Date.now() + '"><\\/script><script src="hotfix-fotos.js?t=' + Date.now() + '"><\\/script><script src="admin-historico-v3.js?t=' + Date.now() + '"><\\/script><script src="admin-armazenamento.js?t=' + Date.now() + '"><\\/script><script src="conclusao-rotas.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
+      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script><script src="protege-ids-remotos.js?t=' + Date.now() + '"><\\/script><script src="hotfix-fotos.js?t=' + Date.now() + '"><\\/script><script src="admin-historico-v3.js?t=' + Date.now() + '"><\\/script><script src="admin-armazenamento.js?t=' + Date.now() + '"><\\/script><script src="conclusao-rotas.js?t=' + Date.now() + '"><\\/script><script src="capa-visual.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
       if (html.indexOf(fimDoApp) < 0) throw new Error('Não foi possível conectar a sincronização ao app.');
       html = html.replace(fimDoApp, fimComRecursos);
 
