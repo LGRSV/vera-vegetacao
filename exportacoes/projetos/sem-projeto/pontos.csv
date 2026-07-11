@@ -1,0 +1,10 @@
+Ponto,Projeto,Equipe,Data/hora,Espécie,Poste,Área,Altura (m),DAP (cm),Acesso,Dist. BT (cm),Dist. MT (cm),Dist. AT (cm),Latitude,Longitude,Qtd fotos,Foto (link),Sincronizado
+V0001,,Enecol Sul,"24/06/2026, 16:47:38",Coqueiro,1096119,urbano,3,35,Sim,50,50,50,-10.177272458051297,-48.32842767115249,,,Não
+V0001,,Equipe 01 — Norte,"23/06/2026, 14:37:19",Teste,1,Teste,7,47,Sim,100,200,,-10.17763830762443,-48.32842697182525,,,Não
+V0001,,Equipe Energisa,"30/06/2026, 15:22:39",Mangueira,443539,URBANO,3.5,45,Sim,0,250,0,-10.177689302381243,-48.328449547502835,3,https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Equipe-Energisa/VER0001F1.jpg,Não
+V0002,,Equipe Energisa,"30/06/2026, 20:26:40",Babaçu,402081,URBANO,4,50,Não,150,150,0,-10.215356958072663,-48.35272768675436,3,https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Equipe-Energisa/VER0002F1.jpg,Não
+V0003,,Equipe Energisa,"26/06/2026, 09:22:24",Oiti,443539,,2.5,20,Sim,300,300,0,-10.1772728,-48.3284619,3,https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Equipe-Energisa/VER0003F1.jpg,Não
+V0004,,Equipe Energisa,"26/06/2026, 09:25:38",Outros,440318,,4,60,Sim,300,300,0,-10.177261,-48.3280135,3,https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Equipe-Energisa/VER0004F1.jpg,Não
+V0005,,Equipe Energisa,"26/06/2026, 09:28:37",Outros,444120,,4,25,Sim,250,300,0,-10.1772336,-48.3278281,3,https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Equipe-Energisa/VER0005F1.jpg,Não
+V0006,,Equipe Energisa,"26/06/2026, 09:31:50",Mangueira,444122,,9,150,Sim,250,150,0,-10.1772393,-48.3274191,3,https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Equipe-Energisa/VER0006F1.jpg,Não
+V20260701201653974298911,,Equipe Energisa,"24/06/2026, 01:48:01",Mangueira,651375,Teste,2,40,Sim,30,0,0,-10.210091690678944,-48.34849406315539,1,https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Equipe-Energisa/VER20260701201653974298911F1.jpg,Sim
