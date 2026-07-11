@@ -5,7 +5,7 @@ name: Exporta CSV dos projetos
 on:
   push:
     branches: [main]
-    paths: ['dados/**']
+    paths: ['dados/**', 'estado-equipes.json', 'rotas.json']
   workflow_dispatch:
 
 permissions:

@@ -36,8 +36,44 @@ def linha(d):
     ]
 
 
+def exporta_status_rotas():
+    """Gera exportacoes/rotas-status.csv com a situacao de cada rota."""
+    try:
+        with open(os.path.join(RAIZ, 'rotas.json'), encoding='utf-8') as fh:
+            rotas = {str(r.get('id')): r for r in json.load(fh).get('rotas', [])}
+    except Exception:
+        rotas = {}
+    try:
+        with open(os.path.join(RAIZ, 'estado-equipes.json'), encoding='utf-8') as fh:
+            estado = json.load(fh)
+    except Exception:
+        estado = {}
+    status = estado.get('statusRotas') or {}
+    ativos = {str(v.get('projetoAtivo', {}).get('rotaId')): k
+              for k, v in (estado.get('equipes') or {}).items() if v.get('projetoAtivo')}
+    destino = os.path.join(RAIZ, 'exportacoes', 'rotas-status.csv')
+    with open(destino, 'w', newline='', encoding='utf-8') as fh:
+        w = csv.writer(fh)
+        w.writerow(['Rota (id)', 'Projeto', 'Equipe', 'Situação', 'Concluída em', 'Concluída por'])
+        vistos = set()
+        for rid, meta in status.items():
+            r = rotas.get(rid, {})
+            w.writerow([rid, meta.get('nomeProjeto') or r.get('nomeProjeto', ''),
+                        meta.get('equipe') or r.get('equipe', ''),
+                        'Concluída' if meta.get('status') == 'concluido' else meta.get('status', ''),
+                        meta.get('concluidoEm', ''), meta.get('concluidoPor', '')])
+            vistos.add(rid)
+        for rid, r in rotas.items():
+            if rid in vistos:
+                continue
+            situacao = 'Em andamento' if rid in ativos else 'Não iniciada'
+            w.writerow([rid, r.get('nomeProjeto', ''), r.get('equipe', ''), situacao, '', ''])
+    print(f'{destino}: {len(status)} concluída(s) de {len(rotas)} rota(s)')
+
+
 def main():
     os.makedirs(os.path.join(RAIZ, 'exportacoes'), exist_ok=True)
+    exporta_status_rotas()
     pastas = sorted(glob.glob(os.path.join(RAIZ, 'dados', '*')))
     for pasta in pastas:
         arquivos = sorted(glob.glob(os.path.join(pasta, '*.json')))
