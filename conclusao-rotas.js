@@ -258,7 +258,7 @@
     if (!botao) return;
     if (concluida) {
       botao.disabled = true;
-      botao.textContent = '✓ Rota concluída';
+      botao.textContent = 'Rota concluída';
       botao.style.background = 'var(--muted,#5a7a55)';
       if (descricao) descricao.textContent = 'Esta rota foi marcada como concluída. Reentrar na rota volta o status para "em andamento".';
     } else {
@@ -329,16 +329,17 @@
         alvo.appendChild(acao);
       }
       const concluida = chave === 'concluido';
-      acao.textContent = concluida ? 'Reabrir' : '✓ Concluir';
-      acao.title = concluida ? 'Voltar esta rota para andamento' : 'Marcar esta rota como concluída';
+      acao.textContent = concluida ? 'Concluído' : 'Concluir';
+      acao.classList.toggle('ok', concluida);
+      acao.title = concluida ? 'Rota concluída — toque para reabrir' : 'Marcar esta rota como concluída';
       acao.onclick = async function (ev) {
         ev.stopPropagation(); ev.preventDefault();
         const nome = rota.nomeProjeto || ('rota ' + rota.id);
         const pergunta = concluida
-          ? 'Reabrir "' + nome + '"? Ela volta a aparecer como pendente/em andamento.'
+          ? '"' + nome + '" já está concluída. Deseja REABRIR? Ela volta a aparecer como em andamento.'
           : 'Marcar "' + nome + '" como concluída?';
         if (!window.confirm(pergunta)) return;
-        acao.disabled = true; acao.textContent = '⏳';
+        acao.disabled = true; acao.textContent = '…';
         try {
           if (concluida) { await reabrirRota(rota.id); }
           else { await concluirRotaPeloAdmin(rota); }
@@ -364,6 +365,7 @@
       '.rota-status-acao{display:inline-block;margin-left:6px;padding:3px 9px;border-radius:999px;' +
       'font-size:10px;font-weight:800;cursor:pointer;vertical-align:middle;white-space:nowrap;' +
       'background:#173b2b;color:#fff;border:1px solid #173b2b;}' +
+      '.rota-status-acao.ok{background:#e6f4ea;color:#1e7a34;border-color:#4CAF50;}' +
       '.rota-status-acao:disabled{opacity:.55;cursor:default;}';
     (document.head || document.documentElement).appendChild(st);
   }
