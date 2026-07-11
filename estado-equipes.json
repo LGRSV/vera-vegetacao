@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-11T14:52:50.073Z",
+  "updatedAt": "2026-07-11T14:52:51.991Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -267,5 +267,6 @@
       },
       "historico": []
     }
-  }
+  },
+  "statusRotas": {}
 }
