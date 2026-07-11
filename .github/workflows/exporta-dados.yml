@@ -1,0 +1,31 @@
+name: Exporta CSV dos projetos
+
+# A cada sync dos tecnicos (push em dados/**), regenera exportacoes/*.csv.
+# As planilhas do Google Drive importam esses CSVs e ficam sempre em dia.
+on:
+  push:
+    branches: [main]
+    paths: ['dados/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: exporta-csv
+  cancel-in-progress: true
+
+jobs:
+  exportar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/exporta_csv.py
+      - name: Commit das exportacoes
+        run: |
+          git config user.name "vera-bot"
+          git config user.email "actions@github.com"
+          git add exportacoes/
+          git diff --cached --quiet && echo "sem mudancas" && exit 0
+          git commit -m "VERA: exportacoes CSV atualizadas"
+          git push
