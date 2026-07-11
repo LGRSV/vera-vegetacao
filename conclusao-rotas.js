@@ -176,6 +176,22 @@
     atualizarBotaoTecnico();
   }
 
+  // Conclusão feita pelo supervisor, direto no painel admin.
+  async function concluirRotaPeloAdmin(rota) {
+    return atualizarStatusRotas(
+      'VERA: concluir rota ' + (rota.nomeProjeto || rota.id) + ' (Admin)',
+      function (statusRotas) {
+        statusRotas[String(rota.id)] = {
+          status: 'concluido',
+          equipe: rota.equipe || '',
+          nomeProjeto: rota.nomeProjeto || '',
+          concluidoEm: new Date().toISOString(),
+          concluidoPor: 'Admin'
+        };
+      }
+    );
+  }
+
   // Ao (re)entrar numa rota, ela deixa de estar concluída — volta a "em andamento".
   async function reabrirRota(rotaId) {
     if (!rotaId) return;
@@ -303,6 +319,33 @@
       const rotulo = ROTULOS[chave] || ROTULOS.nao_iniciado;
       badge.textContent = rotulo.texto;
       badge.className = 'rota-status-badge ' + rotulo.classe;
+
+      // Admin também pode concluir (ou reabrir) a rota direto do card.
+      let acao = alvo.querySelector('.rota-status-acao');
+      if (!acao) {
+        acao = document.createElement('button');
+        acao.type = 'button';
+        acao.className = 'rota-status-acao';
+        alvo.appendChild(acao);
+      }
+      const concluida = chave === 'concluido';
+      acao.textContent = concluida ? 'Reabrir' : '✓ Concluir';
+      acao.title = concluida ? 'Voltar esta rota para andamento' : 'Marcar esta rota como concluída';
+      acao.onclick = async function (ev) {
+        ev.stopPropagation(); ev.preventDefault();
+        const nome = rota.nomeProjeto || ('rota ' + rota.id);
+        const pergunta = concluida
+          ? 'Reabrir "' + nome + '"? Ela volta a aparecer como pendente/em andamento.'
+          : 'Marcar "' + nome + '" como concluída?';
+        if (!window.confirm(pergunta)) return;
+        acao.disabled = true; acao.textContent = '⏳';
+        try {
+          if (concluida) { await reabrirRota(rota.id); }
+          else { await concluirRotaPeloAdmin(rota); }
+        } catch (e) { console.warn('VERA conclusão admin:', e); }
+        acao.disabled = false;
+        try { await aplicarStatusNoAdmin(); } catch (e) {}
+      };
     });
   }
 
@@ -317,7 +360,11 @@
       'font-size:10px;font-weight:800;letter-spacing:.02em;vertical-align:middle;white-space:nowrap;}' +
       '.rota-status-badge.nao-iniciado{background:#eceff1;color:#5a7a55;border:1px solid #d5dbd2;}' +
       '.rota-status-badge.andamento{background:#fef3dc;color:#8a5a00;border:1px solid #e8a020;}' +
-      '.rota-status-badge.concluido{background:#e6f4ea;color:#1e7a34;border:1px solid #4CAF50;}';
+      '.rota-status-badge.concluido{background:#e6f4ea;color:#1e7a34;border:1px solid #4CAF50;}' +
+      '.rota-status-acao{display:inline-block;margin-left:6px;padding:3px 9px;border-radius:999px;' +
+      'font-size:10px;font-weight:800;cursor:pointer;vertical-align:middle;white-space:nowrap;' +
+      'background:#173b2b;color:#fff;border:1px solid #173b2b;}' +
+      '.rota-status-acao:disabled{opacity:.55;cursor:default;}';
     (document.head || document.documentElement).appendChild(st);
   }
 
