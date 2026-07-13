@@ -74,3 +74,74 @@
     if (!document.getElementById('vera-ui-ajustes')) aplicar();
   }).observe(document.documentElement, { childList: true, subtree: true });
 })();
+
+(function () {
+  'use strict';
+
+  // Atualizacao forcada: alguns celulares (PWA instalado) seguram o
+  // index.html antigo em cache e ficam presos numa versao velha do app,
+  // mesmo com os patches sendo baixados frescos. Este verificador — que
+  // TODAS as versoes do app baixam a cada abertura — compara a versao
+  // rodando (APP_VERSION) com a do servidor (version.json). Diferente?
+  // Na tela de login atualiza sozinho; dentro do app mostra uma faixa
+  // "toque para atualizar" (nao interrompe quem esta preenchendo ponto).
+  if (window.__veraForcaAtualizacao) return;
+  window.__veraForcaAtualizacao = true;
+
+  var URL_VERSAO = 'https://lgrsv.github.io/vera-vegetacao/version.json';
+
+  function versaoRodando() {
+    try { return (typeof APP_VERSION !== 'undefined') ? String(APP_VERSION) : ''; } catch (e) { return ''; }
+  }
+
+  function recarregarComVersaoNova(versao) {
+    try { sessionStorage.setItem('vera_auto_atualizou', versao); } catch (e) {}
+    var base = location.origin + location.pathname;
+    location.replace(base + '?atualizar=' + Date.now());
+  }
+
+  function emTelaDeLogin() {
+    var tela = document.getElementById('login-screen');
+    return !!(tela && tela.style.display !== 'none' && tela.offsetParent !== null);
+  }
+
+  function mostrarFaixa(versao) {
+    if (document.getElementById('vera-faixa-atualizar')) return;
+    var faixa = document.createElement('button');
+    faixa.type = 'button';
+    faixa.id = 'vera-faixa-atualizar';
+    faixa.textContent = 'Nova versão ' + versao + ' disponível — toque para atualizar';
+    faixa.style.cssText = 'position:fixed;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 78px);'
+      + 'z-index:100001;padding:13px 14px;border:0;border-radius:12px;background:#e8a020;color:#1a2e1a;'
+      + 'font:700 13px -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;'
+      + 'box-shadow:0 6px 20px rgba(0,0,0,.35);cursor:pointer;text-align:center;';
+    faixa.addEventListener('click', function () { recarregarComVersaoNova(versao); });
+    document.body.appendChild(faixa);
+  }
+
+  function verificar() {
+    var rodando = versaoRodando();
+    if (!rodando) return;
+    fetch(URL_VERSAO + '?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (v) {
+        if (!v || !v.version) return;
+        var nova = String(v.version);
+        if (nova === rodando) return;
+        var jaTentou = '';
+        try { jaTentou = sessionStorage.getItem('vera_auto_atualizou') || ''; } catch (e) {}
+        if (emTelaDeLogin() && jaTentou !== nova) {
+          recarregarComVersaoNova(nova); // sem trabalho em andamento: atualiza sozinho
+          return;
+        }
+        mostrarFaixa(nova);
+      })
+      .catch(function () {});
+  }
+
+  setTimeout(verificar, 5000);
+  setInterval(verificar, 5 * 60 * 1000);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') setTimeout(verificar, 2000);
+  });
+})();
