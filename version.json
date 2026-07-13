@@ -1,1 +1,1 @@
-{"version":"2.6.24","released":"2026-07-13","notes":"Atualizacao forcada: o app detecta versao nova no servidor e atualiza sozinho ou com um toque"}
+{"version":"2.6.25","released":"2026-07-13","notes":"Reinicio automatico ao detectar versao nova (sem interromper preenchimento de ponto)"}
