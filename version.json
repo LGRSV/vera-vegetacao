@@ -1,1 +1,1 @@
-{"version":"2.6.28","released":"2026-07-13","notes":"Ao entrar na rota, comeca sempre mostrando a rede (evita ficar preso em Postes fora da rede)"}
+{"version":"2.6.29","released":"2026-07-13","notes":"Filtro Postes fora da rede removido: o app sempre mostra a rede e os postes, sem filtro que esconda a malha"}

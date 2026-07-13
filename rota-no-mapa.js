@@ -224,4 +224,32 @@
   }
 
   setInterval(completarRede, 25000);
+
+  // ——— Remove o filtro "Postes fora da rede" ─────────────────────────────
+  // Esse botao inverte a visao: mostra os postes LONGE do cabo e esconde a
+  // malha da rota — dando a impressao de que "o mapa esta por cima dos
+  // postes". A pedido do supervisor: escondemos o botao e travamos o filtro
+  // em desligado, para o app SEMPRE mostrar a rede (trechos + postes sobre a
+  // rede), que e o que serve para marcar.
+  let livresRedesenhado = false;
+  function travarFiltroForaDaRede() {
+    if (!document.getElementById('vera-oculta-filtro-livres')) {
+      const st = document.createElement('style');
+      st.id = 'vera-oculta-filtro-livres';
+      st.textContent = '#cam-livres{display:none!important;}';
+      (document.head || document.documentElement).appendChild(st);
+    }
+    try {
+      if (typeof camadas === 'undefined' || !camadas || !camadas.livres) return;
+      camadas.livres = false; // trava desligado
+      if (typeof atualizarBotoesCamadas === 'function') atualizarBotoesCamadas();
+      if (typeof sincronizarVisibilidadeCamadas === 'function') sincronizarVisibilidadeCamadas();
+      if (!livresRedesenhado && !recarregandoRede && typeof window.carregarPostes === 'function') {
+        livresRedesenhado = true; // redesenha os postes certos uma unica vez
+        window.carregarPostes();
+      }
+    } catch (e) { console.warn('VERA travar filtro:', e); }
+  }
+  setInterval(travarFiltroForaDaRede, 1500);
+  travarFiltroForaDaRede();
 })();
