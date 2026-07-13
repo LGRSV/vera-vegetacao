@@ -1,1 +1,1 @@
-{"version":"2.6.26","released":"2026-07-13","notes":"Enquadramento da rota no mapa deterministico (laco continuo) para equipes longe da rota"}
+{"version":"2.6.27","released":"2026-07-13","notes":"Rede completa: circuitos que falharem de baixar sao retentados ate o consolidado inteiro plotar"}
