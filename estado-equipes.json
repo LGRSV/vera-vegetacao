@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-13T09:47:51.390Z",
+  "updatedAt": "2026-07-13T09:47:52.916Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -268,13 +268,5 @@
       "historico": []
     }
   },
-  "statusRotas": {
-    "1782688959998": {
-      "status": "concluido",
-      "equipe": "Enecol Centro",
-      "nomeProjeto": "Porto Nacional",
-      "concluidoEm": "2026-07-11T16:50:50.815Z",
-      "concluidoPor": "Admin"
-    }
-  }
+  "statusRotas": {}
 }
