@@ -119,6 +119,18 @@
     document.body.appendChild(faixa);
   }
 
+  // Reinicio automatico e seguro: os pontos ficam no banco do aparelho e a
+  // sessao da equipe se restaura sozinha depois do reload. So NAO reinicia
+  // sozinho com o formulario de novo ponto aberto ou um modal de confirmacao
+  // na tela — nesses casos fica a faixa de um toque.
+  function podeReiniciarSozinho() {
+    if (emTelaDeLogin()) return true;
+    var abaFormulario = document.getElementById('tab-form');
+    if (abaFormulario && abaFormulario.classList && abaFormulario.classList.contains('active')) return false;
+    if (document.getElementById('vera-modal-confirmacao') || document.getElementById('vera-modal-trocar-equipe')) return false;
+    return true;
+  }
+
   function verificar() {
     var rodando = versaoRodando();
     if (!rodando) return;
@@ -130,8 +142,9 @@
         if (nova === rodando) return;
         var jaTentou = '';
         try { jaTentou = sessionStorage.getItem('vera_auto_atualizou') || ''; } catch (e) {}
-        if (emTelaDeLogin() && jaTentou !== nova) {
-          recarregarComVersaoNova(nova); // sem trabalho em andamento: atualiza sozinho
+        if (jaTentou !== nova && podeReiniciarSozinho()) {
+          if (typeof showToast === 'function') showToast('Atualizando o VERA para a versão ' + nova + '…', '');
+          setTimeout(function () { recarregarComVersaoNova(nova); }, 1200);
           return;
         }
         mostrarFaixa(nova);
