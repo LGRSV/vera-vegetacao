@@ -103,6 +103,25 @@
 
   let chaveEnquadrada = '';
 
+  // Ao entrar numa rota, garante a visão da REDE (trechos + postes sobre a
+  // rede) em vez de "Postes fora da rede" — filtro avançado que, ligado por
+  // engano, esconde a malha e mostra os postes longe do cabo. Só corrige uma
+  // vez por rota; depois o técnico é livre para alternar as camadas.
+  function garantirVisualizacaoDaRede() {
+    try {
+      if (typeof camadas === 'undefined' || !camadas) return;
+      let mudou = false;
+      if (camadas.livres) { camadas.livres = false; mudou = true; }
+      if (!camadas.t1) { camadas.t1 = true; mudou = true; }
+      if (!camadas.postes) { camadas.postes = true; mudou = true; }
+      if (!mudou) return;
+      if (typeof atualizarBotoesCamadas === 'function') atualizarBotoesCamadas();
+      if (typeof sincronizarVisibilidadeCamadas === 'function') sincronizarVisibilidadeCamadas();
+      // redesenha os postes com o filtro correto (usa o cache — não rebaixa nada)
+      if (typeof window.carregarPostes === 'function') window.carregarPostes();
+    } catch (e) { console.warn('VERA visao da rede:', e); }
+  }
+
   function laco() {
     criarBotaoVerRota();
     const m = mapaCampo();
@@ -121,6 +140,7 @@
     if (!b) return;
 
     chaveEnquadrada = chave; // uma vez por rota
+    garantirVisualizacaoDaRede(); // começa sempre mostrando a rede, não "postes fora da rede"
     if (usuarioLongeDaRota(b)) {
       try { if (typeof gpsPrimeiraFixacao !== 'undefined') gpsPrimeiraFixacao = false; } catch (e) {}
       enquadrarRota();
