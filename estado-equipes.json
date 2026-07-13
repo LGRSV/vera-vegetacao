@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-13T16:08:31.419Z",
+  "updatedAt": "2026-07-13T16:14:30.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,25 +247,46 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1782688959998",
-        "nomeProjeto": "Porto Nacional",
+        "rotaId": "1783940358942",
+        "nomeProjeto": "SE Paraíso I",
         "polo": "CENTRO",
         "alimentadores": [
-          "AL01072001",
-          "AL02072001",
-          "AL03072001",
-          "AL04072001",
-          "AL05072001",
-          "AL06072001",
-          "LD01072001",
-          "LD02072001",
-          "LD03072001"
+          "AL01062013",
+          "AL02062013",
+          "AL03062013",
+          "AL04062013",
+          "AL05062013",
+          "LD01062013",
+          "LD02062013",
+          "LD03062013",
+          "LD04062013",
+          "LD05062013"
         ],
-        "iniciadoEm": "2026-07-13T14:25:20.540Z",
-        "atualizadoEm": "2026-07-13T16:08:31.419Z",
-        "atualizadoPor": "Enecol Centro"
+        "iniciadoEm": "2026-07-13T16:14:30.000Z",
+        "atualizadoEm": "2026-07-13T16:14:30.000Z",
+        "atualizadoPor": "Admin"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1783940358942",
+          "nomeProjeto": "SE Paraíso I",
+          "polo": "CENTRO",
+          "alimentadores": [
+            "AL01062013",
+            "AL02062013",
+            "AL03062013",
+            "AL04062013",
+            "AL05062013",
+            "LD01062013",
+            "LD02062013",
+            "LD03062013",
+            "LD04062013",
+            "LD05062013"
+          ],
+          "data": "2026-07-13T16:14:30.000Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1782688959998",
@@ -327,5 +348,13 @@
       ]
     }
   },
-  "statusRotas": {}
+  "statusRotas": {
+    "1782688959998": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Porto Nacional",
+      "concluidoEm": "2026-07-13T16:14:30.000Z",
+      "concluidoPor": "Admin"
+    }
+  }
 }

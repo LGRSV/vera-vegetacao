@@ -31,6 +31,63 @@
     return estado;
   }
 
+  function escHtml(valor) {
+    return String(valor == null ? '' : valor).replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+  }
+
+  // Confirmação com modal do próprio app — o window.confirm() não abre em
+  // iPhones com o app instalado (PWA standalone) e o toque morre sem resposta.
+  function confirmarNoApp(mensagem, textoBotao) {
+    return new Promise(function (resolver) {
+      const anterior = document.getElementById('vera-modal-confirmacao');
+      if (anterior) anterior.remove();
+
+      const fundo = document.createElement('div');
+      fundo.id = 'vera-modal-confirmacao';
+      fundo.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(10,20,14,.55);display:flex;align-items:center;justify-content:center;padding:22px;';
+      fundo.innerHTML = '<div style="width:min(100%,340px);background:#fff;border-radius:16px;padding:22px 20px;box-shadow:0 18px 48px rgba(0,0,0,.35);font-family:inherit;color:#1a2e1a;">'
+        + '<div style="font-size:14px;line-height:1.55;white-space:pre-line;">' + mensagem + '</div>'
+        + '<div style="display:flex;gap:10px;margin-top:18px;">'
+        + '<button type="button" data-acao="nao" style="flex:1;padding:12px;border:1.5px solid #c9dfce;border-radius:10px;background:#fff;color:#1a2e1a;font:700 13px inherit;cursor:pointer;">Cancelar</button>'
+        + '<button type="button" data-acao="sim" style="flex:1;padding:12px;border:0;border-radius:10px;background:#1a2e1a;color:#fff;font:700 13px inherit;cursor:pointer;">' + escHtml(textoBotao || 'Confirmar') + '</button>'
+        + '</div></div>';
+
+      function fechar(resposta) { fundo.remove(); resolver(resposta); }
+      fundo.addEventListener('click', function (ev) {
+        if (ev.target === fundo) return fechar(false);
+        const botao = ev.target && ev.target.closest ? ev.target.closest('[data-acao]') : null;
+        if (botao) fechar(botao.getAttribute('data-acao') === 'sim');
+      });
+      document.body.appendChild(fundo);
+    });
+  }
+
+  // Rota concluída não pode continuar como projeto ativo de nenhuma equipe —
+  // senão o app restauraria a rota concluída sozinho na próxima abertura.
+  function retirarProjetoAtivoDaRota(estado, rotaId) {
+    Object.keys(estado.equipes || {}).forEach(function (equipe) {
+      const dados = estado.equipes[equipe];
+      const ativo = dados && dados.projetoAtivo;
+      if (ativo && String(ativo.rotaId) === String(rotaId)) dados.projetoAtivo = null;
+    });
+  }
+
+  let cacheEstadoPublico = { quando: 0, estado: null };
+  async function lerEstadoPublicoComCache() {
+    const agora = Date.now();
+    if (cacheEstadoPublico.estado && (agora - cacheEstadoPublico.quando) < 10000) return cacheEstadoPublico.estado;
+    const estado = await lerEstadoPublico();
+    cacheEstadoPublico = { quando: agora, estado: estado };
+    return estado;
+  }
+
+  function rotaConcluidaNoEstado(estado, rotaId) {
+    const meta = estado && estado.statusRotas && estado.statusRotas[String(rotaId)];
+    return !!(meta && meta.status === 'concluido');
+  }
+
   // Reutiliza a mesma credencial/repo já resolvida por estado-equipes.js — evita
   // duplicar a lógica (e o token de servidor) num segundo arquivo.
   async function obterCredenciais() {
@@ -107,7 +164,7 @@
         const leitura = await lerEstadoParaGravar(credenciais.repo, credenciais.token);
         const estado = leitura.estado;
 
-        mutacao(estado.statusRotas);
+        mutacao(estado.statusRotas, estado);
         estado.updatedAt = new Date().toISOString();
 
         const corpo = {
@@ -125,7 +182,7 @@
           body: JSON.stringify(corpo)
         });
 
-        if (resposta.ok) return true;
+        if (resposta.ok) { cacheEstadoPublico = { quando: 0, estado: null }; return true; }
         if (resposta.status === 409) continue; // conflito de SHA — relê e tenta de novo
 
         const detalhe = await resposta.json().catch(function () { return {}; });
@@ -149,16 +206,18 @@
     }
     const rota = rotaAtribuida;
     const nome = (rota.nomeProjeto || 'esta rota');
-    if (!window.confirm('Concluir a rota de campo "' + nome + '"?\nO supervisor verá esta rota como concluída no painel.')) {
-      return;
-    }
+    const confirmado = await confirmarNoApp(
+      'Concluir a rota de campo "' + escHtml(nome) + '"?\nO supervisor verá esta rota como concluída no painel e ela sairá da sua lista de projetos.',
+      'Concluir rota'
+    );
+    if (!confirmado) return;
 
     const botao = document.getElementById('btn-concluir-rota');
     if (botao) { botao.disabled = true; botao.textContent = '⏳ Registrando conclusão...'; }
 
     const ok = await atualizarStatusRotas(
       'VERA: concluir rota ' + (rota.nomeProjeto || rota.id) + ' (' + (typeof currentUser !== 'undefined' ? currentUser : '') + ')',
-      function (statusRotas) {
+      function (statusRotas, estado) {
         statusRotas[String(rota.id)] = {
           status: 'concluido',
           equipe: typeof currentUser !== 'undefined' ? currentUser : '',
@@ -166,6 +225,7 @@
           concluidoEm: new Date().toISOString(),
           concluidoPor: typeof currentUser !== 'undefined' ? currentUser : ''
         };
+        retirarProjetoAtivoDaRota(estado, rota.id);
       }
     );
 
@@ -180,7 +240,7 @@
   async function concluirRotaPeloAdmin(rota) {
     return atualizarStatusRotas(
       'VERA: concluir rota ' + (rota.nomeProjeto || rota.id) + ' (Admin)',
-      function (statusRotas) {
+      function (statusRotas, estado) {
         statusRotas[String(rota.id)] = {
           status: 'concluido',
           equipe: rota.equipe || '',
@@ -188,6 +248,7 @@
           concluidoEm: new Date().toISOString(),
           concluidoPor: 'Admin'
         };
+        retirarProjetoAtivoDaRota(estado, rota.id);
       }
     );
   }
@@ -305,6 +366,7 @@
       estado = normalizarEstado({});
     }
 
+    let totalConcluidas = 0;
     cards.forEach(function (card, i) {
       const rota = rotas[i];
       if (!rota) return;
@@ -319,6 +381,11 @@
       const rotulo = ROTULOS[chave] || ROTULOS.nao_iniciado;
       badge.textContent = rotulo.texto;
       badge.className = 'rota-status-badge ' + rotulo.classe;
+
+      // Rota concluída sai da lista do painel; um alternador discreto abaixo
+      // permite revê-las (e reabrir, se preciso).
+      if (chave === 'concluido') totalConcluidas++;
+      card.style.display = (chave === 'concluido' && !window.__veraMostrarRotasConcluidas) ? 'none' : '';
 
       // Admin também pode concluir (ou reabrir) a rota direto do card.
       let acao = alvo.querySelector('.rota-status-acao');
@@ -336,9 +403,9 @@
         ev.stopPropagation(); ev.preventDefault();
         const nome = rota.nomeProjeto || ('rota ' + rota.id);
         const pergunta = concluida
-          ? '"' + nome + '" já está concluída. Deseja REABRIR? Ela volta a aparecer como em andamento.'
-          : 'Marcar "' + nome + '" como concluída?';
-        if (!window.confirm(pergunta)) return;
+          ? '"' + escHtml(nome) + '" já está concluída. Deseja REABRIR? Ela volta a aparecer para a equipe e na lista de projetos.'
+          : 'Marcar "' + escHtml(nome) + '" como concluída?\nEla deixará de aparecer para a equipe e sairá desta lista.';
+        if (!(await confirmarNoApp(pergunta, concluida ? 'Reabrir rota' : 'Concluir rota'))) return;
         acao.disabled = true; acao.textContent = '…';
         try {
           if (concluida) { await reabrirRota(rota.id); }
@@ -348,6 +415,23 @@
         try { await aplicarStatusNoAdmin(); } catch (e) {}
       };
     });
+
+    let alternador = document.getElementById('vera-alternar-concluidas');
+    if (!alternador) {
+      alternador = document.createElement('button');
+      alternador.type = 'button';
+      alternador.id = 'vera-alternar-concluidas';
+      alternador.style.cssText = 'margin:8px 0 0;padding:7px 12px;border:1px dashed #c9dfce;border-radius:8px;background:transparent;color:#5a7a55;font:700 11px inherit;cursor:pointer;';
+      alternador.addEventListener('click', function () {
+        window.__veraMostrarRotasConcluidas = !window.__veraMostrarRotasConcluidas;
+        aplicarStatusNoAdmin();
+      });
+      lista.parentElement.insertBefore(alternador, lista.nextSibling);
+    }
+    alternador.style.display = totalConcluidas ? 'inline-block' : 'none';
+    alternador.textContent = window.__veraMostrarRotasConcluidas
+      ? 'Ocultar rotas concluídas'
+      : 'Mostrar rotas concluídas (' + totalConcluidas + ')';
   }
 
   // Estilos injetados em runtime (o app real é montado via document.write, então
@@ -373,6 +457,20 @@
   // ── Ganchos nas funções globais do app ────────────────────────────────────
 
   function instalarGanchos() {
+    // Rotas concluídas saem da lista de projetos da equipe técnica.
+    if (typeof verificarRotasAtribuidas === 'function' && !window.__veraVerificarRotasAtribuidasOriginal) {
+      window.__veraVerificarRotasAtribuidasOriginal = verificarRotasAtribuidas;
+      window.verificarRotasAtribuidas = async function () {
+        const rotas = await window.__veraVerificarRotasAtribuidasOriginal.apply(this, arguments);
+        try {
+          const estado = await lerEstadoPublicoComCache();
+          return (rotas || []).filter(function (rota) { return !rotaConcluidaNoEstado(estado, rota.id); });
+        } catch (erro) {
+          return rotas;
+        }
+      };
+    }
+
     if (typeof renderRotasAdmin === 'function' && !window.__veraRenderRotasAdminOriginal) {
       window.__veraRenderRotasAdminOriginal = renderRotasAdmin;
       window.renderRotasAdmin = async function () {
