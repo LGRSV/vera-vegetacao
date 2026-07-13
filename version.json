@@ -1,1 +1,1 @@
-{"version":"2.6.27","released":"2026-07-13","notes":"Rede completa: circuitos que falharem de baixar sao retentados ate o consolidado inteiro plotar"}
+{"version":"2.6.28","released":"2026-07-13","notes":"Ao entrar na rota, comeca sempre mostrando a rede (evita ficar preso em Postes fora da rede)"}
