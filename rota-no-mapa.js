@@ -131,4 +131,77 @@
   }
 
   setInterval(laco, 2000);
+
+  // ——— Rede completa: retenta circuitos que falharam de baixar ───────────
+  // O app carrega os circuitos um a um; quando um download falha (rede móvel
+  // oscilou), ele pula o circuito e nunca mais tenta — e só um pedaço do
+  // consolidado aparece plotado. Aqui: quando a carga para com circuito
+  // faltando (sem postes ou sem cabos em cache), chama carregarPostes() de
+  // novo — o app usa o cache do que já veio e refaz só o que faltou —
+  // repetindo até a rede inteira estar no mapa (limite de 6 rodadas).
+
+  let ultimoProgresso = { qtd: -1, quando: 0 };
+  let tentativasRedeCompleta = 0;
+  let chaveRotaRetentativa = '';
+  let recarregandoRede = false;
+
+  function circuitosFaltando() {
+    try {
+      const alims = (typeof alimentadoresAtivos !== 'undefined' && alimentadoresAtivos) || [];
+      if (!alims.length || typeof chaveCircuito !== 'function') return [];
+      return alims.filter(function (circ) {
+        const chave = chaveCircuito(circ);
+        const temPostes = typeof postesCarregados !== 'undefined' && postesCarregados && postesCarregados[chave];
+        const temCabos = typeof cabosCarregados !== 'undefined' && cabosCarregados && cabosCarregados[chave];
+        return !temPostes || !temCabos;
+      });
+    } catch (e) { return []; }
+  }
+
+  function cargaParada() {
+    let qtd = 0;
+    try {
+      qtd = Object.keys((typeof postesVisiveisPorCircuito !== 'undefined' && postesVisiveisPorCircuito) || {}).length;
+    } catch (e) {}
+    const agora = Date.now();
+    if (qtd !== ultimoProgresso.qtd) {
+      ultimoProgresso = { qtd: qtd, quando: agora };
+      return false; // ainda está progredindo
+    }
+    return (agora - ultimoProgresso.quando) > 20000;
+  }
+
+  async function completarRede() {
+    if (recarregandoRede || !navigator.onLine || !mapaCampo()) return;
+
+    let alims = [];
+    try { alims = (typeof alimentadoresAtivos !== 'undefined' && alimentadoresAtivos) || []; } catch (e) {}
+    const chaveRota = alims.join(',');
+    if (!chaveRota) return;
+    if (chaveRota !== chaveRotaRetentativa) {
+      chaveRotaRetentativa = chaveRota;
+      tentativasRedeCompleta = 0;
+    }
+
+    const faltam = circuitosFaltando();
+    if (!faltam.length || tentativasRedeCompleta >= 6 || !cargaParada()) return;
+
+    tentativasRedeCompleta++;
+    recarregandoRede = true;
+    try {
+      if (typeof showToast === 'function') {
+        showToast('Completando o desenho da rota — faltam ' + faltam.length + ' circuito(s)…', '');
+      }
+      if (typeof window.carregarPostes === 'function') await window.carregarPostes();
+      if (!circuitosFaltando().length && typeof showToast === 'function') {
+        showToast('Rota completa no mapa: todos os circuitos desenhados.', 'success');
+      }
+    } catch (e) {
+      console.warn('VERA completar rede:', e);
+    } finally {
+      recarregandoRede = false;
+    }
+  }
+
+  setInterval(completarRede, 25000);
 })();
