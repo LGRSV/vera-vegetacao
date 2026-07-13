@@ -1,15 +1,18 @@
 (function () {
   'use strict';
 
-  // O mapa do técnico centraliza na posição do GPS (primeira fixação faz
-  // setView no usuário). Quando a equipe está longe da rota — ex.: técnico em
-  // Porto Nacional com a rota de Paraíso carregada — a rede fica fora da tela
-  // e parece que "não carregou nada", mesmo com postes e trechos no aparelho.
+  // O mapa do técnico centraliza na posição do GPS. Quando a equipe está
+  // longe da rota — ex.: técnico em Porto Nacional com a rota de Paraíso —
+  // a rede fica fora da tela e parece que "não carregou nada", mesmo com os
+  // postes e trechos no aparelho.
   //
-  // Este ajuste: (1) ao terminar de carregar a rota, se o usuário estiver a
-  // mais de 3 km dela (ou sem GPS ainda), enquadra a rota e desarma o pulo
-  // automático do GPS; (2) adiciona o botão "Ver rota" no mapa para enquadrar
-  // a rede a qualquer momento. O botão de localização continua levando ao GPS.
+  // Versão determinística: um laço de 2s observa o mapa. Assim que a rota
+  // ativa tem postes desenhados, enquadra a rede UMA vez por rota se o
+  // usuário estiver a mais de 3 km dela (ou sem GPS), desarmando o pulo
+  // automático da primeira fixação do GPS. O botão "Ver rota" fica fixo no
+  // mapa desde que ele existe, para enquadrar a rede a qualquer momento.
+  // (Sem gancho em carregarPostes: numa conexão lenta a captura da chamada
+  // podia falhar e o enquadramento não acontecia.)
 
   if (window.__veraRotaNoMapa) return;
   window.__veraRotaNoMapa = true;
@@ -51,6 +54,16 @@
     return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
+  function usuarioLongeDaRota(b) {
+    try {
+      if (typeof currentLat === 'undefined' || currentLat == null
+        || typeof currentLon === 'undefined' || currentLon == null) return true; // sem GPS ainda
+      const centro = b.getCenter();
+      if (b.pad(0.15).contains([currentLat, currentLon])) return false;
+      return distanciaKm(currentLat, currentLon, centro.lat, centro.lng) > 3;
+    } catch (e) { return true; }
+  }
+
   function enquadrarRota() {
     const m = mapaCampo();
     const b = boundsDaRota();
@@ -62,8 +75,8 @@
 
   function criarBotaoVerRota() {
     const m = mapaCampo();
-    if (!m) return false;
-    if (window.__veraBotaoVerRota && window.__veraBotaoVerRota._map === m) return true;
+    if (!m) return;
+    if (window.__veraBotaoVerRota && window.__veraBotaoVerRota._map === m) return;
 
     const Controle = window.L.Control.extend({
       options: { position: 'bottomleft' },
@@ -86,26 +99,29 @@
 
     window.__veraBotaoVerRota = new Controle();
     window.__veraBotaoVerRota.addTo(m);
-    return true;
   }
 
-  function usuarioLongeDaRota(b) {
-    try {
-      if (typeof currentLat === 'undefined' || currentLat == null
-        || typeof currentLon === 'undefined' || currentLon == null) return true; // sem GPS ainda
-      const centro = b.getCenter();
-      if (b.pad(0.15).contains([currentLat, currentLon])) return false;
-      return distanciaKm(currentLat, currentLon, centro.lat, centro.lng) > 3;
-    } catch (e) { return true; }
-  }
+  let chaveEnquadrada = '';
 
-  function aposCarregarRota() {
+  function laco() {
     criarBotaoVerRota();
-    const b = boundsDaRota();
     const m = mapaCampo();
-    if (!b || !m) return;
+    if (!m) return;
+
+    let alims = [];
+    try { alims = (typeof alimentadoresAtivos !== 'undefined' && alimentadoresAtivos) || []; } catch (e) {}
+    const chave = alims.join(',');
+    if (!chave || chave === chaveEnquadrada) return;
+
+    let temPostes = false;
+    try { temPostes = typeof postesLayer !== 'undefined' && postesLayer && postesLayer.getLayers().length > 0; } catch (e) {}
+    if (!temPostes) return;
+
+    const b = boundsDaRota();
+    if (!b) return;
+
+    chaveEnquadrada = chave; // uma vez por rota
     if (usuarioLongeDaRota(b)) {
-      // Desarma o pulo automático da primeira fixação do GPS: a rota manda.
       try { if (typeof gpsPrimeiraFixacao !== 'undefined') gpsPrimeiraFixacao = false; } catch (e) {}
       enquadrarRota();
       if (typeof showToast === 'function') {
@@ -114,20 +130,5 @@
     }
   }
 
-  function instalarGancho() {
-    if (window.__veraCarregarPostesOriginal) return true;
-    if (typeof window.carregarPostes !== 'function') return false;
-    window.__veraCarregarPostesOriginal = window.carregarPostes;
-    window.carregarPostes = async function () {
-      const ret = await window.__veraCarregarPostesOriginal.apply(this, arguments);
-      try { aposCarregarRota(); } catch (e) { console.warn('VERA rota no mapa:', e); }
-      return ret;
-    };
-    return true;
-  }
-
-  const tentativa = setInterval(function () {
-    if (instalarGancho()) clearInterval(tentativa);
-  }, 400);
-  setTimeout(function () { clearInterval(tentativa); }, 30000);
+  setInterval(laco, 2000);
 })();
