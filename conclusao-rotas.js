@@ -292,6 +292,14 @@
   }
 
   async function atualizarBotaoTecnico() {
+    // Conclusão de rota REMOVIDA do técnico de campo (a pedido): ele concluía
+    // rotas por engano. A partir de agora só o Admin conclui, pelo painel.
+    // Escondemos qualquer versão desta seção que já exista na tela.
+    const existente = document.getElementById('secao-concluir-rota');
+    if (existente) existente.style.display = 'none';
+    return;
+
+    // eslint-disable-next-line no-unreachable
     const secao = garantirSecaoTecnico();
     if (!secao) return;
 

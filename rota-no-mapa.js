@@ -73,32 +73,22 @@
   }
   window.veraEnquadrarRota = enquadrarRota;
 
-  function criarBotaoVerRota() {
-    const m = mapaCampo();
-    if (!m) return;
-    if (window.__veraBotaoVerRota && window.__veraBotaoVerRota._map === m) return;
+  function ehAdminCampo() {
+    try { return typeof currentUser !== 'undefined' && typeof ADMIN_USER !== 'undefined' && currentUser === ADMIN_USER; }
+    catch (e) { return false; }
+  }
 
-    const Controle = window.L.Control.extend({
-      options: { position: 'bottomleft' },
-      onAdd: function () {
-        const botao = window.L.DomUtil.create('button');
-        botao.type = 'button';
-        botao.textContent = '🗺 Ver rota';
-        botao.style.cssText = 'padding:10px 13px;border:0;border-radius:12px;background:#173b2b;color:#fff;'
-          + 'font:700 12px -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;'
-          + 'box-shadow:0 4px 14px rgba(0,0,0,.32);cursor:pointer;margin-bottom:6px;';
-        window.L.DomEvent.disableClickPropagation(botao);
-        botao.addEventListener('click', function () {
-          if (!enquadrarRota() && typeof showToast === 'function') {
-            showToast('A rota ainda está carregando…', 'warning');
-          }
-        });
-        return botao;
-      }
-    });
-
-    window.__veraBotaoVerRota = new Controle();
-    window.__veraBotaoVerRota.addTo(m);
+  // Foco do técnico de campo: apenas ver a rede consolidada da SE Paraíso I
+  // (trechos + postes) e marcar. Esconde o painel de filtros "Visualização"
+  // — o técnico não deve poder ocultar/filtrar camadas por engano. (Admin
+  // mantém os controles.) O mapa continua enquadrando a rota sozinho.
+  function esconderFiltrosDoTecnico() {
+    if (ehAdminCampo()) return;
+    if (document.getElementById('vera-oculta-filtros-tecnico')) return;
+    const st = document.createElement('style');
+    st.id = 'vera-oculta-filtros-tecnico';
+    st.textContent = '#camadas-control{display:none!important;}';
+    (document.head || document.documentElement).appendChild(st);
   }
 
   let chaveEnquadrada = '';
@@ -123,7 +113,7 @@
   }
 
   function laco() {
-    criarBotaoVerRota();
+    esconderFiltrosDoTecnico();
     const m = mapaCampo();
     if (!m) return;
 
