@@ -1,0 +1,32 @@
+{
+  "id": "V20260714143902839214113",
+  "synced": false,
+  "wkt": "POINT (-48.900387 -10.177233)",
+  "data": "14/07/2026, 14:39:01",
+  "poste": "602293",
+  "especie": "Coqueiro",
+  "lat": -10.1772333,
+  "lon": -48.9003867,
+  "altura": "8.5",
+  "dtbt": "300",
+  "dtmt": "250",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260714143902839214113F1",
+    "VER20260714143902839214113F2",
+    "VER20260714143902839214113F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260714143902839214113F1.jpg",
+    "fotos/Enecol-Centro/VER20260714143902839214113F2.jpg",
+    "fotos/Enecol-Centro/VER20260714143902839214113F3.jpg"
+  ],
+  "legacy_id": "V0041",
+  "remote_id": "V20260714143902839214113"
+}
