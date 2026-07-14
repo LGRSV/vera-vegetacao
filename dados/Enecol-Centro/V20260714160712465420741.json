@@ -1,0 +1,32 @@
+{
+  "id": "V20260714160712465420741",
+  "synced": false,
+  "wkt": "POINT (-48.899980 -10.176275)",
+  "data": "14/07/2026, 16:07:10",
+  "poste": "602273",
+  "especie": "Bananeira",
+  "lat": -10.176275,
+  "lon": -48.89998,
+  "altura": "10",
+  "dtbt": "",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "40",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260714160712465420741F1",
+    "VER20260714160712465420741F2",
+    "VER20260714160712465420741F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260714160712465420741F1.jpg",
+    "fotos/Enecol-Centro/VER20260714160712465420741F2.jpg",
+    "fotos/Enecol-Centro/VER20260714160712465420741F3.jpg"
+  ],
+  "legacy_id": "V0074",
+  "remote_id": "V20260714160712465420741"
+}
