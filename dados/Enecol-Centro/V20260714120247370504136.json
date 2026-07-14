@@ -1,0 +1,32 @@
+{
+  "id": "V20260714120247370504136",
+  "synced": false,
+  "wkt": "POINT (-48.900713 -10.182972)",
+  "data": "14/07/2026, 12:02:44",
+  "poste": "604976",
+  "especie": "Mangueira",
+  "lat": -10.1829717,
+  "lon": -48.9007133,
+  "altura": "8.5",
+  "dtbt": "",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "80",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260714120247370504136F1",
+    "VER20260714120247370504136F2",
+    "VER20260714120247370504136F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260714120247370504136F1.jpg",
+    "fotos/Enecol-Centro/VER20260714120247370504136F2.jpg",
+    "fotos/Enecol-Centro/VER20260714120247370504136F3.jpg"
+  ],
+  "legacy_id": "V0039",
+  "remote_id": "V20260714120247370504136"
+}
