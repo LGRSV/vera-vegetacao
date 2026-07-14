@@ -1,1 +1,1 @@
-{"version":"2.6.32","released":"2026-07-14","notes":"Forca repintura do canvas (postes/cabos): a rede desenha na tela em iOS e Android, nao so ao mover o mapa"}
+{"version":"2.6.33","released":"2026-07-14","notes":"Postes e cabos desenhados em SVG (nao canvas): a rede aparece em iOS e Android sempre"}

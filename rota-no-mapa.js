@@ -164,6 +164,37 @@
   }
   window.veraForcarRepaint = forcarRepaint;
 
+  // ——— Desenho em SVG em vez de canvas ───────────────────────────────────
+  // O app desenha postes e cabos com L.canvas. Em vários aparelhos (iOS e
+  // Android) o canvas fica SEM PINTAR: a camada existe e o poste ate abre o
+  // popup ao toque (a camada de toque usa o renderer padrao, que e SVG), mas
+  // o desenho azul nao aparece — nem ao mover/dar zoom no mapa. Trocamos os
+  // renderizadores de postes e cabos para L.svg (DOM, pinta sempre) por meio
+  // de criarPaineisMapa, que e onde eles sao criados, e forcamos um
+  // re-render se a rota ja tinha sido desenhada em canvas.
+  (function usarSVG() {
+    if (typeof window.criarPaineisMapa !== 'function' || !window.L) { setTimeout(usarSVG, 400); return; }
+    if (window.__veraRenderSVG) return;
+    window.__veraRenderSVG = true;
+    const original = window.criarPaineisMapa;
+    window.criarPaineisMapa = function () {
+      original.apply(this, arguments);
+      try {
+        if (typeof map === 'undefined' || !map) return;
+        postesRenderer = window.L.svg({ pane: 'postesPane', padding: 0.5 });
+        caboRendererT1 = window.L.svg({ pane: 'cabosT1Pane', padding: 0.5 });
+        caboRendererT2 = caboRendererT1;
+      } catch (e) { console.warn('VERA render SVG:', e); }
+    };
+    // Se a rota já foi desenhada (em canvas) antes desta troca, redesenha.
+    setTimeout(function () {
+      try {
+        const temAlims = typeof alimentadoresAtivos !== 'undefined' && alimentadoresAtivos && alimentadoresAtivos.length;
+        if (temAlims && typeof window.carregarPostes === 'function') window.carregarPostes();
+      } catch (e) {}
+    }, 400);
+  })();
+
   // Após cada (re)carga de postes, força a repintura — cobre os circuitos que
   // chegam mais tarde em rede lenta e o caso iOS de camada sem desenhar.
   (function engancharRepaint() {
