@@ -1,1 +1,1 @@
-{"version":"2.6.31","released":"2026-07-14","notes":"Selo de versao no login discreto e com a versao real (lida do version.json)"}
+{"version":"2.6.32","released":"2026-07-14","notes":"Forca repintura do canvas (postes/cabos): a rede desenha na tela em iOS e Android, nao so ao mover o mapa"}
