@@ -1,1 +1,1 @@
-{"version":"2.6.33","released":"2026-07-14","notes":"Postes e cabos desenhados em SVG (nao canvas): a rede aparece em iOS e Android sempre"}
+{"version":"2.6.34","released":"2026-07-14","notes":"Cruzamento com o KML mais tolerante (18m): completa os trechos que ficavam vazados"}
