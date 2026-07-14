@@ -134,11 +134,49 @@
     if (usuarioLongeDaRota(b)) {
       try { if (typeof gpsPrimeiraFixacao !== 'undefined') gpsPrimeiraFixacao = false; } catch (e) {}
       enquadrarRota();
-      if (typeof showToast === 'function') {
-        showToast('Rota enquadrada no mapa. Use "🗺 Ver rota" para voltar a ela quando quiser.', '');
-      }
     }
+    // Repinta o canvas (postes/cabos podem ficar "no mapa" mas sem pintar no
+    // iOS ate um movimento). Empurroes escalonados garantem que apareca.
+    [200, 1200, 3000, 6000].forEach(function (ms) { setTimeout(forcarRepaint, ms); });
   }
+
+  // Força o Leaflet a repintar as camadas de canvas (postes e cabos). No
+  // Safari/iOS a camada as vezes fica adicionada mas sem desenhar ate o mapa
+  // se mover; um invalidateSize + micro-pan dispara o redraw sem mudar a vista.
+  function forcarRepaint() {
+    const m = mapaCampo();
+    if (!m) return;
+    try {
+      m.invalidateSize({ animate: false });
+      m.panBy([1, 0], { animate: false });
+      m.panBy([-1, 0], { animate: false });
+    } catch (e) {}
+    // Garantia extra: redesenha diretamente os canvas de postes e cabos.
+    try {
+      const renderers = [];
+      if (typeof postesRenderer !== 'undefined' && postesRenderer) renderers.push(postesRenderer);
+      if (typeof caboRendererT1 !== 'undefined' && caboRendererT1) renderers.push(caboRendererT1);
+      if (typeof caboRendererT2 !== 'undefined' && caboRendererT2) renderers.push(caboRendererT2);
+      renderers.forEach(function (r) {
+        try { if (typeof r._redraw === 'function') r._redraw(); else if (typeof r._update === 'function') r._update(); } catch (e) {}
+      });
+    } catch (e) {}
+  }
+  window.veraForcarRepaint = forcarRepaint;
+
+  // Após cada (re)carga de postes, força a repintura — cobre os circuitos que
+  // chegam mais tarde em rede lenta e o caso iOS de camada sem desenhar.
+  (function engancharRepaint() {
+    if (typeof window.carregarPostes !== 'function') { setTimeout(engancharRepaint, 500); return; }
+    if (window.__veraCarregarPostesRepaint) return;
+    window.__veraCarregarPostesRepaint = true;
+    const original = window.carregarPostes;
+    window.carregarPostes = async function () {
+      const r = await original.apply(this, arguments);
+      [100, 800, 2000].forEach(function (ms) { setTimeout(forcarRepaint, ms); });
+      return r;
+    };
+  })();
 
   setInterval(laco, 2000);
 
