@@ -71,9 +71,32 @@
     }
   }
 
+  // Selo de versão da tela de login: no base.html vem fixo ("v2.6.4") e a
+  // cadeia de patch não o atualiza; em aparelhos antigos aparecia até como um
+  // "chip" arredondado ("VERSÃO 2.6.8"). Aqui deixamos discreto (texto
+  // pequeno, sem fundo/pílula) e com a VERSÃO REAL, lida do version.json.
+  function ajustarSeloVersao() {
+    const sub = document.querySelector('#login-screen .login-subtitle');
+    const selo = sub && sub.nextElementSibling ? sub.nextElementSibling : null;
+    if (!selo) return;
+    selo.style.cssText = 'font-size:10px;font-weight:600;color:rgba(168,213,162,.45);'
+      + 'letter-spacing:.08em;margin-top:6px;background:none;border:0;padding:0;'
+      + 'box-shadow:none;border-radius:0;text-transform:none;display:block;';
+    let versaoLocal = '';
+    try { versaoLocal = (typeof APP_VERSION !== 'undefined') ? APP_VERSION : ''; } catch (e) {}
+    if (versaoLocal) selo.textContent = 'v' + versaoLocal;
+    if (selo.__veraVersaoBuscada) return;
+    selo.__veraVersaoBuscada = true;
+    fetch('https://lgrsv.github.io/vera-vegetacao/version.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (v) { if (v && v.version) selo.textContent = 'v' + v.version; })
+      .catch(function () {});
+  }
+
   function aplicar() {
     injetarEstilos();
     aplicarEmblema();
+    ajustarSeloVersao();
   }
 
   aplicar();
