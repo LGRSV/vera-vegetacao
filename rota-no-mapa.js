@@ -311,4 +311,70 @@
   }
   setInterval(travarFiltroForaDaRede, 1500);
   travarFiltroForaDaRede();
+
+  // ——— Complementa o cruzamento com o KML (trechos "vazados") ─────────────
+  // O app so mostra postes a ate 8 m de um cabo do KML; postes um pouco fora
+  // do tracado sumiam, deixando buracos nos trechos. Aumentamos o alcance do
+  // cruzamento para ~18 m (ainda menos que meia quadra, nao pula pra rua
+  // vizinha), reescrevendo as funcoes que fazem o casamento poste<->cabo, e
+  // reconstruimos os indices ja criados com 8 m.
+  window.__veraDistCabo = 18;
+
+  function veraIndiceCabos(cabos) {
+    const grade = new Map();
+    const alcanceGraus = window.__veraDistCabo / 100000;
+    let totalSegmentos = 0;
+    const incluir = function (a, b, tipo) {
+      if (!Array.isArray(a) || !Array.isArray(b)) return;
+      if (!numeroNoIntervalo(a[0], -180, 180) || !numeroNoIntervalo(a[1], -90, 90)
+        || !numeroNoIntervalo(b[0], -180, 180) || !numeroNoIntervalo(b[1], -90, 90)) return;
+      const lon1 = Number(a[0]), lat1 = Number(a[1]), lon2 = Number(b[0]), lat2 = Number(b[1]);
+      const seg = { lat1: lat1, lon1: lon1, lat2: lat2, lon2: lon2, tipo: tipo };
+      const laMin = Math.min(lat1, lat2) - alcanceGraus, laMax = Math.max(lat1, lat2) + alcanceGraus;
+      const loMin = Math.min(lon1, lon2) - alcanceGraus, loMax = Math.max(lon1, lon2) + alcanceGraus;
+      const li = Math.floor(laMin / GRADE_CABOS_GRAUS), lf = Math.floor(laMax / GRADE_CABOS_GRAUS);
+      const ci = Math.floor(loMin / GRADE_CABOS_GRAUS), cf = Math.floor(loMax / GRADE_CABOS_GRAUS);
+      for (let l = li; l <= lf; l++) for (let c = ci; c <= cf; c++) {
+        const k = l + ':' + c; if (!grade.has(k)) grade.set(k, []); grade.get(k).push(seg);
+      }
+      totalSegmentos++;
+    };
+    ['t1', 't2'].forEach(function (t) {
+      (cabos[t] || []).forEach(function (linha) {
+        if (Array.isArray(linha)) for (let i = 1; i < linha.length; i++) incluir(linha[i - 1], linha[i], t);
+      });
+    });
+    return { grade: grade, totalSegmentos: totalSegmentos };
+  }
+
+  function veraTemCabeamento(poste, indice) {
+    if (!indice || !indice.grade || !validarPoste(poste)) return false;
+    const lat = Number(poste.lat), lon = Number(poste.lon), D = window.__veraDistCabo;
+    const li = Math.floor(lat / GRADE_CABOS_GRAUS), co = Math.floor(lon / GRADE_CABOS_GRAUS);
+    const alc = Math.max(1, Math.ceil((D / 111320) / GRADE_CABOS_GRAUS));
+    for (let i = li - alc; i <= li + alc; i++) for (let j = co - alc; j <= co + alc; j++) {
+      const cand = indice.grade.get(i + ':' + j);
+      if (!cand) continue;
+      for (let n = 0; n < cand.length; n++) if (distanciaPontoSegmentoMetros(lat, lon, cand[n]) <= D) return true;
+    }
+    return false;
+  }
+
+  (function complementarCruzamento() {
+    if (typeof window.criarIndiceCabos !== 'function' || typeof window.posteTemCabeamento !== 'function'
+      || typeof GRADE_CABOS_GRAUS === 'undefined') { setTimeout(complementarCruzamento, 500); return; }
+    if (window.__veraCruzamentoComplementado) return;
+    window.__veraCruzamentoComplementado = true;
+    window.criarIndiceCabos = veraIndiceCabos;
+    window.posteTemCabeamento = veraTemCabeamento;
+    setTimeout(function () {
+      try {
+        if (typeof indicesCabos !== 'undefined' && indicesCabos && typeof cabosCarregados !== 'undefined') {
+          Object.keys(indicesCabos).forEach(function (k) { if (cabosCarregados[k]) indicesCabos[k] = veraIndiceCabos(cabosCarregados[k]); });
+        }
+        const temAlims = typeof alimentadoresAtivos !== 'undefined' && alimentadoresAtivos && alimentadoresAtivos.length;
+        if (temAlims && typeof window.carregarPostes === 'function') window.carregarPostes();
+      } catch (e) { console.warn('VERA complementar cruzamento:', e); }
+    }, 900);
+  })();
 })();
