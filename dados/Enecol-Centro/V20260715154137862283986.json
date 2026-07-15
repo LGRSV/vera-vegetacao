@@ -1,0 +1,32 @@
+{
+  "id": "V20260715154137862283986",
+  "synced": false,
+  "wkt": "POINT (-48.887965 -10.197403)",
+  "data": "15/07/2026, 15:41:35",
+  "poste": "31450123",
+  "especie": "Tamarindo",
+  "lat": -10.1974027,
+  "lon": -48.8879645,
+  "altura": "9",
+  "dtbt": "",
+  "dtmt": "200",
+  "dtat": "0",
+  "dap": "85",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260715154137862283986F1",
+    "VER20260715154137862283986F2",
+    "VER20260715154137862283986F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260715154137862283986F1.jpg",
+    "fotos/Enecol-Centro/VER20260715154137862283986F2.jpg",
+    "fotos/Enecol-Centro/VER20260715154137862283986F3.jpg"
+  ],
+  "legacy_id": "V0183",
+  "remote_id": "V20260715154137862283986"
+}
