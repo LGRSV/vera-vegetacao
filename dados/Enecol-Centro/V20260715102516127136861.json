@@ -1,0 +1,32 @@
+{
+  "id": "V20260715102516127136861",
+  "synced": false,
+  "wkt": "POINT (-48.895138 -10.183735)",
+  "data": "15/07/2026, 10:25:14",
+  "poste": "600650",
+  "especie": "Jatobá",
+  "lat": -10.1837346,
+  "lon": -48.8951381,
+  "altura": "14",
+  "dtbt": "",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "120",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260715102516127136861F1",
+    "VER20260715102516127136861F2",
+    "VER20260715102516127136861F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260715102516127136861F1.jpg",
+    "fotos/Enecol-Centro/VER20260715102516127136861F2.jpg",
+    "fotos/Enecol-Centro/VER20260715102516127136861F3.jpg"
+  ],
+  "legacy_id": "V0131",
+  "remote_id": "V20260715102516127136861"
+}
