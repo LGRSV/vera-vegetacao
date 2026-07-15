@@ -1,0 +1,32 @@
+{
+  "id": "V20260715113155309533788",
+  "synced": false,
+  "wkt": "POINT (-48.890723 -10.192122)",
+  "data": "15/07/2026, 11:31:53",
+  "poste": "128247",
+  "especie": "Babaçu",
+  "lat": -10.1921221,
+  "lon": -48.8907227,
+  "altura": "7",
+  "dtbt": "",
+  "dtmt": "200",
+  "dtat": "0",
+  "dap": "55",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260715113155309533788F1",
+    "VER20260715113155309533788F2",
+    "VER20260715113155309533788F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260715113155309533788F1.jpg",
+    "fotos/Enecol-Centro/VER20260715113155309533788F2.jpg",
+    "fotos/Enecol-Centro/VER20260715113155309533788F3.jpg"
+  ],
+  "legacy_id": "V0150",
+  "remote_id": "V20260715113155309533788"
+}
