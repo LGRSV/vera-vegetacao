@@ -1,0 +1,32 @@
+{
+  "id": "V20260716093331873485855",
+  "synced": false,
+  "wkt": "POINT (-48.878228 -10.194490)",
+  "data": "16/07/2026, 09:33:29",
+  "poste": "31450411",
+  "especie": "Pequi",
+  "lat": -10.19449,
+  "lon": -48.8782283,
+  "altura": "12",
+  "dtbt": "",
+  "dtmt": "250",
+  "dtat": "0",
+  "dap": "110",
+  "area": "URBANO",
+  "acesso": "Não",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260716093331873485855F1",
+    "VER20260716093331873485855F2",
+    "VER20260716093331873485855F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260716093331873485855F1.jpg",
+    "fotos/Enecol-Centro/VER20260716093331873485855F2.jpg",
+    "fotos/Enecol-Centro/VER20260716093331873485855F3.jpg"
+  ],
+  "legacy_id": "V0213",
+  "remote_id": "V20260716093331873485855"
+}
