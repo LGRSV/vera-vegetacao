@@ -1,0 +1,32 @@
+{
+  "id": "V20260716095817944771717",
+  "synced": false,
+  "wkt": "POINT (-48.876670 -10.197199)",
+  "data": "16/07/2026, 09:58:15",
+  "poste": "591011",
+  "especie": "Jaca",
+  "lat": -10.1971993,
+  "lon": -48.8766698,
+  "altura": "8",
+  "dtbt": "",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "100",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260716095817944771717F1",
+    "VER20260716095817944771717F2",
+    "VER20260716095817944771717F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260716095817944771717F1.jpg",
+    "fotos/Enecol-Centro/VER20260716095817944771717F2.jpg",
+    "fotos/Enecol-Centro/VER20260716095817944771717F3.jpg"
+  ],
+  "legacy_id": "V0218",
+  "remote_id": "V20260716095817944771717"
+}
