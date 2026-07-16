@@ -1,0 +1,32 @@
+{
+  "id": "V20260716165114184530853",
+  "synced": false,
+  "wkt": "POINT (-48.883267 -10.181655)",
+  "data": "16/07/2026, 16:51:11",
+  "poste": "1689225",
+  "especie": "Goiaba",
+  "lat": -10.1816552,
+  "lon": -48.8832669,
+  "altura": "5.5",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260716165114184530853F1",
+    "VER20260716165114184530853F2",
+    "VER20260716165114184530853F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260716165114184530853F1.jpg",
+    "fotos/Enecol-Centro/VER20260716165114184530853F2.jpg",
+    "fotos/Enecol-Centro/VER20260716165114184530853F3.jpg"
+  ],
+  "legacy_id": "V0297",
+  "remote_id": "V20260716165114184530853"
+}
