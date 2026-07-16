@@ -1,0 +1,32 @@
+{
+  "id": "V20260716165944734295435",
+  "synced": false,
+  "wkt": "POINT (-48.881928 -10.181950)",
+  "data": "16/07/2026, 16:59:42",
+  "poste": "600750",
+  "especie": "Oiti",
+  "lat": -10.18195,
+  "lon": -48.8819283,
+  "altura": "4.5",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "45",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260716165944734295435F1",
+    "VER20260716165944734295435F2",
+    "VER20260716165944734295435F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260716165944734295435F1.jpg",
+    "fotos/Enecol-Centro/VER20260716165944734295435F2.jpg",
+    "fotos/Enecol-Centro/VER20260716165944734295435F3.jpg"
+  ],
+  "legacy_id": "V0301",
+  "remote_id": "V20260716165944734295435"
+}
