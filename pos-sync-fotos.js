@@ -2,10 +2,14 @@
   'use strict';
 
   // Depois que a sincronizacao termina, o GitHub ja e o arquivo definitivo
-  // (fotos + JSON do ponto). Este modulo entao enxuga o registro LOCAL para
-  // 1 foto por ponto: o ponto continua marcado no mapa com uma foto, e o
-  // aparelho para de acumular as 3 fotos em base64 que estouravam o
-  // armazenamento do tablet.
+  // (fotos + JSON do ponto). Este modulo entao REMOVE as fotos LOCAIS dos
+  // pontos JA ENVIADOS: o ponto continua no mapa (o marcador vem de lat/lon,
+  // nao da foto) e o tablet para de carregar centenas de imagens base64 que
+  // estouravam o armazenamento e deixavam o app travado na hora de coletar.
+  //
+  // Regra de seguranca: so mexe em ponto com r.synced === true (fotos ja
+  // seguras no GitHub). Ponto pendente/nao enviado NUNCA e tocado — as fotos
+  // dele sao a unica copia e precisam subir primeiro.
   if (window.__veraPosSyncFotos) return;
   window.__veraPosSyncFotos = true;
 
@@ -18,10 +22,15 @@
     var enxugados = 0;
     for (var i = 0; i < todos.length; i++) {
       var r = todos[i];
-      // So mexe em ponto ja enviado (as 3 fotos estao seguras no GitHub).
+      // So mexe em ponto JA ENVIADO (fotos seguras no GitHub).
       if (!r || !r.synced) continue;
-      if (!Array.isArray(r.photos) || r.photos.length <= 1) continue;
-      r.photos = [r.photos[0]];
+      // Nada a remover se ja esta sem foto local.
+      if (!Array.isArray(r.photos) || r.photos.length === 0) continue;
+      // Guarda a contagem original (p/ CSV/relatorio) antes de descartar.
+      if (typeof r.fotos_count !== 'number') r.fotos_count = r.photos.length;
+      // Remove TODAS as fotos locais: deixa so o ponto. Alivio maximo de
+      // memoria e armazenamento no tablet, sem apagar nada do GitHub.
+      r.photos = [];
       r.fotosEnxugadasEm = new Date().toISOString();
       try { await dbPut('points', r); enxugados++; } catch (e) {}
     }
@@ -39,7 +48,7 @@
       try {
         var n = await enxugarFotosSincronizadas();
         if (n > 0 && typeof showToast === 'function') {
-          showToast(n + ' ponto(s) enxugado(s): fotos locais reduzidas a 1 por ponto (as 3 seguem no GitHub).', 'success');
+          showToast(n + ' ponto(s) enviados aliviados: fotos locais removidas (seguem no GitHub). App mais leve.', 'success');
         }
       } catch (e) { console.warn('VERA pos-sync fotos:', e); }
       return saida;
@@ -50,13 +59,24 @@
   var tentativa = setInterval(function () { if (instalar()) clearInterval(tentativa); }, 500);
   setTimeout(function () { clearInterval(tentativa); }, 30000);
 
-  // Retroativo: pontos sincronizados antes desta versao sao enxugados na
-  // primeira abertura, liberando espaco imediatamente.
-  setTimeout(function () {
+  // Retroativo: pontos ja enviados antes desta versao tem as fotos locais
+  // removidas assim que o banco fica pronto — libera espaco e destrava o app
+  // sem esperar uma nova sincronizacao. Roda uma unica vez.
+  var jaRodou = false;
+  function limpezaRetroativa() {
+    if (jaRodou || typeof dbGetAll !== 'function' || typeof dbPut !== 'function') return;
+    jaRodou = true;
     enxugarFotosSincronizadas().then(function (n) {
       if (n > 0 && typeof showToast === 'function') {
-        showToast('Armazenamento liberado: ' + n + ' ponto(s) agora com 1 foto local.', 'success');
+        showToast('Armazenamento liberado: fotos locais de ' + n + ' ponto(s) ja enviados foram removidas. App mais leve.', 'success');
       }
-    }).catch(function () {});
-  }, 6000);
+    }).catch(function () { jaRodou = false; });
+  }
+  var tentaLimpeza = setInterval(function () {
+    if (typeof dbGetAll === 'function' && typeof dbPut === 'function') {
+      clearInterval(tentaLimpeza);
+      limpezaRetroativa();
+    }
+  }, 500);
+  setTimeout(function () { clearInterval(tentaLimpeza); }, 30000);
 })();
