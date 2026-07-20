@@ -213,13 +213,27 @@
     return true;
   }
 
+  // Mesma protecao do historico: uma unica cadeia de retentativa (cada
+  // mutacao de DOM criava mais uma cadeia infinita de setTimeout no aparelho
+  // do tecnico, onde o painel admin nunca monta) e observador agrupado.
+  var retentativaAgendada = false;
   function iniciar() {
-    if (!montarPainel()) { setTimeout(iniciar, 300); return; }
+    if (!montarPainel()) {
+      if (retentativaAgendada) return;
+      retentativaAgendada = true;
+      setTimeout(function () { retentativaAgendada = false; iniciar(); }, 300);
+      return;
+    }
     if (!estado.dados) atualizar();
   }
 
+  var mutacaoAgendada = null;
   new MutationObserver(function () {
-    if (!estado.painel || !document.body.contains(estado.painel)) iniciar();
+    if (mutacaoAgendada) return;
+    mutacaoAgendada = setTimeout(function () {
+      mutacaoAgendada = null;
+      if (!estado.painel || !document.body.contains(estado.painel)) iniciar();
+    }, 400);
   }).observe(document.documentElement, { childList: true, subtree: true });
 
   iniciar();

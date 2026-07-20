@@ -69,9 +69,15 @@
 
   aplicar();
   // O app real e montado via document.write depois do loader — garante a
-  // reaplicacao quando o <head> for recriado.
+  // reaplicacao quando o <head> for recriado. Agrupa as rajadas de mutacao
+  // (pan/zoom do mapa dispara milhares) numa verificacao a cada 400ms.
+  var mutacaoAgendada = null;
   new MutationObserver(function () {
-    if (!document.getElementById('vera-ui-ajustes')) aplicar();
+    if (mutacaoAgendada) return;
+    mutacaoAgendada = setTimeout(function () {
+      mutacaoAgendada = null;
+      if (!document.getElementById('vera-ui-ajustes')) aplicar();
+    }, 400);
   }).observe(document.documentElement, { childList: true, subtree: true });
 })();
 

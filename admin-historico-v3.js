@@ -384,13 +384,30 @@
     return true;
   }
 
+  // No aparelho do tecnico o mapa admin nunca existe: garante que so UMA
+  // cadeia de retentativa fique viva (antes, cada mutacao de DOM criava uma
+  // nova cadeia infinita de setTimeout — acumulava centenas de timers e
+  // travava o app com o tempo).
+  var retentativaAgendada = false;
   function iniciar() {
-    if (!montarPainel()) { setTimeout(iniciar, 300); return; }
+    if (!montarPainel()) {
+      if (retentativaAgendada) return;
+      retentativaAgendada = true;
+      setTimeout(function () { retentativaAgendada = false; iniciar(); }, 300);
+      return;
+    }
     setTimeout(function () { desenhar(false); }, 350);
   }
 
+  // Observador global e caro em toda mutacao de DOM (pan/zoom do mapa dispara
+  // milhares); agrupa as rajadas numa unica verificacao a cada 400ms.
+  var mutacaoAgendada = null;
   new MutationObserver(function () {
-    if (!estado.painel || !document.body.contains(estado.painel)) iniciar();
+    if (mutacaoAgendada) return;
+    mutacaoAgendada = setTimeout(function () {
+      mutacaoAgendada = null;
+      if (!estado.painel || !document.body.contains(estado.painel)) iniciar();
+    }, 400);
   }).observe(document.documentElement, { childList: true, subtree: true });
 
   iniciar();
