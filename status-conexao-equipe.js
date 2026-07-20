@@ -16,11 +16,18 @@
   var textoDoStatus = '';
   var timerReversao = null;
 
+  var contagemEmVoo = null;
+
   function contarPendentes() {
     if (typeof window.dbGetAll !== 'function') return Promise.resolve(0);
-    return window.dbGetAll('points').then(function (todos) {
+    // Reaproveita a leitura em andamento: o banco inteiro de pontos (com as
+    // fotos base64 dos pendentes) era relido a cada chamada simultanea.
+    if (contagemEmVoo) return contagemEmVoo;
+    contagemEmVoo = window.dbGetAll('points').then(function (todos) {
+      contagemEmVoo = null;
       return (Array.isArray(todos) ? todos : []).filter(function (p) { return !p.synced; }).length;
-    }).catch(function () { return 0; });
+    }).catch(function () { contagemEmVoo = null; return 0; });
+    return contagemEmVoo;
   }
 
   function textoConexao() {

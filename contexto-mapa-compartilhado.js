@@ -7,18 +7,22 @@
   const nomes = ['currentUser', 'ADMIN_USER', 'rotaAtribuida', 'map', 'adminMap'];
   const VERDE_ENECOL = '#2e8b57';
 
-  function lerGlobal(nome) {
-    try {
-      return window.eval('(typeof ' + nome + ' !== "undefined") ? ' + nome + ' : undefined');
-    } catch (erro) {
-      return undefined;
-    }
-  }
+  // Uma unica expressao montada uma vez e um unico eval por rodada — antes
+  // eram 5 evals a cada 300ms, pesando no aparelho do tecnico. O typeof
+  // protege cada nome individualmente, como no comportamento original.
+  const EXPRESSAO_ESPELHO = '({' + nomes.map(function (nome) {
+    return nome + ': (typeof ' + nome + ' !== "undefined") ? ' + nome + ' : undefined';
+  }).join(', ') + '})';
 
   function espelhar() {
+    let valores;
+    try {
+      valores = window.eval(EXPRESSAO_ESPELHO);
+    } catch (erro) {
+      return;
+    }
     nomes.forEach(function (nome) {
-      const valor = lerGlobal(nome);
-      if (typeof valor !== 'undefined') window[nome] = valor;
+      if (valores && typeof valores[nome] !== 'undefined') window[nome] = valores[nome];
     });
   }
 

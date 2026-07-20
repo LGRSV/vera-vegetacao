@@ -97,6 +97,13 @@
   setTimeout(function () { corrigirContagens().catch(function () {}); }, 2500);
 
   // Mapa e recriado ao navegar entre abas — garante o ajuste de zoom sempre.
-  new MutationObserver(function () { desligarZoomDuploClique(); })
-    .observe(document.documentElement, { childList: true, subtree: true });
+  // Agrupado: rodar em TODA mutacao de DOM pesava no aparelho do tecnico.
+  var mutacaoAgendada = null;
+  new MutationObserver(function () {
+    if (mutacaoAgendada) return;
+    mutacaoAgendada = setTimeout(function () {
+      mutacaoAgendada = null;
+      desligarZoomDuploClique();
+    }, 400);
+  }).observe(document.documentElement, { childList: true, subtree: true });
 })();

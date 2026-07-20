@@ -1,1 +1,1 @@
-{"version":"2.6.34","released":"2026-07-14","notes":"Cruzamento com o KML mais tolerante (18m): completa os trechos que ficavam vazados"}
+{"version":"2.6.35","released":"2026-07-20","notes":"Otimização de desempenho: elimina acúmulo de timers e verificações repetidas que travavam o app no campo. Nenhuma funcionalidade foi alterada."}

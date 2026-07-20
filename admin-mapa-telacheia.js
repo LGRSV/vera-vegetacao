@@ -79,9 +79,15 @@
   var tentativa = setInterval(function () { if (instalar()) clearInterval(tentativa); }, 600);
   setTimeout(function () { clearInterval(tentativa); }, 60000);
 
-  // Se o admin for reaberto/recriado, reinstala o botao.
+  // Se o admin for reaberto/recriado, reinstala o botao. Agrupado a cada
+  // 400ms: rodar em toda mutacao de DOM pesava no aparelho do tecnico.
+  var mutacaoAgendada = null;
   new MutationObserver(function () {
-    var el = document.getElementById('admin-map');
-    if (el && !document.getElementById('vera-fs-botao') && mapaAdmin()) instalar();
+    if (mutacaoAgendada) return;
+    mutacaoAgendada = setTimeout(function () {
+      mutacaoAgendada = null;
+      var el = document.getElementById('admin-map');
+      if (el && !document.getElementById('vera-fs-botao') && mapaAdmin()) instalar();
+    }, 400);
   }).observe(document.documentElement, { childList: true, subtree: true });
 })();
