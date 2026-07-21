@@ -1,0 +1,32 @@
+{
+  "id": "V20260721170049870010772",
+  "synced": false,
+  "wkt": "POINT (-48.885836 -10.154026)",
+  "data": "21/07/2026, 17:00:48",
+  "poste": "622136",
+  "especie": "Outros",
+  "lat": -10.1540264,
+  "lon": -48.8858358,
+  "altura": "6",
+  "dtbt": "300",
+  "dtmt": "",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260721170049870010772F1",
+    "VER20260721170049870010772F2",
+    "VER20260721170049870010772F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260721170049870010772F1.jpg",
+    "fotos/Enecol-Centro/VER20260721170049870010772F2.jpg",
+    "fotos/Enecol-Centro/VER20260721170049870010772F3.jpg"
+  ],
+  "legacy_id": "V0487",
+  "remote_id": "V20260721170049870010772"
+}
