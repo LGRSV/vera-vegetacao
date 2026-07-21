@@ -1,0 +1,32 @@
+{
+  "id": "V20260721151816245457741",
+  "synced": false,
+  "wkt": "POINT (-48.892210 -10.169430)",
+  "data": "21/07/2026, 15:18:15",
+  "poste": "600817",
+  "especie": "Cajueiro",
+  "lat": -10.1694301,
+  "lon": -48.8922096,
+  "altura": "11",
+  "dtbt": "150",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "100",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260721151816245457741F1",
+    "VER20260721151816245457741F2",
+    "VER20260721151816245457741F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260721151816245457741F1.jpg",
+    "fotos/Enecol-Centro/VER20260721151816245457741F2.jpg",
+    "fotos/Enecol-Centro/VER20260721151816245457741F3.jpg"
+  ],
+  "legacy_id": "V0453",
+  "remote_id": "V20260721151816245457741"
+}
