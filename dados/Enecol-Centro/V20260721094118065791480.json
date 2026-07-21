@@ -1,0 +1,32 @@
+{
+  "id": "V20260721094118065791480",
+  "synced": false,
+  "wkt": "POINT (-48.881838 -10.175855)",
+  "data": "21/07/2026, 09:41:17",
+  "poste": "605063",
+  "especie": "Buriti",
+  "lat": -10.175855,
+  "lon": -48.8818383,
+  "altura": "10",
+  "dtbt": "100",
+  "dtmt": "250",
+  "dtat": "0",
+  "dap": "80",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260721094118065791480F1",
+    "VER20260721094118065791480F2",
+    "VER20260721094118065791480F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260721094118065791480F1.jpg",
+    "fotos/Enecol-Centro/VER20260721094118065791480F2.jpg",
+    "fotos/Enecol-Centro/VER20260721094118065791480F3.jpg"
+  ],
+  "legacy_id": "V0421",
+  "remote_id": "V20260721094118065791480"
+}
