@@ -1,0 +1,32 @@
+{
+  "id": "V20260722084213369932508",
+  "synced": false,
+  "wkt": "POINT (-48.887478 -10.160967)",
+  "data": "22/07/2026, 08:42:12",
+  "poste": "39179373",
+  "especie": "Mogno",
+  "lat": -10.1609667,
+  "lon": -48.8874783,
+  "altura": "8",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "80",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260722084213369932508F1",
+    "VER20260722084213369932508F2",
+    "VER20260722084213369932508F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260722084213369932508F1.jpg",
+    "fotos/Enecol-Centro/VER20260722084213369932508F2.jpg",
+    "fotos/Enecol-Centro/VER20260722084213369932508F3.jpg"
+  ],
+  "legacy_id": "V0500",
+  "remote_id": "V20260722084213369932508"
+}
