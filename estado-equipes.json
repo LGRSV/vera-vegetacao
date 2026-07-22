@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-22T22:09:44.372Z",
+  "updatedAt": "2026-07-22T22:10:24.930Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,26 +247,30 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1783940358942",
-        "nomeProjeto": "SE Paraíso I",
+        "rotaId": "1784742085633",
+        "nomeProjeto": "Rota Paraíso SE 2",
         "polo": "CENTRO",
         "alimentadores": [
-          "AL01062013",
-          "AL02062013",
-          "AL03062013",
-          "AL04062013",
-          "AL05062013",
-          "LD01062013",
-          "LD02062013",
-          "LD03062013",
-          "LD04062013",
-          "LD05062013"
+          "LD01004013",
+          "LD02004013"
         ],
-        "iniciadoEm": "2026-07-13T16:14:30.000Z",
-        "atualizadoEm": "2026-07-22T22:09:41.985Z",
+        "iniciadoEm": "2026-07-22T22:10:24.930Z",
+        "atualizadoEm": "2026-07-22T22:10:24.930Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1784742085633",
+          "nomeProjeto": "Rota Paraíso SE 2",
+          "polo": "CENTRO",
+          "alimentadores": [
+            "LD01004013",
+            "LD02004013"
+          ],
+          "data": "2026-07-22T22:10:24.930Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1783940358942",
