@@ -1,1 +1,1 @@
-{"version":"2.6.35","released":"2026-07-20","notes":"Otimização de desempenho: elimina acúmulo de timers e verificações repetidas que travavam o app no campo. Nenhuma funcionalidade foi alterada."}
+{"version":"2.6.36","released":"2026-07-22","notes":"Rota Paraiso SE 2 na base do admin e previa Ver como tecnico no painel"}
