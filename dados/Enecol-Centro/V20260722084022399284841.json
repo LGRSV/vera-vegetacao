@@ -1,0 +1,32 @@
+{
+  "id": "V20260722084022399284841",
+  "synced": false,
+  "wkt": "POINT (-48.887472 -10.161107)",
+  "data": "22/07/2026, 08:40:21",
+  "poste": "39179373",
+  "especie": "Carambola",
+  "lat": -10.1611067,
+  "lon": -48.8874717,
+  "altura": "6.5",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "SE Paraíso I",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260722084022399284841F1",
+    "VER20260722084022399284841F2",
+    "VER20260722084022399284841F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260722084022399284841F1.jpg",
+    "fotos/Enecol-Centro/VER20260722084022399284841F2.jpg",
+    "fotos/Enecol-Centro/VER20260722084022399284841F3.jpg"
+  ],
+  "legacy_id": "V0498",
+  "remote_id": "V20260722084022399284841"
+}
