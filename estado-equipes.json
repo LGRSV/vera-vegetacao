@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-23T20:29:52.000Z",
+  "updatedAt": "2026-07-23T21:38:55.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -381,6 +381,20 @@
       "equipe": "Enecol Centro",
       "nomeProjeto": "Rota Paraíso SE 2",
       "concluidoEm": "2026-07-23T20:29:52.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1784838592693": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Guaraí SE 1",
+      "concluidoEm": "2026-07-23T21:38:55.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1784838593700": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Guaraí SE 2",
+      "concluidoEm": "2026-07-23T21:38:55.000Z",
       "concluidoPor": "Admin"
     }
   }
