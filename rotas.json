@@ -55,34 +55,23 @@
       "editada": "22/07/2026, 15:20:00"
     },
     {
-      "id": 1784838592693,
-      "nomeProjeto": "Rota Guaraí SE 1",
+      "id": 1784842859143,
+      "nomeProjeto": "Rota Guaraí",
       "equipe": "Enecol Centro",
       "polo": "NORTE",
       "alimentadores": [
         "AL01037009",
         "AL02037009",
-        "AL03037009"
-      ],
-      "criada": "23/07/2026, 17:29:52",
-      "criadaPor": "Admin",
-      "editada": "23/07/2026, 17:29:52"
-    },
-    {
-      "id": 1784838593700,
-      "nomeProjeto": "Rota Guaraí SE 2",
-      "equipe": "Enecol Centro",
-      "polo": "NORTE",
-      "alimentadores": [
+        "AL03037009",
         "AL01038009",
         "LD01038009",
         "LD02038009",
         "LD03038009",
         "LD04038009"
       ],
-      "criada": "23/07/2026, 17:29:52",
+      "criada": "23/07/2026, 18:40:59",
       "criadaPor": "Admin",
-      "editada": "23/07/2026, 17:29:52"
+      "editada": "23/07/2026, 18:40:59"
     }
   ]
 }
