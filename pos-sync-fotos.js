@@ -96,3 +96,59 @@
   }, 500);
   setTimeout(function () { clearInterval(tentaLimpeza); }, 30000);
 })();
+
+
+/* =========================================================================
+   Filtro do MAPA do TECNICO — mostra so os pontos da ROTA ATIVA.
+   (Empacotado aqui pra nao reescrever o index.html; e independente do resto.)
+   Ao trocar de rota, o tecnico deixa de ver pontos de rotas antigas — so a
+   rota em que esta trabalhando (ex.: Guarai). NAO apaga nada (so filtra a
+   exibicao), NAO afeta o Admin (usa o mapa admin, que le do GitHub) nem a
+   sincronizacao. Em qualquer erro, cai no comportamento original (mostra tudo).
+   ========================================================================= */
+(function () {
+  'use strict';
+  if (window.__veraFiltroMapaTecnico) return;
+  window.__veraFiltroMapaTecnico = true;
+
+  function popup(r) {
+    return '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;min-width:150px">'
+      + '<div style="font-weight:700;color:#1a2e1a;margin-bottom:4px">' + (r.especie || 'Sem especie') + '</div>'
+      + '<div style="font-size:12px;color:#5a7a55">Poste: ' + (r.poste || '—') + '</div>'
+      + '<div style="font-size:12px;color:#5a7a55">Altura: ' + (r.altura || '—') + 'm</div>'
+      + '<div style="font-size:11px;margin-top:4px;color:' + (r.synced ? '#2d5a27' : '#e8a020') + ';font-weight:600">'
+      + (r.synced ? ' Enviado' : '⏳ Pendente') + '</div>'
+      + ((r.photos && r.photos[0]) ? '<img src="' + r.photos[0] + '" style="width:100%;border-radius:6px;margin-top:8px">' : '')
+      + '</div>';
+  }
+
+  var timer = setInterval(function () {
+    if (typeof window.renderMapPoints !== 'function' || window.__rmpFiltrado) return;
+    window.__rmpFiltrado = true;
+    clearInterval(timer);
+    var original = window.renderMapPoints;
+    window.renderMapPoints = async function () {
+      try {
+        var camada = (typeof pointsLayer !== 'undefined') ? pointsLayer : null;
+        var ativa = (typeof rotaAtribuida !== 'undefined' && rotaAtribuida && rotaAtribuida.nomeProjeto) ? rotaAtribuida.nomeProjeto : null;
+        var isAdmin = (typeof currentUser !== 'undefined' && currentUser === 'Admin');
+        // Sem camada / admin / sem rota ativa → comportamento original (mostra tudo).
+        if (!camada || isAdmin || !ativa) return original.apply(this, arguments);
+        camada.clearLayers();
+        var records = await dbGetAll('points');
+        records.forEach(function (r) {
+          if (!r.lat || !r.lon) return;
+          if (r.projeto !== ativa) return; // esconde pontos de OUTRAS rotas
+          var marker = L.circleMarker([r.lat, r.lon], { radius: 8, fillColor: '#4CAF50', color: '#1a2e1a', weight: 2, fillOpacity: 0.85 });
+          marker.bindPopup(popup(r));
+          camada.addLayer(marker);
+        });
+      } catch (e) {
+        console.warn('VERA filtro-mapa-tecnico:', e);
+        try { return original.apply(this, arguments); } catch (_) {}
+      }
+    };
+    try { window.renderMapPoints(); } catch (e) {}
+  }, 400);
+  setTimeout(function () { clearInterval(timer); }, 30000);
+})();
