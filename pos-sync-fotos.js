@@ -7,9 +7,12 @@
   // nao da foto) e o tablet para de carregar centenas de imagens base64 que
   // estouravam o armazenamento e deixavam o app travado na hora de coletar.
   //
-  // Regra de seguranca: so mexe em ponto com r.synced === true (fotos ja
-  // seguras no GitHub). Ponto pendente/nao enviado NUNCA e tocado — as fotos
-  // dele sao a unica copia e precisam subir primeiro.
+  // TRAVA ANTI-PERDA (critico): o app marca synced=true quando o JSON do
+  // ponto sobe, MESMO que alguma foto tenha falhado no upload. Por isso este
+  // modulo so apaga fotos locais quando o GitHub ja tem pelo menos a mesma
+  // quantidade (fotos_github >= fotos locais). Se qualquer foto ainda nao foi
+  // confirmada no GitHub, mantemos TODAS as locais para reenvio. Ponto
+  // pendente/nao enviado NUNCA e tocado.
   if (window.__veraPosSyncFotos) return;
   window.__veraPosSyncFotos = true;
 
@@ -22,14 +25,27 @@
     var enxugados = 0;
     for (var i = 0; i < todos.length; i++) {
       var r = todos[i];
-      // So mexe em ponto JA ENVIADO (fotos seguras no GitHub).
+      // So mexe em ponto JA ENVIADO.
       if (!r || !r.synced) continue;
       // Nada a remover se ja esta sem foto local.
       if (!Array.isArray(r.photos) || r.photos.length === 0) continue;
+
+      // ===== TRAVA ANTI-PERDA DE DADOS =====
+      // ATENCAO: o app marca synced=true quando o JSON do ponto sobe, MESMO
+      // que alguma FOTO tenha falhado no upload (fotos_github guarda so as
+      // que realmente chegaram ao GitHub). Portanto NUNCA confie so em
+      // synced para apagar foto local. So removemos as fotos locais quando o
+      // GitHub JA TEM pelo menos a mesma quantidade que existe no aparelho.
+      // Se ainda ha foto nao confirmada, mantemos TODAS para reenvio.
+      var confirmadasNoGithub = Array.isArray(r.fotos_github) ? r.fotos_github.length : 0;
+      var locaisReais = r.photos.filter(function (p) {
+        return typeof p === 'string' && p.indexOf('data:') === 0;
+      }).length;
+      if (confirmadasNoGithub < locaisReais) continue; // foto pendente → nao apaga nada
+
       // Guarda a contagem original (p/ CSV/relatorio) antes de descartar.
       if (typeof r.fotos_count !== 'number') r.fotos_count = r.photos.length;
-      // Remove TODAS as fotos locais: deixa so o ponto. Alivio maximo de
-      // memoria e armazenamento no tablet, sem apagar nada do GitHub.
+      // Seguro remover: tudo que estava local ja esta no GitHub.
       r.photos = [];
       r.fotosEnxugadasEm = new Date().toISOString();
       try { await dbPut('points', r); enxugados++; } catch (e) {}
