@@ -100,7 +100,7 @@
 
 /* =========================================================================
    Filtro do TECNICO — mostra so os pontos da ROTA ATIVA, tanto no MAPA quanto
-   na LISTA de Registros (e no contador dela).
+   na LISTA de Registros (contador e badge tambem).
    (Empacotado aqui pra nao reescrever o index.html; e independente do resto.)
    Ao trocar de rota, o tecnico deixa de ver pontos de rotas antigas — so a
    rota em que esta trabalhando (ex.: Guarai). NAO apaga nada (so filtra a
@@ -203,10 +203,37 @@
     try { window.renderRecords(); } catch (e) {}
   }
 
+  // ---- CONTADOR "Status de Sincronizacao" (stat-total / stat-pending / pending-info) ----
+  function wrapStatus() {
+    if (typeof window.updatePendingBadge !== 'function' || window.__upbWrap) return;
+    window.__upbWrap = true;
+    var original = window.updatePendingBadge;
+    window.updatePendingBadge = async function () {
+      try {
+        var ativa = rotaAtiva();
+        if (ehAdmin() || !ativa) return original.apply(this, arguments);
+        var all = (await dbGetAll('points')).filter(function (r) { return r && r.projeto === ativa; });
+        var pending = all.filter(function (r) { return !r.synced; });
+        var info = document.getElementById('pending-info');
+        if (info) {
+          if (pending.length > 0) { info.style.display = 'block'; info.textContent = pending.length + ' pendente' + (pending.length > 1 ? 's' : ''); }
+          else { info.style.display = 'none'; }
+        }
+        var st = document.getElementById('stat-total'); if (st) st.textContent = all.length;
+        var sp = document.getElementById('stat-pending'); if (sp) sp.textContent = pending.length;
+      } catch (e) {
+        console.warn('VERA filtro-status:', e);
+        try { return original.apply(this, arguments); } catch (_) {}
+      }
+    };
+    try { window.updatePendingBadge(); } catch (e) {}
+  }
+
   var timer = setInterval(function () {
     wrapMapa();
     wrapLista();
-    if (window.__rmpWrap && window.__rrWrap) clearInterval(timer);
+    wrapStatus();
+    if (window.__rmpWrap && window.__rrWrap && window.__upbWrap) clearInterval(timer);
   }, 400);
   setTimeout(function () { clearInterval(timer); }, 30000);
 })();
