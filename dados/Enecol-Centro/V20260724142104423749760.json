@@ -1,0 +1,32 @@
+{
+  "id": "V20260724142104423749760",
+  "synced": false,
+  "wkt": "POINT (-48.512593 -8.821725)",
+  "data": "24/07/2026, 14:21:03",
+  "poste": "912533",
+  "especie": "Cajueiro",
+  "lat": -8.821725,
+  "lon": -48.5125933,
+  "altura": "9",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Guaraí",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260724142104423749760F1",
+    "VER20260724142104423749760F2",
+    "VER20260724142104423749760F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260724142104423749760F1.jpg",
+    "fotos/Enecol-Centro/VER20260724142104423749760F2.jpg",
+    "fotos/Enecol-Centro/VER20260724142104423749760F3.jpg"
+  ],
+  "legacy_id": "V0541",
+  "remote_id": "V20260724142104423749760"
+}
