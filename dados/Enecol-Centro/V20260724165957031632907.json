@@ -1,0 +1,32 @@
+{
+  "id": "V20260724165957031632907",
+  "synced": false,
+  "wkt": "POINT (-48.514815 -8.839775)",
+  "data": "24/07/2026, 16:59:56",
+  "poste": "912453",
+  "especie": "Oiti",
+  "lat": -8.839775,
+  "lon": -48.514815,
+  "altura": "5",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "30",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Guaraí",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260724165957031632907F1",
+    "VER20260724165957031632907F2",
+    "VER20260724165957031632907F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260724165957031632907F1.jpg",
+    "fotos/Enecol-Centro/VER20260724165957031632907F2.jpg",
+    "fotos/Enecol-Centro/VER20260724165957031632907F3.jpg"
+  ],
+  "legacy_id": "V0585",
+  "remote_id": "V20260724165957031632907"
+}
