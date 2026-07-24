@@ -99,41 +99,48 @@
 
 
 /* =========================================================================
-   Filtro do MAPA do TECNICO — mostra so os pontos da ROTA ATIVA.
+   Filtro do TECNICO — mostra so os pontos da ROTA ATIVA, tanto no MAPA quanto
+   na LISTA de Registros (e no contador dela).
    (Empacotado aqui pra nao reescrever o index.html; e independente do resto.)
    Ao trocar de rota, o tecnico deixa de ver pontos de rotas antigas — so a
    rota em que esta trabalhando (ex.: Guarai). NAO apaga nada (so filtra a
-   exibicao), NAO afeta o Admin (usa o mapa admin, que le do GitHub) nem a
-   sincronizacao. Em qualquer erro, cai no comportamento original (mostra tudo).
+   exibicao), NAO afeta o Admin (usa o mapa/painel admin, que le do GitHub) nem
+   a sincronizacao. Em qualquer erro, cai no comportamento original (mostra tudo).
    ========================================================================= */
 (function () {
   'use strict';
-  if (window.__veraFiltroMapaTecnico) return;
-  window.__veraFiltroMapaTecnico = true;
+  if (window.__veraFiltroTecnico) return;
+  window.__veraFiltroTecnico = true;
+
+  function rotaAtiva() {
+    return (typeof rotaAtribuida !== 'undefined' && rotaAtribuida && rotaAtribuida.nomeProjeto) ? rotaAtribuida.nomeProjeto : null;
+  }
+  function ehAdmin() {
+    return (typeof currentUser !== 'undefined' && currentUser === 'Admin');
+  }
+  function txt(v) { return (v == null ? '' : String(v)); }
 
   function popup(r) {
     return '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;min-width:150px">'
-      + '<div style="font-weight:700;color:#1a2e1a;margin-bottom:4px">' + (r.especie || 'Sem especie') + '</div>'
-      + '<div style="font-size:12px;color:#5a7a55">Poste: ' + (r.poste || '—') + '</div>'
-      + '<div style="font-size:12px;color:#5a7a55">Altura: ' + (r.altura || '—') + 'm</div>'
+      + '<div style="font-weight:700;color:#1a2e1a;margin-bottom:4px">' + txt(r.especie || 'Sem especie') + '</div>'
+      + '<div style="font-size:12px;color:#5a7a55">Poste: ' + txt(r.poste || '—') + '</div>'
+      + '<div style="font-size:12px;color:#5a7a55">Altura: ' + txt(r.altura || '—') + 'm</div>'
       + '<div style="font-size:11px;margin-top:4px;color:' + (r.synced ? '#2d5a27' : '#e8a020') + ';font-weight:600">'
       + (r.synced ? ' Enviado' : '⏳ Pendente') + '</div>'
       + ((r.photos && r.photos[0]) ? '<img src="' + r.photos[0] + '" style="width:100%;border-radius:6px;margin-top:8px">' : '')
       + '</div>';
   }
 
-  var timer = setInterval(function () {
-    if (typeof window.renderMapPoints !== 'function' || window.__rmpFiltrado) return;
-    window.__rmpFiltrado = true;
-    clearInterval(timer);
+  // ---- MAPA ----
+  function wrapMapa() {
+    if (typeof window.renderMapPoints !== 'function' || window.__rmpWrap) return;
+    window.__rmpWrap = true;
     var original = window.renderMapPoints;
     window.renderMapPoints = async function () {
       try {
         var camada = (typeof pointsLayer !== 'undefined') ? pointsLayer : null;
-        var ativa = (typeof rotaAtribuida !== 'undefined' && rotaAtribuida && rotaAtribuida.nomeProjeto) ? rotaAtribuida.nomeProjeto : null;
-        var isAdmin = (typeof currentUser !== 'undefined' && currentUser === 'Admin');
-        // Sem camada / admin / sem rota ativa → comportamento original (mostra tudo).
-        if (!camada || isAdmin || !ativa) return original.apply(this, arguments);
+        var ativa = rotaAtiva();
+        if (!camada || ehAdmin() || !ativa) return original.apply(this, arguments);
         camada.clearLayers();
         var records = await dbGetAll('points');
         records.forEach(function (r) {
@@ -144,11 +151,62 @@
           camada.addLayer(marker);
         });
       } catch (e) {
-        console.warn('VERA filtro-mapa-tecnico:', e);
+        console.warn('VERA filtro-mapa:', e);
         try { return original.apply(this, arguments); } catch (_) {}
       }
     };
     try { window.renderMapPoints(); } catch (e) {}
+  }
+
+  // ---- LISTA DE REGISTROS ----
+  function wrapLista() {
+    if (typeof window.renderRecords !== 'function' || window.__rrWrap) return;
+    window.__rrWrap = true;
+    var original = window.renderRecords;
+    window.renderRecords = async function () {
+      try {
+        var ativa = rotaAtiva();
+        var listEl = document.getElementById('records-list');
+        var countEl = document.getElementById('records-count');
+        if (ehAdmin() || !ativa || !listEl) return original.apply(this, arguments);
+        var all = await dbGetAll('points');
+        var records = all.filter(function (r) { return r && r.projeto === ativa; });
+        var pending = records.filter(function (r) { return !r.synced; }).length;
+        if (countEl) countEl.textContent = records.length + ' ponto(s) — ' + pending + ' pendente(s)';
+        if (records.length === 0) {
+          listEl.innerHTML = '<div class="empty-state"><div class="empty-icon"></div><p>Nenhum ponto de ' + txt(ativa) + ' ainda.<br>Va em "Novo Ponto" para comecar.</p></div>';
+          return;
+        }
+        listEl.innerHTML = records.slice().reverse().map(function (r) {
+          return '<div class="record-card ' + (r.synced ? 'synced' : 'pending') + '">'
+            + '<div>'
+            + '<div class="record-id">' + txt(r.id) + ' · ' + txt(r.usuario) + '</div>'
+            + '<div class="record-species">' + txt(r.especie || '—') + '</div>'
+            + '<div class="record-meta">'
+            + (r.poste ? '<span class="meta-tag"> ' + txt(r.poste) + '</span>' : '')
+            + (r.altura ? '<span class="meta-tag">↕ ' + txt(r.altura) + 'm</span>' : '')
+            + (r.dap ? '<span class="meta-tag">⊙ ' + txt(r.dap) + 'cm</span>' : '')
+            + '<span class="' + (r.synced ? 'synced-tag' : 'sync-tag') + '">' + (r.synced ? ' Enviado' : '⏳ Pendente') + '</span>'
+            + '</div>'
+            + '<div style="font-size:10px;color:var(--text-muted);margin-top:5px">' + txt(r.data) + '</div>'
+            + '</div>'
+            + '<div>'
+            + ((r.photos && r.photos[0]) ? '<img class="record-thumb" src="' + r.photos[0] + '">' : '<div class="record-no-photo"></div>')
+            + '</div>'
+            + '</div>';
+        }).join('');
+      } catch (e) {
+        console.warn('VERA filtro-lista:', e);
+        try { return original.apply(this, arguments); } catch (_) {}
+      }
+    };
+    try { window.renderRecords(); } catch (e) {}
+  }
+
+  var timer = setInterval(function () {
+    wrapMapa();
+    wrapLista();
+    if (window.__rmpWrap && window.__rrWrap) clearInterval(timer);
   }, 400);
   setTimeout(function () { clearInterval(timer); }, 30000);
 })();
