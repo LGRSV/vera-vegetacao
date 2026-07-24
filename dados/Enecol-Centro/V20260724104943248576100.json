@@ -1,6 +1,6 @@
 {
   "id": "V20260724104943248576100",
-  "synced": false,
+  "synced": true,
   "wkt": "POINT (-48.890917 -10.181962)",
   "data": "16/07/2026, 15:29:26",
   "poste": "616164",
@@ -16,7 +16,7 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "SE Paraíso I",
-  "syncedAt": null,
+  "syncedAt": "2026-07-24T13:50:00.905Z",
   "fotos_ids": [],
   "fotos_github": [],
   "fotosEnxugadasEm": "2026-07-17T12:42:44.615Z",
