@@ -1,6 +1,6 @@
 {
   "id": "V20260727103801643655302",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-48.514304 -8.839987)",
   "data": "27/07/2026, 10:38:01",
   "poste": "912957",
@@ -16,7 +16,6 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Guaraí",
-  "syncedAt": "2026-07-27T13:38:08.732Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260727103801643655302F1",
