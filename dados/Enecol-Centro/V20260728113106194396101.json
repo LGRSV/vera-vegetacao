@@ -1,0 +1,32 @@
+{
+  "id": "V20260728113106194396101",
+  "synced": false,
+  "wkt": "POINT (-48.502275 -8.839268)",
+  "data": "28/07/2026, 11:31:05",
+  "poste": "924243",
+  "especie": "Mogno",
+  "lat": -8.8392684,
+  "lon": -48.5022751,
+  "altura": "8",
+  "dtbt": "",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "80",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Guaraí",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260728113106194396101F1",
+    "VER20260728113106194396101F2",
+    "VER20260728113106194396101F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260728113106194396101F1.jpg",
+    "fotos/Enecol-Centro/VER20260728113106194396101F2.jpg",
+    "fotos/Enecol-Centro/VER20260728113106194396101F3.jpg"
+  ],
+  "legacy_id": "V0699",
+  "remote_id": "V20260728113106194396101"
+}
