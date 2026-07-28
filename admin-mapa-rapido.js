@@ -98,20 +98,6 @@
       + '</div></div>';
   }
 
-  // Renderer de CANVAS compartilhado: desenha milhares de "pontinhos verdes"
-  // (circleMarker) numa única tela, em vez de criar 1 elemento HTML (divIcon)
-  // por ponto. Com +1800 pontos, os divIcon travavam/não apareciam no celular;
-  // o canvas mostra tudo instantaneamente. É o mesmo tipo de marcador (leve,
-  // vetorial) que o mapa do técnico usa.
-  var _rendererCanvas = null;
-  function rendererCanvas() {
-    if (_rendererCanvas) return _rendererCanvas;
-    if (window.L && typeof window.L.canvas === 'function') {
-      _rendererCanvas = window.L.canvas({ padding: 0.5 });
-    }
-    return _rendererCanvas; // pode ser null → circleMarker usa o renderer padrão (SVG)
-  }
-
   async function carregarPontosAdminRapido() {
     if (typeof iniciarMapaAdmin === 'function') iniciarMapaAdmin();
     var info = document.getElementById('admin-map-info');
@@ -134,9 +120,11 @@
     }
 
     var shas = await pegarShasPastas(repo, headers);
-    var rc = rendererCanvas();
 
     adminMapLayer.clearLayers();
+    // Limpa a "rede" azul (Ver Rede) e a prévia, pra os pontos VERDES de
+    // vegetação aparecerem limpos — que é o que o painel deve mostrar.
+    try { if (window._adminRedeLayer && window._adminRedeLayer.clearLayers) window._adminRedeLayer.clearLayers(); } catch (e) {}
     var bounds = [];
     var total = 0;
     var contPorEquipe = {};
@@ -162,9 +150,10 @@
         for (var p = 0; p < pontos.length; p++) {
           var pt = pontos[p];
           if (!pt || !pt.lat || !pt.lon) continue;
-          var opts = { radius: 6, fillColor: '#2E7D32', color: '#ffffff', weight: 2, fillOpacity: 0.9 };
-          if (rc) opts.renderer = rc;
-          window.L.circleMarker([pt.lat, pt.lon], opts)
+          // Renderizador PADRÃO (SVG) — o mesmo que desenha as linhas azuis da
+          // rede, que comprovadamente aparecem. Assim os pontos verdes aparecem
+          // onde as linhas aparecem (inclusive no computador).
+          window.L.circleMarker([pt.lat, pt.lon], { radius: 6, fillColor: '#2E7D32', color: '#ffffff', weight: 2, fillOpacity: 0.9 })
             .bindPopup(popupPonto(pt, eq), { maxWidth: 230 })
             .addTo(adminMapLayer);
           bounds.push([pt.lat, pt.lon]);
