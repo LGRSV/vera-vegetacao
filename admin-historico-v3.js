@@ -141,6 +141,30 @@
       .sort(function (a, b) { return a.localeCompare(b, 'pt-BR', { numeric: true }); });
   }
 
+  // Git Trees API: lista TODOS os arquivos da pasta, sem o teto de 1000 da API
+  // de "contents". Essencial agora que a Enecol-Centro passou de 1000 pontos —
+  // sem isto, os pontos mais recentes (Guaraí, ordenados por timestamp) ficavam
+  // de fora e não apareciam no histórico.
+  async function caminhosViaTree() {
+    var partes = PASTA.replace(/\/$/, '').split('/');
+    var folder = partes.pop();
+    var pai = partes.join('/');
+    var rIndice = await fetch('https://api.github.com/repos/' + REPO + '/contents/' + pai + '?ref=main&t=' + Date.now(),
+      { cache: 'no-store', headers: { Accept: 'application/vnd.github+json' } });
+    if (!rIndice.ok) throw new Error('Trees índice HTTP ' + rIndice.status);
+    var itens = await rIndice.json();
+    var alvo = (Array.isArray(itens) ? itens : []).filter(function (x) { return x.name === folder && x.type === 'dir'; })[0];
+    if (!alvo || !alvo.sha) throw new Error('pasta não encontrada na árvore');
+    var rTree = await fetch('https://api.github.com/repos/' + REPO + '/git/trees/' + alvo.sha + '?t=' + Date.now(),
+      { cache: 'no-store', headers: { Accept: 'application/vnd.github+json' } });
+    if (!rTree.ok) throw new Error('Trees HTTP ' + rTree.status);
+    var dados = await rTree.json();
+    var arvore = (dados && dados.tree) || [];
+    return arvore.filter(function (t) { return t.path && t.path.charAt(0) === 'V' && /\.json$/i.test(t.path); })
+      .map(function (t) { return PASTA + t.path; })
+      .sort(function (a, b) { return a.localeCompare(b, 'pt-BR', { numeric: true }); });
+  }
+
   async function caminhosFallback() {
     var resposta = await fetch(raw('backups/historico-enecol-centro.json') + '?t=' + Date.now(), { cache: 'no-store' });
     if (!resposta.ok) throw new Error('Backup estático HTTP ' + resposta.status);
@@ -153,6 +177,15 @@
 
   async function descobrirCaminhos() {
     var falhas = [];
+    // 1º: Git Trees API — completa e sempre fresca (sem teto de 1000, inclui os
+    // pontos mais recentes). Antes o índice público (CDN) vinha na frente e
+    // podia estar defasado/incompleto, escondendo os pontos de hoje.
+    try {
+      var arvore = await caminhosViaTree();
+      if (arvore.length) return arvore;
+      falhas.push('árvore Git sem arquivos');
+    } catch (erroTree) { falhas.push(String(erroTree.message || erroTree)); }
+
     try {
       var cdn = await caminhosViaCdn();
       if (cdn.length) return cdn;
