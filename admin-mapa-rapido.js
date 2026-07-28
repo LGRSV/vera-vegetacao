@@ -2,25 +2,29 @@
   'use strict';
 
   // ============================================================================
-  // MAPA DO ADMIN — CARREGAMENTO RÁPIDO (paralelo em lotes)
+  // MAPA DO ADMIN — CARREGAMENTO COMPLETO E RÁPIDO
   // ----------------------------------------------------------------------------
-  // O carregarPontosAdmin() original do app buscava CADA ponto (V*.json) do
-  // GitHub em SÉRIE (await fetch dentro de um for). Com a Enecol-Centro passando
-  // de 1800 pontos isso levava 4-5 minutos por equipe (pior em "Todas"), e o
-  // mapa do admin parecia que "não aparecia" / ficava eternamente carregando.
+  // Dois problemas do carregarPontosAdmin() original:
+  //  (1) LISTAGEM: usava a API de "contents", que LIMITA diretório a 1000
+  //      arquivos. A Enecol-Centro passou de 1800 pontos → os ~800 mais
+  //      recentes (ordenados por nome/timestamp = os de HOJE, Guaraí) ficavam
+  //      FORA da listagem e o admin não os via.
+  //  (2) VELOCIDADE: baixava cada ponto em SÉRIE (await dentro de for) → minutos.
   //
-  // Este módulo substitui window.carregarPontosAdmin por uma versão que baixa os
-  // JSONs em PARALELO, em lotes (CONCURRENCY por vez) — cai de minutos para
-  // poucos segundos. Comportamento visual idêntico ao original: mesmos ícones
-  // por equipe (sigla), mesmos popups, legenda, enquadramento (fitBounds) e o
-  // texto de "N ponto(s) encontrado(s)". Não toca no app core; só troca a função.
-  // Em qualquer erro, cai no comportamento original (se existir).
+  // Correção:
+  //  - LISTAGEM via Git Trees API (git/trees/<sha-da-pasta>) — devolve TODOS os
+  //    arquivos, sem o teto de 1000.
+  //  - DOWNLOAD dos JSONs em PARALELO, em lotes (CONCURRENCY por vez) — segundos.
+  //  - Token é OPCIONAL (repositório é público): usa se houver, senão segue sem.
+  //
+  // Comportamento visual idêntico ao original (ícones por equipe, popups,
+  // legenda, enquadramento). Não toca no app core. Em erro, loga e não quebra.
   // ============================================================================
 
   if (window.__veraAdminMapaRapido) return;
   window.__veraAdminMapaRapido = true;
 
-  var CONCURRENCY = 40; // fetches simultâneos de pontos por lote
+  var CONCURRENCY = 40; // downloads simultâneos de pontos por lote
 
   var SIGLAS = {
     'Equipe Energisa': 'ENE',
@@ -44,6 +48,37 @@
     }
     var repo = (cfg && cfg.repo) || repoBase();
     return { token: token, repo: repo };
+  }
+
+  function rawBaseDe(repo) {
+    return (typeof GITHUB_RAW !== 'undefined' && GITHUB_RAW)
+      ? GITHUB_RAW
+      : 'https://raw.githubusercontent.com/' + repo + '/main';
+  }
+
+  // Lista os SHAs das pastas dentro de dados/ (poucos itens → sem teto).
+  async function pegarShasPastas(repo, headers) {
+    try {
+      var r = await fetch('https://api.github.com/repos/' + repo + '/contents/dados', { headers: headers });
+      if (!r.ok) return {};
+      var arr = await r.json();
+      var map = {};
+      if (Array.isArray(arr)) arr.forEach(function (x) { if (x.type === 'dir') map[x.name] = x.sha; });
+      return map;
+    } catch (e) { return {}; }
+  }
+
+  // Lista TODOS os V*.json de uma pasta via Git Trees API (sem teto de 1000).
+  async function listarPontosDaPasta(repo, headers, sha) {
+    try {
+      var r = await fetch('https://api.github.com/repos/' + repo + '/git/trees/' + sha, { headers: headers });
+      if (!r.ok) return [];
+      var d = await r.json();
+      var tree = (d && d.tree) || [];
+      return tree.filter(function (t) {
+        return t.path && t.path.charAt(0) === 'V' && t.path.slice(-5) === '.json';
+      }).map(function (t) { return t.path; });
+    } catch (e) { return []; }
   }
 
   function popupPonto(pt, eq) {
@@ -76,16 +111,6 @@
     });
   }
 
-  // Baixa uma leva de arquivos em paralelo e devolve os pontos válidos.
-  async function baixarLote(arquivos) {
-    var resultados = await Promise.all(arquivos.map(function (arq) {
-      return fetch(arq.download_url + '?t=' + Date.now(), { cache: 'no-store' })
-        .then(function (rp) { return rp.ok ? rp.json() : null; })
-        .catch(function () { return null; });
-    }));
-    return resultados.filter(function (pt) { return pt && pt.lat && pt.lon; });
-  }
-
   async function carregarPontosAdminRapido() {
     if (typeof iniciarMapaAdmin === 'function') iniciarMapaAdmin();
     var info = document.getElementById('admin-map-info');
@@ -95,7 +120,8 @@
 
     var tr = await pegarTokenRepo();
     var token = tr.token, repo = tr.repo;
-    if (!token) { if (info) info.textContent = 'Token não configurado.'; return; }
+    var headers = token ? { 'Authorization': 'token ' + token } : {};
+    var rawBase = rawBaseDe(repo);
 
     var equipes = (equipe === '__todas__')
       ? ['Equipe Energisa', 'Enecol Norte', 'Enecol Centro', 'Enecol Sul']
@@ -105,38 +131,37 @@
       if (info) info.textContent = 'Mapa não iniciado.';
       return;
     }
-    adminMapLayer.clearLayers();
 
+    var shas = await pegarShasPastas(repo, headers);
+
+    adminMapLayer.clearLayers();
     var bounds = [];
     var total = 0;
     var contPorEquipe = {};
 
     for (var e = 0; e < equipes.length; e++) {
       var eq = equipes[e];
-      var pasta = 'dados/' + eq.replace(/\s+/g, '-');
+      var folder = eq.replace(/\s+/g, '-');
       var sigla = SIGLAS[eq] || eq.charAt(0);
       var icon = iconeEquipe(sigla);
       contPorEquipe[eq] = 0;
 
-      var arquivos = [];
-      try {
-        var r = await fetch('https://api.github.com/repos/' + repo + '/contents/' + pasta,
-          { headers: { 'Authorization': 'token ' + token } });
-        if (!r.ok) { console.warn('Pasta não encontrada:', pasta, r.status); continue; }
-        var lista = await r.json();
-        if (!Array.isArray(lista)) continue;
-        arquivos = lista.filter(function (a) { return a.name && a.name.charAt(0) === 'V' && a.name.slice(-5) === '.json'; });
-      } catch (err) {
-        console.warn('Erro pasta', pasta, err);
-        continue;
-      }
+      var sha = shas[folder];
+      if (!sha) { continue; } // pasta inexistente para esta equipe
 
-      // Baixa em lotes paralelos (rápido), com progresso ao vivo.
-      for (var i = 0; i < arquivos.length; i += CONCURRENCY) {
-        var lote = arquivos.slice(i, i + CONCURRENCY);
-        var pontos = await baixarLote(lote);
+      var nomes = await listarPontosDaPasta(repo, headers, sha);
+      if (!nomes.length) continue;
+
+      for (var i = 0; i < nomes.length; i += CONCURRENCY) {
+        var lote = nomes.slice(i, i + CONCURRENCY);
+        var pontos = await Promise.all(lote.map(function (nome) {
+          return fetch(rawBase + '/dados/' + folder + '/' + nome + '?t=' + Date.now(), { cache: 'no-store' })
+            .then(function (rp) { return rp.ok ? rp.json() : null; })
+            .catch(function () { return null; });
+        }));
         for (var p = 0; p < pontos.length; p++) {
           var pt = pontos[p];
+          if (!pt || !pt.lat || !pt.lon) continue;
           window.L.marker([pt.lat, pt.lon], { icon: icon })
             .bindPopup(popupPonto(pt, eq), { maxWidth: 230 })
             .addTo(adminMapLayer);
@@ -144,7 +169,7 @@
           total++;
           contPorEquipe[eq]++;
         }
-        if (info) info.textContent = 'Carregando pontos… ' + Math.min(i + CONCURRENCY, arquivos.length) + '/' + arquivos.length + (equipes.length > 1 ? ' (' + eq + ')' : '');
+        if (info) info.textContent = 'Carregando pontos… ' + Math.min(i + CONCURRENCY, nomes.length) + '/' + nomes.length + (equipes.length > 1 ? ' (' + eq + ')' : '');
       }
     }
 
