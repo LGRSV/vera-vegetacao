@@ -1,0 +1,32 @@
+{
+  "id": "V20260728150832523930905",
+  "synced": false,
+  "wkt": "POINT (-48.501918 -8.842516)",
+  "data": "28/07/2026, 15:08:31",
+  "poste": "1854741",
+  "especie": "Abacateiro",
+  "lat": -8.8425156,
+  "lon": -48.5019181,
+  "altura": "16",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "120",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Guaraí",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260728150832523930905F1",
+    "VER20260728150832523930905F2",
+    "VER20260728150832523930905F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260728150832523930905F1.jpg",
+    "fotos/Enecol-Centro/VER20260728150832523930905F2.jpg",
+    "fotos/Enecol-Centro/VER20260728150832523930905F3.jpg"
+  ],
+  "legacy_id": "V0714",
+  "remote_id": "V20260728150832523930905"
+}
