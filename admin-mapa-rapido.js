@@ -27,9 +27,14 @@
     if (proj !== GUARAI || !fotos) return '';
     var base = 'https://raw.githubusercontent.com/' + REPO + '/main/fotos/' + PASTA + '/VER' + String(id).slice(1) + 'F';
     var h = '<div style="font-size:11px;font-weight:700;margin:6px 0 3px">Fotos (' + fotos + ')</div>';
+    h += '<div style="display:flex;gap:4px;flex-wrap:wrap">';
     for (var n = 1; n <= fotos; n++) {
-      h += '<img src="' + base + n + '.jpg" style="width:100%;border-radius:6px;margin-top:5px;display:block;background:#eee;min-height:40px" onerror="this.alt=\'foto indisponível\';this.style.minHeight=\'0\'">';
+      var url = base + n + '.jpg';
+      h += '<a href="' + url + '" target="_blank" rel="noopener" style="flex:0 0 auto;line-height:0">'
+        + '<img src="' + url + '" title="Toque para ampliar" style="width:66px;height:66px;object-fit:cover;border-radius:5px;background:#eee" onerror="this.alt=\'sem foto\';this.style.width=\'auto\'">'
+        + '</a>';
     }
+    h += '</div>';
     return h;
   }
 
