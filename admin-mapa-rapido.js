@@ -98,17 +98,18 @@
       + '</div></div>';
   }
 
-  function iconeEquipe(sigla) {
-    return window.L.divIcon({
-      className: '',
-      html: '<div style="background:#2E7D32;color:#fff;border:2px solid #fff;border-radius:50%;'
-        + 'width:24px;height:24px;display:flex;align-items:center;justify-content:center;'
-        + 'font-size:8px;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,0.3);'
-        + 'font-family:-apple-system,sans-serif;">' + sigla + '</div>',
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -14]
-    });
+  // Renderer de CANVAS compartilhado: desenha milhares de "pontinhos verdes"
+  // (circleMarker) numa única tela, em vez de criar 1 elemento HTML (divIcon)
+  // por ponto. Com +1800 pontos, os divIcon travavam/não apareciam no celular;
+  // o canvas mostra tudo instantaneamente. É o mesmo tipo de marcador (leve,
+  // vetorial) que o mapa do técnico usa.
+  var _rendererCanvas = null;
+  function rendererCanvas() {
+    if (_rendererCanvas) return _rendererCanvas;
+    if (window.L && typeof window.L.canvas === 'function') {
+      _rendererCanvas = window.L.canvas({ padding: 0.5 });
+    }
+    return _rendererCanvas; // pode ser null → circleMarker usa o renderer padrão (SVG)
   }
 
   async function carregarPontosAdminRapido() {
@@ -133,6 +134,7 @@
     }
 
     var shas = await pegarShasPastas(repo, headers);
+    var rc = rendererCanvas();
 
     adminMapLayer.clearLayers();
     var bounds = [];
@@ -142,8 +144,6 @@
     for (var e = 0; e < equipes.length; e++) {
       var eq = equipes[e];
       var folder = eq.replace(/\s+/g, '-');
-      var sigla = SIGLAS[eq] || eq.charAt(0);
-      var icon = iconeEquipe(sigla);
       contPorEquipe[eq] = 0;
 
       var sha = shas[folder];
@@ -162,7 +162,9 @@
         for (var p = 0; p < pontos.length; p++) {
           var pt = pontos[p];
           if (!pt || !pt.lat || !pt.lon) continue;
-          window.L.marker([pt.lat, pt.lon], { icon: icon })
+          var opts = { radius: 6, fillColor: '#2E7D32', color: '#ffffff', weight: 2, fillOpacity: 0.9 };
+          if (rc) opts.renderer = rc;
+          window.L.circleMarker([pt.lat, pt.lon], opts)
             .bindPopup(popupPonto(pt, eq), { maxWidth: 230 })
             .addTo(adminMapLayer);
           bounds.push([pt.lat, pt.lon]);

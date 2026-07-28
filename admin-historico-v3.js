@@ -223,7 +223,7 @@
     try {
       var caminhos = await descobrirCaminhos();
       status('Carregando ' + caminhos.length + ' ponto(s) preservado(s)…');
-      var resultados = await emLotes(caminhos, 12, function (caminho) {
+      var resultados = await emLotes(caminhos, 40, function (caminho) {
         return fetch(raw(caminho) + '?t=' + Date.now(), { cache: 'no-store' })
           .then(function (resposta) {
             if (!resposta.ok) throw new Error(caminho.split('/').pop() + ' · HTTP ' + resposta.status);
