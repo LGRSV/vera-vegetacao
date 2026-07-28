@@ -1,0 +1,32 @@
+{
+  "id": "V20260728145149561451559",
+  "synced": false,
+  "wkt": "POINT (-48.501040 -8.841977)",
+  "data": "28/07/2026, 14:51:48",
+  "poste": "1774959",
+  "especie": "Ipê",
+  "lat": -8.8419767,
+  "lon": -48.50104,
+  "altura": "9",
+  "dtbt": "",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Guaraí",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260728145149561451559F1",
+    "VER20260728145149561451559F2",
+    "VER20260728145149561451559F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260728145149561451559F1.jpg",
+    "fotos/Enecol-Centro/VER20260728145149561451559F2.jpg",
+    "fotos/Enecol-Centro/VER20260728145149561451559F3.jpg"
+  ],
+  "legacy_id": "V0710",
+  "remote_id": "V20260728145149561451559"
+}
