@@ -28,7 +28,7 @@
     var base = 'https://raw.githubusercontent.com/' + REPO + '/main/fotos/' + PASTA + '/VER' + String(id).slice(1) + 'F';
     var h = '<div style="font-size:11px;font-weight:700;margin:6px 0 3px">Fotos (' + fotos + ')</div>';
     for (var n = 1; n <= fotos; n++) {
-      h += '<img src="' + base + n + '.jpg" loading="lazy" style="width:100%;border-radius:6px;margin-top:5px;display:block" onerror="this.style.display=\'none\'">';
+      h += '<img src="' + base + n + '.jpg" style="width:100%;border-radius:6px;margin-top:5px;display:block;background:#eee;min-height:40px" onerror="this.alt=\'foto indisponível\';this.style.minHeight=\'0\'">';
     }
     return h;
   }
