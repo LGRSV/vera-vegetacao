@@ -1,0 +1,32 @@
+{
+  "id": "V20260729164053745675077",
+  "synced": false,
+  "wkt": "POINT (-48.504521 -8.852369)",
+  "data": "29/07/2026, 16:40:52",
+  "poste": "123960",
+  "especie": "Goiaba",
+  "lat": -8.8523692,
+  "lon": -48.5045206,
+  "altura": "8",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "80",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Guaraí",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260729164053745675077F1",
+    "VER20260729164053745675077F2",
+    "VER20260729164053745675077F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260729164053745675077F1.jpg",
+    "fotos/Enecol-Centro/VER20260729164053745675077F2.jpg",
+    "fotos/Enecol-Centro/VER20260729164053745675077F3.jpg"
+  ],
+  "legacy_id": "V0795",
+  "remote_id": "V20260729164053745675077"
+}
