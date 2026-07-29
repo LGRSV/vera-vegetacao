@@ -1,0 +1,32 @@
+{
+  "id": "V20260729143331974573921",
+  "synced": false,
+  "wkt": "POINT (-48.511642 -8.833753)",
+  "data": "29/07/2026, 14:33:30",
+  "poste": "913202",
+  "especie": "Coqueiro",
+  "lat": -8.8337531,
+  "lon": -48.5116418,
+  "altura": "5",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "90",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Guaraí",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260729143331974573921F1",
+    "VER20260729143331974573921F2",
+    "VER20260729143331974573921F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260729143331974573921F1.jpg",
+    "fotos/Enecol-Centro/VER20260729143331974573921F2.jpg",
+    "fotos/Enecol-Centro/VER20260729143331974573921F3.jpg"
+  ],
+  "legacy_id": "V0754",
+  "remote_id": "V20260729143331974573921"
+}
