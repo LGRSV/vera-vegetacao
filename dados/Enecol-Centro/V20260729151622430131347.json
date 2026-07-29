@@ -1,0 +1,32 @@
+{
+  "id": "V20260729151622430131347",
+  "synced": false,
+  "wkt": "POINT (-48.508926 -8.835050)",
+  "data": "29/07/2026, 15:16:21",
+  "poste": "913477",
+  "especie": "Mangueira",
+  "lat": -8.83505,
+  "lon": -48.5089263,
+  "altura": "15",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "160",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Guaraí",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260729151622430131347F1",
+    "VER20260729151622430131347F2",
+    "VER20260729151622430131347F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260729151622430131347F1.jpg",
+    "fotos/Enecol-Centro/VER20260729151622430131347F2.jpg",
+    "fotos/Enecol-Centro/VER20260729151622430131347F3.jpg"
+  ],
+  "legacy_id": "V0773",
+  "remote_id": "V20260729151622430131347"
+}
