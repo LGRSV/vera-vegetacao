@@ -1,0 +1,32 @@
+{
+  "id": "V20260730101118571039711",
+  "synced": false,
+  "wkt": "POINT (-48.509182 -8.844075)",
+  "data": "30/07/2026, 10:11:17",
+  "poste": "912527",
+  "especie": "Buriti",
+  "lat": -8.844075,
+  "lon": -48.5091817,
+  "altura": "17",
+  "dtbt": "300",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "120",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Guaraí",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260730101118571039711F1",
+    "VER20260730101118571039711F2",
+    "VER20260730101118571039711F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260730101118571039711F1.jpg",
+    "fotos/Enecol-Centro/VER20260730101118571039711F2.jpg",
+    "fotos/Enecol-Centro/VER20260730101118571039711F3.jpg"
+  ],
+  "legacy_id": "V0818",
+  "remote_id": "V20260730101118571039711"
+}
