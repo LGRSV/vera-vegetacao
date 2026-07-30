@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-30T18:38:19.941Z",
+  "updatedAt": "2026-07-30T19:48:12.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,24 +247,38 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1784842859143",
-        "nomeProjeto": "Rota Guaraí",
+        "rotaId": "1785440892497",
+        "nomeProjeto": "Rota SE Colinas",
         "polo": "NORTE",
         "alimentadores": [
-          "AL01037009",
-          "AL02037009",
-          "AL03037009",
-          "AL01038009",
-          "LD01038009",
-          "LD02038009",
-          "LD03038009",
-          "LD04038009"
+          "AL01020023",
+          "AL02020023",
+          "AL03020023",
+          "AL04020023",
+          "AL06020023",
+          "LD01020023"
         ],
-        "iniciadoEm": "2026-07-23T21:40:59.000Z",
-        "atualizadoEm": "2026-07-30T18:38:16.775Z",
-        "atualizadoPor": "Enecol Centro"
+        "iniciadoEm": "2026-07-30T19:48:12.000Z",
+        "atualizadoEm": "2026-07-30T19:48:12.000Z",
+        "atualizadoPor": "Admin"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1785440892497",
+          "nomeProjeto": "Rota SE Colinas",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01020023",
+            "AL02020023",
+            "AL03020023",
+            "AL04020023",
+            "AL06020023",
+            "LD01020023"
+          ],
+          "data": "2026-07-30T19:48:12.000Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1784842859143",
@@ -416,6 +430,13 @@
       "equipe": "Enecol Centro",
       "nomeProjeto": "Rota Paraíso SE 2",
       "concluidoEm": "2026-07-23T20:29:52.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1784842859143": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Guaraí",
+      "concluidoEm": "2026-07-30T19:48:12.000Z",
       "concluidoPor": "Admin"
     }
   }
