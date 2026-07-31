@@ -1,0 +1,32 @@
+{
+  "id": "V20260731140137088232561",
+  "synced": false,
+  "wkt": "POINT (-48.497277 -8.038843)",
+  "data": "31/07/2026, 14:01:36",
+  "poste": "1123877",
+  "especie": "Jatobá",
+  "lat": -8.0388433,
+  "lon": -48.4972767,
+  "altura": "14",
+  "dtbt": "",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "120",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota SE Colinas",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260731140137088232561F1",
+    "VER20260731140137088232561F2",
+    "VER20260731140137088232561F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260731140137088232561F1.jpg",
+    "fotos/Enecol-Centro/VER20260731140137088232561F2.jpg",
+    "fotos/Enecol-Centro/VER20260731140137088232561F3.jpg"
+  ],
+  "legacy_id": "V0852",
+  "remote_id": "V20260731140137088232561"
+}
