@@ -1,0 +1,32 @@
+{
+  "id": "V20260731152441182422605",
+  "synced": false,
+  "wkt": "POINT (-48.496944 -8.048768)",
+  "data": "31/07/2026, 15:24:40",
+  "poste": "1758507",
+  "especie": "Mogno",
+  "lat": -8.0487681,
+  "lon": -48.4969438,
+  "altura": "11",
+  "dtbt": "",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota SE Colinas",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260731152441182422605F1",
+    "VER20260731152441182422605F2",
+    "VER20260731152441182422605F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260731152441182422605F1.jpg",
+    "fotos/Enecol-Centro/VER20260731152441182422605F2.jpg",
+    "fotos/Enecol-Centro/VER20260731152441182422605F3.jpg"
+  ],
+  "legacy_id": "V0874",
+  "remote_id": "V20260731152441182422605"
+}
