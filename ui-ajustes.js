@@ -94,6 +94,16 @@
   if (window.__veraForcaAtualizacao) return;
   window.__veraForcaAtualizacao = true;
 
+  // DESATIVADO a pedido: a faixa "Nova versão X disponível — toque para
+  // atualizar" virava uma faixa fantasma / recarregava sozinho, porque o
+  // index.html (bootstrap) roda uma versão fixa e o version.json fica em outra,
+  // então a divergência nunca some. Além disso este verificador é REDUNDANTE:
+  // o próprio bootstrap já desregistra o Service Worker, limpa o cache e busca
+  // o app fresco a cada abertura — não há como ficar preso em versão velha.
+  // Mantemos os "Ajustes de interface" (IIFE acima) ativos; só o verificador
+  // de versão foi desligado. Reative removendo este return se voltar a ser útil.
+  return;
+
   var URL_VERSAO = 'https://lgrsv.github.io/vera-vegetacao/version.json';
 
   function versaoRodando() {
