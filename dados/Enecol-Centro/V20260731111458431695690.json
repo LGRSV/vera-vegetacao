@@ -1,0 +1,32 @@
+{
+  "id": "V20260731111458431695690",
+  "synced": false,
+  "wkt": "POINT (-48.497197 -8.037773)",
+  "data": "31/07/2026, 11:14:57",
+  "poste": "1123879",
+  "especie": "Cajueiro",
+  "lat": -8.0377728,
+  "lon": -48.4971965,
+  "altura": "7",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota SE Colinas",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260731111458431695690F1",
+    "VER20260731111458431695690F2",
+    "VER20260731111458431695690F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260731111458431695690F1.jpg",
+    "fotos/Enecol-Centro/VER20260731111458431695690F2.jpg",
+    "fotos/Enecol-Centro/VER20260731111458431695690F3.jpg"
+  ],
+  "legacy_id": "V0848",
+  "remote_id": "V20260731111458431695690"
+}
