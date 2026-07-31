@@ -1,25 +1,6 @@
 {
   "rotas": [
     {
-      "id": 1784842859143,
-      "nomeProjeto": "Rota Guaraí",
-      "equipe": "Enecol Centro",
-      "polo": "NORTE",
-      "alimentadores": [
-        "AL01037009",
-        "AL02037009",
-        "AL03037009",
-        "AL01038009",
-        "LD01038009",
-        "LD02038009",
-        "LD03038009",
-        "LD04038009"
-      ],
-      "criada": "23/07/2026, 18:40:59",
-      "criadaPor": "Admin",
-      "editada": "23/07/2026, 18:40:59"
-    },
-    {
       "id": 1785440892497,
       "nomeProjeto": "Rota SE Colinas",
       "equipe": "Enecol Centro",
