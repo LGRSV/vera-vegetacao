@@ -1,0 +1,32 @@
+{
+  "id": "V20260803143853169415380",
+  "synced": false,
+  "wkt": "POINT (-48.504122 -8.055924)",
+  "data": "03/08/2026, 14:38:52",
+  "poste": "874048",
+  "especie": "Mangueira",
+  "lat": -8.0559239,
+  "lon": -48.5041221,
+  "altura": "9.5",
+  "dtbt": "0",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "85",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota SE Colinas",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260803143853169415380F1",
+    "VER20260803143853169415380F2",
+    "VER20260803143853169415380F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260803143853169415380F1.jpg",
+    "fotos/Enecol-Centro/VER20260803143853169415380F2.jpg",
+    "fotos/Enecol-Centro/VER20260803143853169415380F3.jpg"
+  ],
+  "legacy_id": "V0922",
+  "remote_id": "V20260803143853169415380"
+}
