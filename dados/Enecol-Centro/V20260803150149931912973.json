@@ -1,0 +1,32 @@
+{
+  "id": "V20260803150149931912973",
+  "synced": false,
+  "wkt": "POINT (-48.499690 -8.055817)",
+  "data": "03/08/2026, 15:01:48",
+  "poste": "874039",
+  "especie": "Coqueiro",
+  "lat": -8.0558166,
+  "lon": -48.4996902,
+  "altura": "8.5",
+  "dtbt": "100",
+  "dtmt": "150",
+  "dtat": "0",
+  "dap": "65",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota SE Colinas",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260803150149931912973F1",
+    "VER20260803150149931912973F2",
+    "VER20260803150149931912973F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260803150149931912973F1.jpg",
+    "fotos/Enecol-Centro/VER20260803150149931912973F2.jpg",
+    "fotos/Enecol-Centro/VER20260803150149931912973F3.jpg"
+  ],
+  "legacy_id": "V0935",
+  "remote_id": "V20260803150149931912973"
+}
