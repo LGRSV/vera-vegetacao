@@ -1,6 +1,6 @@
 {
   "id": "V20260804111046524712795",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-48.464155 -8.040169)",
   "data": "04/08/2026, 11:10:39",
   "poste": "870012",
@@ -16,7 +16,6 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota SE Colinas",
-  "syncedAt": "2026-08-04T14:11:11.813Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260804111046524712795F1",
