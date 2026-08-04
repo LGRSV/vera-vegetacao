@@ -1,0 +1,32 @@
+{
+  "id": "V20260804144911431758212",
+  "synced": false,
+  "wkt": "POINT (-48.474522 -8.054676)",
+  "data": "04/08/2026, 14:49:10",
+  "poste": "873084",
+  "especie": "Oiti",
+  "lat": -8.0546762,
+  "lon": -48.4745223,
+  "altura": "5.5",
+  "dtbt": "250",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota SE Colinas",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260804144911431758212F1",
+    "VER20260804144911431758212F2",
+    "VER20260804144911431758212F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260804144911431758212F1.jpg",
+    "fotos/Enecol-Centro/VER20260804144911431758212F2.jpg",
+    "fotos/Enecol-Centro/VER20260804144911431758212F3.jpg"
+  ],
+  "legacy_id": "V1012",
+  "remote_id": "V20260804144911431758212"
+}
