@@ -1,0 +1,32 @@
+{
+  "id": "V20260804111816319075861",
+  "synced": false,
+  "wkt": "POINT (-48.464163 -8.041172)",
+  "data": "04/08/2026, 11:18:15",
+  "poste": "871337",
+  "especie": "Goiaba",
+  "lat": -8.0411717,
+  "lon": -48.4641633,
+  "altura": "3",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "35",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota SE Colinas",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260804111816319075861F1",
+    "VER20260804111816319075861F2",
+    "VER20260804111816319075861F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260804111816319075861F1.jpg",
+    "fotos/Enecol-Centro/VER20260804111816319075861F2.jpg",
+    "fotos/Enecol-Centro/VER20260804111816319075861F3.jpg"
+  ],
+  "legacy_id": "V1004",
+  "remote_id": "V20260804111816319075861"
+}
