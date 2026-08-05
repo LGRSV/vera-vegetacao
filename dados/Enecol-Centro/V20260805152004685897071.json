@@ -1,0 +1,32 @@
+{
+  "id": "V20260805152004685897071",
+  "synced": false,
+  "wkt": "POINT (-48.484000 -8.052723)",
+  "data": "05/08/2026, 15:20:03",
+  "poste": "897940",
+  "especie": "Babaçu",
+  "lat": -8.0527232,
+  "lon": -48.484,
+  "altura": "12",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota SE Colinas",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260805152004685897071F1",
+    "VER20260805152004685897071F2",
+    "VER20260805152004685897071F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260805152004685897071F1.jpg",
+    "fotos/Enecol-Centro/VER20260805152004685897071F2.jpg",
+    "fotos/Enecol-Centro/VER20260805152004685897071F3.jpg"
+  ],
+  "legacy_id": "V1130",
+  "remote_id": "V20260805152004685897071"
+}
