@@ -1,0 +1,32 @@
+{
+  "id": "V20260805143449596080287",
+  "synced": false,
+  "wkt": "POINT (-48.482600 -8.050530)",
+  "data": "05/08/2026, 14:34:48",
+  "poste": "328586",
+  "especie": "Buriti",
+  "lat": -8.05053,
+  "lon": -48.4826,
+  "altura": "4",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota SE Colinas",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260805143449596080287F1",
+    "VER20260805143449596080287F2",
+    "VER20260805143449596080287F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260805143449596080287F1.jpg",
+    "fotos/Enecol-Centro/VER20260805143449596080287F2.jpg",
+    "fotos/Enecol-Centro/VER20260805143449596080287F3.jpg"
+  ],
+  "legacy_id": "V1110",
+  "remote_id": "V20260805143449596080287"
+}
