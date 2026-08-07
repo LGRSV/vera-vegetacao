@@ -1,0 +1,18 @@
+name: Exportar fotos Enecol Centro
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  exportar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fotos-enecol-centro
+          path: fotos/Enecol-Centro
+          if-no-files-found: error
+          retention-days: 1
