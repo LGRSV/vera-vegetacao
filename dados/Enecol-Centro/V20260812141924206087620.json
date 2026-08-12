@@ -1,0 +1,32 @@
+{
+  "id": "V20260812141924206087620",
+  "synced": false,
+  "wkt": "POINT (-48.491542 -8.048942)",
+  "data": "12/08/2026, 14:19:23",
+  "poste": "902313",
+  "especie": "Outros",
+  "lat": -8.0489423,
+  "lon": -48.4915417,
+  "altura": "6",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota SE Colinas",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260812141924206087620F1",
+    "VER20260812141924206087620F2",
+    "VER20260812141924206087620F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260812141924206087620F1.jpg",
+    "fotos/Enecol-Centro/VER20260812141924206087620F2.jpg",
+    "fotos/Enecol-Centro/VER20260812141924206087620F3.jpg"
+  ],
+  "legacy_id": "V1419",
+  "remote_id": "V20260812141924206087620"
+}
