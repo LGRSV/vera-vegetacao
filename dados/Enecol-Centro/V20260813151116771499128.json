@@ -1,0 +1,32 @@
+{
+  "id": "V20260813151116771499128",
+  "synced": false,
+  "wkt": "POINT (-48.759825 -8.729831)",
+  "data": "13/08/2026, 15:11:15",
+  "poste": "947660",
+  "especie": "Outros",
+  "lat": -8.7298315,
+  "lon": -48.759825,
+  "altura": "3",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Colméia",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260813151116771499128F1",
+    "VER20260813151116771499128F2",
+    "VER20260813151116771499128F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260813151116771499128F1.jpg",
+    "fotos/Enecol-Centro/VER20260813151116771499128F2.jpg",
+    "fotos/Enecol-Centro/VER20260813151116771499128F3.jpg"
+  ],
+  "legacy_id": "V1473",
+  "remote_id": "V20260813151116771499128"
+}
