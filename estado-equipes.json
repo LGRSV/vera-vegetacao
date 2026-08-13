@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-12T13:18:26.371Z",
+  "updatedAt": "2026-08-13T01:22:44.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,22 +247,32 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1785440892497",
-        "nomeProjeto": "Rota SE Colinas",
+        "rotaId": "1786561104228",
+        "nomeProjeto": "Rota Colméia",
         "polo": "NORTE",
         "alimentadores": [
-          "AL01020023",
-          "AL02020023",
-          "AL03020023",
-          "AL04020023",
-          "AL06020023",
-          "LD01020023"
+          "AL01022033",
+          "LD02022033",
+          "LD03022033"
         ],
-        "iniciadoEm": "2026-07-30T19:48:12.000Z",
-        "atualizadoEm": "2026-08-12T13:17:47.498Z",
-        "atualizadoPor": "Enecol Centro"
+        "iniciadoEm": "2026-08-13T01:22:44.000Z",
+        "atualizadoEm": "2026-08-13T01:22:44.000Z",
+        "atualizadoPor": "Admin"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1786561104228",
+          "nomeProjeto": "Rota Colméia",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01022033",
+            "LD02022033",
+            "LD03022033"
+          ],
+          "data": "2026-08-13T01:22:44.000Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1785440892497",
@@ -437,6 +447,13 @@
       "equipe": "Enecol Centro",
       "nomeProjeto": "Rota Guaraí",
       "concluidoEm": "2026-07-30T19:48:12.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1785440892497": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota SE Colinas",
+      "concluidoEm": "2026-08-13T01:22:44.000Z",
       "concluidoPor": "Admin"
     }
   }
