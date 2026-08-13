@@ -1,0 +1,32 @@
+{
+  "id": "V20260813113953853102349",
+  "synced": false,
+  "wkt": "POINT (-48.746992 -8.744067)",
+  "data": "13/08/2026, 11:39:52",
+  "poste": "1121762",
+  "especie": "Pequi",
+  "lat": -8.7440668,
+  "lon": -48.7469923,
+  "altura": "11",
+  "dtbt": "200",
+  "dtmt": "250",
+  "dtat": "0",
+  "dap": "75",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Colméia",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260813113953853102349F1",
+    "VER20260813113953853102349F2",
+    "VER20260813113953853102349F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260813113953853102349F1.jpg",
+    "fotos/Enecol-Centro/VER20260813113953853102349F2.jpg",
+    "fotos/Enecol-Centro/VER20260813113953853102349F3.jpg"
+  ],
+  "legacy_id": "V1442",
+  "remote_id": "V20260813113953853102349"
+}
