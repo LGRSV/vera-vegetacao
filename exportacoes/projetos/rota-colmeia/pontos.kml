@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Rota Colméia — pontos VERA</name>
+<Placemark><name>V20260813111120194739372 — Oiti</name><description><![CDATA[Espécie: Oiti<br/>Poste: 1299742<br/>Área: URBANO<br/>Altura: 5 m · DAP:  cm<br/>Dist. BT/MT/AT: 200/300/0 cm<br/>Equipe: Enecol Centro · 13/08/2026, 11:11:19<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20260813111120194739372F1.jpg">Foto</a>]]></description><Point><coordinates>-48.7488804,-8.7459858,0</coordinates></Point></Placemark>
+</Document></kml>
