@@ -1,6 +1,6 @@
 {
   "id": "V20260813111120194739372",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-48.748880 -8.745986)",
   "data": "13/08/2026, 11:11:19",
   "poste": "1299742",
@@ -16,7 +16,6 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Colméia",
-  "syncedAt": "2026-08-13T14:11:36.290Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260813111120194739372F1",
