@@ -1,0 +1,32 @@
+{
+  "id": "V20260813111937773452218",
+  "synced": false,
+  "wkt": "POINT (-48.747732 -8.745624)",
+  "data": "13/08/2026, 11:19:36",
+  "poste": "1299741",
+  "especie": "Mangueira",
+  "lat": -8.7456244,
+  "lon": -48.7477322,
+  "altura": "8",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Colméia",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260813111937773452218F1",
+    "VER20260813111937773452218F2",
+    "VER20260813111937773452218F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260813111937773452218F1.jpg",
+    "fotos/Enecol-Centro/VER20260813111937773452218F2.jpg",
+    "fotos/Enecol-Centro/VER20260813111937773452218F3.jpg"
+  ],
+  "legacy_id": "V1437",
+  "remote_id": "V20260813111937773452218"
+}
