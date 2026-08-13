@@ -421,14 +421,24 @@
   // cadeia de retentativa fique viva (antes, cada mutacao de DOM criava uma
   // nova cadeia infinita de setTimeout — acumulava centenas de timers e
   // travava o app com o tempo).
+  // A cadeia tambem PARA depois de um tempo sem conseguir montar: este painel
+  // depende de #admin-map, que no aparelho do tecnico nunca existe — antes a
+  // retentativa de 300ms seguia viva o turno inteiro (~3 timers por segundo,
+  // 100 a cada 30 s) gastando bateria a toa. O MutationObserver abaixo segue
+  // vigiando de graca: se o mapa do admin aparecer, o painel e montado na
+  // hora e o contador zera.
   var retentativaAgendada = false;
+  var tentativas = 0;
+  var LIMITE_TENTATIVAS = 60; // ~18 s, de sobra para o painel do admin surgir
   function iniciar() {
     if (!montarPainel()) {
-      if (retentativaAgendada) return;
+      if (retentativaAgendada || tentativas >= LIMITE_TENTATIVAS) return;
+      tentativas++;
       retentativaAgendada = true;
       setTimeout(function () { retentativaAgendada = false; iniciar(); }, 300);
       return;
     }
+    tentativas = 0;
     setTimeout(function () { desenhar(false); }, 350);
   }
 
