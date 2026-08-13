@@ -209,7 +209,7 @@
     };
   })();
 
-  setInterval(laco, 2000);
+  // (o agendamento fica no fim do arquivo: um unico timer para as 3 rotinas)
 
   // ——— Rede completa: retenta circuitos que falharam de baixar ───────────
   // O app carrega os circuitos um a um; quando um download falha (rede móvel
@@ -282,7 +282,7 @@
     }
   }
 
-  setInterval(completarRede, 25000);
+  // (chamado pelo timer unico do fim do arquivo, a cada ~25 s)
 
   // ——— Remove o filtro "Postes fora da rede" ─────────────────────────────
   // Esse botao inverte a visao: mostra os postes LONGE do cabo e esconde a
@@ -309,8 +309,67 @@
       }
     } catch (e) { console.warn('VERA travar filtro:', e); }
   }
-  setInterval(travarFiltroForaDaRede, 1500);
   travarFiltroForaDaRede();
+
+  // ——— Um unico timer, com ritmo adaptativo ──────────────────────────────
+  // Antes eram tres setInterval perpetuos (1,5 s / 2 s / 25 s): ~33 mil
+  // execucoes num turno de 8 h, todas mexendo no DOM — a mesma familia de
+  // problema que travava o app no campo. Agora e um so timer:
+  //   · 2 s enquanto a rota carrega/estabiliza (enquadrar, completar rede);
+  //   · 15 s depois de estavel, so vigiando (filtro travado, rota intacta);
+  //   · volta na hora para o ritmo rapido quando a equipe entra numa rota
+  //     (gancho em confirmarAlimentadores), sem esperar o proximo tique.
+  const RAPIDO = 2000, LENTO = 15000, PERIODO_COMPLETAR = 25000;
+  let timerTique = null, proximoCompletar = 0, forcarRapidoAte = 0;
+
+  function estaEstavel() {
+    try {
+      const alims = (typeof alimentadoresAtivos !== 'undefined' && alimentadoresAtivos) || [];
+      if (!alims.length) return true;                       // sem rota: nada a fazer
+      if (alims.join(',') !== chaveEnquadrada) return false; // rota nova: acelera
+      if (circuitosFaltando().length) return false;          // ainda baixando
+      return true;
+    } catch (e) { return false; }
+  }
+
+  async function tique() {
+    try {
+      esconderFiltrosDoTecnico();
+      travarFiltroForaDaRede();
+      laco();
+      if (Date.now() >= proximoCompletar) {
+        proximoCompletar = Date.now() + PERIODO_COMPLETAR;
+        await completarRede();
+      }
+    } catch (e) { console.warn('VERA tique:', e); }
+    agendar();
+  }
+
+  function agendar() {
+    if (timerTique) clearTimeout(timerTique);
+    const rapido = Date.now() < forcarRapidoAte || !estaEstavel();
+    timerTique = setTimeout(tique, rapido ? RAPIDO : LENTO);
+  }
+
+  function acelerar(ms) {            // volta ao ritmo rapido por um periodo
+    forcarRapidoAte = Date.now() + (ms || 60000);
+    agendar();
+  }
+
+  // Entrar numa rota reacelera na hora (nao espera o tique lento).
+  (function engancharEntrada() {
+    if (typeof window.confirmarAlimentadores !== 'function') { setTimeout(engancharEntrada, 500); return; }
+    if (window.__veraTiqueEntradaHook) return;
+    window.__veraTiqueEntradaHook = true;
+    const original = window.confirmarAlimentadores;
+    window.confirmarAlimentadores = async function () {
+      const r = await original.apply(this, arguments);
+      try { acelerar(90000); } catch (e) {}
+      return r;
+    };
+  })();
+
+  agendar();
 
   // ——— Complementa o cruzamento com o KML (trechos "vazados") ─────────────
   // O app so mostra postes a ate 8 m de um cabo do KML; postes um pouco fora
