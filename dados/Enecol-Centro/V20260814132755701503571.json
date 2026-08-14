@@ -1,0 +1,32 @@
+{
+  "id": "V20260814132755701503571",
+  "synced": false,
+  "wkt": "POINT (-48.756553 -8.731657)",
+  "data": "14/08/2026, 13:27:54",
+  "poste": "74518082",
+  "especie": "Oiti",
+  "lat": -8.7316567,
+  "lon": -48.7565533,
+  "altura": "9",
+  "dtbt": "0",
+  "dtmt": "150",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Colméia",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260814132755701503571F1",
+    "VER20260814132755701503571F2",
+    "VER20260814132755701503571F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260814132755701503571F1.jpg",
+    "fotos/Enecol-Centro/VER20260814132755701503571F2.jpg",
+    "fotos/Enecol-Centro/VER20260814132755701503571F3.jpg"
+  ],
+  "legacy_id": "V1482",
+  "remote_id": "V20260814132755701503571"
+}
