@@ -1,0 +1,32 @@
+{
+  "id": "V20260814145448806143512",
+  "synced": false,
+  "wkt": "POINT (-48.758305 -8.733507)",
+  "data": "14/08/2026, 14:54:47",
+  "poste": "139775",
+  "especie": "Babaçu",
+  "lat": -8.7335067,
+  "lon": -48.758305,
+  "altura": "10",
+  "dtbt": "300",
+  "dtmt": "250",
+  "dtat": "0",
+  "dap": "55",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Colméia",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260814145448806143512F1",
+    "VER20260814145448806143512F2",
+    "VER20260814145448806143512F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260814145448806143512F1.jpg",
+    "fotos/Enecol-Centro/VER20260814145448806143512F2.jpg",
+    "fotos/Enecol-Centro/VER20260814145448806143512F3.jpg"
+  ],
+  "legacy_id": "V1503",
+  "remote_id": "V20260814145448806143512"
+}
