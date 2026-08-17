@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-17T23:02:12.000Z",
+  "updatedAt": "2026-08-17T23:10:36.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -246,8 +246,35 @@
       ]
     },
     "Enecol Centro": {
-      "projetoAtivo": null,
+      "projetoAtivo": {
+        "rotaId": "1787008208468",
+        "nomeProjeto": "Rota Pedro Afonso",
+        "polo": "NORTE",
+        "alimentadores": [
+          "AL01065015",
+          "AL02065015",
+          "LD01065015",
+          "LD02065015"
+        ],
+        "iniciadoEm": "2026-08-17T23:10:36.000Z",
+        "atualizadoEm": "2026-08-17T23:10:36.000Z",
+        "atualizadoPor": "Admin"
+      },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1787008208468",
+          "nomeProjeto": "Rota Pedro Afonso",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01065015",
+            "AL02065015",
+            "LD01065015",
+            "LD02065015"
+          ],
+          "data": "2026-08-17T23:10:36.000Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1786561104228",

@@ -30,6 +30,21 @@
       "criada": "12/08/2026, 15:58:24",
       "criadaPor": "Admin",
       "editada": "12/08/2026, 22:22:44"
+    },
+    {
+      "id": 1787008208468,
+      "nomeProjeto": "Rota Pedro Afonso",
+      "equipe": "Enecol Centro",
+      "polo": "NORTE",
+      "alimentadores": [
+        "AL01065015",
+        "AL02065015",
+        "LD01065015",
+        "LD02065015"
+      ],
+      "criada": "17/08/2026, 20:10:08",
+      "criadaPor": "Admin",
+      "editada": "17/08/2026, 20:10:08"
     }
   ]
 }
