@@ -1,0 +1,32 @@
+{
+  "id": "V20260817102952667479792",
+  "synced": false,
+  "wkt": "POINT (-48.750179 -8.739335)",
+  "data": "17/08/2026, 10:29:51",
+  "poste": "936061",
+  "especie": "Buriti",
+  "lat": -8.739335,
+  "lon": -48.7501791,
+  "altura": "9.5",
+  "dtbt": "0",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Colméia",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260817102952667479792F1",
+    "VER20260817102952667479792F2",
+    "VER20260817102952667479792F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260817102952667479792F1.jpg",
+    "fotos/Enecol-Centro/VER20260817102952667479792F2.jpg",
+    "fotos/Enecol-Centro/VER20260817102952667479792F3.jpg"
+  ],
+  "legacy_id": "V1540",
+  "remote_id": "V20260817102952667479792"
+}
