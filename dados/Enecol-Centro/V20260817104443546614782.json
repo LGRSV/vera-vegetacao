@@ -1,0 +1,32 @@
+{
+  "id": "V20260817104443546614782",
+  "synced": false,
+  "wkt": "POINT (-48.749401 -8.740354)",
+  "data": "17/08/2026, 10:44:42",
+  "poste": "948062",
+  "especie": "Mogno",
+  "lat": -8.740354,
+  "lon": -48.7494009,
+  "altura": "9",
+  "dtbt": "200",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Colméia",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260817104443546614782F1",
+    "VER20260817104443546614782F2",
+    "VER20260817104443546614782F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260817104443546614782F1.jpg",
+    "fotos/Enecol-Centro/VER20260817104443546614782F2.jpg",
+    "fotos/Enecol-Centro/VER20260817104443546614782F3.jpg"
+  ],
+  "legacy_id": "V1544",
+  "remote_id": "V20260817104443546614782"
+}
