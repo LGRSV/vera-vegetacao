@@ -1,0 +1,32 @@
+{
+  "id": "V20260817110916497277348",
+  "synced": false,
+  "wkt": "POINT (-48.764270 -8.732173)",
+  "data": "17/08/2026, 11:09:15",
+  "poste": "950556",
+  "especie": "Coqueiro",
+  "lat": -8.7321733,
+  "lon": -48.76427,
+  "altura": "7",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "45",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Colméia",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260817110916497277348F1",
+    "VER20260817110916497277348F2",
+    "VER20260817110916497277348F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260817110916497277348F1.jpg",
+    "fotos/Enecol-Centro/VER20260817110916497277348F2.jpg",
+    "fotos/Enecol-Centro/VER20260817110916497277348F3.jpg"
+  ],
+  "legacy_id": "V1550",
+  "remote_id": "V20260817110916497277348"
+}
