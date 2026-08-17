@@ -1,0 +1,32 @@
+{
+  "id": "V20260817102745323618115",
+  "synced": false,
+  "wkt": "POINT (-48.750100 -8.739012)",
+  "data": "17/08/2026, 10:27:44",
+  "poste": "934962",
+  "especie": "Cajueiro",
+  "lat": -8.7390125,
+  "lon": -48.7501003,
+  "altura": "3",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "55",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Colméia",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260817102745323618115F1",
+    "VER20260817102745323618115F2",
+    "VER20260817102745323618115F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260817102745323618115F1.jpg",
+    "fotos/Enecol-Centro/VER20260817102745323618115F2.jpg",
+    "fotos/Enecol-Centro/VER20260817102745323618115F3.jpg"
+  ],
+  "legacy_id": "V1538",
+  "remote_id": "V20260817102745323618115"
+}
