@@ -1,5 +1,5 @@
 {
-  "version": "2.6.38",
-  "released": "2026-08-13",
-  "notes": "Menos timers rodando a toa no celular do tecnico (bateria e estabilidade); rota Colmeia ativa"
+  "version": "2.6.39",
+  "released": "2026-08-18",
+  "notes": "Rota Pedro Afonso recortada pelo limite municipal do IBGE (so Pedro Afonso); Bom Jesus do Tocantins e Tupirama removidos"
 }
