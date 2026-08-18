@@ -1,0 +1,34 @@
+{
+  "id": "V20260818154105567661447",
+  "synced": false,
+  "wkt": "POINT (-48.167520 -8.982697)",
+  "data": "18/08/2026, 15:41:04",
+  "poste": "941969",
+  "especie": "Cajueiro",
+  "lat": -8.9826969,
+  "lon": -48.1675198,
+  "altura": "10",
+  "dtbt": "",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pedro Afonso",
+  "fotos_count": 4,
+  "fotos_ids": [
+    "VER20260818154105567661447F1",
+    "VER20260818154105567661447F2",
+    "VER20260818154105567661447F3",
+    "VER20260818154105567661447F4"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260818154105567661447F1.jpg",
+    "fotos/Enecol-Centro/VER20260818154105567661447F2.jpg",
+    "fotos/Enecol-Centro/VER20260818154105567661447F3.jpg",
+    "fotos/Enecol-Centro/VER20260818154105567661447F4.jpg"
+  ],
+  "legacy_id": "V1574",
+  "remote_id": "V20260818154105567661447"
+}
