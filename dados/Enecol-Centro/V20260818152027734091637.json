@@ -1,0 +1,32 @@
+{
+  "id": "V20260818152027734091637",
+  "synced": false,
+  "wkt": "POINT (-48.165320 -8.983077)",
+  "data": "18/08/2026, 15:20:26",
+  "poste": "972832",
+  "especie": "Goiabeira",
+  "lat": -8.9830767,
+  "lon": -48.16532,
+  "altura": "5.5",
+  "dtbt": "150",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "40",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pedro Afonso",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260818152027734091637F1",
+    "VER20260818152027734091637F2",
+    "VER20260818152027734091637F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260818152027734091637F1.jpg",
+    "fotos/Enecol-Centro/VER20260818152027734091637F2.jpg",
+    "fotos/Enecol-Centro/VER20260818152027734091637F3.jpg"
+  ],
+  "legacy_id": "V1566",
+  "remote_id": "V20260818152027734091637"
+}
