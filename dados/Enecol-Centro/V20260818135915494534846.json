@@ -1,0 +1,32 @@
+{
+  "id": "V20260818135915494534846",
+  "synced": false,
+  "wkt": "POINT (-48.169380 -9.008660)",
+  "data": "18/08/2026, 13:59:14",
+  "poste": "25643960",
+  "especie": "Mangueira",
+  "lat": -9.00866,
+  "lon": -48.16938,
+  "altura": "4.5",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pedro Afonso",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260818135915494534846F1",
+    "VER20260818135915494534846F2",
+    "VER20260818135915494534846F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260818135915494534846F1.jpg",
+    "fotos/Enecol-Centro/VER20260818135915494534846F2.jpg",
+    "fotos/Enecol-Centro/VER20260818135915494534846F3.jpg"
+  ],
+  "legacy_id": "V1554",
+  "remote_id": "V20260818135915494534846"
+}
