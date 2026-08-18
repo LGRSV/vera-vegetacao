@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Rota Pedro Afonso — pontos VERA</name>
 <Placemark><name>V20260818135614758523228 — Outros</name><description><![CDATA[Espécie: Outros<br/>Poste: 72332726<br/>Área: URBANO<br/>Altura: 8.5 m · DAP: 50 cm<br/>Dist. BT/MT/AT: 0/150/0 cm<br/>Equipe: Enecol Centro · 18/08/2026, 13:56:13<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20260818135614758523228F1.jpg">Foto</a>]]></description><Point><coordinates>-48.16993,-9.011405,0</coordinates></Point></Placemark>
+<Placemark><name>V20260818135915494534846 — Mangueira</name><description><![CDATA[Espécie: Mangueira<br/>Poste: 25643960<br/>Área: URBANO<br/>Altura: 4.5 m · DAP: 60 cm<br/>Dist. BT/MT/AT: 300/300/0 cm<br/>Equipe: Enecol Centro · 18/08/2026, 13:59:14<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20260818135915494534846F1.jpg">Foto</a>]]></description><Point><coordinates>-48.16938,-9.00866,0</coordinates></Point></Placemark>
 </Document></kml>
