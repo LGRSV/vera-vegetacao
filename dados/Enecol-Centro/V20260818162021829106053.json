@@ -1,0 +1,32 @@
+{
+  "id": "V20260818162021829106053",
+  "synced": false,
+  "wkt": "POINT (-48.173215 -8.971181)",
+  "data": "18/08/2026, 16:20:20",
+  "poste": "969197",
+  "especie": "Oiti",
+  "lat": -8.9711807,
+  "lon": -48.1732155,
+  "altura": "5",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pedro Afonso",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260818162021829106053F1",
+    "VER20260818162021829106053F2",
+    "VER20260818162021829106053F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260818162021829106053F1.jpg",
+    "fotos/Enecol-Centro/VER20260818162021829106053F2.jpg",
+    "fotos/Enecol-Centro/VER20260818162021829106053F3.jpg"
+  ],
+  "legacy_id": "V1585",
+  "remote_id": "V20260818162021829106053"
+}
