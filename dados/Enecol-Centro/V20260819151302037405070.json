@@ -1,6 +1,6 @@
 {
   "id": "V20260819151302037405070",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-48.175246 -8.978187)",
   "data": "19/08/2026, 15:10:44",
   "poste": "99533",
@@ -16,7 +16,6 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Pedro Afonso",
-  "syncedAt": "2026-08-19T18:13:10.113Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260819151302037405070F1",
