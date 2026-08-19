@@ -1,0 +1,32 @@
+{
+  "id": "V20260819141230539659987",
+  "synced": false,
+  "wkt": "POINT (-48.175965 -8.972062)",
+  "data": "19/08/2026, 14:12:29",
+  "poste": "71891574",
+  "especie": "Outros",
+  "lat": -8.9720617,
+  "lon": -48.175965,
+  "altura": "10.5",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pedro Afonso",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260819141230539659987F1",
+    "VER20260819141230539659987F2",
+    "VER20260819141230539659987F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260819141230539659987F1.jpg",
+    "fotos/Enecol-Centro/VER20260819141230539659987F2.jpg",
+    "fotos/Enecol-Centro/VER20260819141230539659987F3.jpg"
+  ],
+  "legacy_id": "V1610",
+  "remote_id": "V20260819141230539659987"
+}
