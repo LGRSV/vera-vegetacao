@@ -1,0 +1,32 @@
+{
+  "id": "V20260819142151153983169",
+  "synced": false,
+  "wkt": "POINT (-48.175953 -8.969080)",
+  "data": "19/08/2026, 14:21:50",
+  "poste": "968879",
+  "especie": "Coqueiro",
+  "lat": -8.9690799,
+  "lon": -48.1759531,
+  "altura": "12",
+  "dtbt": "0",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pedro Afonso",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260819142151153983169F1",
+    "VER20260819142151153983169F2",
+    "VER20260819142151153983169F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260819142151153983169F1.jpg",
+    "fotos/Enecol-Centro/VER20260819142151153983169F2.jpg",
+    "fotos/Enecol-Centro/VER20260819142151153983169F3.jpg"
+  ],
+  "legacy_id": "V1614",
+  "remote_id": "V20260819142151153983169"
+}
