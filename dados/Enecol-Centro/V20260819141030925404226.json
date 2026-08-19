@@ -1,0 +1,32 @@
+{
+  "id": "V20260819141030925404226",
+  "synced": false,
+  "wkt": "POINT (-48.176243 -8.972058)",
+  "data": "19/08/2026, 14:10:30",
+  "poste": "71891394",
+  "especie": "Buriti",
+  "lat": -8.9720583,
+  "lon": -48.1762433,
+  "altura": "13",
+  "dtbt": "300",
+  "dtmt": "200",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pedro Afonso",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260819141030925404226F1",
+    "VER20260819141030925404226F2",
+    "VER20260819141030925404226F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260819141030925404226F1.jpg",
+    "fotos/Enecol-Centro/VER20260819141030925404226F2.jpg",
+    "fotos/Enecol-Centro/VER20260819141030925404226F3.jpg"
+  ],
+  "legacy_id": "V1608",
+  "remote_id": "V20260819141030925404226"
+}
