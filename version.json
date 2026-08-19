@@ -1,5 +1,5 @@
 {
-  "version": "2.6.39",
-  "released": "2026-08-18",
-  "notes": "Rota Pedro Afonso recortada pelo limite municipal do IBGE (so Pedro Afonso); Bom Jesus do Tocantins e Tupirama removidos"
+  "version": "2.6.40",
+  "released": "2026-08-19",
+  "notes": "Rota Bom Jesus do Tocantins cadastrada com perimetro urbano proprio (74 trechos); aguardando liberacao para a equipe"
 }
