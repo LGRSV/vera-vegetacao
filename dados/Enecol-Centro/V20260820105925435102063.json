@@ -1,0 +1,32 @@
+{
+  "id": "V20260820105925435102063",
+  "synced": false,
+  "wkt": "POINT (-48.166269 -8.966776)",
+  "data": "20/08/2026, 10:59:24",
+  "poste": "953219",
+  "especie": "Coqueiro",
+  "lat": -8.9667757,
+  "lon": -48.1662689,
+  "altura": "2",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "30",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Bom Jesus do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260820105925435102063F1",
+    "VER20260820105925435102063F2",
+    "VER20260820105925435102063F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260820105925435102063F1.jpg",
+    "fotos/Enecol-Centro/VER20260820105925435102063F2.jpg",
+    "fotos/Enecol-Centro/VER20260820105925435102063F3.jpg"
+  ],
+  "legacy_id": "V1660",
+  "remote_id": "V20260820105925435102063"
+}
