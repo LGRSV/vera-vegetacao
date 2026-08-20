@@ -1,5 +1,5 @@
 {
-  "version": "2.6.42",
+  "version": "2.6.43",
   "released": "2026-08-20",
-  "notes": "Mapa do tecnico gira: gesto de dois dedos, botao bussola e modo seguir a bussola do aparelho"
+  "notes": "Aba Proximas: a equipe ve a fila de rotas dela com municipio, trechos e km"
 }
