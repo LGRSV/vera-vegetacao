@@ -1,0 +1,32 @@
+{
+  "id": "V20260820150140730054809",
+  "synced": false,
+  "wkt": "POINT (-48.164691 -8.963950)",
+  "data": "20/08/2026, 15:01:39",
+  "poste": "964576",
+  "especie": "Cajueiro",
+  "lat": -8.96395,
+  "lon": -48.1646907,
+  "altura": "10",
+  "dtbt": "0",
+  "dtmt": "0",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Bom Jesus do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260820150140730054809F1",
+    "VER20260820150140730054809F2",
+    "VER20260820150140730054809F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260820150140730054809F1.jpg",
+    "fotos/Enecol-Centro/VER20260820150140730054809F2.jpg",
+    "fotos/Enecol-Centro/VER20260820150140730054809F3.jpg"
+  ],
+  "legacy_id": "V1692",
+  "remote_id": "V20260820150140730054809"
+}
