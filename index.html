@@ -86,14 +86,14 @@
         .replace('</body>',
           '<' + 'script>function toggleMinimizarCamadas(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(!c)return;var min=c.classList.toggle("minimizado");if(ic)ic.textContent=min?"+":"−";try{localStorage.setItem("vera_camadas_min",min?"1":"0");}catch(e){}}(function(){try{if(localStorage.getItem("vera_camadas_min")==="1"){var apl=function(){var c=document.getElementById("camadas-control");var ic=document.getElementById("camadas-min-icon");if(c){c.classList.add("minimizado");if(ic)ic.textContent="+";}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",apl);else apl();}}catch(e){}})();function toggleTelaCheiaAdminMapa(){var c=document.getElementById("admin-map-container");if(!c)return;var ativo=c.classList.toggle("vera-tela-cheia");document.body.style.overflow=ativo?"hidden":"";setTimeout(function(){if(typeof adminMap!=="undefined"&&adminMap&&adminMap.invalidateSize)adminMap.invalidateSize();},220);}document.addEventListener("keydown",function(ev){if(ev.key==="Escape"){var c=document.getElementById("admin-map-container");if(c&&c.classList.contains("vera-tela-cheia"))toggleTelaCheiaAdminMapa();}});<' + '/script></body>'
         )
-        .replaceAll('2.6.14', '2.6.42')
+        .replaceAll('2.6.14', '2.6.43')
         .replace(
           "if (primeira < 0) throw new Error('Trecho não encontrado: ' + nome + '.');",
           "if (primeira < 0) { console.warn('Trecho não encontrado:', nome); return html; }"
         );
 
       const fimDoApp = '      document.open();\n      document.write(html);\n      document.close();';
-      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script><script src="protege-ids-remotos.js?t=' + Date.now() + '"><\\/script><script src="hotfix-fotos.js?t=' + Date.now() + '"><\\/script><script src="admin-historico-v3.js?t=' + Date.now() + '"><\\/script><script src="admin-armazenamento.js?t=' + Date.now() + '"><\\/script><script src="conclusao-rotas.js?t=' + Date.now() + '"><\\/script><script src="capa-visual.js?t=' + Date.now() + '"><\\/script><script src="admin-mapa-telacheia.js?t=' + Date.now() + '"><\\/script><script src="pos-sync-fotos.js?t=' + Date.now() + '"><\\/script><script src="admin-ajustes.js?t=' + Date.now() + '"><\\/script><script src="ui-ajustes.js?t=' + Date.now() + '"><\\/script><script src="status-conexao-equipe.js?t=' + Date.now() + '"><\\/script><script src="rota-no-mapa.js?t=' + Date.now() + '"><\\/script><script src="mapa-rotacao.js?t=' + Date.now() + '"><\\/script><script src="admin-previa-tecnico.js?t=' + Date.now() + '"><\\/script><script src="admin-mapa-rapido.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
+      const fimComRecursos = '      html = html.replace(\'</body>\', \'<script src="estado-equipes.js?t=' + Date.now() + '"><\\/script><script src="sincronizacao-dispositivos.js?t=' + Date.now() + '"><\\/script><script src="protege-ids-remotos.js?t=' + Date.now() + '"><\\/script><script src="hotfix-fotos.js?t=' + Date.now() + '"><\\/script><script src="admin-historico-v3.js?t=' + Date.now() + '"><\\/script><script src="admin-armazenamento.js?t=' + Date.now() + '"><\\/script><script src="conclusao-rotas.js?t=' + Date.now() + '"><\\/script><script src="capa-visual.js?t=' + Date.now() + '"><\\/script><script src="admin-mapa-telacheia.js?t=' + Date.now() + '"><\\/script><script src="pos-sync-fotos.js?t=' + Date.now() + '"><\\/script><script src="admin-ajustes.js?t=' + Date.now() + '"><\\/script><script src="ui-ajustes.js?t=' + Date.now() + '"><\\/script><script src="status-conexao-equipe.js?t=' + Date.now() + '"><\\/script><script src="rota-no-mapa.js?t=' + Date.now() + '"><\\/script><script src="mapa-rotacao.js?t=' + Date.now() + '"><\\/script><script src="proximas-rotas.js?t=' + Date.now() + '"><\\/script><script src="admin-previa-tecnico.js?t=' + Date.now() + '"><\\/script><script src="admin-mapa-rapido.js?t=' + Date.now() + '"><\\/script></body>\');\n' + fimDoApp;
       if (html.indexOf(fimDoApp) < 0) throw new Error('Não foi possível conectar a sincronização ao app.');
       html = html.replace(fimDoApp, fimComRecursos);
 
@@ -109,5 +109,5 @@
   })();
   </script>
 </body>
-<!-- bust 1787223532 -->
+<!-- bust 1787223907 -->
 </html>
