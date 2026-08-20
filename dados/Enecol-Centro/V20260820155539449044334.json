@@ -1,0 +1,32 @@
+{
+  "id": "V20260820155539449044334",
+  "synced": false,
+  "wkt": "POINT (-48.162601 -8.966734)",
+  "data": "20/08/2026, 15:55:38",
+  "poste": "136130",
+  "especie": "Oiti",
+  "lat": -8.9667336,
+  "lon": -48.1626006,
+  "altura": "10",
+  "dtbt": "50",
+  "dtmt": "200",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Bom Jesus do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260820155539449044334F1",
+    "VER20260820155539449044334F2",
+    "VER20260820155539449044334F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260820155539449044334F1.jpg",
+    "fotos/Enecol-Centro/VER20260820155539449044334F2.jpg",
+    "fotos/Enecol-Centro/VER20260820155539449044334F3.jpg"
+  ],
+  "legacy_id": "V1720",
+  "remote_id": "V20260820155539449044334"
+}
