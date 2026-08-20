@@ -1,0 +1,32 @@
+{
+  "id": "V20260820161942458350900",
+  "synced": false,
+  "wkt": "POINT (-48.161223 -8.967442)",
+  "data": "20/08/2026, 16:19:41",
+  "poste": "951868",
+  "especie": "Outros",
+  "lat": -8.9674417,
+  "lon": -48.1612233,
+  "altura": "11",
+  "dtbt": "300",
+  "dtmt": "0",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Bom Jesus do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260820161942458350900F1",
+    "VER20260820161942458350900F2",
+    "VER20260820161942458350900F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260820161942458350900F1.jpg",
+    "fotos/Enecol-Centro/VER20260820161942458350900F2.jpg",
+    "fotos/Enecol-Centro/VER20260820161942458350900F3.jpg"
+  ],
+  "legacy_id": "V1730",
+  "remote_id": "V20260820161942458350900"
+}
