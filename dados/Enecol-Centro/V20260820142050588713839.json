@@ -1,0 +1,32 @@
+{
+  "id": "V20260820142050588713839",
+  "synced": false,
+  "wkt": "POINT (-48.167479 -8.962833)",
+  "data": "20/08/2026, 14:20:49",
+  "poste": "28958788",
+  "especie": "Mangueira",
+  "lat": -8.9628326,
+  "lon": -48.1674794,
+  "altura": "10",
+  "dtbt": "0",
+  "dtmt": "150",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Bom Jesus do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260820142050588713839F1",
+    "VER20260820142050588713839F2",
+    "VER20260820142050588713839F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260820142050588713839F1.jpg",
+    "fotos/Enecol-Centro/VER20260820142050588713839F2.jpg",
+    "fotos/Enecol-Centro/VER20260820142050588713839F3.jpg"
+  ],
+  "legacy_id": "V1681",
+  "remote_id": "V20260820142050588713839"
+}
