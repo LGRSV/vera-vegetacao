@@ -1,0 +1,32 @@
+{
+  "id": "V20260820161209281766864",
+  "synced": false,
+  "wkt": "POINT (-48.162091 -8.967071)",
+  "data": "20/08/2026, 16:12:08",
+  "poste": "951865",
+  "especie": "Mogno",
+  "lat": -8.9670711,
+  "lon": -48.1620907,
+  "altura": "13",
+  "dtbt": "0",
+  "dtmt": "0",
+  "dtat": "0",
+  "dap": "65",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Bom Jesus do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260820161209281766864F1",
+    "VER20260820161209281766864F2",
+    "VER20260820161209281766864F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260820161209281766864F1.jpg",
+    "fotos/Enecol-Centro/VER20260820161209281766864F2.jpg",
+    "fotos/Enecol-Centro/VER20260820161209281766864F3.jpg"
+  ],
+  "legacy_id": "V1723",
+  "remote_id": "V20260820161209281766864"
+}
