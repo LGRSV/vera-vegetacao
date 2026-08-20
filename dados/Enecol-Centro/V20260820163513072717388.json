@@ -1,0 +1,32 @@
+{
+  "id": "V20260820163513072717388",
+  "synced": false,
+  "wkt": "POINT (-48.160079 -8.967926)",
+  "data": "20/08/2026, 16:35:12",
+  "poste": "1429478",
+  "especie": "Buriti",
+  "lat": -8.9679263,
+  "lon": -48.160079,
+  "altura": "11",
+  "dtbt": "150",
+  "dtmt": "0",
+  "dtat": "0",
+  "dap": "90",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Bom Jesus do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260820163513072717388F1",
+    "VER20260820163513072717388F2",
+    "VER20260820163513072717388F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260820163513072717388F1.jpg",
+    "fotos/Enecol-Centro/VER20260820163513072717388F2.jpg",
+    "fotos/Enecol-Centro/VER20260820163513072717388F3.jpg"
+  ],
+  "legacy_id": "V1734",
+  "remote_id": "V20260820163513072717388"
+}
