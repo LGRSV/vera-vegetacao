@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-20T10:30:12.000Z",
+  "updatedAt": "2026-08-20T20:40:02.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,14 +247,14 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1787180016462",
-        "nomeProjeto": "Rota Bom Jesus do Tocantins",
+        "rotaId": "1787222155756",
+        "nomeProjeto": "Rota Pequizeiro",
         "polo": "NORTE",
         "alimentadores": [
-          "AL02065015BJ"
+          "LD02022033PQ"
         ],
-        "iniciadoEm": "2026-08-20T10:30:12.000Z",
-        "atualizadoEm": "2026-08-20T10:30:12.000Z",
+        "iniciadoEm": "2026-08-20T20:40:02.000Z",
+        "atualizadoEm": "2026-08-20T20:40:02.000Z",
         "atualizadoPor": "Admin"
       },
       "historico": [
@@ -450,6 +450,17 @@
           "iniciadoEm": "2026-08-20T10:20:49.156Z",
           "atualizadoEm": "2026-08-20T10:20:49.156Z",
           "atualizadoPor": "Enecol Centro"
+        },
+        {
+          "rotaId": "1787180016462",
+          "nomeProjeto": "Rota Bom Jesus do Tocantins",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL02065015BJ"
+          ],
+          "iniciadoEm": "2026-08-20T10:30:12.000Z",
+          "atualizadoEm": "2026-08-20T10:30:12.000Z",
+          "atualizadoPor": "Admin"
         }
       ]
     }
@@ -503,6 +514,11 @@
       "nomeProjeto": "Rota Pedro Afonso",
       "concluidoEm": "2026-08-19T22:48:33.000Z",
       "concluidoPor": "Admin"
+    },
+    "1787180016462": {
+      "status": "concluido",
+      "em": "2026-08-20T20:40:02.000Z",
+      "por": "Admin"
     }
   }
 }
