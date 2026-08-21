@@ -1,0 +1,32 @@
+{
+  "id": "V20260821151715706265787",
+  "synced": false,
+  "wkt": "POINT (-48.932458 -8.589812)",
+  "data": "21/08/2026, 15:17:14",
+  "poste": "123850",
+  "especie": "Babaçu",
+  "lat": -8.5898124,
+  "lon": -48.9324576,
+  "altura": "7",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "40",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pequizeiro",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260821151715706265787F1",
+    "VER20260821151715706265787F2",
+    "VER20260821151715706265787F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260821151715706265787F1.jpg",
+    "fotos/Enecol-Centro/VER20260821151715706265787F2.jpg",
+    "fotos/Enecol-Centro/VER20260821151715706265787F3.jpg"
+  ],
+  "legacy_id": "V1786",
+  "remote_id": "V20260821151715706265787"
+}
