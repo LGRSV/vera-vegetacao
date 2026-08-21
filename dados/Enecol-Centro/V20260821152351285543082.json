@@ -1,0 +1,32 @@
+{
+  "id": "V20260821152351285543082",
+  "synced": false,
+  "wkt": "POINT (-48.932136 -8.589451)",
+  "data": "21/08/2026, 15:23:50",
+  "poste": "1791063",
+  "especie": "Oiti",
+  "lat": -8.589451,
+  "lon": -48.9321357,
+  "altura": "7",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pequizeiro",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260821152351285543082F1",
+    "VER20260821152351285543082F2",
+    "VER20260821152351285543082F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260821152351285543082F1.jpg",
+    "fotos/Enecol-Centro/VER20260821152351285543082F2.jpg",
+    "fotos/Enecol-Centro/VER20260821152351285543082F3.jpg"
+  ],
+  "legacy_id": "V1789",
+  "remote_id": "V20260821152351285543082"
+}
