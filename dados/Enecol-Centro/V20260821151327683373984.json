@@ -1,0 +1,32 @@
+{
+  "id": "V20260821151327683373984",
+  "synced": false,
+  "wkt": "POINT (-48.932854 -8.590229)",
+  "data": "21/08/2026, 15:13:26",
+  "poste": "948087",
+  "especie": "Mogno",
+  "lat": -8.5902292,
+  "lon": -48.9328542,
+  "altura": "6.5",
+  "dtbt": "100",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pequizeiro",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260821151327683373984F1",
+    "VER20260821151327683373984F2",
+    "VER20260821151327683373984F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260821151327683373984F1.jpg",
+    "fotos/Enecol-Centro/VER20260821151327683373984F2.jpg",
+    "fotos/Enecol-Centro/VER20260821151327683373984F3.jpg"
+  ],
+  "legacy_id": "V1783",
+  "remote_id": "V20260821151327683373984"
+}
