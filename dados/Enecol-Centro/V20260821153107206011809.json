@@ -1,0 +1,32 @@
+{
+  "id": "V20260821153107206011809",
+  "synced": false,
+  "wkt": "POINT (-48.932574 -8.587587)",
+  "data": "21/08/2026, 15:31:06",
+  "poste": "54808752",
+  "especie": "Goiabeira",
+  "lat": -8.5875873,
+  "lon": -48.9325738,
+  "altura": "8",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pequizeiro",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260821153107206011809F1",
+    "VER20260821153107206011809F2",
+    "VER20260821153107206011809F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260821153107206011809F1.jpg",
+    "fotos/Enecol-Centro/VER20260821153107206011809F2.jpg",
+    "fotos/Enecol-Centro/VER20260821153107206011809F3.jpg"
+  ],
+  "legacy_id": "V1793",
+  "remote_id": "V20260821153107206011809"
+}
