@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Rota Pequizeiro — pontos VERA</name>
+<Placemark><name>V20260821134737352660943 — Oiti</name><description><![CDATA[Espécie: Oiti<br/>Poste: 951426<br/>Área: URBANO<br/>Altura: 8 m · DAP: 50 cm<br/>Dist. BT/MT/AT: 200/250/0 cm<br/>Equipe: Enecol Centro · 21/08/2026, 13:47:36<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20260821134737352660943F1.jpg">Foto</a>]]></description><Point><coordinates>-48.9333233,-8.6000083,0</coordinates></Point></Placemark>
+</Document></kml>
