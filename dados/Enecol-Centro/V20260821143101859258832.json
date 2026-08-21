@@ -1,0 +1,32 @@
+{
+  "id": "V20260821143101859258832",
+  "synced": false,
+  "wkt": "POINT (-48.936645 -8.596890)",
+  "data": "21/08/2026, 14:31:00",
+  "poste": "944488",
+  "especie": "Outros",
+  "lat": -8.59689,
+  "lon": -48.936645,
+  "altura": "10",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pequizeiro",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260821143101859258832F1",
+    "VER20260821143101859258832F2",
+    "VER20260821143101859258832F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260821143101859258832F1.jpg",
+    "fotos/Enecol-Centro/VER20260821143101859258832F2.jpg",
+    "fotos/Enecol-Centro/VER20260821143101859258832F3.jpg"
+  ],
+  "legacy_id": "V1762",
+  "remote_id": "V20260821143101859258832"
+}
