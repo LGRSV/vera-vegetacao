@@ -1,0 +1,32 @@
+{
+  "id": "V20260821152727531633983",
+  "synced": false,
+  "wkt": "POINT (-48.931547 -8.588858)",
+  "data": "21/08/2026, 15:27:26",
+  "poste": "951393",
+  "especie": "Mangueira",
+  "lat": -8.5888583,
+  "lon": -48.9315467,
+  "altura": "10.5",
+  "dtbt": "250",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Pequizeiro",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260821152727531633983F1",
+    "VER20260821152727531633983F2",
+    "VER20260821152727531633983F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260821152727531633983F1.jpg",
+    "fotos/Enecol-Centro/VER20260821152727531633983F2.jpg",
+    "fotos/Enecol-Centro/VER20260821152727531633983F3.jpg"
+  ],
+  "legacy_id": "V1792",
+  "remote_id": "V20260821152727531633983"
+}
