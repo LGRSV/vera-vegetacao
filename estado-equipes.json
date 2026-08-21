@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-21T12:03:45.542Z",
+  "updatedAt": "2026-08-21T22:43:26.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -246,17 +246,7 @@
       ]
     },
     "Enecol Centro": {
-      "projetoAtivo": {
-        "rotaId": "1787222155756",
-        "nomeProjeto": "Rota Pequizeiro",
-        "polo": "NORTE",
-        "alimentadores": [
-          "LD02022033PQ"
-        ],
-        "iniciadoEm": "2026-08-20T20:40:02.000Z",
-        "atualizadoEm": "2026-08-21T12:03:43.789Z",
-        "atualizadoPor": "Enecol Centro"
-      },
+      "projetoAtivo": null,
       "historico": [
         {
           "tipo": "PROJETO_ATIVADO",
@@ -517,8 +507,17 @@
     },
     "1787180016462": {
       "status": "concluido",
-      "em": "2026-08-20T20:40:02.000Z",
-      "por": "Admin"
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Bom Jesus do Tocantins",
+      "concluidoEm": "2026-08-20T20:40:02.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1787222155756": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Pequizeiro",
+      "concluidoEm": "2026-08-21T22:43:26.000Z",
+      "concluidoPor": "Admin"
     }
   }
 }
