@@ -1,6 +1,6 @@
 {
   "id": "V20260821160112760465728",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-48.932193 -8.585903)",
   "data": "21/08/2026, 15:49:11",
   "poste": "54808781",
@@ -16,7 +16,6 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Pequizeiro",
-  "syncedAt": "2026-08-21T19:03:16.513Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260821160112760465728F1",
