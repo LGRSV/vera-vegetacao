@@ -1,0 +1,32 @@
+{
+  "id": "V20260824162739297762405",
+  "synced": false,
+  "wkt": "POINT (-49.174217 -8.360274)",
+  "data": "24/08/2026, 16:27:38",
+  "poste": "1454505",
+  "especie": "Outros",
+  "lat": -8.3602742,
+  "lon": -49.1742168,
+  "altura": "10.5",
+  "dtbt": "200",
+  "dtmt": "0",
+  "dtat": "0",
+  "dap": "75",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Couto Magalhães",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260824162739297762405F1",
+    "VER20260824162739297762405F2",
+    "VER20260824162739297762405F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260824162739297762405F1.jpg",
+    "fotos/Enecol-Centro/VER20260824162739297762405F2.jpg",
+    "fotos/Enecol-Centro/VER20260824162739297762405F3.jpg"
+  ],
+  "legacy_id": "V1908",
+  "remote_id": "V20260824162739297762405"
+}
