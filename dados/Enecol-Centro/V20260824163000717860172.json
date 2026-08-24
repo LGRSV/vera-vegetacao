@@ -1,0 +1,32 @@
+{
+  "id": "V20260824163000717860172",
+  "synced": false,
+  "wkt": "POINT (-49.174181 -8.360769)",
+  "data": "24/08/2026, 16:29:59",
+  "poste": "1454511",
+  "especie": "Cajueiro",
+  "lat": -8.3607695,
+  "lon": -49.1741809,
+  "altura": "6",
+  "dtbt": "100",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Couto Magalhães",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260824163000717860172F1",
+    "VER20260824163000717860172F2",
+    "VER20260824163000717860172F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260824163000717860172F1.jpg",
+    "fotos/Enecol-Centro/VER20260824163000717860172F2.jpg",
+    "fotos/Enecol-Centro/VER20260824163000717860172F3.jpg"
+  ],
+  "legacy_id": "V1910",
+  "remote_id": "V20260824163000717860172"
+}
