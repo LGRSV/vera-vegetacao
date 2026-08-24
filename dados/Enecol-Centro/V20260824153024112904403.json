@@ -1,0 +1,32 @@
+{
+  "id": "V20260824153024112904403",
+  "synced": false,
+  "wkt": "POINT (-49.172988 -8.360393)",
+  "data": "24/08/2026, 15:30:23",
+  "poste": "875656",
+  "especie": "Buriti",
+  "lat": -8.3603933,
+  "lon": -49.1729883,
+  "altura": "5.5",
+  "dtbt": "100",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Couto Magalhães",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260824153024112904403F1",
+    "VER20260824153024112904403F2",
+    "VER20260824153024112904403F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260824153024112904403F1.jpg",
+    "fotos/Enecol-Centro/VER20260824153024112904403F2.jpg",
+    "fotos/Enecol-Centro/VER20260824153024112904403F3.jpg"
+  ],
+  "legacy_id": "V1889",
+  "remote_id": "V20260824153024112904403"
+}
