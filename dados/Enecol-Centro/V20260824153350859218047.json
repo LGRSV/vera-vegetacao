@@ -1,0 +1,32 @@
+{
+  "id": "V20260824153350859218047",
+  "synced": false,
+  "wkt": "POINT (-49.170942 -8.360150)",
+  "data": "24/08/2026, 15:33:49",
+  "poste": "875660",
+  "especie": "Babaçu",
+  "lat": -8.36015,
+  "lon": -49.1709417,
+  "altura": "9.5",
+  "dtbt": "300",
+  "dtmt": "150",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Couto Magalhães",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260824153350859218047F1",
+    "VER20260824153350859218047F2",
+    "VER20260824153350859218047F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260824153350859218047F1.jpg",
+    "fotos/Enecol-Centro/VER20260824153350859218047F2.jpg",
+    "fotos/Enecol-Centro/VER20260824153350859218047F3.jpg"
+  ],
+  "legacy_id": "V1891",
+  "remote_id": "V20260824153350859218047"
+}
