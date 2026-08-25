@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-25T14:06:03.962Z",
+  "updatedAt": "2026-08-25T19:21:15.467Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,18 +247,30 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1787222155758",
-        "nomeProjeto": "Rota Couto Magalhães",
+        "rotaId": "1787222155757",
+        "nomeProjeto": "Rota Goianorte",
         "polo": "NORTE",
         "alimentadores": [
-          "AL01024113CM",
-          "LD01010153CM"
+          "LD02022033GN",
+          "LD03022033GN"
         ],
-        "iniciadoEm": "2026-08-24T01:45:50.999Z",
-        "atualizadoEm": "2026-08-25T14:06:01.741Z",
+        "iniciadoEm": "2026-08-25T19:21:15.467Z",
+        "atualizadoEm": "2026-08-25T19:21:15.467Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1787222155757",
+          "nomeProjeto": "Rota Goianorte",
+          "polo": "NORTE",
+          "alimentadores": [
+            "LD02022033GN",
+            "LD03022033GN"
+          ],
+          "data": "2026-08-25T19:21:15.467Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1787222155758",
