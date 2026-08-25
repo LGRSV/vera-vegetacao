@@ -1,0 +1,32 @@
+{
+  "id": "V20260825141406865620293",
+  "synced": false,
+  "wkt": "POINT (-49.183575 -8.359000)",
+  "data": "25/08/2026, 14:14:05",
+  "poste": "877189",
+  "especie": "Oiti",
+  "lat": -8.3589999,
+  "lon": -49.1835747,
+  "altura": "6.5",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Couto Magalhães",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260825141406865620293F1",
+    "VER20260825141406865620293F2",
+    "VER20260825141406865620293F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260825141406865620293F1.jpg",
+    "fotos/Enecol-Centro/VER20260825141406865620293F2.jpg",
+    "fotos/Enecol-Centro/VER20260825141406865620293F3.jpg"
+  ],
+  "legacy_id": "V1948",
+  "remote_id": "V20260825141406865620293"
+}
