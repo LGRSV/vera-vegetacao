@@ -1,0 +1,32 @@
+{
+  "id": "V20260825112627319404008",
+  "synced": false,
+  "wkt": "POINT (-49.181916 -8.360832)",
+  "data": "25/08/2026, 11:26:26",
+  "poste": "878130",
+  "especie": "Mangueira",
+  "lat": -8.3608324,
+  "lon": -49.1819159,
+  "altura": "16",
+  "dtbt": "300",
+  "dtmt": "250",
+  "dtat": "0",
+  "dap": "130",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Couto Magalhães",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260825112627319404008F1",
+    "VER20260825112627319404008F2",
+    "VER20260825112627319404008F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260825112627319404008F1.jpg",
+    "fotos/Enecol-Centro/VER20260825112627319404008F2.jpg",
+    "fotos/Enecol-Centro/VER20260825112627319404008F3.jpg"
+  ],
+  "legacy_id": "V1920",
+  "remote_id": "V20260825112627319404008"
+}
