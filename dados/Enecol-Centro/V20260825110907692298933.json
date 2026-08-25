@@ -1,0 +1,32 @@
+{
+  "id": "V20260825110907692298933",
+  "synced": false,
+  "wkt": "POINT (-49.184257 -8.361071)",
+  "data": "25/08/2026, 11:09:06",
+  "poste": "875387",
+  "especie": "Mogno",
+  "lat": -8.3610711,
+  "lon": -49.1842571,
+  "altura": "8.5",
+  "dtbt": "0",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "65",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Couto Magalhães",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260825110907692298933F1",
+    "VER20260825110907692298933F2",
+    "VER20260825110907692298933F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260825110907692298933F1.jpg",
+    "fotos/Enecol-Centro/VER20260825110907692298933F2.jpg",
+    "fotos/Enecol-Centro/VER20260825110907692298933F3.jpg"
+  ],
+  "legacy_id": "V1911",
+  "remote_id": "V20260825110907692298933"
+}
