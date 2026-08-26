@@ -1,0 +1,32 @@
+{
+  "id": "V20260826150641253030082",
+  "synced": false,
+  "wkt": "POINT (-48.933680 -8.775947)",
+  "data": "26/08/2026, 15:06:40",
+  "poste": "55556155",
+  "especie": "Mogno",
+  "lat": -8.7759467,
+  "lon": -48.93368,
+  "altura": "9",
+  "dtbt": "50",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "85",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Goianorte",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260826150641253030082F1",
+    "VER20260826150641253030082F2",
+    "VER20260826150641253030082F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260826150641253030082F1.jpg",
+    "fotos/Enecol-Centro/VER20260826150641253030082F2.jpg",
+    "fotos/Enecol-Centro/VER20260826150641253030082F3.jpg"
+  ],
+  "legacy_id": "V1987",
+  "remote_id": "V20260826150641253030082"
+}
