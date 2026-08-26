@@ -1,0 +1,32 @@
+{
+  "id": "V20260826162656098543015",
+  "synced": false,
+  "wkt": "POINT (-48.936407 -8.771755)",
+  "data": "26/08/2026, 16:26:55",
+  "poste": "945853",
+  "especie": "Goiabeira",
+  "lat": -8.7717548,
+  "lon": -48.9364069,
+  "altura": "7",
+  "dtbt": "200",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Goianorte",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260826162656098543015F1",
+    "VER20260826162656098543015F2",
+    "VER20260826162656098543015F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260826162656098543015F1.jpg",
+    "fotos/Enecol-Centro/VER20260826162656098543015F2.jpg",
+    "fotos/Enecol-Centro/VER20260826162656098543015F3.jpg"
+  ],
+  "legacy_id": "V1995",
+  "remote_id": "V20260826162656098543015"
+}
