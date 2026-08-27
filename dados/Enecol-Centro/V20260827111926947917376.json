@@ -1,0 +1,32 @@
+{
+  "id": "V20260827111926947917376",
+  "synced": false,
+  "wkt": "POINT (-48.931382 -8.771481)",
+  "data": "27/08/2026, 11:19:26",
+  "poste": "950837",
+  "especie": "Outros",
+  "lat": -8.7714809,
+  "lon": -48.9313824,
+  "altura": "4.5",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "40",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Goianorte",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260827111926947917376F1",
+    "VER20260827111926947917376F2",
+    "VER20260827111926947917376F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260827111926947917376F1.jpg",
+    "fotos/Enecol-Centro/VER20260827111926947917376F2.jpg",
+    "fotos/Enecol-Centro/VER20260827111926947917376F3.jpg"
+  ],
+  "legacy_id": "V2022",
+  "remote_id": "V20260827111926947917376"
+}
