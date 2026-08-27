@@ -1,0 +1,32 @@
+{
+  "id": "V20260827141313573513462",
+  "synced": false,
+  "wkt": "POINT (-48.933528 -8.770555)",
+  "data": "27/08/2026, 14:13:12",
+  "poste": "1783009",
+  "especie": "Cajueiro",
+  "lat": -8.7705554,
+  "lon": -48.933528,
+  "altura": "7",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Goianorte",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260827141313573513462F1",
+    "VER20260827141313573513462F2",
+    "VER20260827141313573513462F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260827141313573513462F1.jpg",
+    "fotos/Enecol-Centro/VER20260827141313573513462F2.jpg",
+    "fotos/Enecol-Centro/VER20260827141313573513462F3.jpg"
+  ],
+  "legacy_id": "V2035",
+  "remote_id": "V20260827141313573513462"
+}
