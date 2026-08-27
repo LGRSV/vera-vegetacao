@@ -1,0 +1,32 @@
+{
+  "id": "V20260827140951224005552",
+  "synced": false,
+  "wkt": "POINT (-48.935950 -8.768807)",
+  "data": "27/08/2026, 14:09:50",
+  "poste": "1782729",
+  "especie": "Mangueira",
+  "lat": -8.7688066,
+  "lon": -48.9359496,
+  "altura": "8",
+  "dtbt": "300",
+  "dtmt": "150",
+  "dtat": "0",
+  "dap": "115",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Goianorte",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260827140951224005552F1",
+    "VER20260827140951224005552F2",
+    "VER20260827140951224005552F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260827140951224005552F1.jpg",
+    "fotos/Enecol-Centro/VER20260827140951224005552F2.jpg",
+    "fotos/Enecol-Centro/VER20260827140951224005552F3.jpg"
+  ],
+  "legacy_id": "V2033",
+  "remote_id": "V20260827140951224005552"
+}
