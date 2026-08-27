@@ -1,0 +1,32 @@
+{
+  "id": "V20260827141950804469022",
+  "synced": false,
+  "wkt": "POINT (-48.932402 -8.770517)",
+  "data": "27/08/2026, 14:19:49",
+  "poste": "944230",
+  "especie": "Oiti",
+  "lat": -8.7705167,
+  "lon": -48.9324017,
+  "altura": "7",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Goianorte",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260827141950804469022F1",
+    "VER20260827141950804469022F2",
+    "VER20260827141950804469022F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260827141950804469022F1.jpg",
+    "fotos/Enecol-Centro/VER20260827141950804469022F2.jpg",
+    "fotos/Enecol-Centro/VER20260827141950804469022F3.jpg"
+  ],
+  "legacy_id": "V2038",
+  "remote_id": "V20260827141950804469022"
+}
