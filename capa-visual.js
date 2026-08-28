@@ -93,10 +93,26 @@
       .catch(function () {});
   }
 
+  // Crédito de autoria, no rodapé do cartão de login. Discreto de propósito:
+  // fica abaixo do botão, no mesmo tom esmaecido do selo de versão, para
+  // assinar sem competir com a marca nem com os campos.
+  function aplicarCredito() {
+    const cartao = document.querySelector('#login-screen .login-card');
+    if (!cartao || cartao.querySelector('#vera-credito')) return;
+    const linha = document.createElement('div');
+    linha.id = 'vera-credito';
+    linha.style.cssText = 'margin-top:18px;padding-top:14px;border-top:1px solid rgba(168,213,162,.16);'
+      + 'font-size:10.5px;line-height:1.5;letter-spacing:.06em;color:rgba(168,213,162,.5);text-align:center;';
+    linha.innerHTML = 'Desenvolvido por<br>'
+      + '<b style="color:rgba(200,231,196,.78);font-weight:700;letter-spacing:.04em;">João Antônio Lagares</b>';
+    cartao.appendChild(linha);
+  }
+
   function aplicar() {
     injetarEstilos();
     aplicarEmblema();
     ajustarSeloVersao();
+    aplicarCredito();
   }
 
   aplicar();
