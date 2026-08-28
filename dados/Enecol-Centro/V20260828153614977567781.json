@@ -1,0 +1,32 @@
+{
+  "id": "V20260828153614977567781",
+  "synced": false,
+  "wkt": "POINT (-48.505479 -8.530649)",
+  "data": "28/08/2026, 15:36:13",
+  "poste": "54422156",
+  "especie": "Outros",
+  "lat": -8.5306489,
+  "lon": -48.5054789,
+  "altura": "5",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Presidente Kennedy",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260828153614977567781F1",
+    "VER20260828153614977567781F2",
+    "VER20260828153614977567781F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260828153614977567781F1.jpg",
+    "fotos/Enecol-Centro/VER20260828153614977567781F2.jpg",
+    "fotos/Enecol-Centro/VER20260828153614977567781F3.jpg"
+  ],
+  "legacy_id": "V2058",
+  "remote_id": "V20260828153614977567781"
+}
