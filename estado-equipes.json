@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-28T14:05:19.928Z",
+  "updatedAt": "2026-08-28T14:06:04.561Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1787919191640",
-        "nomeProjeto": "Rota Santa Maria do Tocantins",
+        "rotaId": "1787919191639",
+        "nomeProjeto": "Rota Itacajá",
         "polo": "NORTE",
         "alimentadores": [
-          "LD01065015SM"
+          "AL01042078IT"
         ],
-        "iniciadoEm": "2026-08-28T14:04:39.208Z",
-        "atualizadoEm": "2026-08-28T14:05:18.158Z",
+        "iniciadoEm": "2026-08-28T14:06:04.561Z",
+        "atualizadoEm": "2026-08-28T14:06:04.561Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1787919191639",
+          "nomeProjeto": "Rota Itacajá",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01042078IT"
+          ],
+          "data": "2026-08-28T14:06:04.561Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1787919191640",
