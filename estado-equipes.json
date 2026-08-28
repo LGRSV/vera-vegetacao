@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-28T00:14:54.288Z",
+  "updatedAt": "2026-08-28T03:43:20.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -246,18 +246,7 @@
       ]
     },
     "Enecol Centro": {
-      "projetoAtivo": {
-        "rotaId": "1787222155757",
-        "nomeProjeto": "Rota Goianorte",
-        "polo": "NORTE",
-        "alimentadores": [
-          "LD02022033GN",
-          "LD03022033GN"
-        ],
-        "iniciadoEm": "2026-08-25T19:21:15.467Z",
-        "atualizadoEm": "2026-08-28T00:14:51.190Z",
-        "atualizadoPor": "Enecol Centro"
-      },
+      "projetoAtivo": null,
       "historico": [
         {
           "tipo": "PROJETO_ATIVADO",
@@ -576,6 +565,13 @@
       "equipe": "Enecol Centro",
       "nomeProjeto": "Rota Pequizeiro",
       "concluidoEm": "2026-08-21T22:43:26.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1787222155757": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Goianorte",
+      "concluidoEm": "2026-08-28T03:43:20.000Z",
       "concluidoPor": "Admin"
     }
   }
