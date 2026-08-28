@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-28T10:18:16.243Z",
+  "updatedAt": "2026-08-28T12:13:35.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,16 +247,15 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1787222155758",
-        "nomeProjeto": "Rota Couto Magalhães",
+        "rotaId": "1787919191639",
+        "nomeProjeto": "Rota Itacajá",
         "polo": "NORTE",
         "alimentadores": [
-          "AL01024113CM",
-          "LD01010153CM"
+          "AL01042078IT"
         ],
-        "iniciadoEm": "2026-08-28T10:18:12.502Z",
-        "atualizadoEm": "2026-08-28T10:18:12.502Z",
-        "atualizadoPor": "Enecol Centro"
+        "iniciadoEm": "2026-08-28T12:13:35.000Z",
+        "atualizadoEm": "2026-08-28T12:13:35.000Z",
+        "atualizadoPor": "Admin"
       },
       "historico": [
         {
@@ -522,6 +521,18 @@
           "iniciadoEm": "2026-08-20T10:30:12.000Z",
           "atualizadoEm": "2026-08-20T10:30:12.000Z",
           "atualizadoPor": "Admin"
+        },
+        {
+          "rotaId": "1787222155758",
+          "nomeProjeto": "Rota Couto Magalhães",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01024113CM",
+            "LD01010153CM"
+          ],
+          "iniciadoEm": "2026-08-28T10:18:12.502Z",
+          "atualizadoEm": "2026-08-28T10:18:12.502Z",
+          "atualizadoPor": "Enecol Centro"
         }
       ]
     }
