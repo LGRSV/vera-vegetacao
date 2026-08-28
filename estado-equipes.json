@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-28T14:06:06.452Z",
+  "updatedAt": "2026-08-28T14:06:43.194Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1787919191639",
-        "nomeProjeto": "Rota Itacajá",
+        "rotaId": "1787919191641",
+        "nomeProjeto": "Rota Presidente Kennedy",
         "polo": "NORTE",
         "alimentadores": [
-          "AL01042078IT"
+          "AL01073034PK"
         ],
-        "iniciadoEm": "2026-08-28T14:06:04.561Z",
-        "atualizadoEm": "2026-08-28T14:06:04.561Z",
+        "iniciadoEm": "2026-08-28T14:06:43.194Z",
+        "atualizadoEm": "2026-08-28T14:06:43.194Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1787919191641",
+          "nomeProjeto": "Rota Presidente Kennedy",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01073034PK"
+          ],
+          "data": "2026-08-28T14:06:43.194Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1787919191639",
