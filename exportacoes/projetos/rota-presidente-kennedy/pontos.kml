@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Rota Presidente Kennedy — pontos VERA</name>
 <Placemark><name>V20260828150319259264412 — Oiti</name><description><![CDATA[Espécie: Oiti<br/>Poste: 878410<br/>Área: URBANO<br/>Altura: 4.5 m · DAP: 45 cm<br/>Dist. BT/MT/AT: 300/300/0 cm<br/>Equipe: Enecol Centro · 28/08/2026, 15:03:18<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20260828150319259264412F1.jpg">Foto</a>]]></description><Point><coordinates>-48.4982767,-8.5308733,0</coordinates></Point></Placemark>
+<Placemark><name>V20260828150417696270801 — Outros</name><description><![CDATA[Espécie: Outros<br/>Poste: 878410<br/>Área: URBANO<br/>Altura: 7 m · DAP: 70 cm<br/>Dist. BT/MT/AT: 0/150/0 cm<br/>Equipe: Enecol Centro · 28/08/2026, 15:04:16<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20260828150417696270801F1.jpg">Foto</a>]]></description><Point><coordinates>-48.4980767,-8.530835,0</coordinates></Point></Placemark>
 </Document></kml>
