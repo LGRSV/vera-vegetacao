@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-28T14:04:19.669Z",
+  "updatedAt": "2026-08-28T14:04:39.208Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1787919191641",
-        "nomeProjeto": "Rota Presidente Kennedy",
+        "rotaId": "1787919191640",
+        "nomeProjeto": "Rota Santa Maria do Tocantins",
         "polo": "NORTE",
         "alimentadores": [
-          "AL01073034PK"
+          "LD01065015SM"
         ],
-        "iniciadoEm": "2026-08-28T14:04:17.188Z",
-        "atualizadoEm": "2026-08-28T14:04:17.188Z",
+        "iniciadoEm": "2026-08-28T14:04:39.208Z",
+        "atualizadoEm": "2026-08-28T14:04:39.208Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1787919191640",
+          "nomeProjeto": "Rota Santa Maria do Tocantins",
+          "polo": "NORTE",
+          "alimentadores": [
+            "LD01065015SM"
+          ],
+          "data": "2026-08-28T14:04:39.208Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1787919191641",
