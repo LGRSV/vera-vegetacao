@@ -1,0 +1,32 @@
+{
+  "id": "V20260828154233164447074",
+  "synced": false,
+  "wkt": "POINT (-48.508893 -8.528785)",
+  "data": "28/08/2026, 15:42:32",
+  "poste": "875600",
+  "especie": "Mangueira",
+  "lat": -8.5287851,
+  "lon": -48.5088926,
+  "altura": "6",
+  "dtbt": "200",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "40",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Presidente Kennedy",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260828154233164447074F1",
+    "VER20260828154233164447074F2",
+    "VER20260828154233164447074F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260828154233164447074F1.jpg",
+    "fotos/Enecol-Centro/VER20260828154233164447074F2.jpg",
+    "fotos/Enecol-Centro/VER20260828154233164447074F3.jpg"
+  ],
+  "legacy_id": "V2059",
+  "remote_id": "V20260828154233164447074"
+}
