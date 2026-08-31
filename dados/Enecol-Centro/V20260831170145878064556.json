@@ -1,0 +1,32 @@
+{
+  "id": "V20260831170145878064556",
+  "synced": false,
+  "wkt": "POINT (-48.505632 -8.537650)",
+  "data": "31/08/2026, 17:01:44",
+  "poste": "98696",
+  "especie": "Coqueiro",
+  "lat": -8.53765,
+  "lon": -48.5056317,
+  "altura": "7",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "110",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Presidente Kennedy",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260831170145878064556F1",
+    "VER20260831170145878064556F2",
+    "VER20260831170145878064556F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260831170145878064556F1.jpg",
+    "fotos/Enecol-Centro/VER20260831170145878064556F2.jpg",
+    "fotos/Enecol-Centro/VER20260831170145878064556F3.jpg"
+  ],
+  "legacy_id": "V2140",
+  "remote_id": "V20260831170145878064556"
+}
