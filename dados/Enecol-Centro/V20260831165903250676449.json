@@ -1,0 +1,32 @@
+{
+  "id": "V20260831165903250676449",
+  "synced": false,
+  "wkt": "POINT (-48.505805 -8.536865)",
+  "data": "31/08/2026, 16:59:02",
+  "poste": "876839",
+  "especie": "Oiti",
+  "lat": -8.536865,
+  "lon": -48.505805,
+  "altura": "4",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Presidente Kennedy",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260831165903250676449F1",
+    "VER20260831165903250676449F2",
+    "VER20260831165903250676449F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260831165903250676449F1.jpg",
+    "fotos/Enecol-Centro/VER20260831165903250676449F2.jpg",
+    "fotos/Enecol-Centro/VER20260831165903250676449F3.jpg"
+  ],
+  "legacy_id": "V2139",
+  "remote_id": "V20260831165903250676449"
+}
