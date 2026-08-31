@@ -1,0 +1,32 @@
+{
+  "id": "V20260831171910309613443",
+  "synced": false,
+  "wkt": "POINT (-48.506097 -8.534847)",
+  "data": "31/08/2026, 17:19:09",
+  "poste": "876229",
+  "especie": "Mogno",
+  "lat": -8.5348474,
+  "lon": -48.5060966,
+  "altura": "9.5",
+  "dtbt": "0",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "130",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Presidente Kennedy",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260831171910309613443F1",
+    "VER20260831171910309613443F2",
+    "VER20260831171910309613443F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260831171910309613443F1.jpg",
+    "fotos/Enecol-Centro/VER20260831171910309613443F2.jpg",
+    "fotos/Enecol-Centro/VER20260831171910309613443F3.jpg"
+  ],
+  "legacy_id": "V2145",
+  "remote_id": "V20260831171910309613443"
+}
