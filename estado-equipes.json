@@ -665,13 +665,17 @@
     },
     "1787222155758": {
       "status": "concluido",
-      "em": "2026-09-01T10:58:29.000Z",
-      "por": "Admin"
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Couto Magalhães",
+      "concluidoEm": "2026-09-01T10:58:29.000Z",
+      "concluidoPor": "Admin"
     },
     "1787919191641": {
       "status": "concluido",
-      "em": "2026-09-01T10:58:29.000Z",
-      "por": "Admin"
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Presidente Kennedy",
+      "concluidoEm": "2026-09-01T10:58:29.000Z",
+      "concluidoPor": "Admin"
     }
   }
 }
