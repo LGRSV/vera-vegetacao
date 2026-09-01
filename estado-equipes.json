@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-31T11:12:41.766Z",
+  "updatedAt": "2026-09-01T10:58:29.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,15 +247,15 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1787919191641",
-        "nomeProjeto": "Rota Presidente Kennedy",
+        "rotaId": "1787919191639",
+        "nomeProjeto": "Rota Itacajá",
         "polo": "NORTE",
         "alimentadores": [
-          "AL01073034PK"
+          "AL01042078IT"
         ],
-        "iniciadoEm": "2026-08-28T14:06:43.194Z",
-        "atualizadoEm": "2026-08-31T11:12:38.511Z",
-        "atualizadoPor": "Enecol Centro"
+        "iniciadoEm": "2026-09-01T10:58:29.000Z",
+        "atualizadoEm": "2026-09-01T10:58:29.000Z",
+        "atualizadoPor": "Admin"
       },
       "historico": [
         {
@@ -577,6 +577,17 @@
           "iniciadoEm": "2026-08-28T10:18:12.502Z",
           "atualizadoEm": "2026-08-28T10:18:12.502Z",
           "atualizadoPor": "Enecol Centro"
+        },
+        {
+          "rotaId": "1787919191641",
+          "nomeProjeto": "Rota Presidente Kennedy",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01073034PK"
+          ],
+          "iniciadoEm": "2026-08-28T14:06:43.194Z",
+          "atualizadoEm": "2026-08-31T11:12:38.511Z",
+          "atualizadoPor": "Enecol Centro"
         }
       ]
     }
@@ -651,6 +662,16 @@
       "nomeProjeto": "Rota Goianorte",
       "concluidoEm": "2026-08-28T03:43:20.000Z",
       "concluidoPor": "Admin"
+    },
+    "1787222155758": {
+      "status": "concluido",
+      "em": "2026-09-01T10:58:29.000Z",
+      "por": "Admin"
+    },
+    "1787919191641": {
+      "status": "concluido",
+      "em": "2026-09-01T10:58:29.000Z",
+      "por": "Admin"
     }
   }
 }
