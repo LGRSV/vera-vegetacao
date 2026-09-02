@@ -1,0 +1,32 @@
+{
+  "id": "V20260902144443067694087",
+  "synced": false,
+  "wkt": "POINT (-47.751410 -8.774955)",
+  "data": "02/09/2026, 14:44:42",
+  "poste": "42528095",
+  "especie": "Mangueira",
+  "lat": -8.7749551,
+  "lon": -47.75141,
+  "altura": "10.5",
+  "dtbt": "100",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "115",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Santa Maria do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260902144443067694087F1",
+    "VER20260902144443067694087F2",
+    "VER20260902144443067694087F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260902144443067694087F1.jpg",
+    "fotos/Enecol-Centro/VER20260902144443067694087F2.jpg",
+    "fotos/Enecol-Centro/VER20260902144443067694087F3.jpg"
+  ],
+  "legacy_id": "V0075",
+  "remote_id": "V20260902144443067694087"
+}
