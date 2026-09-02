@@ -265,6 +265,36 @@ Antes de publicar, renderize o traçado sobre imagem de satélite e confira que 
 cobre a malha de ruas. Traçado magro demais para o tamanho da cidade é sinal de
 dado faltando, não de cidade pequena.
 
+### O recorte em cima do alimentador é mais comum do que parecia
+
+A nota acima citava dois arquivos. Uma varredura de todos os `cabos/` contra o
+commit de importação (`8286f9291` NORTE, `583c46c20` CENTRO, `04c20d8cb` SUL)
+achou **42 alimentadores menores do que entraram**, vários reduzidos a menos de
+1% do traçado original:
+
+| arquivo | no import | hoje |
+|---|---|---|
+| `NORTE/LD03038009` | 11.249 | 8 |
+| `NORTE/LD01065015` | 13.663 | 38 |
+| `NORTE/LD02038009` | 1.709 | 18 |
+| `CENTRO/LD02072001` | 8.890 | 76 |
+
+Parte desses recortes é **intencional e está em uso**: as rotas de Colinas,
+Colméia e Pedro Afonso foram publicadas antes da convenção de código sintético
+e dependem do arquivo recortado. Restaurar esses quebraria as rotas. Os demais
+estão órfãos — nenhuma rota os referencia — e o traçado completo só existe no
+histórico do git.
+
+Antes de recortar uma cidade nova, **leia o cabo do commit de importação**, não
+do arquivo atual:
+
+```
+git show 8286f9291:cabos/NORTE/LD02038009.json
+```
+
+Foi assim que Tabocão pôde ser avaliada com o dado íntegro (e reprovada por
+mérito, não por arquivo truncado).
+
 ### Verificações que valem a pena antes de publicar
 
 - O traçado recortado é **uma única componente conexa** (fragmentou = recorte
