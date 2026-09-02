@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Rota Santa Maria do Tocantins — pontos VERA</name>
 <Placemark><name>V20260902143923428690149 — Mangueira</name><description><![CDATA[Espécie: Mangueira<br/>Poste: 951779<br/>Área: URBANO<br/>Altura: 13 m · DAP: 90 cm<br/>Dist. BT/MT/AT: 150/50/0 cm<br/>Equipe: Enecol Centro · 02/09/2026, 14:39:22<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20260902143923428690149F1.jpg">Foto</a>]]></description><Point><coordinates>-47.75203,-8.7756183,0</coordinates></Point></Placemark>
+<Placemark><name>V20260902144049239601575 — Mangueira</name><description><![CDATA[Espécie: Mangueira<br/>Poste: 951779<br/>Área: URBANO<br/>Altura: 14 m · DAP: 130 cm<br/>Dist. BT/MT/AT: 300/250/0 cm<br/>Equipe: Enecol Centro · 02/09/2026, 14:40:48<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20260902144049239601575F1.jpg">Foto</a>]]></description><Point><coordinates>-47.751965,-8.7755433,0</coordinates></Point></Placemark>
 </Document></kml>
