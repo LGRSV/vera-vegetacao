@@ -1,0 +1,33 @@
+{
+  "id": "V20260902084906650952101",
+  "synced": true,
+  "wkt": "POINT (-47.776080 -8.395535)",
+  "data": "01/09/2026, 15:36:58",
+  "poste": "842343",
+  "especie": "Mangueira",
+  "lat": -8.3955346,
+  "lon": -47.7760797,
+  "altura": "12",
+  "dtbt": "300",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "140",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Itacajá",
+  "syncedAt": "2026-09-02T11:49:15.050Z",
+  "fotos_ids": [
+    "VER20260902084906650952101F1",
+    "VER20260902084906650952101F2",
+    "VER20260902084906650952101F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260902084906650952101F1.jpg",
+    "fotos/Enecol-Centro/VER20260902084906650952101F2.jpg",
+    "fotos/Enecol-Centro/VER20260902084906650952101F3.jpg"
+  ],
+  "fotos_count": 3,
+  "legacy_id": "V0052",
+  "remote_id": "V20260902084906650952101"
+}
