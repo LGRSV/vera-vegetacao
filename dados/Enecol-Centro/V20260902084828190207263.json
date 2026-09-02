@@ -1,0 +1,33 @@
+{
+  "id": "V20260902084828190207263",
+  "synced": true,
+  "wkt": "POINT (-47.772464 -8.390852)",
+  "data": "01/09/2026, 15:26:11",
+  "poste": "1741627",
+  "especie": "Oiti",
+  "lat": -8.3908518,
+  "lon": -47.7724643,
+  "altura": "8.5",
+  "dtbt": "100",
+  "dtmt": "150",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Itacajá",
+  "syncedAt": "2026-09-02T11:48:38.698Z",
+  "fotos_ids": [
+    "VER20260902084828190207263F1",
+    "VER20260902084828190207263F2",
+    "VER20260902084828190207263F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260902084828190207263F1.jpg",
+    "fotos/Enecol-Centro/VER20260902084828190207263F2.jpg",
+    "fotos/Enecol-Centro/VER20260902084828190207263F3.jpg"
+  ],
+  "fotos_count": 3,
+  "legacy_id": "V0049",
+  "remote_id": "V20260902084828190207263"
+}
