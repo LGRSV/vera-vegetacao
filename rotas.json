@@ -131,6 +131,42 @@
       "criada": "28/08/2026, 04:30:00",
       "criadaPor": "Admin",
       "editada": "28/08/2026, 04:30:00"
+    },
+    {
+      "id": "1788400000000",
+      "nomeProjeto": "Rota Rio dos Bois",
+      "equipe": "Enecol Centro",
+      "polo": "CENTRO",
+      "alimentadores": [
+        "LD03050008RB"
+      ]
+    },
+    {
+      "id": "1788400000001",
+      "nomeProjeto": "Rota Miranorte",
+      "equipe": "Enecol Centro",
+      "polo": "CENTRO",
+      "alimentadores": [
+        "AL02050008MN"
+      ]
+    },
+    {
+      "id": "1788400000002",
+      "nomeProjeto": "Rota Miracema do Tocantins",
+      "equipe": "Enecol Centro",
+      "polo": "CENTRO",
+      "alimentadores": [
+        "AL02048007MC"
+      ]
+    },
+    {
+      "id": "1788400000003",
+      "nomeProjeto": "Rota Dois Irmãos do Tocantins",
+      "equipe": "Enecol Centro",
+      "polo": "CENTRO",
+      "alimentadores": [
+        "LD02050008DI"
+      ]
     }
   ]
 }

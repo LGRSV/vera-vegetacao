@@ -1,7 +1,7 @@
 {
   "gerado": "02/09/2026",
-  "total_pontos": 3312,
-  "total_fotos": 7548,
+  "total_pontos": 3382,
+  "total_fotos": 7759,
   "projetos": [
     {
       "nome": "SE Paraíso I",
@@ -134,6 +134,18 @@
       "de": "26/08/2026",
       "ate": "27/08/2026",
       "especie_top": "Outros"
+    },
+    {
+      "nome": "Rota Itacajá",
+      "slug": "rota-itacaja",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 70,
+      "fotos": 211,
+      "fotos_ausentes": 0,
+      "de": "01/09/2026",
+      "ate": "01/09/2026",
+      "especie_top": "Oiti"
     },
     {
       "nome": "Rota Paraíso SE 2",
