@@ -33,6 +33,17 @@
         "dados/Enecol-Centro/V0022.json",
         "dados/Enecol-Centro/V0023.json"
       ]
+    },
+    {
+      "chave": "02-09",
+      "titulo": "02/09/2026",
+      "data": "20260902",
+      "branch": "backup/enecol-centro-2026-09-02",
+      "ref": "02f4ea660ee148d84a809d596a0aa3178c7f938e",
+      "descricao": "Snapshot completo antes de encerrar a Rota Itacaja: 3.631 pontos e 7.576 fotos, 12 rotas concluidas.",
+      "pontos": 3631,
+      "fotos": 7576,
+      "arquivos": []
     }
   ]
 }

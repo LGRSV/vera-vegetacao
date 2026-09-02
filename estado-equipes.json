@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-01T10:58:29.000Z",
+  "updatedAt": "2026-09-02T11:28:11.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,14 +247,14 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1787919191639",
-        "nomeProjeto": "Rota Itacajá",
+        "rotaId": "1787919191640",
+        "nomeProjeto": "Rota Santa Maria do Tocantins",
         "polo": "NORTE",
         "alimentadores": [
-          "AL01042078IT"
+          "LD01065015SM"
         ],
-        "iniciadoEm": "2026-09-01T10:58:29.000Z",
-        "atualizadoEm": "2026-09-01T10:58:29.000Z",
+        "iniciadoEm": "2026-09-02T11:28:11.000Z",
+        "atualizadoEm": "2026-09-02T11:28:11.000Z",
         "atualizadoPor": "Admin"
       },
       "historico": [
@@ -588,6 +588,17 @@
           "iniciadoEm": "2026-08-28T14:06:43.194Z",
           "atualizadoEm": "2026-08-31T11:12:38.511Z",
           "atualizadoPor": "Enecol Centro"
+        },
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1787919191640",
+          "nomeProjeto": "Rota Santa Maria do Tocantins",
+          "polo": "NORTE",
+          "alimentadores": [
+            "LD01065015SM"
+          ],
+          "em": "2026-09-02T11:28:11.000Z",
+          "por": "Admin"
         }
       ]
     }
@@ -675,6 +686,13 @@
       "equipe": "Enecol Centro",
       "nomeProjeto": "Rota Presidente Kennedy",
       "concluidoEm": "2026-09-01T10:58:29.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1787919191639": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Itacajá",
+      "concluidoEm": "2026-09-02T11:28:11.000Z",
       "concluidoPor": "Admin"
     }
   }
