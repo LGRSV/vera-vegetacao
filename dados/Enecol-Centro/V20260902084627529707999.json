@@ -1,0 +1,33 @@
+{
+  "id": "V20260902084627529707999",
+  "synced": false,
+  "wkt": "POINT (-47.768434 -8.389954)",
+  "data": "01/09/2026, 14:42:11",
+  "poste": "841590",
+  "especie": "Outros",
+  "lat": -8.3899545,
+  "lon": -47.7684335,
+  "altura": "8.5",
+  "dtbt": "250",
+  "dtmt": "250",
+  "dtat": "0",
+  "dap": "50",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Itacajá",
+  "syncedAt": null,
+  "fotos_ids": [
+    "VER20260902084627529707999F1",
+    "VER20260902084627529707999F2",
+    "VER20260902084627529707999F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260902084627529707999F1.jpg",
+    "fotos/Enecol-Centro/VER20260902084627529707999F2.jpg",
+    "fotos/Enecol-Centro/VER20260902084627529707999F3.jpg"
+  ],
+  "fotos_count": 3,
+  "legacy_id": "V0036",
+  "remote_id": "V20260902084627529707999"
+}
