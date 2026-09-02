@@ -1,6 +1,6 @@
 {
   "id": "V20260902084842416673919",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-47.776810 -8.395535)",
   "data": "01/09/2026, 15:34:16",
   "poste": "137671",
@@ -16,7 +16,7 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Itacajá",
-  "syncedAt": "2026-09-02T11:48:50.174Z",
+  "syncedAt": null,
   "fotos_ids": [
     "VER20260902084842416673919F1",
     "VER20260902084842416673919F2",
