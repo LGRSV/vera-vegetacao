@@ -1,0 +1,32 @@
+{
+  "id": "V20260902151417850023142",
+  "synced": false,
+  "wkt": "POINT (-47.748275 -8.775695)",
+  "data": "02/09/2026, 15:14:16",
+  "poste": "937777",
+  "especie": "Outros",
+  "lat": -8.7756951,
+  "lon": -47.7482754,
+  "altura": "4",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "45",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Santa Maria do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260902151417850023142F1",
+    "VER20260902151417850023142F2",
+    "VER20260902151417850023142F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260902151417850023142F1.jpg",
+    "fotos/Enecol-Centro/VER20260902151417850023142F2.jpg",
+    "fotos/Enecol-Centro/VER20260902151417850023142F3.jpg"
+  ],
+  "legacy_id": "V0090",
+  "remote_id": "V20260902151417850023142"
+}
