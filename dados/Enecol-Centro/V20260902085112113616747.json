@@ -1,0 +1,33 @@
+{
+  "id": "V20260902085112113616747",
+  "synced": false,
+  "wkt": "POINT (-47.769969 -8.395945)",
+  "data": "01/09/2026, 15:59:33",
+  "poste": "843965",
+  "especie": "Mogno",
+  "lat": -8.3959445,
+  "lon": -47.7699694,
+  "altura": "6.5",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Itacajá",
+  "syncedAt": null,
+  "fotos_ids": [
+    "VER20260902085112113616747F1",
+    "VER20260902085112113616747F2",
+    "VER20260902085112113616747F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260902085112113616747F1.jpg",
+    "fotos/Enecol-Centro/VER20260902085112113616747F2.jpg",
+    "fotos/Enecol-Centro/VER20260902085112113616747F3.jpg"
+  ],
+  "fotos_count": 3,
+  "legacy_id": "V0063",
+  "remote_id": "V20260902085112113616747"
+}
