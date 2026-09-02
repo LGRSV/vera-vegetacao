@@ -1,6 +1,6 @@
 {
   "id": "V20260902162857834204075",
-  "synced": false,
+  "synced": true,
   "wkt": "POINT (-47.753278 -8.775077)",
   "data": "02/09/2026, 16:28:56",
   "poste": "105744",
@@ -16,6 +16,7 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Santa Maria do Tocantins",
+  "syncedAt": "2026-09-02T19:29:21.934Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260902162857834204075F1",
