@@ -1,0 +1,32 @@
+{
+  "id": "V20260902151304045483699",
+  "synced": false,
+  "wkt": "POINT (-47.748484 -8.776412)",
+  "data": "02/09/2026, 15:13:03",
+  "poste": "939446",
+  "especie": "Mogno",
+  "lat": -8.7764124,
+  "lon": -47.7484843,
+  "altura": "10",
+  "dtbt": "100",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "60",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Santa Maria do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260902151304045483699F1",
+    "VER20260902151304045483699F2",
+    "VER20260902151304045483699F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260902151304045483699F1.jpg",
+    "fotos/Enecol-Centro/VER20260902151304045483699F2.jpg",
+    "fotos/Enecol-Centro/VER20260902151304045483699F3.jpg"
+  ],
+  "legacy_id": "V0089",
+  "remote_id": "V20260902151304045483699"
+}
