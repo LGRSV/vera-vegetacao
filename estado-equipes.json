@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-03T11:30:35.836Z",
+  "updatedAt": "2026-09-03T11:30:59.168Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1788400000002",
-        "nomeProjeto": "Rota Miracema do Tocantins",
+        "rotaId": "1788400000001",
+        "nomeProjeto": "Rota Miranorte",
         "polo": "CENTRO",
         "alimentadores": [
-          "AL02048007MC"
+          "AL02050008MN"
         ],
-        "iniciadoEm": "2026-09-03T11:30:34.211Z",
-        "atualizadoEm": "2026-09-03T11:30:34.211Z",
+        "iniciadoEm": "2026-09-03T11:30:59.168Z",
+        "atualizadoEm": "2026-09-03T11:30:59.168Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1788400000001",
+          "nomeProjeto": "Rota Miranorte",
+          "polo": "CENTRO",
+          "alimentadores": [
+            "AL02050008MN"
+          ],
+          "data": "2026-09-03T11:30:59.168Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1788400000002",
