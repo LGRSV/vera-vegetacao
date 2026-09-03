@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-03T11:31:00.911Z",
+  "updatedAt": "2026-09-03T11:31:14.207Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1788400000001",
-        "nomeProjeto": "Rota Miranorte",
+        "rotaId": "1788400000000",
+        "nomeProjeto": "Rota Rio dos Bois",
         "polo": "CENTRO",
         "alimentadores": [
-          "AL02050008MN"
+          "LD03050008RB"
         ],
-        "iniciadoEm": "2026-09-03T11:30:59.168Z",
-        "atualizadoEm": "2026-09-03T11:30:59.168Z",
+        "iniciadoEm": "2026-09-03T11:31:14.207Z",
+        "atualizadoEm": "2026-09-03T11:31:14.207Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1788400000000",
+          "nomeProjeto": "Rota Rio dos Bois",
+          "polo": "CENTRO",
+          "alimentadores": [
+            "LD03050008RB"
+          ],
+          "data": "2026-09-03T11:31:14.207Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1788400000001",
