@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-03T11:38:44.165Z",
+  "updatedAt": "2026-09-03T11:39:14.582Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1788400000003",
-        "nomeProjeto": "Rota Dois Irmãos do Tocantins",
+        "rotaId": "1788400000002",
+        "nomeProjeto": "Rota Miracema do Tocantins",
         "polo": "CENTRO",
         "alimentadores": [
-          "LD02050008DI"
+          "AL02048007MC"
         ],
-        "iniciadoEm": "2026-09-03T11:38:42.456Z",
-        "atualizadoEm": "2026-09-03T11:38:42.456Z",
+        "iniciadoEm": "2026-09-03T11:39:14.582Z",
+        "atualizadoEm": "2026-09-03T11:39:14.582Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1788400000002",
+          "nomeProjeto": "Rota Miracema do Tocantins",
+          "polo": "CENTRO",
+          "alimentadores": [
+            "AL02048007MC"
+          ],
+          "data": "2026-09-03T11:39:14.582Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1788400000003",
@@ -642,17 +653,6 @@
           ],
           "iniciadoEm": "2026-08-28T10:18:12.502Z",
           "atualizadoEm": "2026-08-28T10:18:12.502Z",
-          "atualizadoPor": "Enecol Centro"
-        },
-        {
-          "rotaId": "1787919191641",
-          "nomeProjeto": "Rota Presidente Kennedy",
-          "polo": "NORTE",
-          "alimentadores": [
-            "AL01073034PK"
-          ],
-          "iniciadoEm": "2026-08-28T14:06:43.194Z",
-          "atualizadoEm": "2026-08-31T11:12:38.511Z",
           "atualizadoPor": "Enecol Centro"
         }
       ]
