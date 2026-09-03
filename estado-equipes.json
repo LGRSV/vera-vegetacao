@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-02T11:53:39.739Z",
+  "updatedAt": "2026-09-03T11:29:51.440Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1787919191640",
-        "nomeProjeto": "Rota Santa Maria do Tocantins",
-        "polo": "NORTE",
+        "rotaId": "1788400000003",
+        "nomeProjeto": "Rota Dois Irmãos do Tocantins",
+        "polo": "CENTRO",
         "alimentadores": [
-          "LD01065015SM"
+          "LD02050008DI"
         ],
-        "iniciadoEm": "2026-09-02T11:28:11.000Z",
-        "atualizadoEm": "2026-09-02T11:53:37.130Z",
+        "iniciadoEm": "2026-09-03T11:29:51.440Z",
+        "atualizadoEm": "2026-09-03T11:29:51.440Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1788400000003",
+          "nomeProjeto": "Rota Dois Irmãos do Tocantins",
+          "polo": "CENTRO",
+          "alimentadores": [
+            "LD02050008DI"
+          ],
+          "data": "2026-09-03T11:29:51.440Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1787919191641",
