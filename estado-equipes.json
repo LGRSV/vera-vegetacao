@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-03T11:31:15.921Z",
+  "updatedAt": "2026-09-03T11:31:42.670Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1788400000000",
-        "nomeProjeto": "Rota Rio dos Bois",
-        "polo": "CENTRO",
+        "rotaId": "1787919191640",
+        "nomeProjeto": "Rota Santa Maria do Tocantins",
+        "polo": "NORTE",
         "alimentadores": [
-          "LD03050008RB"
+          "LD01065015SM"
         ],
-        "iniciadoEm": "2026-09-03T11:31:14.207Z",
-        "atualizadoEm": "2026-09-03T11:31:14.207Z",
+        "iniciadoEm": "2026-09-03T11:31:42.670Z",
+        "atualizadoEm": "2026-09-03T11:31:42.670Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1787919191640",
+          "nomeProjeto": "Rota Santa Maria do Tocantins",
+          "polo": "NORTE",
+          "alimentadores": [
+            "LD01065015SM"
+          ],
+          "data": "2026-09-03T11:31:42.670Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1788400000000",
