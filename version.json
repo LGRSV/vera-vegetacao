@@ -1,5 +1,5 @@
 {
-  "version": "2.6.48",
-  "released": "2026-08-31",
-  "notes": "Couto Magalhaes e Presidente Kennedy concluidas; Itacaja ativa e Santa Maria na fila"
+  "version": "2.6.49",
+  "released": "2026-09-04",
+  "notes": "Exportacao do painel admin refeita: le a base consolidada (sem limite de 1000 arquivos), remove duplicados de reenvio e traz Polo/Tipo/Alimentador"
 }
