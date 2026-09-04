@@ -1,5 +1,5 @@
 {
-  "version": "2.6.49",
+  "version": "2.6.50",
   "released": "2026-09-04",
-  "notes": "Exportacao do painel admin refeita: le a base consolidada (sem limite de 1000 arquivos), remove duplicados de reenvio e traz Polo/Tipo/Alimentador"
+  "notes": "Exportacao do admin sai no padrao da planilha em uso: coluna AL (alimentador) depois do ID e mes/ano no fim"
 }

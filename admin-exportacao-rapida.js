@@ -188,35 +188,39 @@
     }
   }
 
-  // Cabecalho original do app, com POLO/TIPO/ALIMENTADOR acrescentados no fim
-  // para nao deslocar nenhuma coluna ja usada pelas planilhas existentes.
-  var COLUNAS = ['WKT', 'ID', 'DATA', 'PROJETO', 'POSTE', 'ESPECIE', 'LATITUDE', 'LONGITUDE',
-    'ALTURA(M)', 'DT BT(cm)', 'DT MT(cm)', 'DT AT(cm)', 'DIAM.TRONCO(cm)', 'Area',
-    'Acesso LV', 'Equipe', 'Fotos', 'IDs_Fotos', 'POLO', 'TIPO', 'ALIMENTADOR'];
+  // Padrao da planilha em uso: AL (alimentador) logo depois do ID e mes/ano no fim.
+  var COLUNAS = ['WKT', 'ID', 'AL', 'DATA', 'POSTE', 'ESPECIE', 'LATITUDE', 'LONGITUDE',
+    'ALTURA(M)', 'DT BT(cm)', 'DT MT(cm)', 'DT AT(cm)', 'DAP (cm)', 'Area',
+    'Acesso LV', 'IDs_Fotos', 'mês', 'ano'];
 
-  // Ids das fotos do ponto, todos numa coluna so (VER<id sem o V>F<n>).
-  // A exportacao por equipe traz apenas a contagem, e a numeracao e sequencial.
+  // Nomes dos arquivos de foto do ponto, todos numa coluna so.
   function idsFotos(p) {
     var n = p.fotos || 0;
     if (!n) return '';
     var base = 'VER' + String(p.id).replace(/^V/, '') + 'F';
     var out = [];
-    for (var i = 1; i <= n; i++) out.push(base + i);
+    for (var i = 1; i <= n; i++) out.push(base + i + '.jpg');
     return out.join(' | ');
+  }
+
+  function mesAno(p) {
+    var m = String(p.data || '').match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    return m ? [String(Number(m[2])), m[3]] : ['', ''];
   }
 
   function montarCSV() {
     var linhas = [COLUNAS.join(';')];
     registros.forEach(function (p) {
-      var wkt = (p.lat && p.lon) ? ('POINT (' + Number(p.lon).toFixed(6) + ' ' + Number(p.lat).toFixed(6) + ')') : '';
+      var wkt = (p.lat && p.lon)
+        ? ('POINT (' + Number(p.lon).toFixed(6) + ' ' + Number(p.lat).toFixed(6) + ')') : '';
+      var ma = mesAno(p);
       linhas.push([
-        wkt, p.id, p.data, p.rota, p.poste || 'NÃO INFORMADO', p.especie,
+        wkt, p.id, p.alimentador, p.data, p.poste || 'NÃO INFORMADO', p.especie,
         p.lat, p.lon, p.altura, p.dtbt, p.dtmt, p.dtat, p.dap, p.area,
-        p.acesso, p.equipe, p.fotos, idsFotos(p),
-        p.polo, p.tipo, p.alimentador
+        p.acesso, idsFotos(p), ma[0], ma[1]
       ].map(escCSV).join(';'));
     });
-    return '﻿' + linhas.join('\r\n') + '\r\n';
+    return '\ufeff' + linhas.join('\r\n') + '\r\n';
   }
 
   function xml(s) {
