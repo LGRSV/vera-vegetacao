@@ -1,5 +1,5 @@
 {
-  "version": "2.6.50",
+  "version": "2.6.51",
   "released": "2026-09-04",
-  "notes": "Exportacao do admin sai no padrao da planilha em uso: coluna AL (alimentador) depois do ID e mes/ano no fim"
+  "notes": "Painel Extracao global na aba Admin: CSV de todas as equipes, CSV por rota e fotos do servidor em .zip por rota"
 }
