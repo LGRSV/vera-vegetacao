@@ -1,0 +1,32 @@
+{
+  "id": "V20260909104941479003667",
+  "synced": false,
+  "wkt": "POINT (-48.538062 -9.343282)",
+  "data": "09/09/2026, 10:49:40",
+  "poste": "",
+  "especie": "Mangueira",
+  "lat": -9.3432817,
+  "lon": -48.5380617,
+  "altura": "14.5",
+  "dtbt": "250",
+  "dtmt": "150",
+  "dtat": "0",
+  "dap": "200",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Rio dos Bois",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260909104941479003667F1",
+    "VER20260909104941479003667F2",
+    "VER20260909104941479003667F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260909104941479003667F1.jpg",
+    "fotos/Enecol-Centro/VER20260909104941479003667F2.jpg",
+    "fotos/Enecol-Centro/VER20260909104941479003667F3.jpg"
+  ],
+  "legacy_id": "V0136",
+  "remote_id": "V20260909104941479003667"
+}
