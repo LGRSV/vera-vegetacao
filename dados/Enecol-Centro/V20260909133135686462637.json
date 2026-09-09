@@ -1,0 +1,32 @@
+{
+  "id": "V20260909133135686462637",
+  "synced": false,
+  "wkt": "POINT (-48.534097 -9.342975)",
+  "data": "09/09/2026, 13:31:34",
+  "poste": "",
+  "especie": "Goiabeira",
+  "lat": -9.342975,
+  "lon": -48.5340967,
+  "altura": "5",
+  "dtbt": "250",
+  "dtmt": "300",
+  "dtat": "",
+  "dap": "55",
+  "area": "URBANO",
+  "acesso": "Não",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Rio dos Bois",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260909133135686462637F1",
+    "VER20260909133135686462637F2",
+    "VER20260909133135686462637F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260909133135686462637F1.jpg",
+    "fotos/Enecol-Centro/VER20260909133135686462637F2.jpg",
+    "fotos/Enecol-Centro/VER20260909133135686462637F3.jpg"
+  ],
+  "legacy_id": "V0150",
+  "remote_id": "V20260909133135686462637"
+}
