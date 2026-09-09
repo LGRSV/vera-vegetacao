@@ -1,0 +1,32 @@
+{
+  "id": "V20260909132040304756123",
+  "synced": false,
+  "wkt": "POINT (-48.535077 -9.346267)",
+  "data": "09/09/2026, 13:20:39",
+  "poste": "143578",
+  "especie": "Outros",
+  "lat": -9.3462667,
+  "lon": -48.5350767,
+  "altura": "7",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "55",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Rio dos Bois",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260909132040304756123F1",
+    "VER20260909132040304756123F2",
+    "VER20260909132040304756123F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260909132040304756123F1.jpg",
+    "fotos/Enecol-Centro/VER20260909132040304756123F2.jpg",
+    "fotos/Enecol-Centro/VER20260909132040304756123F3.jpg"
+  ],
+  "legacy_id": "V0148",
+  "remote_id": "V20260909132040304756123"
+}
