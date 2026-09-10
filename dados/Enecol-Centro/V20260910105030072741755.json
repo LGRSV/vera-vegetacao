@@ -1,0 +1,32 @@
+{
+  "id": "V20260910105030072741755",
+  "synced": false,
+  "wkt": "POINT (-49.058075 -9.262000)",
+  "data": "10/09/2026, 10:50:29",
+  "poste": "",
+  "especie": "Jatobá",
+  "lat": -9.262,
+  "lon": -49.058075,
+  "altura": "10",
+  "dtbt": "",
+  "dtmt": "200",
+  "dtat": "0",
+  "dap": "100",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Dois Irmãos do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260910105030072741755F1",
+    "VER20260910105030072741755F2",
+    "VER20260910105030072741755F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260910105030072741755F1.jpg",
+    "fotos/Enecol-Centro/VER20260910105030072741755F2.jpg",
+    "fotos/Enecol-Centro/VER20260910105030072741755F3.jpg"
+  ],
+  "legacy_id": "V0154",
+  "remote_id": "V20260910105030072741755"
+}
