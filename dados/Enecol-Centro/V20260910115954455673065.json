@@ -1,6 +1,6 @@
 {
   "id": "V20260910115954455673065",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-49.068067 -9.262332)",
   "data": "10/09/2026, 11:59:54",
   "poste": "",
@@ -16,7 +16,6 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Dois Irmãos do Tocantins",
-  "syncedAt": "2026-09-10T15:00:07.754Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260910115954455673065F1",
