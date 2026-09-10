@@ -1,0 +1,32 @@
+{
+  "id": "V20260910105645432549483",
+  "synced": false,
+  "wkt": "POINT (-49.059815 -9.260890)",
+  "data": "10/09/2026, 10:56:44",
+  "poste": "",
+  "especie": "Abacateiro",
+  "lat": -9.26089,
+  "lon": -49.059815,
+  "altura": "5",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "85",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Dois Irmãos do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260910105645432549483F1",
+    "VER20260910105645432549483F2",
+    "VER20260910105645432549483F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260910105645432549483F1.jpg",
+    "fotos/Enecol-Centro/VER20260910105645432549483F2.jpg",
+    "fotos/Enecol-Centro/VER20260910105645432549483F3.jpg"
+  ],
+  "legacy_id": "V0156",
+  "remote_id": "V20260910105645432549483"
+}
