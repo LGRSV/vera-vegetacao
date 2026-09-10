@@ -1,5 +1,5 @@
 {
-  "version": "2.6.51",
-  "released": "2026-09-04",
-  "notes": "Painel Extracao global na aba Admin: CSV de todas as equipes, CSV por rota e fotos do servidor em .zip por rota"
+  "version": "2.6.52",
+  "released": "2026-09-10",
+  "notes": "Poste de Referencia obrigatorio para a equipe de campo ao registrar um ponto"
 }
