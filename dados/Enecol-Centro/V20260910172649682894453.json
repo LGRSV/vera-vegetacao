@@ -1,0 +1,32 @@
+{
+  "id": "V20260910172649682894453",
+  "synced": false,
+  "wkt": "POINT (-49.068030 -9.255985)",
+  "data": "10/09/2026, 17:26:48",
+  "poste": "216966",
+  "especie": "Macauba",
+  "lat": -9.255985,
+  "lon": -49.06803,
+  "altura": "7.5",
+  "dtbt": "",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "80",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Dois Irmãos do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260910172649682894453F1",
+    "VER20260910172649682894453F2",
+    "VER20260910172649682894453F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260910172649682894453F1.jpg",
+    "fotos/Enecol-Centro/VER20260910172649682894453F2.jpg",
+    "fotos/Enecol-Centro/VER20260910172649682894453F3.jpg"
+  ],
+  "legacy_id": "V0242",
+  "remote_id": "V20260910172649682894453"
+}
