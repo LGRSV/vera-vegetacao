@@ -1,0 +1,32 @@
+{
+  "id": "V20260910144903858555521",
+  "synced": false,
+  "wkt": "POINT (-49.066040 -9.258097)",
+  "data": "10/09/2026, 14:49:02",
+  "poste": "",
+  "especie": "Cajueiro",
+  "lat": -9.2580967,
+  "lon": -49.06604,
+  "altura": "5.5",
+  "dtbt": "0",
+  "dtmt": "150",
+  "dtat": "0",
+  "dap": "55",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Dois Irmãos do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260910144903858555521F1",
+    "VER20260910144903858555521F2",
+    "VER20260910144903858555521F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260910144903858555521F1.jpg",
+    "fotos/Enecol-Centro/VER20260910144903858555521F2.jpg",
+    "fotos/Enecol-Centro/VER20260910144903858555521F3.jpg"
+  ],
+  "legacy_id": "V0190",
+  "remote_id": "V20260910144903858555521"
+}
