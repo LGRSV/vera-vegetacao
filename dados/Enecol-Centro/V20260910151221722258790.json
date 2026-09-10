@@ -1,0 +1,32 @@
+{
+  "id": "V20260910151221722258790",
+  "synced": false,
+  "wkt": "POINT (-49.064205 -9.253843)",
+  "data": "10/09/2026, 15:12:20",
+  "poste": "",
+  "especie": "Palmeira",
+  "lat": -9.2538433,
+  "lon": -49.064205,
+  "altura": "7",
+  "dtbt": "250",
+  "dtmt": "250",
+  "dtat": "0",
+  "dap": "95",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Dois Irmãos do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260910151221722258790F1",
+    "VER20260910151221722258790F2",
+    "VER20260910151221722258790F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260910151221722258790F1.jpg",
+    "fotos/Enecol-Centro/VER20260910151221722258790F2.jpg",
+    "fotos/Enecol-Centro/VER20260910151221722258790F3.jpg"
+  ],
+  "legacy_id": "V0200",
+  "remote_id": "V20260910151221722258790"
+}
