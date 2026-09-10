@@ -1,0 +1,32 @@
+{
+  "id": "V20260910170809908920071",
+  "synced": false,
+  "wkt": "POINT (-49.067508 -9.255337)",
+  "data": "10/09/2026, 17:08:09",
+  "poste": "",
+  "especie": "Limoeiro",
+  "lat": -9.2553367,
+  "lon": -49.0675083,
+  "altura": "6",
+  "dtbt": "50",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "45",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Dois Irmãos do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260910170809908920071F1",
+    "VER20260910170809908920071F2",
+    "VER20260910170809908920071F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260910170809908920071F1.jpg",
+    "fotos/Enecol-Centro/VER20260910170809908920071F2.jpg",
+    "fotos/Enecol-Centro/VER20260910170809908920071F3.jpg"
+  ],
+  "legacy_id": "V0235",
+  "remote_id": "V20260910170809908920071"
+}
