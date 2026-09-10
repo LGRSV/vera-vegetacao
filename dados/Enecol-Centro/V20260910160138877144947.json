@@ -1,0 +1,32 @@
+{
+  "id": "V20260910160138877144947",
+  "synced": false,
+  "wkt": "POINT (-49.065785 -9.251752)",
+  "data": "10/09/2026, 16:01:37",
+  "poste": "",
+  "especie": "Outros",
+  "lat": -9.2517517,
+  "lon": -49.065785,
+  "altura": "4",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "95",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Dois Irmãos do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260910160138877144947F1",
+    "VER20260910160138877144947F2",
+    "VER20260910160138877144947F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260910160138877144947F1.jpg",
+    "fotos/Enecol-Centro/VER20260910160138877144947F2.jpg",
+    "fotos/Enecol-Centro/VER20260910160138877144947F3.jpg"
+  ],
+  "legacy_id": "V0214",
+  "remote_id": "V20260910160138877144947"
+}
