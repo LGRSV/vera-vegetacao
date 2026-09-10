@@ -1,0 +1,32 @@
+{
+  "id": "V20260910110821047323165",
+  "synced": false,
+  "wkt": "POINT (-49.060963 -9.260438)",
+  "data": "10/09/2026, 11:08:20",
+  "poste": "",
+  "especie": "Jambo",
+  "lat": -9.2604383,
+  "lon": -49.0609633,
+  "altura": "12",
+  "dtbt": "200",
+  "dtmt": "150",
+  "dtat": "0",
+  "dap": "95",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Dois Irmãos do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260910110821047323165F1",
+    "VER20260910110821047323165F2",
+    "VER20260910110821047323165F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260910110821047323165F1.jpg",
+    "fotos/Enecol-Centro/VER20260910110821047323165F2.jpg",
+    "fotos/Enecol-Centro/VER20260910110821047323165F3.jpg"
+  ],
+  "legacy_id": "V0160",
+  "remote_id": "V20260910110821047323165"
+}
