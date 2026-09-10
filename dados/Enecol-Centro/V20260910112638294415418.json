@@ -1,0 +1,32 @@
+{
+  "id": "V20260910112638294415418",
+  "synced": false,
+  "wkt": "POINT (-49.061180 -9.260310)",
+  "data": "10/09/2026, 11:26:37",
+  "poste": "220915",
+  "especie": "Mangueira",
+  "lat": -9.26031,
+  "lon": -49.06118,
+  "altura": "10.5",
+  "dtbt": "300",
+  "dtmt": "250",
+  "dtat": "0",
+  "dap": "175",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Dois Irmãos do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260910112638294415418F1",
+    "VER20260910112638294415418F2",
+    "VER20260910112638294415418F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260910112638294415418F1.jpg",
+    "fotos/Enecol-Centro/VER20260910112638294415418F2.jpg",
+    "fotos/Enecol-Centro/VER20260910112638294415418F3.jpg"
+  ],
+  "legacy_id": "V0166",
+  "remote_id": "V20260910112638294415418"
+}
