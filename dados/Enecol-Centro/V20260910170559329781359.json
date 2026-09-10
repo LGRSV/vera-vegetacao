@@ -1,0 +1,32 @@
+{
+  "id": "V20260910170559329781359",
+  "synced": false,
+  "wkt": "POINT (-49.067277 -9.255573)",
+  "data": "10/09/2026, 17:05:58",
+  "poste": "",
+  "especie": "Goiabeira",
+  "lat": -9.2555733,
+  "lon": -49.0672767,
+  "altura": "5",
+  "dtbt": "200",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "65",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Dois Irmãos do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260910170559329781359F1",
+    "VER20260910170559329781359F2",
+    "VER20260910170559329781359F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260910170559329781359F1.jpg",
+    "fotos/Enecol-Centro/VER20260910170559329781359F2.jpg",
+    "fotos/Enecol-Centro/VER20260910170559329781359F3.jpg"
+  ],
+  "legacy_id": "V0234",
+  "remote_id": "V20260910170559329781359"
+}
