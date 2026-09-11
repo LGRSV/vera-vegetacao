@@ -1,5 +1,5 @@
 {
-  "version": "2.6.52",
-  "released": "2026-09-10",
-  "notes": "Poste de Referencia obrigatorio para a equipe de campo ao registrar um ponto"
+  "version": "2.6.53",
+  "released": "2026-09-11",
+  "notes": "Botao para alternar a base do mapa do admin entre satelite e OpenStreetMap"
 }
