@@ -1,0 +1,32 @@
+{
+  "id": "V20260911105619700197293",
+  "synced": false,
+  "wkt": "POINT (-48.408622 -9.563140)",
+  "data": "11/09/2026, 10:56:18",
+  "poste": "145219",
+  "especie": "Tamarindo",
+  "lat": -9.56314,
+  "lon": -48.4086217,
+  "altura": "7",
+  "dtbt": "0",
+  "dtmt": "0",
+  "dtat": "0",
+  "dap": "100",
+  "area": "URBANO",
+  "acesso": "Não",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Miracema do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260911105619700197293F1",
+    "VER20260911105619700197293F2",
+    "VER20260911105619700197293F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260911105619700197293F1.jpg",
+    "fotos/Enecol-Centro/VER20260911105619700197293F2.jpg",
+    "fotos/Enecol-Centro/VER20260911105619700197293F3.jpg"
+  ],
+  "legacy_id": "V0260",
+  "remote_id": "V20260911105619700197293"
+}
