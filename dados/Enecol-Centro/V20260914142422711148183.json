@@ -1,6 +1,6 @@
 {
   "id": "V20260914142422711148183",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-48.411192 -9.559555)",
   "data": "14/09/2026, 14:24:21",
   "poste": "211440",
@@ -16,7 +16,6 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Miracema do Tocantins",
-  "syncedAt": "2026-09-14T17:25:55.222Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260914142422711148183F1",
