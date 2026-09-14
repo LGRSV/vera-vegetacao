@@ -1,0 +1,32 @@
+{
+  "id": "V20260914143714743875538",
+  "synced": false,
+  "wkt": "POINT (-48.400842 -9.562557)",
+  "data": "14/09/2026, 14:37:13",
+  "poste": "145488",
+  "especie": "Outros",
+  "lat": -9.5625567,
+  "lon": -48.4008417,
+  "altura": "5.5",
+  "dtbt": "50",
+  "dtmt": "250",
+  "dtat": "0",
+  "dap": "65",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Miracema do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260914143714743875538F1",
+    "VER20260914143714743875538F2",
+    "VER20260914143714743875538F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260914143714743875538F1.jpg",
+    "fotos/Enecol-Centro/VER20260914143714743875538F2.jpg",
+    "fotos/Enecol-Centro/VER20260914143714743875538F3.jpg"
+  ],
+  "legacy_id": "V0343",
+  "remote_id": "V20260914143714743875538"
+}
