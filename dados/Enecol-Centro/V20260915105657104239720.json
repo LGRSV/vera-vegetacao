@@ -1,0 +1,32 @@
+{
+  "id": "V20260915105657104239720",
+  "synced": false,
+  "wkt": "POINT (-48.414117 -9.563545)",
+  "data": "15/09/2026, 10:56:56",
+  "poste": "145646",
+  "especie": "Cajueiro",
+  "lat": -9.563545,
+  "lon": -48.4141167,
+  "altura": "6",
+  "dtbt": "100",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "75",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Miracema do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260915105657104239720F1",
+    "VER20260915105657104239720F2",
+    "VER20260915105657104239720F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260915105657104239720F1.jpg",
+    "fotos/Enecol-Centro/VER20260915105657104239720F2.jpg",
+    "fotos/Enecol-Centro/VER20260915105657104239720F3.jpg"
+  ],
+  "legacy_id": "V0389",
+  "remote_id": "V20260915105657104239720"
+}
