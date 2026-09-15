@@ -1,0 +1,32 @@
+{
+  "id": "V20260915105213809592228",
+  "synced": false,
+  "wkt": "POINT (-48.414195 -9.564290)",
+  "data": "15/09/2026, 10:52:12",
+  "poste": "145652",
+  "especie": "Mangueira",
+  "lat": -9.56429,
+  "lon": -48.414195,
+  "altura": "7.5",
+  "dtbt": "150",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "110",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Miracema do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260915105213809592228F1",
+    "VER20260915105213809592228F2",
+    "VER20260915105213809592228F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260915105213809592228F1.jpg",
+    "fotos/Enecol-Centro/VER20260915105213809592228F2.jpg",
+    "fotos/Enecol-Centro/VER20260915105213809592228F3.jpg"
+  ],
+  "legacy_id": "V0386",
+  "remote_id": "V20260915105213809592228"
+}
