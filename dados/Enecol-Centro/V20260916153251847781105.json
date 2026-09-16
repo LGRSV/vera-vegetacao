@@ -1,0 +1,32 @@
+{
+  "id": "V20260916153251847781105",
+  "synced": false,
+  "wkt": "POINT (-48.593353 -9.536817)",
+  "data": "16/09/2026, 15:32:50",
+  "poste": "135652",
+  "especie": "Outros",
+  "lat": -9.5368167,
+  "lon": -48.5933533,
+  "altura": "3.5",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "85",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Miranorte",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260916153251847781105F1",
+    "VER20260916153251847781105F2",
+    "VER20260916153251847781105F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260916153251847781105F1.jpg",
+    "fotos/Enecol-Centro/VER20260916153251847781105F2.jpg",
+    "fotos/Enecol-Centro/VER20260916153251847781105F3.jpg"
+  ],
+  "legacy_id": "V0516",
+  "remote_id": "V20260916153251847781105"
+}
