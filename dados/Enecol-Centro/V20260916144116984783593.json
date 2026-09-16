@@ -1,0 +1,32 @@
+{
+  "id": "V20260916144116984783593",
+  "synced": false,
+  "wkt": "POINT (-48.587002 -9.532762)",
+  "data": "16/09/2026, 14:41:16",
+  "poste": "136603",
+  "especie": "Coqueiro",
+  "lat": -9.5327617,
+  "lon": -48.5870017,
+  "altura": "6",
+  "dtbt": "100",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "55",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Miranorte",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260916144116984783593F1",
+    "VER20260916144116984783593F2",
+    "VER20260916144116984783593F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260916144116984783593F1.jpg",
+    "fotos/Enecol-Centro/VER20260916144116984783593F2.jpg",
+    "fotos/Enecol-Centro/VER20260916144116984783593F3.jpg"
+  ],
+  "legacy_id": "V0500",
+  "remote_id": "V20260916144116984783593"
+}
