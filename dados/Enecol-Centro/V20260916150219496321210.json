@@ -1,0 +1,33 @@
+{
+  "id": "V20260916150219496321210",
+  "synced": true,
+  "wkt": "POINT (-48.598287 -9.548468)",
+  "data": "16/09/2026, 15:00:46",
+  "poste": "1216434",
+  "especie": "Taboca",
+  "lat": -9.5484683,
+  "lon": -48.5982867,
+  "altura": "6.5",
+  "dtbt": "150",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "55",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Miranorte",
+  "syncedAt": "2026-09-16T18:02:47.917Z",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260916150219496321210F1",
+    "VER20260916150219496321210F2",
+    "VER20260916150219496321210F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260916150219496321210F1.jpg",
+    "fotos/Enecol-Centro/VER20260916150219496321210F2.jpg",
+    "fotos/Enecol-Centro/VER20260916150219496321210F3.jpg"
+  ],
+  "legacy_id": "V0504",
+  "remote_id": "V20260916150219496321210"
+}
