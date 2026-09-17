@@ -1,0 +1,32 @@
+{
+  "id": "V20260917112411196899901",
+  "synced": false,
+  "wkt": "POINT (-48.591567 -9.519528)",
+  "data": "17/09/2026, 11:24:10",
+  "poste": "137961",
+  "especie": "Pequi",
+  "lat": -9.5195283,
+  "lon": -48.5915667,
+  "altura": "11.5",
+  "dtbt": "150",
+  "dtmt": "0",
+  "dtat": "0",
+  "dap": "200",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Miranorte",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260917112411196899901F1",
+    "VER20260917112411196899901F2",
+    "VER20260917112411196899901F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260917112411196899901F1.jpg",
+    "fotos/Enecol-Centro/VER20260917112411196899901F2.jpg",
+    "fotos/Enecol-Centro/VER20260917112411196899901F3.jpg"
+  ],
+  "legacy_id": "V0552",
+  "remote_id": "V20260917112411196899901"
+}
