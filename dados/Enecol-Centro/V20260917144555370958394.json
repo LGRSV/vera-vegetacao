@@ -1,0 +1,32 @@
+{
+  "id": "V20260917144555370958394",
+  "synced": false,
+  "wkt": "POINT (-48.597092 -9.539743)",
+  "data": "17/09/2026, 14:44:30",
+  "poste": "140651",
+  "especie": "Cajueiro",
+  "lat": -9.5397433,
+  "lon": -48.5970917,
+  "altura": "13.5",
+  "dtbt": "50",
+  "dtmt": "50",
+  "dtat": "0",
+  "dap": "200",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Miranorte",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260917144555370958394F1",
+    "VER20260917144555370958394F2",
+    "VER20260917144555370958394F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260917144555370958394F1.jpg",
+    "fotos/Enecol-Centro/VER20260917144555370958394F2.jpg",
+    "fotos/Enecol-Centro/VER20260917144555370958394F3.jpg"
+  ],
+  "legacy_id": "V0565",
+  "remote_id": "V20260917144555370958394"
+}
