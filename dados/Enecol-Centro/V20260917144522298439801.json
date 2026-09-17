@@ -1,6 +1,6 @@
 {
   "id": "V20260917144522298439801",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-48.597353 -9.540665)",
   "data": "17/09/2026, 14:41:24",
   "poste": "140648",
@@ -16,7 +16,6 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Miranorte",
-  "syncedAt": "2026-09-17T17:45:31.486Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260917144522298439801F1",
