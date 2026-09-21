@@ -1,0 +1,32 @@
+{
+  "id": "V20260921142859196109575",
+  "synced": false,
+  "wkt": "POINT (-48.590747 -9.540622)",
+  "data": "21/09/2026, 14:28:58",
+  "poste": "1486803",
+  "especie": "Mangueira",
+  "lat": -9.5406217,
+  "lon": -48.5907467,
+  "altura": "5.5",
+  "dtbt": "",
+  "dtmt": "150",
+  "dtat": "0",
+  "dap": "100",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Miranorte",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260921142859196109575F1",
+    "VER20260921142859196109575F2",
+    "VER20260921142859196109575F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260921142859196109575F1.jpg",
+    "fotos/Enecol-Centro/VER20260921142859196109575F2.jpg",
+    "fotos/Enecol-Centro/VER20260921142859196109575F3.jpg"
+  ],
+  "legacy_id": "V0684",
+  "remote_id": "V20260921142859196109575"
+}
