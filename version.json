@@ -1,5 +1,5 @@
 {
-  "version": "2.6.53",
-  "released": "2026-09-11",
-  "notes": "Botao para alternar a base do mapa do admin entre satelite e OpenStreetMap"
+  "version": "2.6.54",
+  "released": "2026-09-22",
+  "notes": "Guardas contra perda de ponto e foto: armazenamento persistente, erro visivel ao salvar, reenvio e limpeza protegidos"
 }
