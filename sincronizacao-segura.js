@@ -35,6 +35,44 @@
   if (window.__veraSyncSegura) return;
   window.__veraSyncSegura = true;
 
+  // O window.confirm() não abre em iPhone com o app instalado (PWA standalone)
+  // e o toque morre sem resposta — o repositório já registrou isso em
+  // conclusao-rotas.js:40. O confirmarNoApp de lá resolve, mas é função de
+  // módulo, não vai para o window. Então aqui vai o mesmo recurso, próprio.
+  function confirmar(mensagem, textoBotao) {
+    return new Promise(function (resolver) {
+      var anterior = document.getElementById('vera-confirma-sync');
+      if (anterior) anterior.remove();
+      var fundo = document.createElement('div');
+      fundo.id = 'vera-confirma-sync';
+      fundo.style.cssText = 'position:fixed;inset:0;z-index:100001;background:rgba(10,20,14,.55);'
+        + 'display:flex;align-items:center;justify-content:center;padding:22px;';
+      var cartao = document.createElement('div');
+      cartao.style.cssText = 'width:min(100%,360px);background:#fff;border-radius:16px;padding:22px 20px;'
+        + 'box-shadow:0 18px 48px rgba(0,0,0,.35);font-family:inherit;color:#1a2e1a;';
+      var texto = document.createElement('div');
+      texto.style.cssText = 'font-size:14px;line-height:1.55;white-space:pre-line;';
+      texto.textContent = mensagem;                 // textContent: mensagem é dado, não markup
+      var linha = document.createElement('div');
+      linha.style.cssText = 'display:flex;gap:10px;margin-top:18px;';
+      var nao = document.createElement('button');
+      nao.type = 'button'; nao.textContent = 'Cancelar';
+      nao.style.cssText = 'flex:1;padding:12px;border:1.5px solid #c9dfce;border-radius:10px;'
+        + 'background:#fff;color:#1a2e1a;font:700 13px inherit;cursor:pointer;';
+      var sim = document.createElement('button');
+      sim.type = 'button'; sim.textContent = textoBotao || 'Confirmar';
+      sim.style.cssText = 'flex:1;padding:12px;border:0;border-radius:10px;background:#1a2e1a;'
+        + 'color:#fff;font:700 13px inherit;cursor:pointer;';
+      function fechar(r) { fundo.remove(); resolver(r); }
+      nao.addEventListener('click', function () { fechar(false); });
+      sim.addEventListener('click', function () { fechar(true); });
+      fundo.addEventListener('click', function (ev) { if (ev.target === fundo) fechar(false); });
+      linha.appendChild(nao); linha.appendChild(sim);
+      cartao.appendChild(texto); cartao.appendChild(linha); fundo.appendChild(cartao);
+      document.body.appendChild(fundo);
+    });
+  }
+
   function toast(msg, tipo) {
     if (typeof showToast === 'function') showToast(msg, tipo || '');
     else console.warn('VERA:', msg);
@@ -206,22 +244,30 @@
         if (!todos.length) { toast('Nenhum ponto registrado.'); return; }
         var seguros = todos.filter(function (r) { return !foiEnxugado(r); });
         var pulados = todos.length - seguros.length;
+        // O app NÃO consulta o GitHub aqui: fotos_github é lembrança de uma
+        // resposta antiga, não inventário do servidor. Por isso a mensagem não
+        // afirma que as fotos estão lá — diz só o que o aparelho sabe.
         if (!seguros.length) {
-          toast('Nada a reenviar: todos os ' + pulados + ' ponto(s) já estão no '
-              + 'servidor com as fotos. Reenviar apagaria as fotos deles.', '');
+          toast('Nada a reenviar: os ' + pulados + ' ponto(s) enviados já não têm '
+              + 'as fotos neste aparelho. Reenviar apagaria a ligação com elas.', '');
           return;
         }
         var msg = 'Reenviar ' + seguros.length + ' ponto(s)?'
-          + (pulados ? '\n\n' + pulados + ' ponto(s) ficam de fora: as fotos deles já'
-              + ' estão no servidor e não existem mais neste aparelho. Reenviar'
-              + ' apagaria a ligação com essas fotos.' : '');
-        if (!confirm(msg)) return;
+          + (pulados ? '\n\n' + pulados + ' ponto(s) ficam de fora: as fotos deles não'
+              + ' existem mais neste aparelho, e reenviar apagaria a ligação com'
+              + ' elas no servidor.' : '');
+        if (!(await confirmar(msg, 'Reenviar'))) return;
         for (var i = 0; i < seguros.length; i++) {
           var p = seguros[i];
           p.synced = false;
           p.syncedAt = null;
-          // fotos_ids e fotos_github NÃO são zerados: se o upload da foto
-          // falhar no reenvio, a referência antiga continua valendo.
+          // fotos_ids e fotos_github não são zerados aqui. ATENÇÃO ao alcance
+          // disso: syncPendingPoints RECALCULA os dois do zero a cada envio
+          // (base.html:1874 no JSON que sobe, 1886 no registro local), então
+          // não zerar só protege quando o PUT do JSON falha inteiro e o
+          // registro não chega a ser tocado. Não é garantia contra foto que
+          // falha no meio de um reenvio bem-sucedido — para isso o que vale é
+          // o skip dos enxugados, logo acima.
           await window.dbPut('points', p);
         }
         if (typeof updatePendingBadge === 'function') updatePendingBadge();
@@ -236,17 +282,22 @@
     // assim quando o JSON sobe, mesmo com foto faltando. O pos-sync tem trava
     // para isso, mas clearSyncedRecords a ignorava e apagava o registro inteiro.
     if (typeof window.clearSyncedRecords === 'function') {
-      var limparOriginal = window.clearSyncedRecords;
       window.clearSyncedRecords = async function () {
         var todos = await window.dbGetAll('points');
         var enviados = todos.filter(function (r) { return r.synced; });
         var podem = enviados.filter(fotosConfirmadas);
         var retidos = enviados.length - podem.length;
         if (!enviados.length) { toast('Nenhum ponto enviado para remover.'); return; }
+        if (!podem.length) {
+          toast('Nada a remover: os ' + retidos + ' ponto(s) enviado(s) têm foto que '
+              + 'ainda não chegou ao servidor.', '');
+          return;
+        }
         var msg = 'Remover ' + podem.length + ' ponto(s) já enviado(s)?'
-          + (retidos ? '\n\n' + retidos + ' ficam retidos: têm foto que ainda não'
-              + ' chegou ao servidor. Apagar perderia essa foto para sempre.' : '');
-        if (!confirm(msg)) return;
+          + (retidos ? '\n\n' + retidos + (retidos > 1 ? ' ficam retidos' : ' fica retido')
+              + ': tem foto que ainda não chegou ao servidor. Apagar perderia'
+              + ' essa foto para sempre.' : '');
+        if (!(await confirmar(msg, 'Remover'))) return;
         for (var i = 0; i < podem.length; i++) await window.dbDelete('points', podem[i].id);
         if (typeof renderRecords === 'function') renderRecords();
         if (typeof renderMapPoints === 'function') renderMapPoints();
@@ -258,22 +309,26 @@
 
     // ── 5. limpar tudo tem de dizer quantos pendentes vai levar junto ──
     if (typeof window.clearAllRecords === 'function') {
-      var apagarOriginal = window.clearAllRecords;
       window.clearAllRecords = async function () {
         var todos = await window.dbGetAll('points');
         var pendentes = todos.filter(function (r) { return !r.synced; }).length;
         var comFotoPresa = todos.filter(function (r) {
           return r.synced && !fotosConfirmadas(r);
         }).length;
-        if (pendentes || comFotoPresa) {
-          var aviso = 'ATENÇÃO — isto apaga dado que NÃO está no servidor:\n\n'
+        // Um diálogo só. Delegar ao original somaria o confirm() dele ao
+        // aviso daqui, e dois diálogos seguidos treinam o dedo a bater OK.
+        var aviso = (pendentes || comFotoPresa)
+          ? 'ATENÇÃO — isto apaga dado que NÃO está no servidor:\n\n'
             + (pendentes ? '• ' + pendentes + ' ponto(s) nunca enviado(s)\n' : '')
             + (comFotoPresa ? '• ' + comFotoPresa + ' ponto(s) com foto que não subiu\n' : '')
             + '\nEsse material não existe em nenhum outro lugar. Sincronize antes.'
-            + '\n\nApagar mesmo assim?';
-          if (!confirm(aviso)) return;
-        }
-        return apagarOriginal.apply(this, arguments);
+          : 'Apagar todos os ' + todos.length + ' registro(s) deste aparelho?';
+        if (!(await confirmar(aviso, 'Apagar tudo'))) return;
+        for (var i = 0; i < todos.length; i++) await window.dbDelete('points', todos[i].id);
+        if (typeof renderRecords === 'function') renderRecords();
+        if (typeof renderMapPoints === 'function') renderMapPoints();
+        if (typeof updatePendingBadge === 'function') updatePendingBadge();
+        toast('Todos os registros removidos.', 'warning');
       };
     }
 
