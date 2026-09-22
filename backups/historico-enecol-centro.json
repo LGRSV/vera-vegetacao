@@ -44,6 +44,17 @@
       "pontos": 3631,
       "fotos": 7576,
       "arquivos": []
+    },
+    {
+      "chave": "22-09",
+      "titulo": "22/09/2026",
+      "data": "20260922",
+      "branch": "backup/enecol-centro-2026-09-22",
+      "ref": "35b711644db9623bfd7af70fd0ca5168bfbd054b",
+      "descricao": "Fechamento das cinco ultimas rotas: as 18 do VERA concluidas. 4.341 pontos e 9.703 fotos.",
+      "pontos": 4341,
+      "fotos": 9703,
+      "arquivos": []
     }
   ]
 }
