@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+<name>SE-2ITP — Itaporã do Tocantins: perimetro urbano + T1/T2</name>
+<Style id="stLim"><LineStyle><color>ff00d6ff</color><width>3</width></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+<Style id="stT1"><LineStyle><color>ff808040</color><width>2.4</width></LineStyle></Style>
+<Style id="stT2"><LineStyle><color>ff2020e0</color><width>2.4</width></LineStyle></Style>
+<Style id="stPoste"><IconStyle><scale>0.5</scale><color>ffff0000</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle></Style>
+<Folder><name>Limite municipal — Itaporã do Tocantins (IBGE 1711100)</name>
+<Placemark><styleUrl>#stLim</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.688810,-8.239576,0 -48.692197,-8.245239,0 -48.695670,-8.244918,0 -48.692587,-8.251685,0 -48.696449,-8.257442,0 -48.692089,-8.264476,0 -48.695499,-8.268052,0 -48.684389,-8.282807,0 -48.673729,-8.277244,0 -48.666786,-8.283340,0 -48.666495,-8.290740,0 -48.661359,-8.298098,0 -48.662442,-8.316010,0 -48.637553,-8.350384,0 -48.637900,-8.368906,0 -48.627811,-8.389227,0 -48.631889,-8.397344,0 -48.640198,-8.397060,0 -48.660641,-8.401455,0 -48.653276,-8.417521,0 -48.653700,-8.434852,0 -48.663779,-8.461280,0 -48.669713,-8.465227,0 -48.672669,-8.474621,0 -48.660482,-8.491034,0 -48.651087,-8.495697,0 -48.653530,-8.500205,0 -48.642229,-8.520709,0 -48.642638,-8.530874,0 -48.652353,-8.545236,0 -48.648087,-8.547926,0 -48.635721,-8.581745,0 -48.635137,-8.596089,0 -48.628141,-8.603295,0 -48.631937,-8.616783,0 -48.628334,-8.622989,0 -48.639750,-8.636149,0 -48.647462,-8.655839,0 -48.662164,-8.664436,0 -48.677662,-8.686168,0 -48.679266,-8.687808,0 -48.680666,-8.683717,0 -48.676759,-8.668277,0 -48.683053,-8.656672,0 -48.702006,-8.653934,0 -48.710303,-8.630045,0 -48.717738,-8.626072,0 -48.726165,-8.634209,0 -48.728804,-8.631475,0 -48.736308,-8.634170,0 -48.740723,-8.625883,0 -48.756693,-8.625360,0 -48.754838,-8.618925,0 -48.766477,-8.607159,0 -48.777857,-8.608564,0 -48.799004,-8.597843,0 -48.806302,-8.601985,0 -48.821221,-8.590757,0 -48.824443,-8.595093,0 -48.836468,-8.597857,0 -48.839417,-8.602922,0 -48.841666,-8.595289,0 -48.846228,-8.593181,0 -48.844980,-8.599448,0 -48.857385,-8.597116,0 -48.873195,-8.587600,0 -48.870447,-8.585259,0 -48.872087,-8.580805,0 -48.881477,-8.580398,0 -48.879722,-8.575861,0 -48.884725,-8.570387,0 -48.886501,-8.561486,0 -48.893778,-8.560815,0 -48.894052,-8.552480,0 -48.897583,-8.556071,0 -48.900149,-8.550422,0 -48.902989,-8.553102,0 -48.906500,-8.549379,0 -48.897889,-8.539268,0 -48.908895,-8.536220,0 -48.908560,-8.523788,0 -48.913635,-8.517033,0 -48.911785,-8.508607,0 -48.920079,-8.507270,0 -48.916576,-8.494502,0 -48.891341,-8.468175,0 -48.856638,-8.429744,0 -48.825675,-8.355164,0 -48.825428,-8.354500,0 -48.759962,-8.190461,0 -48.701774,-8.218586,0 -48.696670,-8.221251,0 -48.694976,-8.232481,0 -48.688810,-8.239576,0</coordinates></LineString></Placemark>
+</Folder>
+<Folder><name>AL01044024IP — Itaporã do Tocantins (50 trechos · 3.3 km)</name><Folder><name>Trecho</name>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.695900,-8.576140,0 -48.695930,-8.576060,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.695930,-8.576060,0 -48.695920,-8.576010,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.695940,-8.576060,0 -48.695960,-8.576040,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.695960,-8.575990,0 -48.695920,-8.576010,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.695960,-8.575990,0 -48.695980,-8.575970,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.695970,-8.576020,0 -48.695960,-8.575990,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.695980,-8.575970,0 -48.696000,-8.575960,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.695980,-8.575970,0 -48.695980,-8.575950,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.696000,-8.575960,0 -48.696310,-8.576090,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.694940,-8.575120,0 -48.693520,-8.574370,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.695960,-8.575940,0 -48.694940,-8.575120,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.693520,-8.574370,0 -48.693480,-8.574360,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.693480,-8.574360,0 -48.691930,-8.574110,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.691930,-8.574110,0 -48.691930,-8.574130,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.691930,-8.574110,0 -48.690690,-8.573060,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.691930,-8.574130,0 -48.691960,-8.574470,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.690690,-8.573060,0 -48.691210,-8.572380,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.690690,-8.573060,0 -48.690510,-8.572900,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.690690,-8.573060,0 -48.690650,-8.573080,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.691210,-8.572380,0 -48.691400,-8.572140,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.690510,-8.572900,0 -48.690490,-8.572880,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.690490,-8.572880,0 -48.689260,-8.572130,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.689260,-8.572130,0 -48.689220,-8.572120,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.689220,-8.572120,0 -48.688620,-8.571930,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.688620,-8.571930,0 -48.688610,-8.571910,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.688610,-8.571910,0 -48.688410,-8.570370,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.688410,-8.570370,0 -48.688210,-8.570060,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.688210,-8.570060,0 -48.688210,-8.570040,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.688210,-8.570040,0 -48.687690,-8.569090,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.687690,-8.569090,0 -48.687680,-8.569070,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.687680,-8.569070,0 -48.687670,-8.568910,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.687670,-8.568910,0 -48.687660,-8.568760,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.697410,-8.576550,0 -48.700050,-8.577910,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.696350,-8.576110,0 -48.697410,-8.576550,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.691520,-8.575020,0 -48.691560,-8.574900,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.691520,-8.575020,0 -48.691440,-8.575000,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.691520,-8.575020,0 -48.690780,-8.577470,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.691940,-8.575150,0 -48.691520,-8.575020,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.690780,-8.577470,0 -48.690690,-8.577820,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.691960,-8.575160,0 -48.691940,-8.575150,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.690690,-8.577820,0 -48.690680,-8.577850,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.691960,-8.575160,0 -48.691880,-8.575490,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.691960,-8.574500,0 -48.691960,-8.575160,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.690680,-8.577850,0 -48.690130,-8.579540,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.690130,-8.579540,0 -48.689960,-8.579970,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.697290,-8.576180,0 -48.696190,-8.572370,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.697300,-8.576210,0 -48.697290,-8.576180,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.697400,-8.576520,0 -48.697300,-8.576210,0</coordinates></LineString></Placemark>
+<Placemark><name>T1</name><styleUrl>#stT1</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.696240,-8.572350,0 -48.696640,-8.572160,0</coordinates></LineString></Placemark>
+<Placemark><name>T2</name><styleUrl>#stT2</styleUrl><LineString><tessellate>1</tessellate><coordinates>-48.695960,-8.576040,0 -48.695970,-8.576020,0</coordinates></LineString></Placemark>
+</Folder><Folder><name>Poste</name>
+<Placemark><name>1132171</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691192,-8.575698,0</coordinates></Point></Placemark>
+<Placemark><name>1132170</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690885,-8.576576,0</coordinates></Point></Placemark>
+<Placemark><name>949533</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.696479,-8.576301,0</coordinates></Point></Placemark>
+<Placemark><name>951176</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.697898,-8.576808,0</coordinates></Point></Placemark>
+<Placemark><name>949532</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.696174,-8.576178,0</coordinates></Point></Placemark>
+<Placemark><name>861236</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.688601,-8.570866,0</coordinates></Point></Placemark>
+<Placemark><name>136334</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690499,-8.572891,0</coordinates></Point></Placemark>
+<Placemark><name>1748665</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.695132,-8.575355,0</coordinates></Point></Placemark>
+<Placemark><name>857520</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.695184,-8.575289,0</coordinates></Point></Placemark>
+<Placemark><name>858508</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691428,-8.575342,0</coordinates></Point></Placemark>
+<Placemark><name>861238</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.688637,-8.571436,0</coordinates></Point></Placemark>
+<Placemark><name>861235</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691955,-8.575159,0</coordinates></Point></Placemark>
+<Placemark><name>33192762</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.689241,-8.572123,0</coordinates></Point></Placemark>
+<Placemark><name>857167</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.697054,-8.576415,0</coordinates></Point></Placemark>
+<Placemark><name>858159</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691437,-8.574999,0</coordinates></Point></Placemark>
+<Placemark><name>858505</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690917,-8.572770,0</coordinates></Point></Placemark>
+<Placemark><name>861928</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690578,-8.578209,0</coordinates></Point></Placemark>
+<Placemark><name>857519</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.695478,-8.575623,0</coordinates></Point></Placemark>
+<Placemark><name>858507</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691660,-8.573887,0</coordinates></Point></Placemark>
+<Placemark><name>861599</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690688,-8.577834,0</coordinates></Point></Placemark>
+<Placemark><name>1748671</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.689506,-8.572448,0</coordinates></Point></Placemark>
+<Placemark><name>857171</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.696638,-8.572160,0</coordinates></Point></Placemark>
+<Placemark><name>857541</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690995,-8.573318,0</coordinates></Point></Placemark>
+<Placemark><name>858160</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.697023,-8.575216,0</coordinates></Point></Placemark>
+<Placemark><name>33433739</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.688208,-8.570050,0</coordinates></Point></Placemark>
+<Placemark><name>857170</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.696194,-8.572369,0</coordinates></Point></Placemark>
+<Placemark><name>857842</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.689008,-8.572058,0</coordinates></Point></Placemark>
+<Placemark><name>861595</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691247,-8.575948,0</coordinates></Point></Placemark>
+<Placemark><name>892443</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691408,-8.572123,0</coordinates></Point></Placemark>
+<Placemark><name>857168</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.689508,-8.572246,0</coordinates></Point></Placemark>
+<Placemark><name>858506</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690757,-8.572970,0</coordinates></Point></Placemark>
+<Placemark><name>33433859</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.687663,-8.568758,0</coordinates></Point></Placemark>
+<Placemark><name>127703</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.694942,-8.575116,0</coordinates></Point></Placemark>
+<Placemark><name>857166</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.688604,-8.570668,0</coordinates></Point></Placemark>
+<Placemark><name>857843</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.688606,-8.571930,0</coordinates></Point></Placemark>
+<Placemark><name>857850</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.697405,-8.576549,0</coordinates></Point></Placemark>
+<Placemark><name>1748521</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691272,-8.573468,0</coordinates></Point></Placemark>
+<Placemark><name>33433742</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.688024,-8.569824,0</coordinates></Point></Placemark>
+<Placemark><name>857169</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.696706,-8.576260,0</coordinates></Point></Placemark>
+<Placemark><name>857849</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.697775,-8.576680,0</coordinates></Point></Placemark>
+<Placemark><name>127701</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691881,-8.575489,0</coordinates></Point></Placemark>
+<Placemark><name>861230</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691339,-8.575641,0</coordinates></Point></Placemark>
+<Placemark><name>1363336</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.695890,-8.576153,0</coordinates></Point></Placemark>
+<Placemark><name>1748684</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690213,-8.572769,0</coordinates></Point></Placemark>
+<Placemark><name>42990613</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.688875,-8.572015,0</coordinates></Point></Placemark>
+<Placemark><name>127700</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.688412,-8.570366,0</coordinates></Point></Placemark>
+<Placemark><name>857848</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.689760,-8.572387,0</coordinates></Point></Placemark>
+<Placemark><name>1861635</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.693237,-8.574377,0</coordinates></Point></Placemark>
+<Placemark><name>857845</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690308,-8.572741,0</coordinates></Point></Placemark>
+<Placemark><name>1861633</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.694361,-8.574788,0</coordinates></Point></Placemark>
+<Placemark><name>1885710</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690648,-8.577654,0</coordinates></Point></Placemark>
+<Placemark><name>861233</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691933,-8.574108,0</coordinates></Point></Placemark>
+<Placemark><name>892444</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691037,-8.572613,0</coordinates></Point></Placemark>
+<Placemark><name>33433747</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.688026,-8.569762,0</coordinates></Point></Placemark>
+<Placemark><name>857847</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.698206,-8.576879,0</coordinates></Point></Placemark>
+<Placemark><name>857506</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.694670,-8.574906,0</coordinates></Point></Placemark>
+<Placemark><name>861234</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691966,-8.574850,0</coordinates></Point></Placemark>
+<Placemark><name>1748462</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.692926,-8.574260,0</coordinates></Point></Placemark>
+<Placemark><name>858504</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691215,-8.572378,0</coordinates></Point></Placemark>
+<Placemark><name>861232</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.692095,-8.574222,0</coordinates></Point></Placemark>
+<Placemark><name>1097348</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.689957,-8.579974,0</coordinates></Point></Placemark>
+<Placemark><name>1748464</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.692736,-8.574296,0</coordinates></Point></Placemark>
+<Placemark><name>33433806</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.687884,-8.569546,0</coordinates></Point></Placemark>
+<Placemark><name>861239</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.688643,-8.571663,0</coordinates></Point></Placemark>
+<Placemark><name>1097349</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690131,-8.579537,0</coordinates></Point></Placemark>
+<Placemark><name>857846</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690056,-8.572538,0</coordinates></Point></Placemark>
+<Placemark><name>861598</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690908,-8.577085,0</coordinates></Point></Placemark>
+<Placemark><name>41596078</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.697294,-8.576195,0</coordinates></Point></Placemark>
+<Placemark><name>857517</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.693144,-8.574309,0</coordinates></Point></Placemark>
+<Placemark><name>859052</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691715,-8.575085,0</coordinates></Point></Placemark>
+<Placemark><name>1749103</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690209,-8.578950,0</coordinates></Point></Placemark>
+<Placemark><name>127698</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.695984,-8.575951,0</coordinates></Point></Placemark>
+<Placemark><name>857844</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690582,-8.572962,0</coordinates></Point></Placemark>
+<Placemark><name>861596</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691150,-8.576274,0</coordinates></Point></Placemark>
+<Placemark><name>858158</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691558,-8.574904,0</coordinates></Point></Placemark>
+<Placemark><name>308924</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690781,-8.577472,0</coordinates></Point></Placemark>
+<Placemark><name>857515</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.694154,-8.574616,0</coordinates></Point></Placemark>
+<Placemark><name>857542</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690767,-8.573120,0</coordinates></Point></Placemark>
+<Placemark><name>1251001</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.693499,-8.574364,0</coordinates></Point></Placemark>
+<Placemark><name>127704</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.696318,-8.576096,0</coordinates></Point></Placemark>
+<Placemark><name>1759880</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691081,-8.572431,0</coordinates></Point></Placemark>
+<Placemark><name>861229</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690281,-8.579142,0</coordinates></Point></Placemark>
+<Placemark><name>861231</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.692359,-8.574285,0</coordinates></Point></Placemark>
+<Placemark><name>1238423</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.695947,-8.576022,0</coordinates></Point></Placemark>
+<Placemark><name>33433856</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.687675,-8.568908,0</coordinates></Point></Placemark>
+<Placemark><name>857509</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.694358,-8.574731,0</coordinates></Point></Placemark>
+<Placemark><name>861929</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.690423,-8.578792,0</coordinates></Point></Placemark>
+<Placemark><name>127702</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691965,-8.574482,0</coordinates></Point></Placemark>
+<Placemark><name>858162</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.696341,-8.572937,0</coordinates></Point></Placemark>
+<Placemark><name>861597</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.691035,-8.576659,0</coordinates></Point></Placemark>
+<Placemark><name>33433847</name><styleUrl>#stPoste</styleUrl><Point><coordinates>-48.687684,-8.569089,0</coordinates></Point></Placemark>
+</Folder></Folder></Document></kml>

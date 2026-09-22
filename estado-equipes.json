@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-22T12:18:10.000Z",
+  "updatedAt": "2026-09-22T12:40:25.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -246,7 +246,17 @@
       ]
     },
     "Enecol Centro": {
-      "projetoAtivo": null,
+      "projetoAtivo": {
+        "rotaId": "1789000000000",
+        "nomeProjeto": "Rota Itaporã do Tocantins",
+        "polo": "NORTE",
+        "alimentadores": [
+          "AL01044024IP"
+        ],
+        "iniciadoEm": "2026-09-22T12:40:25.000Z",
+        "atualizadoEm": "2026-09-22T12:40:25.000Z",
+        "atualizadoPor": "Admin"
+      },
       "historico": [
         {
           "tipo": "PROJETO_ATIVADO",
@@ -597,6 +607,17 @@
           "tipo": "PROJETO_ENCERRADO",
           "nomeProjeto": "Rota Rio dos Bois",
           "em": "2026-09-22T12:18:10.000Z",
+          "por": "Admin"
+        },
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1789000000000",
+          "nomeProjeto": "Rota Itaporã do Tocantins",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01044024IP"
+          ],
+          "em": "2026-09-22T12:40:25.000Z",
           "por": "Admin"
         }
       ]
