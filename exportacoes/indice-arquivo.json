@@ -1,7 +1,7 @@
 {
-  "gerado": "02/09/2026",
-  "total_pontos": 3382,
-  "total_fotos": 7759,
+  "gerado": "22/09/2026",
+  "total_pontos": 4018,
+  "total_fotos": 9670,
   "projetos": [
     {
       "nome": "SE Paraíso I",
@@ -50,6 +50,30 @@
       "de": "24/07/2026",
       "ate": "30/07/2026",
       "especie_top": "Oiti"
+    },
+    {
+      "nome": "Rota Miracema do Tocantins",
+      "slug": "rota-miracema-do-tocantins",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 255,
+      "fotos": 765,
+      "fotos_ausentes": 0,
+      "de": "11/09/2026",
+      "ate": "16/09/2026",
+      "especie_top": "Outros"
+    },
+    {
+      "nome": "Rota Miranorte",
+      "slug": "rota-miranorte",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 209,
+      "fotos": 627,
+      "fotos_ausentes": 0,
+      "de": "16/09/2026",
+      "ate": "21/09/2026",
+      "especie_top": "Outros"
     },
     {
       "nome": "Rota Couto Magalhães",
@@ -112,6 +136,18 @@
       "especie_top": "Oiti"
     },
     {
+      "nome": "Rota Dois Irmãos do Tocantins",
+      "slug": "rota-dois-irmaos-do-tocantins",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 89,
+      "fotos": 267,
+      "fotos_ausentes": 0,
+      "de": "10/09/2026",
+      "ate": "10/09/2026",
+      "especie_top": "Outros"
+    },
+    {
       "nome": "Rota Bom Jesus do Tocantins",
       "slug": "rota-bom-jesus-do-tocantins",
       "equipe": "Enecol Centro",
@@ -146,6 +182,30 @@
       "de": "01/09/2026",
       "ate": "01/09/2026",
       "especie_top": "Oiti"
+    },
+    {
+      "nome": "Rota Santa Maria do Tocantins",
+      "slug": "rota-santa-maria-do-tocantins",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 57,
+      "fotos": 174,
+      "fotos_ausentes": 0,
+      "de": "02/09/2026",
+      "ate": "02/09/2026",
+      "especie_top": "Oiti"
+    },
+    {
+      "nome": "Rota Rio dos Bois",
+      "slug": "rota-rio-dos-bois",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 26,
+      "fotos": 78,
+      "fotos_ausentes": 0,
+      "de": "09/09/2026",
+      "ate": "09/09/2026",
+      "especie_top": "Outros"
     },
     {
       "nome": "Rota Paraíso SE 2",

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-22T11:53:10.257Z",
+  "updatedAt": "2026-09-22T12:18:10.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -246,17 +246,7 @@
       ]
     },
     "Enecol Centro": {
-      "projetoAtivo": {
-        "rotaId": "1788400000000",
-        "nomeProjeto": "Rota Rio dos Bois",
-        "polo": "CENTRO",
-        "alimentadores": [
-          "LD03050008RB"
-        ],
-        "iniciadoEm": "2026-09-22T11:53:08.115Z",
-        "atualizadoEm": "2026-09-22T11:53:08.115Z",
-        "atualizadoPor": "Enecol Centro"
-      },
+      "projetoAtivo": null,
       "historico": [
         {
           "tipo": "PROJETO_ATIVADO",
@@ -602,6 +592,12 @@
           ],
           "data": "2026-07-30T19:48:12.000Z",
           "equipe": "Enecol Centro"
+        },
+        {
+          "tipo": "PROJETO_ENCERRADO",
+          "nomeProjeto": "Rota Rio dos Bois",
+          "em": "2026-09-22T12:18:10.000Z",
+          "por": "Admin"
         }
       ]
     }
@@ -696,6 +692,41 @@
       "equipe": "Enecol Centro",
       "nomeProjeto": "Rota Itacajá",
       "concluidoEm": "2026-09-02T11:28:11.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1787919191640": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Santa Maria do Tocantins",
+      "concluidoEm": "2026-09-22T12:18:10.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1788400000000": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Rio dos Bois",
+      "concluidoEm": "2026-09-22T12:18:10.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1788400000003": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Dois Irmãos do Tocantins",
+      "concluidoEm": "2026-09-22T12:18:10.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1788400000002": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Miracema do Tocantins",
+      "concluidoEm": "2026-09-22T12:18:10.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1788400000001": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Miranorte",
+      "concluidoEm": "2026-09-22T12:18:10.000Z",
       "concluidoPor": "Admin"
     }
   }
