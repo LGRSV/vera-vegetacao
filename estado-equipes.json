@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-22T13:11:08.765Z",
+  "updatedAt": "2026-09-22T13:12:07.682Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1789000000004",
-        "nomeProjeto": "Rota Goiatins",
+        "rotaId": "1789000000000",
+        "nomeProjeto": "Rota Itaporã do Tocantins",
         "polo": "NORTE",
         "alimentadores": [
-          "LD03105019GO"
+          "AL01044024IP"
         ],
-        "iniciadoEm": "2026-09-22T13:11:05.815Z",
-        "atualizadoEm": "2026-09-22T13:11:05.815Z",
+        "iniciadoEm": "2026-09-22T13:12:07.682Z",
+        "atualizadoEm": "2026-09-22T13:12:07.682Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1789000000000",
+          "nomeProjeto": "Rota Itaporã do Tocantins",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01044024IP"
+          ],
+          "data": "2026-09-22T13:12:07.682Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1789000000004",
@@ -580,20 +591,6 @@
             "AL02065015BJ"
           ],
           "data": "2026-08-20T10:20:49.156Z",
-          "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1787008208468",
-          "nomeProjeto": "Rota Pedro Afonso",
-          "polo": "NORTE",
-          "alimentadores": [
-            "AL01065015",
-            "AL02065015",
-            "LD01065015",
-            "LD02065015"
-          ],
-          "data": "2026-08-17T23:10:36.000Z",
           "equipe": "Enecol Centro"
         }
       ]
