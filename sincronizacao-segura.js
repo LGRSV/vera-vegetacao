@@ -261,23 +261,41 @@
   // registro entrou, desmente o alarme em vez de deixar o técnico achando que
   // perdeu o ponto.
   function confirmarDepois(id) {
-    var tentativas = 0;
-    var t = setInterval(async function () {
-      tentativas++;
-      try {
-        var r = await window.dbGet('points', id);
+    // Regras que esta função aprendeu na revisão:
+    //  - laço sequencial, não setInterval: um callback async em setInterval não
+    //    espera o ciclo anterior, e leituras sobrepostas produziam mensagens
+    //    contraditórias ("não entrou" seguido de "entrou").
+    //  - prazo por relógio, não por contagem: o dbGet do base.html:1548 tem o
+    //    mesmo defeito do dbPut (tem tx.onerror, não tem tx.onabort) e pode
+    //    nunca assentar. Contar tentativas não limita nada se a tentativa trava.
+    //  - só fala para CONFIRMAR. Nunca para afirmar perda: o wrapper do
+    //    savePoint já disse ao técnico para conferir na aba Registros, e uma
+    //    leitura que falhou não é prova de que o ponto não entrou. Dizer
+    //    "registre de novo" a partir de um catch vazio produziria duplicata.
+    var PRAZO = 45000, INTERVALO = 1500;
+    var limite = Date.now() + PRAZO;
+    (async function () {
+      while (Date.now() < limite) {
+        await new Promise(function (r) { setTimeout(r, INTERVALO); });
+        var r = null;
+        try {
+          r = await Promise.race([
+            window.dbGet('points', id),
+            new Promise(function (_, rej) { setTimeout(function () { rej(new Error('lento')); }, 3000); })
+          ]);
+        } catch (e) { continue; }          // leitura travou ou falhou: tenta de novo
         if (r && r.id) {
-          clearInterval(t);
           toast('O ponto ' + id + ' entrou, sim — a gravação só demorou. '
               + 'NÃO registre de novo.', 'success');
           return;
         }
-      } catch (e) {}
-      if (tentativas >= 10) {
-        clearInterval(t);
-        toast('O ponto NÃO entrou no aparelho. Registre de novo.', 'error');
       }
-    }, 1500);
+      // Prazo esgotado sem confirmar: cala. O aviso do savePoint ("confira na
+      // aba Registros") continua valendo e é o certo — não temos evidência
+      // para mandar registrar de novo.
+      console.warn('VERA: nao deu para confirmar a gravacao de ' + id + ' em '
+        + (PRAZO / 1000) + 's');
+    })();
   }
 
   var instalado = false;
