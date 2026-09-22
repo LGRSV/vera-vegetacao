@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-22T12:40:25.000Z",
+  "updatedAt": "2026-09-22T13:08:52.066Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1789000000000",
-        "nomeProjeto": "Rota Itaporã do Tocantins",
+        "rotaId": "1789000000005",
+        "nomeProjeto": "Rota Xambioá",
         "polo": "NORTE",
         "alimentadores": [
-          "AL01044024IP"
+          "AL01087030XA"
         ],
-        "iniciadoEm": "2026-09-22T12:40:25.000Z",
-        "atualizadoEm": "2026-09-22T12:40:25.000Z",
-        "atualizadoPor": "Admin"
+        "iniciadoEm": "2026-09-22T13:08:52.066Z",
+        "atualizadoEm": "2026-09-22T13:08:52.066Z",
+        "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1789000000005",
+          "nomeProjeto": "Rota Xambioá",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01087030XA"
+          ],
+          "data": "2026-09-22T13:08:52.066Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1788400000000",
@@ -586,39 +597,6 @@
           ],
           "data": "2026-08-13T01:22:44.000Z",
           "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1785440892497",
-          "nomeProjeto": "Rota SE Colinas",
-          "polo": "NORTE",
-          "alimentadores": [
-            "AL01020023",
-            "AL02020023",
-            "AL03020023",
-            "AL04020023",
-            "AL06020023",
-            "LD01020023"
-          ],
-          "data": "2026-07-30T19:48:12.000Z",
-          "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ENCERRADO",
-          "nomeProjeto": "Rota Rio dos Bois",
-          "em": "2026-09-22T12:18:10.000Z",
-          "por": "Admin"
-        },
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1789000000000",
-          "nomeProjeto": "Rota Itaporã do Tocantins",
-          "polo": "NORTE",
-          "alimentadores": [
-            "AL01044024IP"
-          ],
-          "em": "2026-09-22T12:40:25.000Z",
-          "por": "Admin"
         }
       ]
     }
