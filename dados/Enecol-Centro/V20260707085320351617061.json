@@ -16,17 +16,24 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Porto Nacional",
-  "fotos_count": 3,
+  "fotos_count": 1,
   "fotos_ids": [
-    "VER20260707085320351617061F1",
-    "VER20260707085320351617061F2",
-    "VER20260707085320351617061F3"
+    "VER20260707085320351617061F1"
   ],
   "fotos_github": [
-    "fotos/Enecol-Centro/VER20260707085320351617061F1.jpg",
-    "fotos/Enecol-Centro/VER20260707085320351617061F2.jpg",
-    "fotos/Enecol-Centro/VER20260707085320351617061F3.jpg"
+    "fotos/Enecol-Centro/VER20260707085320351617061F1.jpg"
   ],
   "legacy_id": "V0164",
-  "remote_id": "V20260707085320351617061"
+  "remote_id": "V20260707085320351617061",
+  "fotos_removidas": {
+    "quantidade": 2,
+    "arquivos": [
+      "fotos/Enecol-Centro/VER20260707085320351617061F2.jpg",
+      "fotos/Enecol-Centro/VER20260707085320351617061F3.jpg"
+    ],
+    "em": "2026-07-07",
+    "commit": "93d310d188fa4d40748cef377723f869a2d10460",
+    "motivo": "limpeza de armazenamento: manter 1 foto por ponto",
+    "recuperavel": "git checkout 93d310d188fa4d40748cef377723f869a2d10460^ -- <arquivo>"
+  }
 }
