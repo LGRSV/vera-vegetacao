@@ -1,0 +1,32 @@
+{
+  "id": "V20260922143124518150766",
+  "synced": false,
+  "wkt": "POINT (-48.691385 -8.572202)",
+  "data": "22/09/2026, 14:31:23",
+  "poste": "892443",
+  "especie": "Outros",
+  "lat": -8.5722017,
+  "lon": -48.691385,
+  "altura": "7",
+  "dtbt": "200",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "90",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Itaporã do Tocantins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260922143124518150766F1",
+    "VER20260922143124518150766F2",
+    "VER20260922143124518150766F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260922143124518150766F1.jpg",
+    "fotos/Enecol-Centro/VER20260922143124518150766F2.jpg",
+    "fotos/Enecol-Centro/VER20260922143124518150766F3.jpg"
+  ],
+  "legacy_id": "V0722",
+  "remote_id": "V20260922143124518150766"
+}
