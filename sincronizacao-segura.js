@@ -8,11 +8,22 @@
   // caminhos já existentes destruam o que ainda só existe no aparelho.
   //
   // Defeitos que endereçam, conferidos um a um no base.html:
-  //   1. o app nunca pediu armazenamento persistente ao navegador
-  //   2. savePoint() grava sem try/catch: quota estourada falha em silêncio
-  //   3. reenviarTodos() zera fotos_github e órfã as fotos no GitHub
-  //   4. clearSyncedRecords() ignora a trava que protege foto não confirmada
-  //   5. clearAllRecords() apaga pendente sem dizer quantos
+  //   1. dbPut sobrescreve ponto por colisão de id local — o pior deles
+  //   2. dbPut pode nunca resolver: tem tx.onerror e não tem tx.onabort
+  //   3. o app nunca pediu armazenamento persistente ao navegador
+  //   4. savePoint() grava sem try/catch: quota estourada falha em silêncio
+  //   5. reenviarTodos() zera fotos_github e órfã as fotos no GitHub
+  //   6. clearSyncedRecords() ignora a trava que protege foto não confirmada
+  //   7. clearAllRecords() apaga pendente sem dizer quantos
+  //
+  // Nota da revisão: clearSyncedRecords e clearAllRecords NÃO TÊM CHAMADOR
+  // hoje — só se chega nelas pelo console. As guardas 6 e 7 ficam porque são
+  // baratas e a função pode ganhar botão amanhã, mas não são a proteção
+  // principal. E o botão "Sincronizar agora" não roda syncPendingPoints: o
+  // hotfix-fotos.js o intercepta (linha 319) e roda forcarSincronizacaoOnline,
+  // que também dispara sozinho no evento online, a cada visibilitychange e
+  // 1,8 s depois de cada carga. Esse caminho já barra o ponto enxugado pelo
+  // precisaReenviar (hotfix-fotos.js:144, `locais > remotas`), conferido.
   //
   // Um sexto defeito NÃO é corrigido aqui e fica registrado: isSyncing é
   // setado sem try/finally (base.html:1775 e 1898). Uma exceção que escape
@@ -35,15 +46,32 @@
   // GitHub existe em uma única cópia, ali dentro.
   function pedirPersistencia() {
     try {
-      if (!navigator.storage || !navigator.storage.persist) return;
+      if (!navigator.storage || !navigator.storage.persist) {
+        window.__veraArmazenamentoPersistente = false;
+        avisarArmazenamentoFragil();       // iOS cai aqui
+        return;
+      }
       navigator.storage.persisted().then(function (ja) {
         if (ja) { window.__veraArmazenamentoPersistente = true; return; }
         return navigator.storage.persist().then(function (ok) {
           window.__veraArmazenamentoPersistente = !!ok;
           console.info('VERA armazenamento persistente:', ok ? 'concedido' : 'negado');
+          if (!ok) avisarArmazenamentoFragil();
         });
       }).catch(function () {});
     } catch (e) {}
+  }
+
+  // No iOS a API nem existe, e é justamente lá que o despejo mais acontece.
+  // Sem aviso o técnico nunca saberia que o que ele coletou está numa única
+  // cópia que o sistema pode recolher.
+  function avisarArmazenamentoFragil() {
+    if (window.__veraAvisouArmazenamento) return;
+    window.__veraAvisouArmazenamento = true;
+    setTimeout(function () {
+      toast('Este aparelho não garante o armazenamento do app. Sincronize '
+          + 'sempre que pegar sinal — não acumule pontos sem enviar.', 'warning');
+    }, 6000);
   }
 
   // ── helpers de integridade foto↔ponto ────────────────────────────────
@@ -67,11 +95,74 @@
     return !!r.synced && locaisReais(r) === 0 && noGithub(r) > 0;
   }
 
+  // ── dbPut: colisão de id e gravação que nunca resolve ────────────────
+  // (a) base.html:2446 cunha o id do ponto como 'V' + (total local + 1), e o
+  //     store usa keyPath 'id' com put(), que é upsert. Se o total encolher,
+  //     o próximo ponto reusa um id existente e SOBRESCREVE a coleta antiga
+  //     sem erro nenhum. Já queimou em produção: dados/Equipe-Energisa/V0001
+  //     carregou quatro coletas diferentes ao longo do tempo.
+  //     protege-ids-remotos.js estancou isso no lado do GitHub; no IndexedDB
+  //     do aparelho continuava aberto.
+  // (b) dbPut (base.html:1532) tem tx.onerror e não tem tx.onabort. Uma
+  //     transação abortada sem erro que borbulhe deixa a promise pendente
+  //     para sempre — e try/catch não pega promise pendente, a tela só congela.
+  var LIMITE_MS = 20000;
+  function idNovo() {
+    var d = new Date(), p = function (n, c) { return String(n).padStart(c || 2, '0'); };
+    return 'V' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate())
+      + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds())
+      + p(d.getMilliseconds(), 3) + p(Math.floor(Math.random() * 1000000), 6);
+  }
+  // Duas coletas diferentes, ou a mesma sendo atualizada? O carimbo de coleta
+  // mais a coordenada identificam a coleta; o resto do registro muda a cada
+  // sincronização (synced, syncedAt, fotos_*) e não serve de critério.
+  function mesmaColeta(a, b) {
+    return String(a.data || '') === String(b.data || '')
+      && String(a.lat || '') === String(b.lat || '')
+      && String(a.lon || '') === String(b.lon || '');
+  }
+  function blindarDbPut() {
+    if (typeof window.dbPut !== 'function' || window.__veraDbPutBlindado) return;
+    window.__veraDbPutBlindado = true;
+    var original = window.dbPut;
+    window.dbPut = async function (store, data) {
+      if (store === 'points' && data && data.id && typeof window.dbGet === 'function') {
+        try {
+          var existente = await window.dbGet('points', data.id);
+          if (existente && existente.id && !mesmaColeta(existente, data)) {
+            var antigo = data.id;
+            data.id = idNovo();   // muta o objeto do chamador: as gravações
+                                  // seguintes dele já usam o id novo
+            console.warn('VERA: id ' + antigo + ' ja estava em uso por outra '
+              + 'coleta; este ponto passou a ser ' + data.id);
+            toast('Numeração repetida detectada. O ponto foi salvo com outro '
+                + 'número para não apagar o anterior.', 'warning');
+          }
+        } catch (e) { /* não achou, ou leitura falhou: segue o fluxo normal */ }
+      }
+      var estourou = false;
+      var relogio = new Promise(function (_, rej) {
+        setTimeout(function () { estourou = true; rej(new Error('VERA_DBPUT_TIMEOUT')); }, LIMITE_MS);
+      });
+      try {
+        return await Promise.race([original.call(this, store, data), relogio]);
+      } catch (e) {
+        if (estourou) {
+          console.error('VERA: dbPut nao confirmou em ' + (LIMITE_MS / 1000) + 's', store, data && data.id);
+        }
+        throw e;
+      }
+    };
+  }
+
   var instalado = false;
   function instalar() {
     if (instalado) return true;
     if (typeof window.savePoint !== 'function'
-        || typeof window.dbGetAll !== 'function') return false;
+        || typeof window.dbGetAll !== 'function'
+        || typeof window.dbPut !== 'function'
+        || typeof window.dbDelete !== 'function') return false;
+    blindarDbPut();
 
     // ── 2. savePoint não pode falhar calado ────────────────────────────
     // O `await dbPut` do base.html não tem try/catch. Se a quota estourar, a
@@ -83,12 +174,23 @@
         return await saveOriginal.apply(this, arguments);
       } catch (e) {
         console.error('VERA savePoint falhou:', e);
-        var nome = (e && e.name) || '';
-        toast(/quota|QuotaExceeded/i.test(nome + ' ' + (e && e.message))
-          ? 'SEM ESPAÇO no aparelho: o ponto NÃO foi salvo. Sincronize os pendentes e tente de novo.'
-          : 'O ponto NÃO foi salvo (' + (nome || 'erro') + '). Não saia da tela: tente salvar de novo.',
-          'error');
-        throw e;
+        var texto = ((e && e.name) || '') + ' ' + ((e && e.message) || '');
+        // A mensagem não afirma perda: a exceção pode vir de DEPOIS da
+        // gravação (render, badge, troca de aba). Em vez de adivinhar, manda
+        // o técnico conferir na aba Registros antes de registrar de novo —
+        // dizer "não foi salvo" quando foi seria convite a duplicar o ponto.
+        if (/quota|QuotaExceeded/i.test(texto)) {
+          toast('SEM ESPAÇO no aparelho: o ponto NÃO foi salvo. Sincronize os '
+              + 'pendentes para liberar espaço e tente de novo.', 'error');
+        } else if (/VERA_DBPUT_TIMEOUT/.test(texto)) {
+          toast('A gravação não confirmou. NÃO registre de novo ainda: confira '
+              + 'na aba Registros se o ponto entrou.', 'error');
+        } else {
+          toast('Erro ao salvar (' + ((e && e.name) || 'erro') + '). Confira na '
+              + 'aba Registros se o ponto entrou antes de registrar de novo.', 'error');
+        }
+        // Não repassa a rejeição: nenhum chamador a trata, e repassar só
+        // produziria unhandled rejection no console.
       }
     };
 
@@ -181,5 +283,14 @@
 
   pedirPersistencia();
   var tentativa = setInterval(function () { if (instalar()) clearInterval(tentativa); }, 500);
-  setTimeout(function () { clearInterval(tentativa); }, 60000);
+  setTimeout(function () {
+    clearInterval(tentativa);
+    // Desistir calado deixaria o app exatamente como antes da correção sem
+    // ninguém saber. Se não instalou em 60 s, avisa.
+    if (!instalado) {
+      console.error('VERA: guardas de sincronizacao NAO instaladas');
+      toast('As proteções de gravação não carregaram. Recarregue o app antes '
+          + 'de coletar.', 'error');
+    }
+  }, 60000);
 })();
