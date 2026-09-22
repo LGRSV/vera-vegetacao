@@ -42,7 +42,11 @@
   function confirmar(mensagem, textoBotao) {
     return new Promise(function (resolver) {
       var anterior = document.getElementById('vera-confirma-sync');
-      if (anterior) anterior.remove();
+      if (anterior) {
+        // Fechar sem resolver deixaria quem estava esperando pendurado.
+        if (anterior.__veraResolver) { try { anterior.__veraResolver(false); } catch (e) {} }
+        anterior.remove();
+      }
       var fundo = document.createElement('div');
       fundo.id = 'vera-confirma-sync';
       fundo.style.cssText = 'position:fixed;inset:0;z-index:100001;background:rgba(10,20,14,.55);'
@@ -63,7 +67,8 @@
       sim.type = 'button'; sim.textContent = textoBotao || 'Confirmar';
       sim.style.cssText = 'flex:1;padding:12px;border:0;border-radius:10px;background:#1a2e1a;'
         + 'color:#fff;font:700 13px inherit;cursor:pointer;';
-      function fechar(r) { fundo.remove(); resolver(r); }
+      fundo.__veraResolver = resolver;
+      function fechar(r) { fundo.__veraResolver = null; fundo.remove(); resolver(r); }
       nao.addEventListener('click', function () { fechar(false); });
       sim.addEventListener('click', function () { fechar(true); });
       fundo.addEventListener('click', function (ev) { if (ev.target === fundo) fechar(false); });
@@ -74,8 +79,15 @@
   }
 
   function toast(msg, tipo) {
-    if (typeof showToast === 'function') showToast(msg, tipo || '');
-    else console.warn('VERA:', msg);
+    // showToast escreve direto em #toast (base.html:2596). Se o app ainda não
+    // montou, estoura — e justamente as mensagens de falha de carga cairiam aqui.
+    try {
+      if (typeof showToast === 'function' && document.getElementById('toast')) {
+        showToast(msg, tipo || '');
+        return;
+      }
+    } catch (e) {}
+    console.warn('VERA:', msg);
   }
 
   // ── 1. Armazenamento persistente ──────────────────────────────────────
@@ -106,10 +118,21 @@
   function avisarArmazenamentoFragil() {
     if (window.__veraAvisouArmazenamento) return;
     window.__veraAvisouArmazenamento = true;
-    setTimeout(function () {
-      toast('Este aparelho não garante o armazenamento do app. Sincronize '
-          + 'sempre que pegar sinal — não acumule pontos sem enviar.', 'warning');
-    }, 6000);
+    // Espera o técnico passar do login: o aviso aparecendo na tela de senha
+    // não é lido por ninguém.
+    var esperas = 0;
+    var t = setInterval(function () {
+      esperas++;
+      var login = document.getElementById('login-screen');
+      var dentro = login && (login.style.display === 'none' || !login.offsetParent);
+      if (dentro || esperas > 120) {
+        clearInterval(t);
+        setTimeout(function () {
+          toast('Este aparelho não garante o armazenamento do app. Sincronize '
+              + 'sempre que pegar sinal — não acumule pontos sem enviar.', 'warning');
+        }, 4000);
+      }
+    }, 1000);
   }
 
   // ── helpers de integridade foto↔ponto ────────────────────────────────
@@ -167,30 +190,94 @@
       if (store === 'points' && data && data.id && typeof window.dbGet === 'function') {
         try {
           var existente = await window.dbGet('points', data.id);
-          if (existente && existente.id && !mesmaColeta(existente, data)) {
+          var colide = !!(existente && existente.id && !mesmaColeta(existente, data));
+          existente = null;          // registro pode ter centenas de KB de foto
+          if (colide) {
             var antigo = data.id;
             data.id = idNovo();   // muta o objeto do chamador: as gravações
                                   // seguintes dele já usam o id novo
             console.warn('VERA: id ' + antigo + ' ja estava em uso por outra '
               + 'coleta; este ponto passou a ser ' + data.id);
-            toast('Numeração repetida detectada. O ponto foi salvo com outro '
-                + 'número para não apagar o anterior.', 'warning');
+            // O toast é um elemento único: savePoint mostra "Ponto <id> salvo!"
+            // logo depois do put (base.html:2472) e apagaria este aviso. Pior,
+            // aquele texto traz o id ANTIGO, porque savePoint capturou `const
+            // id` em 2446, antes desta renomeação. Então este aviso vem depois,
+            // e corrige o número que o técnico acabou de ler.
+            (function (novo) {
+              setTimeout(function () {
+                toast('O número ' + antigo + ' já era de outra coleta. Este ponto '
+                    + 'foi salvo como ' + novo + ' — a coleta anterior foi preservada.',
+                    'warning');
+              }, 1600);
+            })(data.id);
           }
-        } catch (e) { /* não achou, ou leitura falhou: segue o fluxo normal */ }
+        } catch (e) {
+          // dbGet resolve `undefined` quando não acha (base.html:1548); só
+          // rejeita em erro de transação. Seguimos gravando — falhar aqui
+          // custaria a coleta —, mas não em silêncio.
+          console.warn('VERA: nao deu para conferir colisao de id em ' + data.id, e);
+        }
       }
-      var estourou = false;
+      var estourou = false, marcador = null;
       var relogio = new Promise(function (_, rej) {
-        setTimeout(function () { estourou = true; rej(new Error('VERA_DBPUT_TIMEOUT')); }, LIMITE_MS);
+        marcador = setTimeout(function () { estourou = true; rej(new Error('VERA_DBPUT_TIMEOUT')); }, LIMITE_MS);
       });
       try {
         return await Promise.race([original.call(this, store, data), relogio]);
       } catch (e) {
         if (estourou) {
           console.error('VERA: dbPut nao confirmou em ' + (LIMITE_MS / 1000) + 's', store, data && data.id);
+          // O timeout desiste de esperar, mas NÃO aborta a transação: ela pode
+          // ter entrado depois. Dizer "não salvou" sem conferir faria o técnico
+          // registrar de novo e duplicar. Então confere antes de falar.
+          if (store === 'points' && data && data.id) confirmarDepois(data.id);
         }
         throw e;
+      } finally {
+        if (marcador) clearTimeout(marcador);
       }
     };
+  }
+
+  // Instalador próprio: a guarda de gravação só precisa de dbPut e dbGet.
+  // Amarrá-la às pré-condições das outras guardas faria com que um refactor
+  // em savePoint derrubasse a proteção contra sobrescrita de ponto, que é a
+  // mais importante do arquivo.
+  var relogioDbPut = setInterval(function () {
+    if (typeof window.dbPut === 'function' && typeof window.dbGet === 'function') {
+      blindarDbPut();
+      clearInterval(relogioDbPut);
+    }
+  }, 200);
+  setTimeout(function () {
+    clearInterval(relogioDbPut);
+    if (!window.__veraDbPutBlindado) {
+      console.error('VERA: guarda de gravacao NAO instalada');
+      toast('A proteção de gravação não carregou. Recarregue o app antes de coletar.', 'error');
+    }
+  }, 60000);
+
+  // Depois de um timeout, volta a olhar o banco por alguns segundos: se o
+  // registro entrou, desmente o alarme em vez de deixar o técnico achando que
+  // perdeu o ponto.
+  function confirmarDepois(id) {
+    var tentativas = 0;
+    var t = setInterval(async function () {
+      tentativas++;
+      try {
+        var r = await window.dbGet('points', id);
+        if (r && r.id) {
+          clearInterval(t);
+          toast('O ponto ' + id + ' entrou, sim — a gravação só demorou. '
+              + 'NÃO registre de novo.', 'success');
+          return;
+        }
+      } catch (e) {}
+      if (tentativas >= 10) {
+        clearInterval(t);
+        toast('O ponto NÃO entrou no aparelho. Registre de novo.', 'error');
+      }
+    }, 1500);
   }
 
   var instalado = false;
@@ -200,7 +287,6 @@
         || typeof window.dbGetAll !== 'function'
         || typeof window.dbPut !== 'function'
         || typeof window.dbDelete !== 'function') return false;
-    blindarDbPut();
 
     // ── 2. savePoint não pode falhar calado ────────────────────────────
     // O `await dbPut` do base.html não tem try/catch. Se a quota estourar, a
@@ -255,8 +341,11 @@
         var msg = 'Reenviar ' + seguros.length + ' ponto(s)?'
           + (pulados ? '\n\n' + pulados + ' ponto(s) ficam de fora: as fotos deles não'
               + ' existem mais neste aparelho, e reenviar apagaria a ligação com'
-              + ' elas no servidor.' : '');
+              + ' elas no servidor.\n\nOs dados desses pontos (espécie, poste, DAP,'
+              + ' alturas) também NÃO são reenviados. Se precisar restaurá-los no'
+              + ' servidor, fale com a supervisão.' : '');
         if (!(await confirmar(msg, 'Reenviar'))) return;
+        var falhas = 0;
         for (var i = 0; i < seguros.length; i++) {
           var p = seguros[i];
           p.synced = false;
@@ -268,11 +357,15 @@
           // registro não chega a ser tocado. Não é garantia contra foto que
           // falha no meio de um reenvio bem-sucedido — para isso o que vale é
           // o skip dos enxugados, logo acima.
-          await window.dbPut('points', p);
+          // Sem try/catch aqui, uma gravação que falhasse abortava o laço
+          // inteiro: parte dos pontos marcada, parte não, e nenhum aviso.
+          try { await window.dbPut('points', p); } catch (e) { falhas++; }
         }
         if (typeof updatePendingBadge === 'function') updatePendingBadge();
-        toast('Reenviando ' + seguros.length + ' ponto(s)'
-              + (pulados ? ' (' + pulados + ' preservados)' : '') + '...', '');
+        toast('Reenviando ' + (seguros.length - falhas) + ' ponto(s)'
+              + (pulados ? ' (' + pulados + ' preservados)' : '')
+              + (falhas ? ' — ' + falhas + ' não puderam ser marcados' : '') + '...',
+              falhas ? 'warning' : '');
         if (typeof window.syncPendingPoints === 'function') await window.syncPendingPoints();
       };
     }
