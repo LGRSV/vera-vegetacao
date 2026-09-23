@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-23T18:03:19.476Z",
+  "updatedAt": "2026-09-23T18:03:41.631Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1789000000005",
-        "nomeProjeto": "Rota Xambioá",
+        "rotaId": "1789000000004",
+        "nomeProjeto": "Rota Goiatins",
         "polo": "NORTE",
         "alimentadores": [
-          "AL01087030XA"
+          "LD03105019GO"
         ],
-        "iniciadoEm": "2026-09-23T18:03:16.903Z",
-        "atualizadoEm": "2026-09-23T18:03:16.903Z",
+        "iniciadoEm": "2026-09-23T18:03:41.631Z",
+        "atualizadoEm": "2026-09-23T18:03:41.631Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1789000000004",
+          "nomeProjeto": "Rota Goiatins",
+          "polo": "NORTE",
+          "alimentadores": [
+            "LD03105019GO"
+          ],
+          "data": "2026-09-23T18:03:41.631Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1789000000005",
@@ -579,18 +590,6 @@
             "LD03022033GN"
           ],
           "data": "2026-08-21T23:55:17.778Z",
-          "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1787222155758",
-          "nomeProjeto": "Rota Couto Magalhães",
-          "polo": "NORTE",
-          "alimentadores": [
-            "AL01024113CM",
-            "LD01010153CM"
-          ],
-          "data": "2026-08-21T23:53:58.042Z",
           "equipe": "Enecol Centro"
         }
       ]
