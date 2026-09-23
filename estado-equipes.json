@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-22T13:12:09.564Z",
+  "updatedAt": "2026-09-23T18:03:16.903Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1789000000000",
-        "nomeProjeto": "Rota Itaporã do Tocantins",
+        "rotaId": "1789000000005",
+        "nomeProjeto": "Rota Xambioá",
         "polo": "NORTE",
         "alimentadores": [
-          "AL01044024IP"
+          "AL01087030XA"
         ],
-        "iniciadoEm": "2026-09-22T13:12:07.682Z",
-        "atualizadoEm": "2026-09-22T13:12:07.682Z",
+        "iniciadoEm": "2026-09-23T18:03:16.903Z",
+        "atualizadoEm": "2026-09-23T18:03:16.903Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1789000000005",
+          "nomeProjeto": "Rota Xambioá",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01087030XA"
+          ],
+          "data": "2026-09-23T18:03:16.903Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1789000000000",
@@ -580,17 +591,6 @@
             "LD01010153CM"
           ],
           "data": "2026-08-21T23:53:58.042Z",
-          "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1787180016462",
-          "nomeProjeto": "Rota Bom Jesus do Tocantins",
-          "polo": "NORTE",
-          "alimentadores": [
-            "AL02065015BJ"
-          ],
-          "data": "2026-08-20T10:20:49.156Z",
           "equipe": "Enecol Centro"
         }
       ]
