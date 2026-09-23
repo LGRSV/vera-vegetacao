@@ -1,0 +1,32 @@
+{
+  "id": "V20260923170624741691109",
+  "synced": false,
+  "wkt": "POINT (-48.120128 -5.655747)",
+  "data": "23/09/2026, 17:06:23",
+  "poste": "1081248",
+  "especie": "Cajueiro",
+  "lat": -5.6557467,
+  "lon": -48.1201283,
+  "altura": "7.5",
+  "dtbt": "",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "120",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Araguatins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260923170624741691109F1",
+    "VER20260923170624741691109F2",
+    "VER20260923170624741691109F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260923170624741691109F1.jpg",
+    "fotos/Enecol-Centro/VER20260923170624741691109F2.jpg",
+    "fotos/Enecol-Centro/VER20260923170624741691109F3.jpg"
+  ],
+  "legacy_id": "V0765",
+  "remote_id": "V20260923170624741691109"
+}
