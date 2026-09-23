@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-23T18:03:43.409Z",
+  "updatedAt": "2026-09-23T18:05:17.724Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1789000000004",
-        "nomeProjeto": "Rota Goiatins",
+        "rotaId": "1789000000003",
+        "nomeProjeto": "Rota Augustinópolis",
         "polo": "NORTE",
         "alimentadores": [
-          "LD03105019GO"
+          "AL02014045AU"
         ],
-        "iniciadoEm": "2026-09-23T18:03:41.631Z",
-        "atualizadoEm": "2026-09-23T18:03:41.631Z",
+        "iniciadoEm": "2026-09-23T18:05:17.724Z",
+        "atualizadoEm": "2026-09-23T18:05:17.724Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1789000000003",
+          "nomeProjeto": "Rota Augustinópolis",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL02014045AU"
+          ],
+          "data": "2026-09-23T18:05:17.724Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1789000000004",
@@ -578,18 +589,6 @@
             "LD01010153CM"
           ],
           "data": "2026-08-24T01:45:50.999Z",
-          "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1787222155757",
-          "nomeProjeto": "Rota Goianorte",
-          "polo": "NORTE",
-          "alimentadores": [
-            "LD02022033GN",
-            "LD03022033GN"
-          ],
-          "data": "2026-08-21T23:55:17.778Z",
           "equipe": "Enecol Centro"
         }
       ]
