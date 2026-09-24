@@ -1,6 +1,6 @@
 {
   "id": "V20260924163640327038675",
-  "synced": false,
+  "synced": true,
   "wkt": "POINT (-48.105115 -5.653718)",
   "data": "24/09/2026, 16:35:37",
   "poste": "1809000",
@@ -16,6 +16,7 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Araguatins",
+  "syncedAt": "2026-09-24T19:38:07.930Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260924163640327038675F1",
