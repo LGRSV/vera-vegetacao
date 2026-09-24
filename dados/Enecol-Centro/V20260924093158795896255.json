@@ -1,0 +1,32 @@
+{
+  "id": "V20260924093158795896255",
+  "synced": false,
+  "wkt": "POINT (-48.127173 -5.640303)",
+  "data": "24/09/2026, 09:31:57",
+  "poste": "653505",
+  "especie": "Pequi",
+  "lat": -5.6403033,
+  "lon": -48.1271733,
+  "altura": "11",
+  "dtbt": "",
+  "dtmt": "0",
+  "dtat": "0",
+  "dap": "150",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Araguatins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260924093158795896255F1",
+    "VER20260924093158795896255F2",
+    "VER20260924093158795896255F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260924093158795896255F1.jpg",
+    "fotos/Enecol-Centro/VER20260924093158795896255F2.jpg",
+    "fotos/Enecol-Centro/VER20260924093158795896255F3.jpg"
+  ],
+  "legacy_id": "V0791",
+  "remote_id": "V20260924093158795896255"
+}
