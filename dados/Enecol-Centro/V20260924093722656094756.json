@@ -1,0 +1,32 @@
+{
+  "id": "V20260924093722656094756",
+  "synced": false,
+  "wkt": "POINT (-48.127868 -5.640088)",
+  "data": "24/09/2026, 09:37:21",
+  "poste": "1376930",
+  "especie": "Mangueira",
+  "lat": -5.6400883,
+  "lon": -48.1278683,
+  "altura": "9.5",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "115",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Araguatins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260924093722656094756F1",
+    "VER20260924093722656094756F2",
+    "VER20260924093722656094756F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260924093722656094756F1.jpg",
+    "fotos/Enecol-Centro/VER20260924093722656094756F2.jpg",
+    "fotos/Enecol-Centro/VER20260924093722656094756F3.jpg"
+  ],
+  "legacy_id": "V0795",
+  "remote_id": "V20260924093722656094756"
+}
