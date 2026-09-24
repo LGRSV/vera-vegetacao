@@ -1,0 +1,32 @@
+{
+  "id": "V20260924142631115615896",
+  "synced": false,
+  "wkt": "POINT (-48.100915 -5.657410)",
+  "data": "24/09/2026, 14:26:30",
+  "poste": "1290904",
+  "especie": "Outros",
+  "lat": -5.65741,
+  "lon": -48.100915,
+  "altura": "6.5",
+  "dtbt": "0",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "70",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Araguatins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260924142631115615896F1",
+    "VER20260924142631115615896F2",
+    "VER20260924142631115615896F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260924142631115615896F1.jpg",
+    "fotos/Enecol-Centro/VER20260924142631115615896F2.jpg",
+    "fotos/Enecol-Centro/VER20260924142631115615896F3.jpg"
+  ],
+  "legacy_id": "V0837",
+  "remote_id": "V20260924142631115615896"
+}
