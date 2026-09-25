@@ -1,0 +1,32 @@
+{
+  "id": "V20260925115034512294181",
+  "synced": false,
+  "wkt": "POINT (-48.536411 -6.418529)",
+  "data": "25/09/2026, 11:50:33",
+  "poste": "650343",
+  "especie": "Outros",
+  "lat": -6.4185286,
+  "lon": -48.5364105,
+  "altura": "7.5",
+  "dtbt": "150",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "110",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Xambioá",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260925115034512294181F1",
+    "VER20260925115034512294181F2",
+    "VER20260925115034512294181F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260925115034512294181F1.jpg",
+    "fotos/Enecol-Centro/VER20260925115034512294181F2.jpg",
+    "fotos/Enecol-Centro/VER20260925115034512294181F3.jpg"
+  ],
+  "legacy_id": "V0887",
+  "remote_id": "V20260925115034512294181"
+}
