@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Rota Xambioá — pontos VERA</name>
 <Placemark><name>V20260925113615911986470 — Outros</name><description><![CDATA[Espécie: Outros<br/>Poste: 128223<br/>Área: URBANO<br/>Altura: 4 m · DAP: 75 cm<br/>Dist. BT/MT/AT: 300/300/0 cm<br/>Equipe: Enecol Centro · 25/09/2026, 11:36:14<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20260925113615911986470F1.jpg">Foto</a>]]></description><Point><coordinates>-48.5350134,-6.422294,0</coordinates></Point></Placemark>
+<Placemark><name>V20260925113737130314989 — Cajueiro</name><description><![CDATA[Espécie: Cajueiro<br/>Poste: 650059<br/>Área: URBANO<br/>Altura: 5 m · DAP: 80 cm<br/>Dist. BT/MT/AT: 300/300/0 cm<br/>Equipe: Enecol Centro · 25/09/2026, 11:37:36<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20260925113737130314989F1.jpg">Foto</a>]]></description><Point><coordinates>-48.5354152,-6.4228403,0</coordinates></Point></Placemark>
 </Document></kml>
