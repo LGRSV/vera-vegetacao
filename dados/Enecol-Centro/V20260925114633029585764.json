@@ -1,6 +1,6 @@
 {
   "id": "V20260925114633029585764",
-  "synced": true,
+  "synced": false,
   "wkt": "POINT (-48.538159 -6.418405)",
   "data": "25/09/2026, 11:46:32",
   "poste": "296219",
@@ -16,7 +16,6 @@
   "acesso": "Sim",
   "usuario": "Enecol Centro",
   "projeto": "Rota Xambioá",
-  "syncedAt": "2026-09-25T14:47:26.706Z",
   "fotos_count": 3,
   "fotos_ids": [
     "VER20260925114633029585764F1",
