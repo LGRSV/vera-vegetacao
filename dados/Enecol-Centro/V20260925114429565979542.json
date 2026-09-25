@@ -1,0 +1,32 @@
+{
+  "id": "V20260925114429565979542",
+  "synced": false,
+  "wkt": "POINT (-48.536882 -6.418845)",
+  "data": "25/09/2026, 11:44:28",
+  "poste": "649084",
+  "especie": "Mangueira",
+  "lat": -6.4188446,
+  "lon": -48.5368816,
+  "altura": "5.5",
+  "dtbt": "0",
+  "dtmt": "200",
+  "dtat": "0",
+  "dap": "80",
+  "area": "URBANO",
+  "acesso": "Não",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Xambioá",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20260925114429565979542F1",
+    "VER20260925114429565979542F2",
+    "VER20260925114429565979542F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20260925114429565979542F1.jpg",
+    "fotos/Enecol-Centro/VER20260925114429565979542F2.jpg",
+    "fotos/Enecol-Centro/VER20260925114429565979542F3.jpg"
+  ],
+  "legacy_id": "V0885",
+  "remote_id": "V20260925114429565979542"
+}
