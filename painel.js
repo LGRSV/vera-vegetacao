@@ -141,9 +141,13 @@
       '.vpn-mais{border:none;background:none;font:inherit;font-size:12px;font-weight:600;color:var(--vpn-bar);padding:8px 0 2px;cursor:pointer;}',
       // grade de municípios: uma caixa por município (km + status)
       '.vpn-quadro{border:2px solid var(--vpn-ink);border-radius:14px;padding:12px;background:#fff;margin-top:12px;}',
-      '.vpn-quadro-cab{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px;}',
+      '.vpn-quadro-cab{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;}',
       '.vpn-quadro-tit{font-size:14px;font-weight:800;color:var(--vpn-ink);}',
-      '.vpn-quadro-res{font-size:11.5px;color:var(--vpn-ink2);}',
+      '.vpn-resumo{display:flex;flex-wrap:wrap;gap:6px;}',
+      '.vpn-rs{display:inline-flex;align-items:baseline;gap:4px;font-size:11px;color:var(--vpn-ink2);',
+      'background:var(--vpn-track);border-radius:8px;padding:4px 9px;white-space:nowrap;}',
+      '.vpn-rs b{font-size:13.5px;font-weight:800;color:var(--vpn-ink);font-variant-numeric:tabular-nums;}',
+      '.vpn-rs.ok b{color:var(--vpn-ok);} .vpn-rs.and b{color:var(--vpn-and);}',
       '.vpn-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px;}',
       '.vpn-cx{border:2px solid var(--vpn-ink);border-radius:10px;padding:9px 10px 10px;background:#fff;display:flex;flex-direction:column;gap:3px;min-width:0;}',
       '.vpn-cx.st-and{border-color:#e8a020;background:#fffaf0;}',
@@ -159,7 +163,9 @@
       '.vpn-escuro.vpn-quadro{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:16px;',
       'box-shadow:0 24px 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}',
       '.vpn-escuro .vpn-quadro-tit{color:#fff;font-size:15px;}',
-      '.vpn-escuro .vpn-quadro-res{color:#bcd8b6;}',
+      '.vpn-escuro .vpn-rs{background:rgba(255,255,255,.08);color:#bcd8b6;}',
+      '.vpn-escuro .vpn-rs b{color:#fff;}',
+      '.vpn-escuro .vpn-rs.ok b{color:#9fe89a;} .vpn-escuro .vpn-rs.and b{color:#f5c567;}',
       '.vpn-escuro .vpn-cx{background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.28);}',
       '.vpn-escuro .vpn-cx.st-and{border-color:#f0b43c;background:rgba(240,180,60,.10);}',
       '.vpn-escuro .vpn-cx.st-fila,.vpn-escuro .vpn-cx.st-pau{border-color:rgba(255,255,255,.14);}',
@@ -173,10 +179,22 @@
       '.vpn-escuro .vpn-st.fila{background:rgba(255,255,255,.08);color:#b9c8b6;}',
       '.vpn-escuro .vpn-prog{background:rgba(255,255,255,.12);}',
       '.vpn-escuro .vpn-prog .ok{background:#6fce6a;}',
-      '#login-screen{flex-direction:column;justify-content:flex-start!important;justify-content:safe center!important;gap:18px;}',
-      '#vpn-capa{width:100%;max-width:880px;}',
-      '#vpn-capa .vpn-grade{max-height:46vh;overflow-y:auto;padding-right:2px;-webkit-overflow-scrolling:touch;}',
-      '#login-screen .login-card{flex-shrink:0;}'
+      // Capa: no celular o cartao de login vem primeiro e o quadro desce; no
+      // computador os dois ficam lado a lado, com o cartao fixo enquanto a
+      // lista de municipios rola. Antes o quadro empurrava o login para fora
+      // da tela e a grade cortava uma fileira no meio.
+      '#login-screen{flex-direction:column;align-items:center;justify-content:flex-start!important;',
+      'gap:20px;padding:26px 18px 40px;}',
+      '#login-screen .login-card{flex-shrink:0;order:1;}',
+      '#vpn-capa{width:100%;max-width:880px;order:2;}',
+      '#vpn-capa .vpn-grade{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}',
+      '@media(min-width:1040px){',
+      '#login-screen{flex-direction:row;align-items:flex-start;justify-content:center!important;gap:28px;padding:40px 28px;}',
+      // cartao centrado na altura do quadro; se a lista passar da tela, ele
+      // gruda no topo em vez de sumir na rolagem
+      '#login-screen .login-card{align-self:center;position:sticky;top:40px;order:0;}',
+      '#vpn-capa{flex:1 1 auto;max-width:1040px;min-width:0;order:0;}',
+      '#vpn-capa .vpn-grade{grid-template-columns:repeat(auto-fill,minmax(168px,1fr));}}'
     ].join('');
     document.head.appendChild(st);
   }
@@ -250,8 +268,12 @@
     var pausadas = grupos.some(function (g) { return g.status === 'pausada'; });
     return '<div class="vpn-quadro' + (escuro ? ' vpn-escuro' : '') + '">' +
       '<div class="vpn-quadro-cab"><span class="vpn-quadro-tit">' + esc(titulo) + '</span>' +
-      '<span class="vpn-quadro-res">' + num(r.km, 1) + ' km mapeados · ' + r.concl + ' concluída' + (r.concl === 1 ? '' : 's') +
-        ' · ' + r.and + ' em andamento · ' + (r.fila + r.pau) + ' na fila</span></div>' +
+      '<span class="vpn-resumo">' +
+        '<span class="vpn-rs"><b>' + num(r.km, 1) + '</b> km mapeados</span>' +
+        '<span class="vpn-rs ok"><b>' + r.concl + '</b> concluída' + (r.concl === 1 ? '' : 's') + '</span>' +
+        '<span class="vpn-rs and"><b>' + r.and + '</b> em andamento</span>' +
+        '<span class="vpn-rs"><b>' + (r.fila + r.pau) + '</b> na fila</span>' +
+      '</span></div>' +
       (grupos.length ? '<div class="vpn-grade">' + grupos.map(caixa).join('') + '</div>'
                      : '<div class="vpn-vazio">Nenhum município neste filtro.</div>') +
       (pausadas ? '<div class="vpn-nota">‖ Parada: a coleta começou, mas a rota saiu da vez sem ser concluída.</div>' : '') +
