@@ -2,10 +2,11 @@ name: Exporta CSV dos projetos
 
 # A cada sync dos tecnicos (push em dados/**), regenera exportacoes/*.csv.
 # As planilhas do Google Drive importam esses CSVs e ficam sempre em dia.
+# Tambem regenera exportacoes/painel.json (paineis do tecnico, do admin e da capa).
 on:
   push:
     branches: [main]
-    paths: ['dados/**', 'estado-equipes.json', 'rotas.json']
+    paths: ['dados/**', 'estado-equipes.json', 'rotas.json', 'cabos/**', 'scripts/gera_painel.py']
   workflow_dispatch:
 
 permissions:
@@ -21,6 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 scripts/exporta_csv.py
+      - run: python3 scripts/gera_painel.py
       - name: Commit das exportacoes
         run: |
           git config user.name "vera-bot"

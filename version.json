@@ -1,5 +1,5 @@
 {
-  "version": "2.6.54",
-  "released": "2026-09-22",
-  "notes": "Guardas contra perda de ponto e foto: armazenamento persistente, erro visivel ao salvar, reenvio e limpeza protegidos"
+  "version": "2.6.55",
+  "released": "2026-09-29",
+  "notes": "Paineis: quadro de municipios na capa, aba Painel do tecnico e indicadores do admin (km por mes, arvores por dia)"
 }
