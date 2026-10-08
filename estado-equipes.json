@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-08T12:53:41.525Z",
+  "updatedAt": "2026-10-08T12:54:52.881Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1789000000004",
-        "nomeProjeto": "Rota Goiatins",
+        "rotaId": "1789000000003",
+        "nomeProjeto": "Rota Augustinópolis",
         "polo": "NORTE",
         "alimentadores": [
-          "LD03105019GO"
+          "AL02014045AU"
         ],
-        "iniciadoEm": "2026-10-08T12:53:39.466Z",
-        "atualizadoEm": "2026-10-08T12:53:39.466Z",
+        "iniciadoEm": "2026-10-08T12:54:52.881Z",
+        "atualizadoEm": "2026-10-08T12:54:52.881Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1789000000003",
+          "nomeProjeto": "Rota Augustinópolis",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL02014045AU"
+          ],
+          "data": "2026-10-08T12:54:52.881Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1789000000004",
@@ -575,17 +586,6 @@
             "AL01042078IT"
           ],
           "data": "2026-08-28T14:06:04.561Z",
-          "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1787919191640",
-          "nomeProjeto": "Rota Santa Maria do Tocantins",
-          "polo": "NORTE",
-          "alimentadores": [
-            "LD01065015SM"
-          ],
-          "data": "2026-08-28T14:04:39.208Z",
           "equipe": "Enecol Centro"
         }
       ]
