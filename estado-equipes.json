@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-08T12:54:54.654Z",
+  "updatedAt": "2026-10-08T12:55:30.876Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1789000000003",
-        "nomeProjeto": "Rota Augustinópolis",
+        "rotaId": "1789000000002",
+        "nomeProjeto": "Rota Tocantinópolis",
         "polo": "NORTE",
         "alimentadores": [
-          "AL02014045AU"
+          "AL02084002TO"
         ],
-        "iniciadoEm": "2026-10-08T12:54:52.881Z",
-        "atualizadoEm": "2026-10-08T12:54:52.881Z",
+        "iniciadoEm": "2026-10-08T12:55:30.876Z",
+        "atualizadoEm": "2026-10-08T12:55:30.876Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1789000000002",
+          "nomeProjeto": "Rota Tocantinópolis",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL02084002TO"
+          ],
+          "data": "2026-10-08T12:55:30.876Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1789000000003",
@@ -575,17 +586,6 @@
             "AL01073034PK"
           ],
           "data": "2026-08-28T14:06:43.194Z",
-          "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1787919191639",
-          "nomeProjeto": "Rota Itacajá",
-          "polo": "NORTE",
-          "alimentadores": [
-            "AL01042078IT"
-          ],
-          "data": "2026-08-28T14:06:04.561Z",
           "equipe": "Enecol Centro"
         }
       ]
