@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-08T12:47:17.000Z",
+  "updatedAt": "2026-10-08T12:53:39.466Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -246,8 +246,29 @@
       ]
     },
     "Enecol Centro": {
-      "projetoAtivo": null,
+      "projetoAtivo": {
+        "rotaId": "1789000000004",
+        "nomeProjeto": "Rota Goiatins",
+        "polo": "NORTE",
+        "alimentadores": [
+          "LD03105019GO"
+        ],
+        "iniciadoEm": "2026-10-08T12:53:39.466Z",
+        "atualizadoEm": "2026-10-08T12:53:39.466Z",
+        "atualizadoPor": "Enecol Centro"
+      },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1789000000004",
+          "nomeProjeto": "Rota Goiatins",
+          "polo": "NORTE",
+          "alimentadores": [
+            "LD03105019GO"
+          ],
+          "data": "2026-10-08T12:53:39.466Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1789000000005",
@@ -566,23 +587,6 @@
           ],
           "data": "2026-08-28T14:04:39.208Z",
           "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1787919191641",
-          "nomeProjeto": "Rota Presidente Kennedy",
-          "polo": "NORTE",
-          "alimentadores": [
-            "AL01073034PK"
-          ],
-          "data": "2026-08-28T14:04:17.188Z",
-          "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ENCERRADO",
-          "nomeProjeto": "Rota Xambioá",
-          "em": "2026-10-08T12:47:17.000Z",
-          "por": "Admin"
         }
       ]
     }
