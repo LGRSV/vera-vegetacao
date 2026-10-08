@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-08T12:44:49.618Z",
+  "updatedAt": "2026-10-08T12:47:17.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -246,17 +246,7 @@
       ]
     },
     "Enecol Centro": {
-      "projetoAtivo": {
-        "rotaId": "1789000000005",
-        "nomeProjeto": "Rota Xambioá",
-        "polo": "NORTE",
-        "alimentadores": [
-          "AL01087030XA"
-        ],
-        "iniciadoEm": "2026-09-24T19:53:41.164Z",
-        "atualizadoEm": "2026-10-08T12:44:47.737Z",
-        "atualizadoPor": "Enecol Centro"
-      },
+      "projetoAtivo": null,
       "historico": [
         {
           "tipo": "PROJETO_ATIVADO",
@@ -587,6 +577,12 @@
           ],
           "data": "2026-08-28T14:04:17.188Z",
           "equipe": "Enecol Centro"
+        },
+        {
+          "tipo": "PROJETO_ENCERRADO",
+          "nomeProjeto": "Rota Xambioá",
+          "em": "2026-10-08T12:47:17.000Z",
+          "por": "Admin"
         }
       ]
     }
@@ -716,6 +712,20 @@
       "equipe": "Enecol Centro",
       "nomeProjeto": "Rota Miranorte",
       "concluidoEm": "2026-09-22T12:18:10.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1789000000001": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Araguatins",
+      "concluidoEm": "2026-10-08T12:47:17.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1789000000005": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Xambioá",
+      "concluidoEm": "2026-10-08T12:47:17.000Z",
       "concluidoPor": "Admin"
     }
   }

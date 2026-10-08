@@ -1,7 +1,7 @@
 {
-  "gerado": "22/09/2026",
-  "total_pontos": 4018,
-  "total_fotos": 9670,
+  "gerado": "08/10/2026",
+  "total_pontos": 4229,
+  "total_fotos": 10305,
   "projetos": [
     {
       "nome": "SE Paraíso I",
@@ -73,6 +73,18 @@
       "fotos_ausentes": 0,
       "de": "16/09/2026",
       "ate": "21/09/2026",
+      "especie_top": "Outros"
+    },
+    {
+      "nome": "Rota Araguatins",
+      "slug": "rota-araguatins",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 152,
+      "fotos": 458,
+      "fotos_ausentes": 0,
+      "de": "23/09/2026",
+      "ate": "24/09/2026",
       "especie_top": "Outros"
     },
     {
@@ -196,6 +208,18 @@
       "especie_top": "Oiti"
     },
     {
+      "nome": "Rota Xambioá",
+      "slug": "rota-xambioa",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 37,
+      "fotos": 111,
+      "fotos_ausentes": 0,
+      "de": "25/09/2026",
+      "ate": "25/09/2026",
+      "especie_top": "Outros"
+    },
+    {
       "nome": "Rota Rio dos Bois",
       "slug": "rota-rio-dos-bois",
       "equipe": "Enecol Centro",
@@ -205,6 +229,18 @@
       "fotos_ausentes": 0,
       "de": "09/09/2026",
       "ate": "09/09/2026",
+      "especie_top": "Outros"
+    },
+    {
+      "nome": "Rota Itaporã do Tocantins",
+      "slug": "rota-itapora-do-tocantins",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 22,
+      "fotos": 66,
+      "fotos_ausentes": 0,
+      "de": "22/09/2026",
+      "ate": "22/09/2026",
       "especie_top": "Outros"
     },
     {
