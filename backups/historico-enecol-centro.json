@@ -55,6 +55,17 @@
       "pontos": 4341,
       "fotos": 9703,
       "arquivos": []
+    },
+    {
+      "chave": "08-10",
+      "titulo": "08/10/2026",
+      "data": "20261008",
+      "branch": "backup/enecol-centro-2026-10-08",
+      "ref": "e450ee433a2974464c30366f95bcca5b4b4d8e13",
+      "descricao": "Fechamento de Araguatins e Xambioa: 20 das 24 rotas concluidas. 4.558 pontos e 10.338 fotos.",
+      "pontos": 4558,
+      "fotos": 10338,
+      "arquivos": []
     }
   ]
 }
