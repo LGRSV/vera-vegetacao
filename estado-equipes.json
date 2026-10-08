@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-08T12:55:32.829Z",
+  "updatedAt": "2026-10-08T12:55:57.710Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1789000000002",
-        "nomeProjeto": "Rota Tocantinópolis",
+        "rotaId": "1789000000000",
+        "nomeProjeto": "Rota Itaporã do Tocantins",
         "polo": "NORTE",
         "alimentadores": [
-          "AL02084002TO"
+          "AL01044024IP"
         ],
-        "iniciadoEm": "2026-10-08T12:55:30.876Z",
-        "atualizadoEm": "2026-10-08T12:55:30.876Z",
+        "iniciadoEm": "2026-10-08T12:55:57.710Z",
+        "atualizadoEm": "2026-10-08T12:55:57.710Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1789000000000",
+          "nomeProjeto": "Rota Itaporã do Tocantins",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL01044024IP"
+          ],
+          "data": "2026-10-08T12:55:57.710Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1789000000002",
@@ -575,17 +586,6 @@
             "LD02050008DI"
           ],
           "data": "2026-09-03T11:29:51.440Z",
-          "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1787919191641",
-          "nomeProjeto": "Rota Presidente Kennedy",
-          "polo": "NORTE",
-          "alimentadores": [
-            "AL01073034PK"
-          ],
-          "data": "2026-08-28T14:06:43.194Z",
           "equipe": "Enecol Centro"
         }
       ]
