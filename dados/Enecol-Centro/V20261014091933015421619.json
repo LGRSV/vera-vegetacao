@@ -1,0 +1,32 @@
+{
+  "id": "V20261014091933015421619",
+  "synced": false,
+  "wkt": "POINT (-47.884303 -5.468102)",
+  "data": "14/10/2026, 09:19:32",
+  "poste": "543426",
+  "especie": "Cajueiro",
+  "lat": -5.4681017,
+  "lon": -47.8843033,
+  "altura": "9",
+  "dtbt": "150",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "185",
+  "area": "URBANO",
+  "acesso": "Não",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Augustinópolis",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20261014091933015421619F1",
+    "VER20261014091933015421619F2",
+    "VER20261014091933015421619F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20261014091933015421619F1.jpg",
+    "fotos/Enecol-Centro/VER20261014091933015421619F2.jpg",
+    "fotos/Enecol-Centro/VER20261014091933015421619F3.jpg"
+  ],
+  "legacy_id": "V0948",
+  "remote_id": "V20261014091933015421619"
+}
