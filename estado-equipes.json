@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T10:06:32.214Z",
+  "updatedAt": "2026-10-14T19:44:53.465Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -247,17 +247,28 @@
     },
     "Enecol Centro": {
       "projetoAtivo": {
-        "rotaId": "1789000000003",
-        "nomeProjeto": "Rota Augustinópolis",
+        "rotaId": "1789000000002",
+        "nomeProjeto": "Rota Tocantinópolis",
         "polo": "NORTE",
         "alimentadores": [
-          "AL02014045AU"
+          "AL02084002TO"
         ],
-        "iniciadoEm": "2026-10-13T19:21:16.944Z",
-        "atualizadoEm": "2026-10-14T10:06:30.174Z",
+        "iniciadoEm": "2026-10-14T19:44:53.465Z",
+        "atualizadoEm": "2026-10-14T19:44:53.465Z",
         "atualizadoPor": "Enecol Centro"
       },
       "historico": [
+        {
+          "tipo": "PROJETO_ATIVADO",
+          "rotaId": "1789000000002",
+          "nomeProjeto": "Rota Tocantinópolis",
+          "polo": "NORTE",
+          "alimentadores": [
+            "AL02084002TO"
+          ],
+          "data": "2026-10-14T19:44:53.465Z",
+          "equipe": "Enecol Centro"
+        },
         {
           "tipo": "PROJETO_ATIVADO",
           "rotaId": "1789000000003",
@@ -575,17 +586,6 @@
             "AL02050008MN"
           ],
           "data": "2026-09-03T11:30:59.168Z",
-          "equipe": "Enecol Centro"
-        },
-        {
-          "tipo": "PROJETO_ATIVADO",
-          "rotaId": "1788400000002",
-          "nomeProjeto": "Rota Miracema do Tocantins",
-          "polo": "CENTRO",
-          "alimentadores": [
-            "AL02048007MC"
-          ],
-          "data": "2026-09-03T11:30:34.211Z",
           "equipe": "Enecol Centro"
         }
       ]
