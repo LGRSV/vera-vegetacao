@@ -1,0 +1,32 @@
+{
+  "id": "V20261014093319336130321",
+  "synced": false,
+  "wkt": "POINT (-47.881125 -5.464790)",
+  "data": "14/10/2026, 09:33:18",
+  "poste": "30960666",
+  "especie": "Mangueira",
+  "lat": -5.46479,
+  "lon": -47.881125,
+  "altura": "5",
+  "dtbt": "100",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "55",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Augustinópolis",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20261014093319336130321F1",
+    "VER20261014093319336130321F2",
+    "VER20261014093319336130321F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20261014093319336130321F1.jpg",
+    "fotos/Enecol-Centro/VER20261014093319336130321F2.jpg",
+    "fotos/Enecol-Centro/VER20261014093319336130321F3.jpg"
+  ],
+  "legacy_id": "V0949",
+  "remote_id": "V20261014093319336130321"
+}
