@@ -1,0 +1,32 @@
+{
+  "id": "V20261014085452901000256",
+  "synced": false,
+  "wkt": "POINT (-47.878023 -5.468968)",
+  "data": "14/10/2026, 08:54:51",
+  "poste": "831203",
+  "especie": "Outros",
+  "lat": -5.4689683,
+  "lon": -47.8780233,
+  "altura": "3.5",
+  "dtbt": "300",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "25",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Augustinópolis",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20261014085452901000256F1",
+    "VER20261014085452901000256F2",
+    "VER20261014085452901000256F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20261014085452901000256F1.jpg",
+    "fotos/Enecol-Centro/VER20261014085452901000256F2.jpg",
+    "fotos/Enecol-Centro/VER20261014085452901000256F3.jpg"
+  ],
+  "legacy_id": "V0942",
+  "remote_id": "V20261014085452901000256"
+}
