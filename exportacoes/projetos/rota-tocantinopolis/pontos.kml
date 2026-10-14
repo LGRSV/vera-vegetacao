@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Rota Tocantinópolis — pontos VERA</name>
 <Placemark><name>V20261014170953141870514 — Outros</name><description><![CDATA[Espécie: Outros<br/>Poste: 837234<br/>Área: URBANO<br/>Altura: 5 m · DAP: 65 cm<br/>Dist. BT/MT/AT: 300/300/0 cm<br/>Equipe: Enecol Centro · 14/10/2026, 17:09:52<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20261014170953141870514F1.jpg">Foto</a>]]></description><Point><coordinates>-47.4266217,-6.3099017,0</coordinates></Point></Placemark>
+<Placemark><name>V20261014171112007013360 — Outros</name><description><![CDATA[Espécie: Outros<br/>Poste: 837234<br/>Área: URBANO<br/>Altura: 5 m · DAP: 50 cm<br/>Dist. BT/MT/AT: 150/300/0 cm<br/>Equipe: Enecol Centro · 14/10/2026, 17:11:11<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20261014171112007013360F1.jpg">Foto</a>]]></description><Point><coordinates>-47.4266117,-6.309955,0</coordinates></Point></Placemark>
 </Document></kml>
