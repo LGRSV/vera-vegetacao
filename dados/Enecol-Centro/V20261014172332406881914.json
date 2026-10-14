@@ -1,0 +1,32 @@
+{
+  "id": "V20261014172332406881914",
+  "synced": false,
+  "wkt": "POINT (-47.424948 -6.314808)",
+  "data": "14/10/2026, 17:23:31",
+  "poste": "1290940",
+  "especie": "Outros",
+  "lat": -6.3148083,
+  "lon": -47.4249483,
+  "altura": "6.5",
+  "dtbt": "0",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "95",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Tocantinópolis",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20261014172332406881914F1",
+    "VER20261014172332406881914F2",
+    "VER20261014172332406881914F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20261014172332406881914F1.jpg",
+    "fotos/Enecol-Centro/VER20261014172332406881914F2.jpg",
+    "fotos/Enecol-Centro/VER20261014172332406881914F3.jpg"
+  ],
+  "legacy_id": "V1001",
+  "remote_id": "V20261014172332406881914"
+}
