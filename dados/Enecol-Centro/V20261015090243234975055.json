@@ -1,0 +1,32 @@
+{
+  "id": "V20261015090243234975055",
+  "synced": false,
+  "wkt": "POINT (-47.426707 -6.322468)",
+  "data": "15/10/2026, 09:02:42",
+  "poste": "1454393",
+  "especie": "Cajueiro",
+  "lat": -6.3224683,
+  "lon": -47.4267067,
+  "altura": "12",
+  "dtbt": "",
+  "dtmt": "200",
+  "dtat": "0",
+  "dap": "200",
+  "area": "URBANO",
+  "acesso": "Não",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Tocantinópolis",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20261015090243234975055F1",
+    "VER20261015090243234975055F2",
+    "VER20261015090243234975055F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20261015090243234975055F1.jpg",
+    "fotos/Enecol-Centro/VER20261015090243234975055F2.jpg",
+    "fotos/Enecol-Centro/VER20261015090243234975055F3.jpg"
+  ],
+  "legacy_id": "V1025",
+  "remote_id": "V20261015090243234975055"
+}
