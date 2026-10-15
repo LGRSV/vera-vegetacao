@@ -1,0 +1,32 @@
+{
+  "id": "V20261015073440883551904",
+  "synced": false,
+  "wkt": "POINT (-47.415691 -6.322541)",
+  "data": "15/10/2026, 07:34:39",
+  "poste": "1731417",
+  "especie": "Mangueira",
+  "lat": -6.3225412,
+  "lon": -47.4156912,
+  "altura": "15",
+  "dtbt": "",
+  "dtmt": "0",
+  "dtat": "0",
+  "dap": "200",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Tocantinópolis",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20261015073440883551904F1",
+    "VER20261015073440883551904F2",
+    "VER20261015073440883551904F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20261015073440883551904F1.jpg",
+    "fotos/Enecol-Centro/VER20261015073440883551904F2.jpg",
+    "fotos/Enecol-Centro/VER20261015073440883551904F3.jpg"
+  ],
+  "legacy_id": "V1002",
+  "remote_id": "V20261015073440883551904"
+}
