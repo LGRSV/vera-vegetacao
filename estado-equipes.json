@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-16T10:39:59.465Z",
+  "updatedAt": "2026-10-16T17:35:21.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -246,17 +246,7 @@
       ]
     },
     "Enecol Centro": {
-      "projetoAtivo": {
-        "rotaId": "1789000000004",
-        "nomeProjeto": "Rota Goiatins",
-        "polo": "NORTE",
-        "alimentadores": [
-          "LD03105019GO"
-        ],
-        "iniciadoEm": "2026-10-15T20:49:39.620Z",
-        "atualizadoEm": "2026-10-16T10:39:57.496Z",
-        "atualizadoPor": "Enecol Centro"
-      },
+      "projetoAtivo": null,
       "historico": [
         {
           "tipo": "PROJETO_ATIVADO",
@@ -587,6 +577,12 @@
           ],
           "data": "2026-09-03T11:31:14.207Z",
           "equipe": "Enecol Centro"
+        },
+        {
+          "tipo": "PROJETO_ENCERRADO",
+          "nomeProjeto": "Rota Goiatins",
+          "em": "2026-10-16T17:35:21.000Z",
+          "por": "Admin"
         }
       ]
     }
@@ -730,6 +726,20 @@
       "equipe": "Enecol Centro",
       "nomeProjeto": "Rota Xambioá",
       "concluidoEm": "2026-10-08T12:47:17.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1789000000000": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Itaporã do Tocantins",
+      "concluidoEm": "2026-10-16T17:35:21.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1789000000004": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Goiatins",
+      "concluidoEm": "2026-10-16T17:35:21.000Z",
       "concluidoPor": "Admin"
     }
   }
