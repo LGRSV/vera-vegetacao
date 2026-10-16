@@ -1,7 +1,7 @@
 {
-  "gerado": "08/10/2026",
-  "total_pontos": 4229,
-  "total_fotos": 10305,
+  "gerado": "16/10/2026",
+  "total_pontos": 4390,
+  "total_fotos": 10790,
   "projetos": [
     {
       "nome": "SE Paraíso I",
@@ -172,6 +172,18 @@
       "especie_top": "Oiti"
     },
     {
+      "nome": "Rota Augustinópolis",
+      "slug": "rota-augustinopolis",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 76,
+      "fotos": 228,
+      "fotos_ausentes": 0,
+      "de": "14/10/2026",
+      "ate": "14/10/2026",
+      "especie_top": "Outros"
+    },
+    {
       "nome": "Rota Goianorte",
       "slug": "rota-goianorte",
       "equipe": "Enecol Centro",
@@ -194,6 +206,18 @@
       "de": "01/09/2026",
       "ate": "01/09/2026",
       "especie_top": "Oiti"
+    },
+    {
+      "nome": "Rota Tocantinópolis",
+      "slug": "rota-tocantinopolis",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 61,
+      "fotos": 185,
+      "fotos_ausentes": 0,
+      "de": "14/10/2026",
+      "ate": "15/10/2026",
+      "especie_top": "Outros"
     },
     {
       "nome": "Rota Santa Maria do Tocantins",
@@ -229,6 +253,18 @@
       "fotos_ausentes": 0,
       "de": "09/09/2026",
       "ate": "09/09/2026",
+      "especie_top": "Outros"
+    },
+    {
+      "nome": "Rota Goiatins",
+      "slug": "rota-goiatins",
+      "equipe": "Enecol Centro",
+      "pasta_fotos": "Enecol-Centro",
+      "pontos": 24,
+      "fotos": 72,
+      "fotos_ausentes": 0,
+      "de": "16/10/2026",
+      "ate": "16/10/2026",
       "especie_top": "Outros"
     },
     {
