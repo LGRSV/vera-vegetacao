@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Rota Goiatins — pontos VERA</name>
+<Placemark><name>V20261016074323557308575 — Mangueira</name><description><![CDATA[Espécie: Mangueira<br/>Poste: 842352<br/>Área: URBANO<br/>Altura: 8 m · DAP: 135 cm<br/>Dist. BT/MT/AT: 0/0/0 cm<br/>Equipe: Enecol Centro · 16/10/2026, 07:43:22<br/><a href="https://raw.githubusercontent.com/LGRSV/vera-vegetacao/main/fotos/Enecol-Centro/VER20261016074323557308575F1.jpg">Foto</a>]]></description><Point><coordinates>-47.3235483,-7.7125083,0</coordinates></Point></Placemark>
+</Document></kml>
