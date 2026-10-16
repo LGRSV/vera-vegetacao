@@ -1,0 +1,32 @@
+{
+  "id": "V20261016075021902518595",
+  "synced": false,
+  "wkt": "POINT (-47.321393 -7.713693)",
+  "data": "16/10/2026, 07:50:20",
+  "poste": "46160546",
+  "especie": "Outros",
+  "lat": -7.7136933,
+  "lon": -47.3213933,
+  "altura": "6",
+  "dtbt": "0",
+  "dtmt": "300",
+  "dtat": "0",
+  "dap": "95",
+  "area": "URBANO",
+  "acesso": "Sim",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Goiatins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20261016075021902518595F1",
+    "VER20261016075021902518595F2",
+    "VER20261016075021902518595F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20261016075021902518595F1.jpg",
+    "fotos/Enecol-Centro/VER20261016075021902518595F2.jpg",
+    "fotos/Enecol-Centro/VER20261016075021902518595F3.jpg"
+  ],
+  "legacy_id": "V1058",
+  "remote_id": "V20261016075021902518595"
+}
