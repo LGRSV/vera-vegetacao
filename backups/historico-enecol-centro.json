@@ -66,6 +66,17 @@
       "pontos": 4558,
       "fotos": 10338,
       "arquivos": []
+    },
+    {
+      "chave": "16-10",
+      "titulo": "16/10/2026",
+      "data": "20261016",
+      "branch": "backup/enecol-centro-2026-10-16",
+      "ref": "678d61753a4bdd31fc99eb81814ea73a16b5531d",
+      "descricao": "Fechamento de Itapora do Tocantins e Goiatins: 22 das 24 rotas concluidas. 4.719 pontos e 10.825 fotos.",
+      "pontos": 4719,
+      "fotos": 10825,
+      "arquivos": []
     }
   ]
 }
