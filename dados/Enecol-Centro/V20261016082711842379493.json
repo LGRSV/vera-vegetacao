@@ -1,0 +1,32 @@
+{
+  "id": "V20261016082711842379493",
+  "synced": false,
+  "wkt": "POINT (-47.314983 -7.714072)",
+  "data": "16/10/2026, 08:27:10",
+  "poste": "853037",
+  "especie": "Cajueiro",
+  "lat": -7.7140717,
+  "lon": -47.3149833,
+  "altura": "10.5",
+  "dtbt": "0",
+  "dtmt": "100",
+  "dtat": "0",
+  "dap": "165",
+  "area": "URBANO",
+  "acesso": "Não",
+  "usuario": "Enecol Centro",
+  "projeto": "Rota Goiatins",
+  "fotos_count": 3,
+  "fotos_ids": [
+    "VER20261016082711842379493F1",
+    "VER20261016082711842379493F2",
+    "VER20261016082711842379493F3"
+  ],
+  "fotos_github": [
+    "fotos/Enecol-Centro/VER20261016082711842379493F1.jpg",
+    "fotos/Enecol-Centro/VER20261016082711842379493F2.jpg",
+    "fotos/Enecol-Centro/VER20261016082711842379493F3.jpg"
+  ],
+  "legacy_id": "V1072",
+  "remote_id": "V20261016082711842379493"
+}
