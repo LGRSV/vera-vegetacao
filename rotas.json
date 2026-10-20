@@ -221,6 +221,24 @@
       "alimentadores": [
         "AL01087030XA"
       ]
+    },
+    {
+      "id": "1789000000006",
+      "nomeProjeto": "Rota Formoso do Araguaia",
+      "equipe": "Enecol Centro",
+      "polo": "SUL",
+      "alimentadores": [
+        "AL02036052FA"
+      ]
+    },
+    {
+      "id": "1789000000007",
+      "nomeProjeto": "Rota Alvorada",
+      "equipe": "Enecol Centro",
+      "polo": "SUL",
+      "alimentadores": [
+        "AL01003036AV"
+      ]
     }
   ]
 }
