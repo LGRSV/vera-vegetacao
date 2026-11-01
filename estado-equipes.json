@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "updatedAt": "2026-10-16T17:35:21.000Z",
+  "version": 2,
+  "updatedAt": "2026-11-01T18:20:51.000Z",
   "equipes": {
     "Equipe Energisa": {
       "projetoAtivo": {
@@ -740,6 +740,20 @@
       "equipe": "Enecol Centro",
       "nomeProjeto": "Rota Goiatins",
       "concluidoEm": "2026-10-16T17:35:21.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1789000000002": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Tocantinópolis",
+      "concluidoEm": "2026-11-01T18:20:51.000Z",
+      "concluidoPor": "Admin"
+    },
+    "1789000000003": {
+      "status": "concluido",
+      "equipe": "Enecol Centro",
+      "nomeProjeto": "Rota Augustinópolis",
+      "concluidoEm": "2026-11-01T18:20:51.000Z",
       "concluidoPor": "Admin"
     }
   }
