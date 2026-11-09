@@ -1,5 +1,5 @@
 {
-  "version": "2.6.56",
-  "released": "2026-09-29",
-  "notes": "Capa: login e quadro de municipios lado a lado no computador, login primeiro no celular e fim da grade cortada"
+  "version": "2.6.57",
+  "released": "2026-11-09",
+  "notes": "Admin: filtro por rota e km percorrido na produtividade; historico do mapa em ordem cronologica, por mes e dia"
 }

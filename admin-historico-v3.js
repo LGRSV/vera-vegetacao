@@ -12,7 +12,8 @@
     carregado: false,
     registros: [],
     falhas: [],
-    modo: 'todos',
+    modo: 'todos',      // dia escolhido (AAAA-MM-DD) ou 'todos'
+    mes: 'todos',       // mês escolhido (AAAA-MM) ou 'todos'
     camada: null,
     mapa: null,
     painel: null,
@@ -56,16 +57,31 @@
     return Number.isFinite(lat) && Number.isFinite(lon) ? [lat, lon] : null;
   }
 
+  // A chave do dia é AAAA-MM-DD para que a ordem alfabética seja a ordem do
+  // calendário. Antes era DD-MM: os botões e a lista saíam embaralhados
+  // (01/09, 01/10, 02/09…) e os dias de anos diferentes se misturavam.
+  var MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
   function dataDoPonto(ponto) {
     var valor = String(ponto && ponto.data || '');
-    var achado = valor.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
-    if (!achado) return { chave: 'sem-data', titulo: 'Sem data', ordem: '00000000' };
-    return { chave: achado[1] + '-' + achado[2], titulo: achado[1] + '/' + achado[2] + '/' + achado[3], ordem: achado[3] + achado[2] + achado[1] };
+    var achado = valor.match(/^(\d{2})\/(\d{2})\/(\d{4})(?:,?\s*(\d{2}):(\d{2})(?::(\d{2}))?)?/);
+    if (!achado) return { chave: 'sem-data', mes: 'sem-data', titulo: 'Sem data', ordem: '00000000000000' };
+    return {
+      chave: achado[3] + '-' + achado[2] + '-' + achado[1],
+      mes: achado[3] + '-' + achado[2],
+      titulo: achado[1] + '/' + achado[2] + '/' + achado[3],
+      ordem: achado[3] + achado[2] + achado[1] + (achado[4] || '00') + (achado[5] || '00') + (achado[6] || '00')
+    };
+  }
+  function rotuloMes(mes) {
+    var p = mes.split('-');
+    return p.length === 2 ? MESES[Number(p[1]) - 1] + '/' + p[0].slice(2) : 'Sem data';
   }
 
   function idExibido(registro) {
-    var data = dataDoPonto(registro.ponto).titulo;
-    return data.slice(0, 5) + ' · ' + String(registro.ponto && registro.ponto.id || 'Sem ID');
+    var ponto = registro.ponto || {};
+    var data = dataDoPonto(ponto).titulo;
+    var hora = String(ponto.data || '').match(/(\d{2}:\d{2})/);
+    return data.slice(0, 5) + (hora ? ' ' + hora[1] : '') + ' · ' + String(ponto.id || 'Sem ID');
   }
 
   function fotosDoRegistro(registro) {
@@ -246,10 +262,10 @@
         registros.push(registro);
       });
 
+      // ordem cronológica de verdade (data + hora), do primeiro ao último ponto
       registros.sort(function (a, b) {
-        var da = String(a.ponto && a.ponto.data || '');
-        var db = String(b.ponto && b.ponto.data || '');
-        return db.localeCompare(da, 'pt-BR', { numeric: true });
+        var oa = dataDoPonto(a.ponto).ordem, ob = dataDoPonto(b.ponto).ordem;
+        return oa < ob ? -1 : oa > ob ? 1 : chaveRegistro(a).localeCompare(chaveRegistro(b));
       });
 
       var datas = {};
@@ -266,8 +282,12 @@
   }
 
   function registrosDoModo() {
-    if (estado.modo === 'todos') return estado.registros.slice();
-    return estado.registros.filter(function (registro) { return dataDoPonto(registro.ponto).chave === estado.modo; });
+    return estado.registros.filter(function (registro) {
+      var d = dataDoPonto(registro.ponto);
+      if (estado.mes !== 'todos' && d.mes !== estado.mes) return false;
+      if (estado.modo !== 'todos' && d.chave !== estado.modo) return false;
+      return true;
+    });
   }
 
   function siglaEquipe(usuario) {
@@ -299,7 +319,7 @@
       var ponto = registro.ponto || {};
       return '<button type="button" data-vera-historico-registro="' + esc(chaveRegistro(registro)) + '" style="display:block;width:100%;padding:8px 9px;margin:0 0 6px;text-align:left;border:1px solid #c7dfce;border-radius:8px;background:#fff;color:#17372a;font:inherit;cursor:pointer;">'
         + '<b style="display:block;font-size:11px;">' + esc(idExibido(registro)) + '</b>'
-        + '<span style="display:block;margin-top:2px;font-size:10px;color:#607467;">' + esc(ponto.poste ? 'Poste ' + ponto.poste + ' · ' : '') + 'Dados e fotos</span></button>';
+        + '<span style="display:block;margin-top:2px;font-size:10px;color:#607467;">' + esc((ponto.projeto ? String(ponto.projeto).replace(/^Rota\s+/i, '') + ' · ' : '') + (ponto.poste ? 'Poste ' + ponto.poste + ' · ' : '')) + 'Dados e fotos</span></button>';
     }).join('') || '<div style="font-size:11px;color:#64766c;">Nenhum ponto disponível neste filtro.</div>';
 
     lista.querySelectorAll('[data-vera-historico-registro]').forEach(function (botao) {
@@ -311,25 +331,51 @@
     });
   }
 
+  function botao(chave, rotulo, ativo, atributo) {
+    return '<button type="button" ' + atributo + '="' + esc(chave) + '" style="padding:8px 10px;border:1px solid ' + (ativo ? '#163d2a' : '#c7dfce') + ';border-radius:8px;background:' + (ativo ? '#163d2a' : '#fff') + ';color:' + (ativo ? '#fff' : '#1f4933') + ';font:700 11px inherit;cursor:pointer;">' + esc(rotulo) + '</button>';
+  }
+
+  // Primeiro os meses, em ordem; escolhido um mês, aparecem os dias dele,
+  // também em ordem. Com todos os dias do ano numa linha só eram 60 botões.
   function atualizarBotoes() {
     var wrap = document.getElementById('vera-historico-completo-chips');
     if (!wrap) return;
-    var contagens = {};
+    var meses = {}, dias = {};
     estado.registros.forEach(function (registro) {
-      var data = dataDoPonto(registro.ponto);
-      contagens[data.chave] = { titulo: data.titulo, total: (contagens[data.chave] && contagens[data.chave].total || 0) + 1 };
+      var d = dataDoPonto(registro.ponto);
+      meses[d.mes] = (meses[d.mes] || 0) + 1;
+      if (estado.mes !== 'todos' && d.mes === estado.mes) {
+        dias[d.chave] = dias[d.chave] || { titulo: d.titulo, total: 0 };
+        dias[d.chave].total++;
+      }
     });
-    var chips = [{ chave: 'todos', rotulo: 'Todos · ' + estado.registros.length }];
-    Object.keys(contagens).sort().forEach(function (chave) { chips.push({ chave: chave, rotulo: contagens[chave].titulo + ' · ' + contagens[chave].total }); });
+    var html = '<div style="display:flex;gap:7px;flex-wrap:wrap;">' +
+      botao('todos', 'Todos · ' + estado.registros.length, estado.mes === 'todos', 'data-vera-historico-mes') +
+      Object.keys(meses).sort().map(function (m) {
+        return botao(m, rotuloMes(m) + ' · ' + meses[m], estado.mes === m, 'data-vera-historico-mes');
+      }).join('') + '</div>';
+    var chavesDias = Object.keys(dias).sort();
+    if (chavesDias.length) {
+      html += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;padding-top:7px;border-top:1px dashed #dbe8df;">' +
+        botao('todos', 'Mês inteiro', estado.modo === 'todos', 'data-vera-historico-lote') +
+        chavesDias.map(function (k) {
+          return botao(k, dias[k].titulo.slice(0, 5) + ' · ' + dias[k].total, estado.modo === k, 'data-vera-historico-lote');
+        }).join('') + '</div>';
+    }
+    wrap.style.display = 'block';
+    wrap.innerHTML = html;
 
-    wrap.innerHTML = chips.map(function (chip) {
-      var ativo = chip.chave === estado.modo;
-      return '<button type="button" data-vera-historico-lote="' + esc(chip.chave) + '" style="padding:8px 10px;border:1px solid ' + (ativo ? '#163d2a' : '#c7dfce') + ';border-radius:8px;background:' + (ativo ? '#163d2a' : '#fff') + ';color:' + (ativo ? '#fff' : '#1f4933') + ';font:700 11px inherit;cursor:pointer;">' + esc(chip.rotulo) + '</button>';
-    }).join('');
-
-    wrap.querySelectorAll('[data-vera-historico-lote]').forEach(function (botao) {
-      botao.addEventListener('click', function () {
-        estado.modo = botao.getAttribute('data-vera-historico-lote');
+    wrap.querySelectorAll('[data-vera-historico-mes]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        estado.mes = b.getAttribute('data-vera-historico-mes');
+        estado.modo = 'todos';
+        atualizarBotoes();
+        desenhar(false);
+      });
+    });
+    wrap.querySelectorAll('[data-vera-historico-lote]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        estado.modo = b.getAttribute('data-vera-historico-lote');
         atualizarBotoes();
         desenhar(false);
       });
