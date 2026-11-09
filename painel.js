@@ -21,7 +21,12 @@
   var carregando = null;
   var filtroCampo = 'todas';
   var modoKm = 'mensal';
-  var filtros = { municipio: '', periodo: 'tudo', equipe: '', status: '' };
+  var filtros = { municipio: '', rota: '', periodo: 'tudo', equipe: '', status: '' };
+  // Produtividade em km: 'percorrido' conta só o trecho da rede que recebeu
+  // ponto (traçado x fração percorrida); 'rede' conta a rota inteira depois
+  // de concluída. Em outubro as rotas foram fechadas com 36–63% percorrido e
+  // o km de rede inflava o mês (90 km em 3 dias de campo).
+  var metricaKm = 'percorrido';
 
   var MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
   var STATUS = {
@@ -118,7 +123,8 @@
       '.vpn-a-tit{font-size:14px;font-weight:800;color:var(--vpn-ink);}',
       '.vpn-a-sub{font-size:11px;color:var(--vpn-mut);margin-top:1px;}',
       '.vpn-filtros{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0;}',
-      '@media(min-width:720px){.vpn-filtros{grid-template-columns:repeat(4,minmax(0,1fr));}}',
+      '@media(min-width:720px){.vpn-filtros{grid-template-columns:repeat(5,minmax(0,1fr));}}',
+      '.vpn-graf-ctl{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}',
       '.vpn-filtros label{display:block;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--vpn-mut);margin-bottom:3px;}',
       '.vpn-filtros select{width:100%;font:inherit;font-size:12.5px;padding:7px 8px;border:1px solid var(--vpn-line);border-radius:8px;background:#fff;color:var(--vpn-ink);min-height:36px;}',
       '.vpn-graf{border:1px solid var(--vpn-line);border-radius:12px;padding:12px 12px 6px;margin-top:10px;position:relative;}',
@@ -373,6 +379,7 @@
     return dados.rotas.filter(function (r) {
       if (filtros.municipio && r.municipio !== filtros.municipio) return false;
       if (filtros.equipe && r.equipe !== filtros.equipe) return false;
+      if (filtros.rota && String(r.id) !== filtros.rota) return false;
       if (filtros.status) {
         var st = statusDe(r);
         if (filtros.status === 'andamento' ? (st !== 'andamento' && st !== 'pausada') : st !== filtros.status) return false;
@@ -394,17 +401,37 @@
       if (!r) return;
       if (filtros.equipe && d.equipe !== filtros.equipe) return;
       if (!semPeriodo && (d.dia < ini[0] || d.dia > ini[1])) return;
-      var x = dias[d.dia] = dias[d.dia] || { dia: d.dia, arvores: 0, km: 0, rotas: {} };
+      var x = dias[d.dia] = dias[d.dia] || { dia: d.dia, arvores: 0, km: 0, rotas: {}, kmRotas: {} };
+      var k = r.pontos ? kmDaRota(r) * d.arvores / r.pontos : 0;
       x.arvores += d.arvores;
-      x.km += r.pontos ? (r.km_mapeado || 0) * d.arvores / r.pontos : 0;
+      x.km += k;
+      x.kmRotas[r.nome] = (x.kmRotas[r.nome] || 0) + k;
       x.rotas[r.municipio || r.nome] = (x.rotas[r.municipio || r.nome] || 0) + d.arvores;
     });
     return dias;
   }
 
+  function kmDaRota(r) {
+    if (metricaKm === 'rede') return r.km_mapeado || 0;
+    return r.percorrido == null ? (r.km_mapeado || 0) : (r.km || 0) * r.percorrido;
+  }
+
   function opcoes(lista, atual, todas) {
     return '<option value="">' + todas + '</option>' + lista.map(function (v) {
       return '<option value="' + esc(v) + '"' + (v === atual ? ' selected' : '') + '>' + esc(v) + '</option>';
+    }).join('');
+  }
+
+  // rotas em ordem cronológica de coleta (as que ainda não começaram no fim),
+  // limitadas ao município escolhido
+  function opcoesRota() {
+    var lista = dados.rotas.filter(function (r) { return !filtros.municipio || r.municipio === filtros.municipio; })
+      .slice().sort(function (a, b) { return (a.de || '9999').localeCompare(b.de || '9999') || a.nome.localeCompare(b.nome, 'pt-BR'); });
+    if (filtros.rota && !lista.some(function (r) { return String(r.id) === filtros.rota; })) filtros.rota = '';
+    return '<option value="">Todas</option>' + lista.map(function (r) {
+      var quando = r.de ? ' · ' + mesRotulo(r.de.slice(0, 7)) : ' · sem coleta';
+      return '<option value="' + esc(r.id) + '"' + (String(r.id) === filtros.rota ? ' selected' : '') + '>' +
+        esc(r.nome.replace(/^Rota\s+/i, '')) + quando + '</option>';
     }).join('');
   }
 
@@ -420,6 +447,7 @@
       .concat(Object.keys(meses).sort().reverse().map(function (m) { return [m, mesRotulo(m)]; }));
     return '<div class="vpn-filtros">' +
       '<div><label for="vpn-f-mun">Município</label><select id="vpn-f-mun" data-k="municipio">' + opcoes(muns, filtros.municipio, 'Todos') + '</select></div>' +
+      '<div><label for="vpn-f-rota">Rota</label><select id="vpn-f-rota" data-k="rota">' + opcoesRota() + '</select></div>' +
       '<div><label for="vpn-f-per">Período</label><select id="vpn-f-per" data-k="periodo">' + per.map(function (p) {
         return '<option value="' + p[0] + '"' + (filtros.periodo === p[0] ? ' selected' : '') + '>' + p[1] + '</option>';
       }).join('') + '</select></div>' +
@@ -512,7 +540,7 @@
     chaves.forEach(function (k) { totArv += dias[k].arvores; totKm += dias[k].km; });
     var r = resumo(rotas);
     document.getElementById('vpn-a-kpis').innerHTML = '<div class="vpn-tiles">' +
-      '<div class="vpn-tile"><div class="vpn-tile-rot">Km mapeados</div><div class="vpn-tile-num">' + num(totKm, 1) + ' <small>km</small></div>' +
+      '<div class="vpn-tile"><div class="vpn-tile-rot">' + (metricaKm === 'rede' ? 'Km de rede' : 'Km percorridos') + '</div><div class="vpn-tile-num">' + num(totKm, 1) + ' <small>km</small></div>' +
         '<div class="vpn-tile-det">no período filtrado</div></div>' +
       '<div class="vpn-tile"><div class="vpn-tile-rot">Árvores</div><div class="vpn-tile-num">' + num(totArv) + '</div>' +
         '<div class="vpn-tile-det">' + chaves.length + ' dia' + (chaves.length === 1 ? '' : 's') + ' de coleta</div></div>' +
@@ -525,8 +553,15 @@
     document.getElementById('vpn-a-mun').innerHTML = quadro(rotas, 'Municípios · situação atual', false);
 
     // ---- 1) km por mês ----
-    var meses = {};
-    chaves.forEach(function (k) { var m = k.slice(0, 7); meses[m] = (meses[m] || 0) + dias[k].km; });
+    var meses = {}, porRotaMes = {}, arvMes = {}, diasMes = {};
+    chaves.forEach(function (k) {
+      var m = k.slice(0, 7);
+      meses[m] = (meses[m] || 0) + dias[k].km;
+      arvMes[m] = (arvMes[m] || 0) + dias[k].arvores;
+      diasMes[m] = (diasMes[m] || 0) + 1;
+      var pr = porRotaMes[m] = porRotaMes[m] || {};
+      Object.keys(dias[k].kmRotas).forEach(function (n) { pr[n] = (pr[n] || 0) + dias[k].kmRotas[n]; });
+    });
     var mk = Object.keys(meses).sort();
     // o acumulado parte do que já tinha sido mapeado antes do período
     // escolhido, senão "últimos 30 dias" pareceria começar do zero
@@ -539,12 +574,17 @@
       return {
         rot: mesRotulo(m), val: val, destaque: i === mk.length - 1,
         dica: '<b>' + num(val, 1) + ' km</b><br>' + mesRotulo(m) +
-              (modoKm === 'acumulado' ? '<br>+' + num(v, 1) + ' km no mês' : '')
+              (modoKm === 'acumulado' ? '<br>+' + num(v, 1) + ' km no mês' : '') +
+              '<br><span style="opacity:.8">' + num(arvMes[m]) + ' árvores · ' + diasMes[m] + ' dia' + (diasMes[m] === 1 ? '' : 's') + ' de campo</span>' +
+              Object.keys(porRotaMes[m]).sort(function (a, b) { return porRotaMes[m][b] - porRotaMes[m][a]; }).map(function (n) {
+                return '<br><span style="opacity:.8">' + esc(n.replace(/^Rota\s+/i, '')) + ': ' + num(porRotaMes[m][n], 1) + ' km</span>';
+              }).join('')
       };
     });
+    var oque = metricaKm === 'rede' ? 'rede das rotas trabalhadas' : 'rede percorrida (trecho com ponto a até 120 m)';
     document.getElementById('vpn-g1-sub').textContent = modoKm === 'acumulado'
-      ? 'Total de rede mapeada até o fim de cada mês'
-      : 'Rede mapeada em cada mês';
+      ? 'Km de ' + oque + ', acumulado até o fim de cada mês'
+      : 'Km de ' + oque + ' em cada mês';
     var c1 = document.getElementById('vpn-g1');
     if (!itensMes.length) c1.innerHTML = '<div class="vpn-vazio">Sem coleta neste recorte.</div>';
     else barras(c1, itensMes, {
@@ -631,8 +671,10 @@
       '<div id="vpn-a-mun"></div>' +
       '<div class="vpn-graf">' +
         '<div class="vpn-graf-cab"><div><div class="vpn-graf-tit">Produtividade · km por mês</div><div class="vpn-graf-sub" id="vpn-g1-sub"></div></div>' +
-        '<div class="vpn-seg" role="tablist"><button data-m="mensal" class="' + (modoKm === 'mensal' ? 'on' : '') + '">Mensal</button>' +
-        '<button data-m="acumulado" class="' + (modoKm === 'acumulado' ? 'on' : '') + '">Acumulado</button></div></div>' +
+        '<div class="vpn-graf-ctl"><div class="vpn-seg" role="tablist" data-grupo="km"><button data-k="percorrido" class="' + (metricaKm === 'percorrido' ? 'on' : '') + '">Percorrido</button>' +
+        '<button data-k="rede" class="' + (metricaKm === 'rede' ? 'on' : '') + '">Rede</button></div>' +
+        '<div class="vpn-seg" role="tablist" data-grupo="modo"><button data-m="mensal" class="' + (modoKm === 'mensal' ? 'on' : '') + '">Mensal</button>' +
+        '<button data-m="acumulado" class="' + (modoKm === 'acumulado' ? 'on' : '') + '">Acumulado</button></div></div></div>' +
         '<div id="vpn-g1" style="position:relative"></div>' +
       '</div>' +
       '<div class="vpn-graf">' +
@@ -642,12 +684,27 @@
       '</div>';
 
     raiz.querySelectorAll('.vpn-filtros select').forEach(function (s) {
-      s.addEventListener('change', function () { filtros[s.getAttribute('data-k')] = s.value; desenharGraficos(); });
+      s.addEventListener('change', function () {
+        filtros[s.getAttribute('data-k')] = s.value;
+        // trocar o município refaz a lista de rotas
+        if (s.getAttribute('data-k') === 'municipio') {
+          var sr = document.getElementById('vpn-f-rota');
+          if (sr) sr.innerHTML = opcoesRota();
+        }
+        desenharGraficos();
+      });
     });
-    raiz.querySelectorAll('.vpn-seg button').forEach(function (b) {
+    raiz.querySelectorAll('.vpn-seg[data-grupo="modo"] button').forEach(function (b) {
       b.addEventListener('click', function () {
         modoKm = b.getAttribute('data-m');
-        raiz.querySelectorAll('.vpn-seg button').forEach(function (o) { o.classList.toggle('on', o === b); });
+        raiz.querySelectorAll('.vpn-seg[data-grupo="modo"] button').forEach(function (o) { o.classList.toggle('on', o === b); });
+        desenharGraficos();
+      });
+    });
+    raiz.querySelectorAll('.vpn-seg[data-grupo="km"] button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        metricaKm = b.getAttribute('data-k');
+        raiz.querySelectorAll('.vpn-seg[data-grupo="km"] button').forEach(function (o) { o.classList.toggle('on', o === b); });
         desenharGraficos();
       });
     });
